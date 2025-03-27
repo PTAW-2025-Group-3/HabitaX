@@ -5,14 +5,14 @@
 @section('content')
 <section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4 py-12">
   <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-8 overflow-hidden animate-fade-in">
-    
+
     {{-- Decorative Blur --}}
     <div class="absolute -top-12 -left-12 w-40 h-40 bg-indigo-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
     <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-purple-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
 
     {{-- Title --}}
     <h2 class="relative text-3xl font-bold text-center text-gray-800 dark:text-white mb-6 z-10">
-      Welcome Back
+      Bem-Vindo de Volta
     </h2>
 
     {{-- Flash Message --}}
@@ -55,24 +55,24 @@
       <div class="flex items-center justify-between">
         <label class="flex items-center space-x-2">
           <input type="checkbox" name="remember" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
-          <span class="text-sm text-gray-600 dark:text-gray-300">Remember me</span>
+          <span class="text-sm text-gray-600 dark:text-gray-300">Guardar Autenticação</span>
         </label>
-        <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:underline">Forgot Password?</a>
+        <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:underline">Esqueceu a password?</a>
       </div>
 
       {{-- Submit --}}
       <div>
         <button type="submit"
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl shadow-md transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
-          Sign In
+          LogIn
         </button>
       </div>
     </form>
 
     {{-- Divider --}}
     <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
-      Don’t have an account?
-      <a href="{{ route('register') }}" class="text-indigo-600 hover:underline">Register</a>
+      Não tem conta ainda?
+      <a href="{{ route('register') }}" class="text-indigo-600 hover:underline">Registar</a>
     </div>
 
   </div>
