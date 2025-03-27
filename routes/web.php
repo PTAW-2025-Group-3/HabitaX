@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Auth;
 
 // Home Page
@@ -20,6 +21,12 @@ Route::get('/dashboard', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+// Property Page
+Route::get('/property-listing',
+    [PropertyController::class, 'listing']
+)->name('property.listing');
+
 
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
@@ -50,4 +57,4 @@ Route::middleware('auth')->group(function () {
 });
 
 // Auth (login, logout, etc.)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
