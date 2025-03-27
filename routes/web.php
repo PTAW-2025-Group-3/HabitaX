@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,11 +22,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-// Property Page
-Route::get('/property-listing',
-    [PropertyController::class, 'listing']
-)->name('property.listing');
-
+// Advertisement Routes
+Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/create', [AdvertisementController::class, 'create'])->name('advertisements.create');
+Route::post('/advertisements/store', [AdvertisementController::class, 'store'])->name('advertisements.store');
+Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
@@ -38,11 +38,6 @@ Route::middleware('auth')->group(function () {
         ]);
     })->name('account');
 
-    // Show Create Announcement Form
-    Route::get('/create-announcement', [AnnouncementController::class, 'create'])->name('announcements.create');
-
-    // Handle Announcement Form Submission
-    Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
 });
 
 // Registration Routes

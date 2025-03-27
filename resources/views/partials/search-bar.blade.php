@@ -9,7 +9,7 @@
             O teu Espaço, <span class="text-gray-300 font-light">a tua Escolha</span>
         </h2>
 
-        <form action="{{ route('property.listing') }}" method="GET" class="flex flex-wrap justify-center gap-4 md:gap-2 lg:gap-4 items-center">
+        <form action="{{ route('advertisements.index') }}" method="GET" class="flex flex-wrap justify-center gap-4 md:gap-2 lg:gap-4 items-center">
 
             {{-- Property Type Toggle --}}
             <div class="flex gap-0.5">

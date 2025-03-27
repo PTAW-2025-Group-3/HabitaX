@@ -51,7 +51,7 @@
             @endguest
 
             {{-- CTA Button --}}
-            <a href="{{ route('announcements.create') }}"
+            <a href="{{ route('advertisements.create') }}"
                class="relative inline-flex items-center justify-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-xl shadow-md transition-all duration-300 hover:bg-indigo-700 hover:scale-105 active:scale-95">
                 <span class="z-10">Publicar Anúncio</span>
                 <span class="absolute inset-0 bg-indigo-400 blur-xl opacity-30 rounded-xl"></span>
