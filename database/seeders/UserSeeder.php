@@ -1,0 +1,54 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $users = [
+            [
+                'name' => 'Ali Rezaei',
+                'email' => 'ali@example.com',
+                'password' => 'password1'
+            ],
+            [
+                'name' => 'Sara Moshiri',
+                'email' => 'sara@example.com',
+                'password' => 'password2'
+            ],
+            [
+                'name' => 'John Doe',
+                'email' => 'john@example.com',
+                'password' => 'password3'
+            ],
+            [
+                'name' => 'Sofia Dias',
+                'email' => 'sofia@example.com',
+                'password' => 'password4'
+            ],
+            [
+                'name' => 'Rui Costa',
+                'email' => 'rui@example.com',
+                'password' => 'password5'
+            ],
+        ];
+
+        foreach ($users as $user) {
+            User::updateOrCreate(
+                ['email' => $user['email']], // Prevent duplicate seed
+                [
+                    'name' => $user['name'],
+                    'password' => Hash::make($user['password']),
+                ]
+            );
+        }
+    }
+}
