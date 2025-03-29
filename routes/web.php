@@ -22,6 +22,10 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
 Route::get('/advertisements/create', [AdvertisementController::class, 'create'])->name('advertisements.create');
