@@ -16,7 +16,7 @@
                 <span
                     class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-indigo-500 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="#" class="relative group text-gray-700 font-medium text-lg transition-all duration-300">
+            <a href="{{url('/about')}}" class="relative group text-gray-700 font-medium text-lg transition-all duration-300">
                 About
                 <span
                     class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-indigo-500 group-hover:w-full transition-all duration-300"></span>
