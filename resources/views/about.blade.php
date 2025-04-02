@@ -90,21 +90,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- FAQ -->
-        <div class="mt-16">
-            <h2 class="text-3xl font-semibold text-center text-gray-900">Perguntas Frequentes</h2>
-            <div class="max-w-3xl mx-auto mt-6 space-y-4">
-                <details class="bg-gray-100 p-4 rounded-lg">
-                    <summary class="font-semibold cursor-pointer">Como posso anunciar um imóvel?</summary>
-                    <p class="mt-2 text-gray-600">Basta criar uma conta, clicar em "Publicar Anúncio" e preencher os detalhes.</p>
-                </details>
-                <details class="bg-gray-100 p-4 rounded-lg">
-                    <summary class="font-semibold cursor-pointer">Quais os custos para anunciar?</summary>
-                    <p class="mt-2 text-gray-600">Nosso plano básico é gratuito! Para maior visibilidade, temos opções pagas.</p>
-                </details>
-            </div>
-        </div>
+        
 
         <!-- Botão de Voltar -->
         <div class="text-center mt-16">
