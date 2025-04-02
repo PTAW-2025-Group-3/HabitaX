@@ -52,7 +52,7 @@ class AdvertisementController extends Controller
             ]
         ];
 
-        return view('advertisements.index', compact('properties', 'location'));
+        return view('pages.advertisements.index', compact('properties', 'location'));
     }
 
     public function show($id)
@@ -73,7 +73,7 @@ class AdvertisementController extends Controller
             'monthly_ads' => [22, 19, 25, 21, 35, 28],
         ];
 
-        return view('advertisements.show', ['ad' => (object) $ad]);
+        return view('pages.advertisements.show', ['ad' => (object) $ad]);
     }
 
 
