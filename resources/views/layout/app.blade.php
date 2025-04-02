@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Styles and Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -22,7 +22,6 @@
 @include('layout.header')
 
 <div class="min-h-screen flex flex-col justify-between">
-
     {{-- Optional Page Header --}}
     @isset($header)
         <header class="bg-white dark:bg-gray-800 shadow">
@@ -35,8 +34,6 @@
     {{-- Spacer --}}
     <div class="h-40 bg-gray-100"></div>
 
-    {{-- Optional Sidebar --}}
-
     {{-- Main Page Content --}}
     <main class="flex-grow">
         @yield('content')
@@ -44,7 +41,6 @@
 
     {{-- Global Footer --}}
     @include('layout.footer')
-
 </div>
 
 {{-- Page-specific JS Scripts --}}
