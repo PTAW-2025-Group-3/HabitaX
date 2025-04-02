@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 // Home Page
 Route::get('/', function () {
-    return view('home');
+    return view('pages.home.home');
 })->name('home');
 
 // Dashboard (after login)
@@ -19,11 +19,11 @@ Route::get('/dashboard', function () {
 
 // Contact Page
 Route::get('/contact', function () {
-    return view('contact');
+    return view('pages.contact.contact');
 })->name('contact');
 
 Route::get('/about', function () {
-    return view('about');
+    return view('pages.about.about');
 })->name('about');
 
 // Advertisement Routes

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('title', 'My Account')
 
@@ -19,7 +19,7 @@
 
   {{-- PROFILE SECTION --}}
   <div class="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
-    
+
     {{-- Name & Email --}}
     <div class="text-center mb-6">
       <h2 class="text-xl font-bold text-gray-900">{{ $user->name }}</h2>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-8 space-y-6 md:space-y-0">
-      
+
       {{-- Avatar --}}
       <div class="flex flex-col items-center">
         <div class="w-36 h-36 rounded-full bg-gray-100 border-4 border-[#c9cfff] shadow-inner flex items-center justify-center text-gray-400 text-sm">
