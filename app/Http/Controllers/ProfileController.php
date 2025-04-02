@@ -89,4 +89,9 @@ class ProfileController extends Controller
 
         return redirect()->route('home')->with('success', 'Sua conta foi excluída com sucesso.');
     }
+
+    public function settings()
+    {
+        return view('pages.account.sections.settings');
+    }
 }

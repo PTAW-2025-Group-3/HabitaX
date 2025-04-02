@@ -40,10 +40,28 @@ Route::middleware('auth')->group(function () {
 
     // User Account Page
     Route::get('/account', function () {
-        return view('profile.account', [
-            'user' => Auth::user()
-        ]);
+        return view('pages.account.account');
     })->name('account');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Account Settings Routes
+    Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
+    Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password');
+    Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
+    Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
+
+    // Favorites and Properties Routes
+    Route::get('/favorites', function () {
+        return view('pages.account.sections.favorites');
+    })->name('favorites');
+
+    Route::get('/my-properties', function () {
+        return view('pages.account.sections.my-properties');
+    })->name('my-properties');
 
 });
 
