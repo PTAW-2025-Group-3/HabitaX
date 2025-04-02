@@ -1,7 +1,9 @@
 @extends('layout.app')
 
+@section('title', 'Moderation')
+
 @section('content')
-    <div class="min-h-screen py-10">
+    <div class="bg-gray-100 min-h-screen py-10">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
 
             @include('pages.moderation.partials.header')
@@ -43,10 +45,10 @@
                         'filters' => [],
                         'headers' => ['ID', 'Nome do Utilizador', 'Motivo da Suspensão', 'Data da Suspensão', 'Duração', 'Ações'],
                         'rows' => [
-                            ['#5644', 'Cristiano Ronaldo', 'Má Conduta', '12/03/2025 - 14:55', '1 mês', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700">Prolongar</button></div>'],
-                            ['#6112', 'Maria da Silva', 'Spam', '11/03/2025 - 12:33', '2 meses', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700">Prolongar</button></div>'],
-                            ['#6141', 'Aurélio da Silva', 'Fraude', '09/03/2025 - 19:43', '1 ano', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700">Prolongar</button></div>'],
-                            ['#6535', 'Luís Assis', 'Fraude', '07/03/2025 - 15:46', '2 anos', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700">Prolongar</button></div>'],
+                            ['#5644', 'Cristiano Ronaldo', 'Má Conduta', '12/03/2025 - 14:55', '1 mês', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700" onclick="openModal(\'reativarModal\')">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700" onclick="openModal(\'prolongarModal\')">Prolongar</button></div>'],
+                            ['#6112', 'Maria da Silva', 'Spam', '11/03/2025 - 12:33', '2 meses', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700" onclick="openModal(\'reativarModal\')">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700" onclick="openModal(\'prolongarModal\')">Prolongar</button></div>'],
+                            ['#6141', 'Aurélio da Silva', 'Fraude', '09/03/2025 - 19:43', '1 ano', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700" onclick="openModal(\'reativarModal\')">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700" onclick="openModal(\'prolongarModal\')">Prolongar</button></div>'],
+                            ['#6535', 'Luís Assis', 'Fraude', '07/03/2025 - 15:46', '2 anos', '<div class="flex gap-2"><button class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full hover:bg-emerald-700" onclick="openModal(\'reativarModal\')">Reativar</button><button class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full hover:bg-amber-700" onclick="openModal(\'prolongarModal\')">Prolongar</button></div>'],
                         ]
                     ]
                 ];
@@ -55,7 +57,17 @@
             @foreach ($sections as $section)
                 @include('pages.moderation.partials.table-sections.data-section', ['section' => $section])
             @endforeach
-
+            @include('pages.moderation.partials.modals.reactive-modal')
+            @include('pages.moderation.partials.modals.prolong-modal')
         </div>
     </div>
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+    </script>
 @endsection

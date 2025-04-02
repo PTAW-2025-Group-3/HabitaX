@@ -35,6 +35,13 @@ Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.c
 Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
+// Moderation Route
+Route::get('/moderation', function () {
+    return view('pages.moderation.moderation-dashboard');
+})->name('moderation');
+Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
+Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
+
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
 

@@ -210,7 +210,6 @@
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Comentário/Justificação</label>
                         <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white" rows="3" placeholder="Adicione um comentário ou justificação para a sua decisão..."></textarea>
                     </div>
-
                     <div class="flex justify-center space-x-4">
                         <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium flex items-center transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
