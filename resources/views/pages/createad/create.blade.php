@@ -6,15 +6,16 @@
     <div class="max-w-5xl mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-8 text-indigo-800">Create Advertisement</h1>
 
-        <form action="{{ route('advertisements.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form action="{{ route('pages.createad.store') }}" method="POST" enctype="multipart/form-data"
+              class="space-y-8">
             @csrf
 
-            @include('advertisements.sections.details')
-            @include('advertisements.sections.location')
-            @include('advertisements.sections.general-info')
-            @include('advertisements.sections.additional-info')
-            @include('advertisements.sections.documents')
-            @include('advertisements.sections.photos')
+            @include('pages.createad.sections.details')
+            @include('pages.createad.sections.location')
+            @include('pages.createad.sections.general-info')
+            @include('pages.createad.sections.additional-info')
+            @include('pages.createad.sections.documents')
+            @include('pages.createad.sections.photos')
 
             <div class="flex justify-end">
                 <button type="submit"

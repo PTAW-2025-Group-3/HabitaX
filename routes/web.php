@@ -14,7 +14,7 @@ Route::get('/', function () {
 
 // Dashboard (after login)
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('auth.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Contact Page
@@ -28,8 +28,8 @@ Route::get('/about', function () {
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
-Route::get('/advertisements/create', [AdvertisementController::class, 'create'])->name('advertisements.create');
-Route::post('/advertisements/store', [AdvertisementController::class, 'store'])->name('advertisements.store');
+Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.createad.create');
+Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 // Authenticated Routes (User must be logged in)

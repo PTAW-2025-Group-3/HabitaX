@@ -19,7 +19,7 @@
 <body class="font-sans antialiased bg-white">
 
 {{-- Custom Navigation Bar --}}
-@include('components.navbar')
+@include('layout.header')
 
 <div class="min-h-screen flex flex-col justify-between">
 
@@ -32,13 +32,18 @@
         </header>
     @endisset
 
+    {{-- Spacer --}}
+    <div class="h-40 bg-gray-100"></div>
+
+    {{-- Optional Sidebar --}}
+
     {{-- Main Page Content --}}
     <main class="flex-grow">
         @yield('content')
     </main>
 
     {{-- Global Footer --}}
-    @include('components.footer')
+    @include('layout.footer')
 
 </div>
 

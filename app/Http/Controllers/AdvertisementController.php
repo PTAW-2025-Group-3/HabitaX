@@ -80,7 +80,7 @@ class AdvertisementController extends Controller
     // Show the Create Announcement Form
     public function create()
     {
-        return view('advertisements.create');
+        return view('pages.createad.create');
     }
 
     // Handle the form submission and store the announcement
