@@ -6,16 +6,50 @@
 
 
 @keyframes fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out both;
+    animation: fade-in 0.6s ease-out both;
+}
+
+.text-primary {
+    @apply text-blue-900;
+}
+
+.text-secondary {
+    @apply text-indigo-500;
+
+}
+
+.bg-primary {
+    @apply bg-blue-900;
+}
+
+.bg-secondary {
+    @apply bg-indigo-600;
+}
+
+.btn-primary {
+    @apply inline-flex items-center justify-center bg-blue-900 text-white hover:bg-blue-800
+    font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
+}
+.btn-secondary {
+    @apply inline-flex items-center justify-center bg-indigo-500 text-white hover:bg-indigo-400
+    font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
+.text-hover{
+    @apply w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50
+}
+
+.text-red{
+    @apply w-full flex items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-50
 }

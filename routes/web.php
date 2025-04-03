@@ -31,9 +31,9 @@ Route::get('/about', function () {
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.createad.create');
 Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
-Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 // Moderation Route
 Route::get('/moderation', function () {

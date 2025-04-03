@@ -5,7 +5,7 @@
 
       {{-- Section Heading --}}
       <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-14">
-        As Nossas <span class="text-indigo-500">Melhores Ofertas</span>
+        As Nossas <span class="text-secondary">Melhores Ofertas</span>
       </h2>
 
       {{-- Properties Grid --}}
