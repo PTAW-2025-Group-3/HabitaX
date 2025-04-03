@@ -75,23 +75,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Depoimentos -->
-        <div class="mt-16 text-center">
-            <h2 class="text-3xl font-semibold text-gray-900">O que nossos clientes dizem</h2>
-            <div class="flex flex-wrap justify-center mt-6 gap-8">
-                <div class="max-w-md bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-gray-600 italic">"Encontrei minha casa ideal em apenas 3 dias! Super recomendo."</p>
-                    <p class="text-sm text-gray-500 mt-2">- Ana Pereira</p>
-                </div>
-                <div class="max-w-md bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-gray-600 italic">"O suporte é incrível! Muito fácil de usar."</p>
-                    <p class="text-sm text-gray-500 mt-2">- Carlos Mendes</p>
-                </div>
-            </div>
-        </div>
-
-
+        
         <!-- Botão de Voltar -->
         <div class="text-center mt-16">
             <a href="{{ url('/') }}"
