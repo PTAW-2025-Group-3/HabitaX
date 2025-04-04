@@ -42,6 +42,11 @@ Route::get('/moderation', function () {
 Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
 Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
 
+// Administration Route
+Route::get('/administration', function () {
+    return view('pages.administration.index');
+})->name('administration');
+
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
 
