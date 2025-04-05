@@ -43,7 +43,7 @@ Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementCont
 Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
 
 // Administration Route
-Route::get('/administration', function () {
+Route::get('/admin', function () {
     return view('pages.administration.index');
 })->name('administration');
 
