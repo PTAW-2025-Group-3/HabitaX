@@ -1,10 +1,12 @@
 @extends('layout.app')
 
+@section('title', 'Administration')
+
 @section('content')
     <div class="container mx-auto p-4">
-        @include('components.administration.stats')
-        @include('components.administration.charts')
-        @include('components.administration.user-management')
-        @include('components.administration.parameters-management')
+        @include('pages.administration.partials.stats')
+        @include('pages.administration.partials.charts')
+        @include('pages.administration.partials.user-management')
+        @include('pages.administration.partials.parameters-management')
     </div>
 @endsection
