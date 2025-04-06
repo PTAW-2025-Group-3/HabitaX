@@ -3,7 +3,7 @@
 @section('title', 'Sign In')
 
 @section('content')
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4 py-12">
+<section class="min-h-screen flex items-center justify-center px-4 py-12">
   <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-8 overflow-hidden animate-fade-in">
 
     {{-- Decorative Blur --}}
