@@ -33,45 +33,45 @@
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="first_name" class="block text-sm font-semibold text-gray-700">Nome</label>
+            <label for="first_name" class="block text-sm font-semibold text-gray">Nome</label>
             <input type="text" id="first_name" name="first_name"
-                   class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                   class="form-contact-input"
                    placeholder="João">
           </div>
           <div>
-            <label for="last_name" class="block text-sm font-semibold text-gray-700">Apelido</label>
+            <label for="last_name" class="block text-sm font-semibold text-gray">Apelido</label>
             <input type="text" id="last_name" name="last_name"
-                   class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                   class="form-contact-input"
                    placeholder="Silva">
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="email" class="block text-sm font-semibold text-gray-700">Email</label>
+            <label for="email" class="block text-sm font-semibold text-gray">Email</label>
             <input type="email" id="email" name="email"
-                   class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                   class="form-contact-input"
                    placeholder="joao.silva@exemplo.com">
           </div>
           <div>
-            <label for="phone" class="block text-sm font-semibold text-gray-700">Número de Telefone</label>
+            <label for="phone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
             <input type="text" id="phone" name="phone"
-                   class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                   class="form-contact-input"
                    placeholder="+351 912 345 678">
           </div>
         </div>
 
         <div>
-          <label for="message" class="block text-sm font-semibold text-gray-700">Messagem</label>
+          <label for="message" class="block text-sm font-semibold text-gray">Mensagem</label>
           <textarea id="message" name="message" rows="4"
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Escreva a sua menssagem aqui..."></textarea>
+                    class="form-contact-input"
+                    placeholder="Escreva a sua mensagem aqui..."></textarea>
         </div>
 
         <div>
           <button type="submit"
                   class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105">
-            Enviar Menssagem
+            Enviar Mensagem
           </button>
         </div>
       </form>

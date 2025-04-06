@@ -29,6 +29,10 @@
 
 }
 
+.bg-back{
+    @apply bg-gray-100;
+}
+
 .bg-primary {
     @apply bg-blue-900;
 }
@@ -53,3 +57,47 @@
 .text-red{
     @apply w-full flex items-center px-4 py-2 text-sm text-red-500 hover:bg-gray-50
 }
+
+.text-gray{
+    @apply text-gray-600;
+}
+
+.text-gray-secondary{
+    @apply text-gray-800;
+}
+
+.border-primary{
+    @apply border-blue-900;
+}
+
+.border-secondary{
+    @apply border-indigo-600;
+}
+
+.form-contact-input{
+    @apply mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+.card-about{
+    @apply absolute inset-0 bg-gradient-to-t from-indigo-900 to-transparent opacity-0 group-hover:opacity-70 transition-all duration-300
+}
+
+.card-about-img{
+    @apply w-full h-48 object-cover object-center group-hover:scale-110 transition-all duration-500;
+}
+
+.home-ads-style{
+    @apply bg-white rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] hover:shadow-[0_35px_80px_-20px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-2 cursor-pointer;
+}
+
+.home-property-card-style{
+    @apply bg-white rounded-xl border-2 border-transparent hover:border-indigo-600 transition duration-300 shadow-md hover:shadow-2xl transform hover:-translate-y-2 cursor-pointer p-6 flex flex-col items-center text-center;
+}
+
+.home-icon-style{
+    @apply w-20 h-20 flex items-center justify-center rounded-full bg-gray-100 mb-4 transition duration-300 group-hover:scale-110;
+}
+
+
+
+

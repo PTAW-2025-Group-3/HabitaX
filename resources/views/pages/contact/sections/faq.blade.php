@@ -1,15 +1,15 @@
 <section class="max-w-5xl mx-auto mt-20 mb-24 px-4">
-    <h2 class="text-center text-3xl font-extrabold text-gray-900 mb-2">FAQ’s</h2>
-    <p class="text-center text-sm text-gray-500 mb-10">As Perguntas Mais Frequentemente Feitas</p>
+    <h2 class="text-center text-5xl font-bold text-black tracking-tight">FAQ’s</h2>
+    <p class="text-center text-gray mt-4 mb-10">As Perguntas Mais Frequentemente Feitas</p>
 
     <div class="bg-gray-50 rounded-2xl shadow-xl divide-y divide-gray-200">
 
         @php
             $faqs = [
               ['question' => 'Como faço para criar um anúncio?', 'answer' => 'Preencha o formulário com os detalhes necessários e clique no botão "Publicar Anúncio". A sua propriedade vai ser listada de imediato!.'],
-              ['question' => 'Como faço para editar ou eleminar um anúncio?', 'answer' => 'Vá até a sua dashboard, selecione o anúncio que deseja editar ou eleminar, e utilize o respetivo botão.'],
+              ['question' => 'Como faço para editar ou eliminar um anúncio?', 'answer' => 'Vá até a sua dashboard, selecione o anúncio que deseja editar ou eliminar, e utilize o respetivo botão.'],
               ['question' => 'Como posso agendar uma visita?', 'answer' => 'Utilize o formulário de contacto ou o número de telefone fornecido no anúncio para coordenar a visita diretamente com o dono da propriedade.'],
-              ['question' => 'Como reporto um problema com uma propriedade?', 'answer' => 'Contacte a nossa equipa de suporte utilizando o formulario acima ou envie-nos um email diretamente no endereço suporte@habitax.pt.']
+              ['question' => 'Como reporto um problema com uma propriedade?', 'answer' => 'Contacte a nossa equipa de suporte utilizando o formulário acima ou envie-nos um email diretamente no endereço suporte@habitax.pt.']
             ];
         @endphp
 
@@ -18,16 +18,16 @@
                 <div class="flex justify-between items-start cursor-pointer" onclick="toggleFaq({{ $index }})">
                     <div class="flex items-center space-x-3">
                         <span
-                            class="text-xl font-extrabold text-gray-800">{{ $index + 1 < 10 ? '0' . ($index + 1) : $index + 1 }}</span>
-                        <h3 class="text-indigo-700 font-bold text-lg">{{ $faq['question'] }}</h3>
+                            class="text-xl font-extrabold text-black">{{ $index + 1 < 10 ? '0' . ($index + 1) : $index + 1 }}</span>
+                        <h3 class="text-secondary  font-bold text-lg">{{ $faq['question'] }}</h3>
                     </div>
                     <button
-                        class="text-indigo-600 text-2xl font-bold focus:outline-none transition-transform duration-300 transform"
+                        class="text-secondary  text-2xl font-bold focus:outline-none transition-transform duration-300 transform"
                         id="toggle-icon-{{ $index }}">+
                     </button>
                 </div>
                 <div
-                    class="mt-4 pl-11 text-sm text-gray-700 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-in-out"
+                    class="mt-4 pl-11 text-sm text-gray max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-in-out"
                     id="faq-answer-{{ $index }}">
                     {{ $faq['answer'] }}
                 </div>
