@@ -9,7 +9,8 @@
         <div class="grid grid-cols-3 gap-4">
             <!-- Main Image -->
             <div class="col-span-2">
-                <img src="/images/{{ $ad->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow" alt="Main Image">
+                <img src="/images/{{ $ad->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow"
+                     alt="Main Image">
             </div>
 
             <!-- Gallery Thumbnails -->
@@ -55,19 +56,20 @@
                     </div>
                 </section>
 
-                @include('components.price-history', ['ad' => $ad])
-                @include('components.market-stats', ['ad' => $ad])
-                @include('components.loan-simulator', ['ad' => $ad])
+                @include('pages.advertisements.individual.sections.price-history', ['ad' => $ad])
+                @include('pages.advertisements.individual.sections.market-stats', ['ad' => $ad])
+                @include('pages.advertisements.individual.sections.loan-simulator', ['ad' => $ad])
             </div>
 
             <div class="space-y-4">
                 <div class="space-y-4">
                     <div class="rounded overflow-hidden shadow">
-                        <iframe src="https://www.google.com/maps/embed?..." class="w-full h-48 border-0" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?..." class="w-full h-48 border-0"
+                                allowfullscreen="" loading="lazy"></iframe>
                         <button class="w-full bg-white py-2 text-blue-500 font-semibold border-t">Ver no mapa</button>
                     </div>
 
-                    @include('components.contact-form', ['ad' => $ad])
+                    @include('pages.advertisements.individual.sections.contact-form', ['ad' => $ad])
                 </div>
             </div>
         </div>
