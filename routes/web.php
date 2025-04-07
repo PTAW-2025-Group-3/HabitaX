@@ -36,7 +36,7 @@ Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.c
 Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
 
 // Moderation Route
-Route::get('/moderation', function () {
+Route::get('/mod', function () {
     return view('pages.moderation.moderation-dashboard');
 })->name('moderation');
 Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
