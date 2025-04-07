@@ -36,14 +36,14 @@ Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.c
 Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
 
 // Moderation Route
-Route::get('/moderation', function () {
+Route::get('/mod', function () {
     return view('pages.moderation.moderation-dashboard');
 })->name('moderation');
 Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
 Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
 
 // Administration Route
-Route::get('/administration', function () {
+Route::get('/admin', function () {
     return view('pages.administration.index');
 })->name('administration');
 

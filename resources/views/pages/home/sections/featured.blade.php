@@ -1,10 +1,9 @@
 {{-- resources/views/home/featured.blade.php --}}
-
 <section class="bg-gray-100 pt-3 pb-20 px-6 lg:px-24">
     <div class="max-w-7xl mx-auto">
 
       {{-- Section Heading --}}
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-14">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-secondary mb-14">
         As Nossas <span class="text-secondary">Melhores Ofertas</span>
       </h2>
 
@@ -26,7 +25,7 @@
 
         @foreach($properties as $property)
           <div
-            class="group bg-white rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] hover:shadow-[0_35px_80px_-20px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+            class="group home-ads-style">
 
             {{-- Image with zoom effect --}}
             <div class="overflow-hidden h-48">
@@ -37,13 +36,13 @@
 
             {{-- Content --}}
             <div class="p-5">
-              <h3 class="text-sm text-gray-700 font-medium mb-1">
+              <h3 class="text-sm text-gray font-medium mb-1">
                 {{ $property['location'] }}
               </h3>
-              <p class="text-xl font-bold text-gray-900 leading-tight">
+              <p class="text-xl font-bold text-gray-secondary leading-tight">
                 {{ $property['price'] }}
               </p>
-              <p class="text-sm text-gray-500 capitalize mt-1">
+              <p class="text-sm text-gray capitalize mt-1">
                 {{ $property['type'] }}
               </p>
             </div>

@@ -1,7 +1,7 @@
 {{-- resources/views/partials/search-bar.blade.php --}}
 
 {{-- Div para sobrepor a searchbar e o nome por trás --}}
-<div class="w-full flex flex-col items-center justify-start bg-gray-100">
+<div class="w-full flex flex-col items-center justify-start bg-back">
     {{-- Container Principal --}}
     <div class="text-[280px] font-extrabold text-black opacity-90 relative z-10">HabitaX</div>
     <div class="absolute z-20 w-full max-w-5xl mx-auto bg-blue-800 bg-opacity-50 backdrop-blur-md rounded-2xl px-6 py-8 mt-36 shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-500">
@@ -25,7 +25,7 @@
 
             {{-- Property Category --}}
             <select
-                class="h-10 px-5 py-2 rounded-md bg-gray-100 text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all">
+                class="h-10 px-5 py-2 rounded-md bg-back text-gray-secondary shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all">
                 <option>Moradias</option>
                 <option>Apartamentos</option>
                 <option>Terrenos</option>
@@ -34,7 +34,7 @@
 
             {{-- Location Field --}}
             <input type="text" placeholder="Localização, Cidade, Zona"
-                   class="w-56 md:w-72 px-5 py-2 rounded-md bg-gray-100 text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" />
+                   class="w-56 md:w-72 px-5 py-2 rounded-md bg-back text-gray-secondary shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" />
 
             {{-- Search Button --}}
             <button type="submit"

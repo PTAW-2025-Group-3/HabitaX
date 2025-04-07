@@ -3,11 +3,23 @@
     <div class="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
         {{-- Logo & Name --}}
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-500 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300"></div>
+            <div class="w-10 h-10 bg-gradient-to-r from-indigo-600 to-blue-900 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 overflow-hidden">
+                <img src="{{ asset('images/logos/habitaxLogo.png') }}" alt="HabitaXLogo" class="mt-1 object-cover">
+            </div>
             <span class="text-2xl font-bold text-gray-900 tracking-tight">Habita<span class="text-secondary">X</span></span>
         </div>
 
-        {{-- Main Navigation Links --}}
+        {{-- Mobile Menu Button --}}
+        <div class="md:hidden">
+            <button id="mobileMenuButton" class="text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    <path id="closeIcon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Main Navigation Links (Desktop) --}}
         <div class="hidden md:flex items-center space-x-10">
             <a href="/" class="relative group text-gray-700 font-medium text-lg transition-all duration-300">
                 Home
@@ -23,7 +35,7 @@
             </a>
         </div>
 
-        {{-- CTA / Auth --}}
+        {{-- CTA / Auth (Desktop) --}}
         <div class="hidden md:flex items-center space-x-5">
             @guest
                 <a href="{{ route('login') }}" class="text-gray-600 hover:text-indigo-600 text-md font-medium transition-all duration-300">
@@ -105,6 +117,9 @@
             </a>
         </div>
     </div>
+
+    {{-- Mobile Menu --}}
+    @include('layout.header_mobile')
 </nav>
 
 {{-- JavaScript for menu functionality --}}
@@ -129,6 +144,20 @@
                 if (!isClickInside) {
                     dropdownMenu.classList.add('hidden');
                 }
+            });
+        }
+
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
             });
         }
     });
