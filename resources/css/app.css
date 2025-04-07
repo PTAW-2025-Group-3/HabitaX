@@ -50,6 +50,21 @@
     font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
 }
 
+.btn-gray {
+    @apply inline-flex items-center justify-center bg-gray-200 text-black hover:bg-gray-300
+    font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
+.btn-success {
+    @apply inline-flex items-center justify-center bg-green-600 text-white hover:bg-green-500
+    font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
+.btn-warning {
+    @apply inline-flex items-center justify-center bg-red-700 text-white hover:bg-red-600
+    font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
 .text-hover{
     @apply w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50
 }
@@ -72,6 +87,10 @@
 
 .border-secondary{
     @apply border-indigo-600;
+}
+
+.border-gray{
+    @apply border-gray-100;
 }
 
 .form-contact-input{

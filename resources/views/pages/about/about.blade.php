@@ -76,7 +76,7 @@
 
             {{-- Botão Voltar --}}
             <div class="text-center mt-16">
-                <a href="{{ url('/') }}" class="relative inline-flex items-center justify-center px-6 py-3 bg-secondary text-white font-semibold rounded-xl shadow-md transition-all duration-300 hover:bg-indigo-700 hover:scale-105 active:scale-95">
+                <a href="{{ url('/') }}" class="relative inline-flex btn-secondary px-6 py-3">
                     <span class="z-10">Voltar ao Início</span>
                     <span class="absolute inset-0 bg-secondary blur-xl opacity-30 rounded-xl"></span>
                 </a>

@@ -39,8 +39,8 @@ Route::post('/create/store', [AdvertisementController::class, 'store'])->name('p
 Route::get('/mod', function () {
     return view('pages.moderation.moderation-dashboard');
 })->name('moderation');
-Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
-Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
+Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
+Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
 
 // Administration Route
 Route::get('/admin', function () {

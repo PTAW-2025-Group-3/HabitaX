@@ -4,7 +4,7 @@
 
         <!-- Map View Filter -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

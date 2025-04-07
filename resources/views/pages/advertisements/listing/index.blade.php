@@ -3,7 +3,7 @@
 @section('title', 'Advertisements Listing')
 
 @section('content')
-    <div class="bg-gray-100 w-full min-h-screen" x-data="{ view: 'grid' }">
+    <div class="bg-back w-full min-h-screen" x-data="{ view: 'grid' }">
         <div class="max-w-7xl mx-auto px-4 py-6">
             <div class="max-w-4xl mx-auto p-8 rounded">
                 @include('pages.advertisements.listing.sections.toggle-buttons')

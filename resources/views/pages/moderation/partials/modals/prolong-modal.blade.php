@@ -7,7 +7,7 @@
             <!-- Cabeçalho com ícone -->
             <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100">
                 <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <h2 class="text-lg font-semibold text-gray-900">Prolongar Suspensão</h2>
@@ -21,24 +21,24 @@
 
             <!-- Corpo do modal -->
             <div class="px-6 py-4">
-                <p class="text-sm text-gray-600 mb-4">Por quanto tempo deseja prolongar a suspensão deste utilizador?</p>
+                <p class="text-sm text-gray mb-4">Por quanto tempo deseja prolongar a suspensão deste utilizador?</p>
 
                 <div class="space-y-3 mt-3">
                     <div class="flex items-center">
-                        <input id="oneWeek" name="suspensionTime" type="radio" class="h-4 w-4 text-amber-600 focus:ring-amber-500">
-                        <label for="oneWeek" class="ml-3 text-sm text-gray-700">1 semana</label>
+                        <input id="oneWeek" name="suspensionTime" type="radio" class="h-4 w-4 text-red-700 focus:ring-red-500">
+                        <label for="oneWeek" class="ml-3 text-sm text-gray">1 semana</label>
                     </div>
                     <div class="flex items-center">
-                        <input id="oneMonth" name="suspensionTime" type="radio" class="h-4 w-4 text-amber-600 focus:ring-amber-500" checked>
-                        <label for="oneMonth" class="ml-3 text-sm text-gray-700">1 mês</label>
+                        <input id="oneMonth" name="suspensionTime" type="radio" class="h-4 w-4 text-red-700 focus:ring-red-500" checked>
+                        <label for="oneMonth" class="ml-3 text-sm text-gray">1 mês</label>
                     </div>
                     <div class="flex items-center">
-                        <input id="threeMonths" name="suspensionTime" type="radio" class="h-4 w-4 text-amber-600 focus:ring-amber-500">
-                        <label for="threeMonths" class="ml-3 text-sm text-gray-700">3 meses</label>
+                        <input id="threeMonths" name="suspensionTime" type="radio" class="h-4 w-4 text-red-700 focus:ring-red-500">
+                        <label for="threeMonths" class="ml-3 text-sm text-gray">3 meses</label>
                     </div>
                     <div class="flex items-center">
-                        <input id="oneYear" name="suspensionTime" type="radio" class="h-4 w-4 text-amber-600 focus:ring-amber-500">
-                        <label for="oneYear" class="ml-3 text-sm text-gray-700">1 ano</label>
+                        <input id="oneYear" name="suspensionTime" type="radio" class="h-4 w-4 text-red-700 focus:ring-red-500">
+                        <label for="oneYear" class="ml-3 text-sm text-gray">1 ano</label>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500" onclick="closeModal('prolongarModal')">
                     Cancelar
                 </button>
-                <button class="px-4 py-2 text-sm font-medium text-white bg-amber-600 border border-transparent rounded-full shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <button class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
                     Prolongar Suspensão
                 </button>
             </div>

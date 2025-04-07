@@ -11,19 +11,13 @@
         <div class="relative">
             {{-- Setas --}}
             <button id="testimonial-prev"
-                    class="absolute -left-6 top-1/2 transform -translate-y-1/2 bg-indigo-100 text-secondary rounded-full w-10 h-10 shadow hover:bg-indigo-200 transition z-10 hidden">
-                <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
+                    class="absolute -left-6 top-1/2 transform -translate-y-1/2 bg-indigo-100 text-secondary rounded-full w-10 h-10 shadow hover:bg-indigo-200 transition z-10 hidden flex items-center justify-center">
+                <i class="bi bi-chevron-left text-xl leading-none"></i>
             </button>
 
             <button id="testimonial-next"
-                    class="absolute -right-6 top-1/2 transform -translate-y-1/2 bg-indigo-100 text-secondary rounded-full w-10 h-10 shadow hover:bg-indigo-200 transition z-10">
-                <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+                    class="absolute -right-6 top-1/2 transform -translate-y-1/2 bg-indigo-100 text-secondary rounded-full w-10 h-10 shadow hover:bg-indigo-200 transition z-10 flex items-center justify-center">
+                <i class="bi bi-chevron-right text-xl leading-none"></i>
             </button>
 
             {{-- Slides de Testemunhos --}}
@@ -51,9 +45,9 @@
                                 <h4 class="text-lg font-semibold text-gray-800">{{ $cliente['nome'] }}</h4>
                                 <p class="text-sm text-gray-500 mb-2">{{ $cliente['profissao'] }}</p>
                                 <p class="text-sm text-gray-600 italic leading-relaxed">
-                                    <i class="bi bi-quote text-2xl text-gray-400 mb-2"></i>
+                                    <i class="bi bi-quote text-2xl text-gray mb-2"></i>
                                     {{ $cliente['mensagem'] }}
-                                    <i class="bi bi-quote text-2xl text-gray-400 mb-2 inline-block rotate-180"></i>
+                                    <i class="bi bi-quote text-2xl text-gray mb-2 inline-block rotate-180"></i>
                                 </p>
                             </div>
                         @endforeach

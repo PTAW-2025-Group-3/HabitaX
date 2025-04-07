@@ -22,7 +22,7 @@
                         <h3 class="text-secondary  font-bold text-lg">{{ $faq['question'] }}</h3>
                     </div>
                     <button
-                        class="text-secondary  text-2xl font-bold focus:outline-none transition-transform duration-300 transform"
+                        class="text-secondary text-2xl font-bold focus:outline-none transition-transform duration-300 transform"
                         id="toggle-icon-{{ $index }}">+
                     </button>
                 </div>

@@ -37,12 +37,8 @@
                    class="w-56 md:w-72 px-5 py-2 rounded-md bg-back text-gray-secondary shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" />
 
             {{-- Search Button --}}
-            <button type="submit"
-                    class="px-3 py-3 btn-primary">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
-                </svg>
+            <button type="submit" class="px-3 py-3 btn-primary">
+                <i class="bi bi-search w-5 h-5" style="font-size: 1.25rem; line-height: 1; stroke-width: 2;"></i>
             </button>
         </form>
     </div>
