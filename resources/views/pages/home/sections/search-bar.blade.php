@@ -3,7 +3,7 @@
 {{-- Div para sobrepor a searchbar e o nome por trás --}}
 <div class="w-full flex flex-col items-center justify-start bg-back">
     {{-- Container Principal --}}
-    <div class="text-[280px] font-extrabold text-black opacity-90 relative z-10">HabitaX</div>
+    <div class="text-[280px] font-extrabold text-black opacity-90 relative z-10 select-none">HabitaX</div>
     <div class="absolute z-20 w-full max-w-5xl mx-auto bg-blue-800 bg-opacity-50 backdrop-blur-md rounded-2xl px-6 py-8 mt-36 shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-500">
         <h2 class="text-center text-white text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
             O teu Espaço, <span class="text-gray-300 font-light">a tua Escolha</span>

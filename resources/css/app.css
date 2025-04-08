@@ -93,8 +93,12 @@
     @apply border-gray-100;
 }
 
-.form-contact-input{
-    @apply mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500;
+.form-input{
+    @apply mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+.form-input-big{
+    @apply bg-white border border-gray-300 rounded-xl shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all;
 }
 
 .card-about{

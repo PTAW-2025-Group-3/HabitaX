@@ -1,21 +1,22 @@
 <div class="relative w-full max-w-md mx-auto mb-8">
-    <div class="flex bg-gray-200 rounded-full p-1 relative overflow-hidden">
+    <div class="flex bg-gray-200 rounded-2xl relative overflow-hidden">
+
         <!-- Slider Azul -->
         <div
             id="slider"
-            class="absolute top-1 left-1 w-1/2 h-[calc(100%-0.5rem)] bg-blue-900 rounded-full transition-all duration-300 z-0"
+            class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-all duration-300 z-0"
         ></div>
 
         <!-- Botões -->
         <button
             id="btn-comprar"
-            class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 rounded-full text-xl font-medium text-white font-semibold"
+            class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-white"
         >
             Comprar
         </button>
         <button
             id="btn-arrendar"
-            class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 rounded-full text-xl font-medium text-gray-800"
+            class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-gray-800"
         >
             Arrendar
         </button>
@@ -28,7 +29,7 @@
     const slider = document.getElementById("slider");
 
     btnComprar.addEventListener("click", () => {
-        slider.style.left = "0.25rem";
+        slider.style.left = "0%";
         btnComprar.classList.add("text-white", "font-semibold");
         btnArrendar.classList.remove("text-white", "font-semibold");
         btnArrendar.classList.add("text-gray-800");
