@@ -1,17 +1,11 @@
 <div class="w-full md:w-1/4">
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <h2 class="font-bold text-2xl mb-6 text-blue-900 text-center">Filtros</h2>
+        <h2 class="font-bold text-2xl mb-6 text-primary text-center">Filtros</h2>
 
-        <!-- Map View Filter -->
+        <!-- Ver no Mapa -->
         <div class="mb-6">
             <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
+                <i class="bi bi-geo-alt-fill mr-2 text-secondary"></i>
                 Ver no Mapa
             </h3>
             <div class="w-full h-48 bg-gray-200 rounded-lg overflow-hidden relative">
@@ -21,172 +15,166 @@
                     allowfullscreen=""
                     loading="lazy">
                 </iframe>
-                <button
-                    class="absolute bottom-2 right-2 bg-blue-700 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-800 transition-colors">
-                    Expandir
+                <button class="absolute bottom-2 right-2 px-3 py-2 btn-secondary">
+                    <i class="bi bi-arrows-fullscreen mr-1"></i> Expandir
                 </button>
             </div>
         </div>
 
-        <!-- Quartos Filter -->
+        <!-- Quartos -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                </svg>
-                Quartos
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-door-open-fill mr-2 text-secondary"></i> Quartos
             </h3>
             <div class="grid grid-cols-5 gap-2 filter-group">
-                <button data-selected class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">All</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors">1+</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors">2+</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors">3+</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors">4+</button>
+                <button data-selected
+                        class="py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
+                    All
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    1+
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    2+
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    3+
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    4+
+                </button>
             </div>
         </div>
 
-        <!-- Casas de Banho Filter -->
+        <!-- Casas de Banho -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                Casas de Banho
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-badge-wc-fill mr-2 text-secondary"></i> Casas de Banho
             </h3>
-            <div class="grid grid-cols-4 gap-2 filter-group" data-filter-type="default">
-                <button data-selected class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">All</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">1+</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">2+</button>
-                <button class="py-2 px-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">3+</button>
+            <div class="grid grid-cols-4 gap-2 filter-group">
+                <button data-selected
+                        class="py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
+                    All
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    1+
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    2+
+                </button>
+                <button
+                    class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
+                    3+
+                </button>
             </div>
         </div>
 
-        <!-- Estado Filter -->
+        <!-- Estado -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
-                </svg>
-                Estado
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-building-fill-check mr-2 text-secondary"></i> Estado
             </h3>
-            <div class="space-y-2 filter-group" data-filter-type="light">
-                <button data-selected class="w-full py-2 px-4 border-2 border-gray-300 text-gray-700 bg-white rounded-lg font-medium text-left hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">Qualquer</button>
-                <button class="w-full py-2 px-4 border-2 border-gray-300 text-gray-700 bg-white rounded-lg font-medium text-left hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">Novo/Renovado</button>
-                <button class="w-full py-2 px-4 border-2 border-gray-300 text-gray-700 bg-white rounded-lg font-medium text-left hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">Usado</button>
-                <button class="w-full py-2 px-4 border-2 border-gray-300 text-gray-700 bg-white rounded-lg font-medium text-left hover:border-blue-700 hover:bg-blue-50 transition-colors focus:outline-none">Para Renovar</button>
+            <div class="space-y-2 filter-group">
+                <button data-selected
+                        class="w-full py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
+                    Qualquer
+                </button>
+                <button
+                    class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
+                    Novo/Renovado
+                </button>
+                <button
+                    class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
+                    Usado
+                </button>
+                <button
+                    class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
+                    Para Renovar
+                </button>
             </div>
         </div>
 
         <!-- Divider -->
         <div class="w-full h-px bg-gray-200 my-6"></div>
 
-        <!-- Publicação Filter -->
+        <!-- Publicação -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Publicação
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-clock-history mr-2 text-secondary"></i> Publicação
             </h3>
-            <div class="relative">
-                <select
-                    class="w-full p-3 bg-white border-2 border-gray-300 rounded-lg appearance-none text-gray-800 pr-10">
+            <div class="relative dropdown-wrapper">
+                <select class="p-2 pl-4 pr-10 dropdown-select">
                     <option>Últimas 24 horas</option>
                     <option>Últimos 3 dias</option>
                     <option>Última semana</option>
                     <option>Último mês</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                    <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                    </svg>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Preço Filter -->
+
+        <!-- Preço -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Preço
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-currency-euro mr-2 text-secondary"></i> Preço
             </h3>
             <div class="grid grid-cols-2 gap-3">
-                <div class="relative">
-                    <select
-                        class="w-full p-3 bg-white border-2 border-gray-300 rounded-lg appearance-none text-gray-800 pr-10">
+                <div class="relative dropdown-wrapper">
+                    <select class="p-2 pl-4 pr-10 dropdown-select">
                         <option>Mínimo</option>
                         <option>100.000€</option>
                         <option>200.000€</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
                 </div>
-                <div class="relative">
-                    <select
-                        class="w-full p-3 bg-white border-2 border-gray-300 rounded-lg appearance-none text-gray-800 pr-10">
+                <div class="relative dropdown-wrapper">
+                    <select class="p-2 pl-4 pr-10 dropdown-select">
                         <option>Máximo</option>
                         <option>500.000€</option>
                         <option>1.000.000€</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tamanho Filter -->
+        <!-- Tamanho -->
         <div class="mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
-                </svg>
-                Tamanho
+            <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-arrows-expand mr-2 text-secondary"></i> Tamanho
             </h3>
             <div class="grid grid-cols-2 gap-3">
-                <div class="relative">
-                    <select
-                        class="w-full p-3 bg-white border-2 border-gray-300 rounded-lg appearance-none text-gray-800 pr-10">
+                <div class="relative dropdown-wrapper">
+                    <select class="p-2 pl-4 pr-10 dropdown-select">
                         <option>Mínimo</option>
                         <option>50 m²</option>
                         <option>100 m²</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
                 </div>
-                <div class="relative">
-                    <select
-                        class="w-full p-3 bg-white border-2 border-gray-300 rounded-lg appearance-none text-gray-800 pr-10">
+                <div class="relative dropdown-wrapper">
+                    <select class="p-2 pl-4 pr-10 dropdown-select">
                         <option>Máximo</option>
                         <option>200 m²</option>
                         <option>500 m²</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
                 </div>
             </div>
@@ -195,107 +183,63 @@
         <!-- Divider -->
         <div class="w-full h-px bg-gray-200 my-6"></div>
 
-        <!-- Amenities Filter -->
+        <!-- Comodidades -->
         <div class="mb-4">
-            <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Comodidades
+            <h3 class="font-semibold text-gray-secondary mb-4 flex items-center">
+                <i class="bi bi-sliders2-vertical mr-2 text-secondary"></i> Comodidades
             </h3>
             <div class="grid grid-cols-1 gap-3">
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="ac"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
+                @foreach (['Ar Condicionado', 'Garagem', 'Jardim', 'Piscina', 'Painéis Solares', 'Mobilidade Reduzida'] as $amenity)
+                    <div
+                        class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-secondary hover:bg-indigo-50 transition">
+                        <div class="w-5 mr-3 flex items-center justify-center">
+                            <input type="checkbox" id="{{ Str::slug($amenity) }}"
+                                   class="h-5 w-5 text-secondary rounded border-gray-300 focus:ring-secondary">
+                        </div>
+                        <label for="{{ Str::slug($amenity) }}" class="text-sm font-medium">{{ $amenity }}</label>
                     </div>
-                    <label for="ac" class="text-sm font-medium">Ar Condicionado</label>
-                </div>
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="garagem"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
-                    </div>
-                    <label for="garagem" class="text-sm font-medium">Garagem</label>
-                </div>
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="jardim"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
-                    </div>
-                    <label for="jardim" class="text-sm font-medium">Jardim</label>
-                </div>
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="piscina"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
-                    </div>
-                    <label for="piscina" class="text-sm font-medium">Piscina</label>
-                </div>
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="paineis"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
-                    </div>
-                    <label for="paineis" class="text-sm font-medium">Painéis Solares</label>
-                </div>
-                <div
-                    class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
-                    <div class="w-5 mr-3 flex items-center justify-center">
-                        <input type="checkbox" id="mobilidade"
-                               class="h-5 w-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500">
-                    </div>
-                    <label for="mobilidade" class="text-sm font-medium">Mobilidade Reduzida</label>
-                </div>
+                @endforeach
             </div>
         </div>
 
-        <!-- Apply Filters Button -->
+        <!-- Aplicar Filtros -->
         <div class="mt-8">
-            <button
-                class="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg shadow-md transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                Aplicar Filtros
+            <button class="w-full py-3 btn-secondary">
+                <i class="bi bi-funnel-fill mr-2"></i> Aplicar Filtros
             </button>
         </div>
     </div>
 </div>
-<!-- Script para ativação de filtros -->
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Botões de filtros
         document.querySelectorAll('.filter-group').forEach(group => {
             const type = group.dataset.filterType || 'default';
             const buttons = group.querySelectorAll('button');
 
             const applyActiveStyle = (button) => {
                 if (type === 'light') {
-                    button.classList.remove('border-gray-300', 'text-gray-700', 'hover:bg-blue-50');
-                    button.classList.add('bg-blue-100', 'text-blue-900', 'border-blue-600');
+                    button.classList.remove('border-gray-300', 'text-gray-700', 'hover:bg-indigo-50');
+                    button.classList.add('bg-indigo-100', 'text-secondary', 'border-secondary');
                 } else {
-                    button.classList.remove('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-blue-50');
-                    button.classList.add('bg-blue-700', 'text-white', 'border-blue-700');
-                    button.classList.remove('hover:text-white');
+                    button.classList.remove('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-indigo-50');
+                    button.classList.add('bg-secondary', 'text-white', 'border-secondary');
                 }
             };
 
             const resetButtons = () => {
                 buttons.forEach(b => {
                     b.classList.remove(
-                        'bg-blue-700', 'text-white', 'border-blue-700',
-                        'bg-blue-100', 'text-blue-900', 'border-blue-600',
-                        'hover:bg-blue-50', 'hover:text-white'
+                        'bg-secondary', 'text-white', 'border-secondary',
+                        'bg-indigo-100', 'text-secondary',
+                        'hover:bg-indigo-50'
                     );
-                    b.classList.add('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-blue-50');
+                    b.classList.add('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-indigo-50');
                     b.blur();
                 });
             };
 
-            // Evento de clique
             buttons.forEach(button => {
                 button.addEventListener('click', () => {
                     resetButtons();
@@ -303,11 +247,26 @@
                 });
             });
 
-            // Ativa botão com data-selected
             const preselected = group.querySelector('button[data-selected]');
             if (preselected) applyActiveStyle(preselected);
         });
+
+        // Dropdown com chevron animado
+        document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
+            const chevron = wrapper.querySelector('.chevron');
+
+            wrapper.addEventListener('click', () => {
+                chevron.classList.toggle('rotate-90');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    chevron.classList.remove('rotate-90');
+                }
+            });
+        });
     });
 </script>
+
 
 

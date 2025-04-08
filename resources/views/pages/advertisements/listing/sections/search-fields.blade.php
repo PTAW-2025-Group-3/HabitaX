@@ -4,13 +4,14 @@
         <label for="property-type" class="block text-gray-800 font-semibold mb-2">Tipo de Imóvel</label>
         <div class="relative">
             <select id="property-type"
-                    class="w-full p-3 pl-4 pr-10 bg-white border border-gray-300 rounded-xl shadow-sm appearance-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    class="p-3 pl-4 pr-10 w-full
+                     bg-white border border-gray-300 rounded-xl shadow-sm appearance-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all;">
                 <option selected>Moradias</option>
                 <option>Apartamentos</option>
                 <option>Terrenos</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500">
-                <i id="chevron" class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
             </div>
         </div>
     </div>
@@ -30,7 +31,7 @@
     <div class="w-full md:w-auto flex items-end">
         <button
             type="button"
-            class="w-full md:w-auto px-5 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-800 rounded-xl shadow-sm flex items-center justify-center transition-all"
+            class="w-full md:w-auto px-5 py-3 btn-primary"
         >
             <i class="bi bi-search mr-2"></i>
             <span>Pesquisar</span>
@@ -43,7 +44,7 @@
     // Script para o menu dropdown do tipo de imóvel
     document.addEventListener('DOMContentLoaded', function () {
         const select = document.getElementById('property-type');
-        const chevron = document.getElementById('chevron');
+        const chevron = document.querySelector('.chevron');
 
         let isOpen = false;
 
@@ -52,7 +53,7 @@
             chevron.classList.toggle('rotate-90', isOpen);
         });
 
-        // Opcional: fecha o menu se o utilizador clicar fora
+        // Fecha o menu se o utilizador clicar fora
         document.addEventListener('click', function (e) {
             if (!select.contains(e.target)) {
                 chevron.classList.remove('rotate-90');
@@ -61,3 +62,4 @@
         });
     });
 </script>
+
