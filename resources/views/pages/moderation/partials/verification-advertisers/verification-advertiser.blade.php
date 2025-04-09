@@ -27,9 +27,7 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
                 <div class="border-b border-gray-200">
                     <h4 class="text-lg font-semibold p-4 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
+                        <i class="bi bi-person me-2 text-gray"></i>
                         Informações do Anunciante
                     </h4>
                 </div>
@@ -39,11 +37,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Nome Completo</label>
                             <div class="flex">
-                            <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </span>
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-person text-gray"></i>
+                                </span>
                                 <input type="text" value="Ana Sofia Cardoso" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
                             </div>
                         </div>
@@ -51,11 +47,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Email</label>
                             <div class="flex">
-                            <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </span>
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-envelope text-gray"></i>
+                                </span>
                                 <input type="text" value="anasofiacardoso@gmail.com" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
                             </div>
                         </div>
@@ -63,11 +57,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Telefone</label>
                             <div class="flex">
-                            <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                            </span>
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-telephone text-gray"></i>
+                                </span>
                                 <input type="text" value="+351 912 345 678" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
                             </div>
                         </div>
@@ -75,11 +67,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Tipo de Documento</label>
                             <div class="flex">
-                            <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-                                </svg>
-                            </span>
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-card-text text-gray"></i>
+                                </span>
                                 <input type="text" value="Cartão de Cidadão" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
                             </div>
                         </div>
@@ -93,9 +83,7 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
                     <div class="border-b border-gray-200">
                         <h4 class="text-lg font-semibold p-4 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                            </svg>
+                            <i class="bi bi-card-heading me-2 text-gray"></i>
                             Documento de Identificação
                         </h4>
                     </div>
@@ -106,15 +94,11 @@
 
                         <div class="flex space-x-3">
                             <button class="flex-1 btn-primary px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
+                                <i class="bi bi-download me-1"></i>
                                 Download
                             </button>
                             <button class="flex-1 btn-gray px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
+                                <i class="bi bi-search me-1"></i>
                                 Ampliar
                             </button>
                         </div>
@@ -125,10 +109,7 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
                     <div class="border-b border-gray-200">
                         <h4 class="text-lg font-semibold p-4 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
+                            <i class="bi bi-camera me-2 text-gray"></i>
                             Selfie com Documento
                         </h4>
                     </div>
@@ -139,15 +120,11 @@
 
                         <div class="flex space-x-3">
                             <button class="flex-1 btn-primary px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
+                                <i class="bi bi-download me-1"></i>
                                 Download
                             </button>
                             <button class="flex-1 btn-gray px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
+                                <i class="bi bi-search me-1"></i>
                                 Ampliar
                             </button>
                         </div>
@@ -159,9 +136,7 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
                 <div class="border-b border-gray-200">
                     <h4 class="text-lg font-semibold p-4 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
+                        <i class="bi bi-clipboard-check me-2 text-gray"></i>
                         Checklist de Verificação
                     </h4>
                 </div>
@@ -169,27 +144,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex items-start">
                             <input id="check1" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check1" class="ml-2 text-gray-700">Documento legível e válido</label>
+                            <label for="check1" class="ms-2 text-gray-700">Documento legível e válido</label>
                         </div>
                         <div class="flex items-start">
                             <input id="check2" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check2" class="ml-2 text-gray-700">Informações do documento correspondem ao registo</label>
+                            <label for="check2" class="ms-2 text-gray-700">Informações do documento correspondem ao registo</label>
                         </div>
                         <div class="flex items-start">
                             <input id="check3" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check3" class="ml-2 text-gray-700">Selfie mostra claramente o rosto do utilizador</label>
+                            <label for="check3" class="ms-2 text-gray-700">Selfie mostra claramente o rosto do utilizador</label>
                         </div>
                         <div class="flex items-start">
                             <input id="check4" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check4" class="ml-2 text-gray-700">O documento na selfie corresponde ao documento enviado</label>
+                            <label for="check4" class="ms-2 text-gray-700">O documento na selfie corresponde ao documento enviado</label>
                         </div>
                         <div class="flex items-start">
                             <input id="check5" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check5" class="ml-2 text-gray-700">Não há sinais de manipulação nos documentos</label>
+                            <label for="check5" class="ms-2 text-gray-700">Não há sinais de manipulação nos documentos</label>
                         </div>
                         <div class="flex items-start">
                             <input id="check6" type="checkbox" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="check6" class="ml-2 text-gray-700">Documento não expirado</label>
+                            <label for="check6" class="ms-2 text-gray-700">Documento não expirado</label>
                         </div>
                     </div>
                 </div>
@@ -199,9 +174,7 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
                 <div class="border-b border-gray-200">
                     <h4 class="text-lg font-semibold p-4 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <i class="bi bi-check-circle me-2 text-gray"></i>
                         Decisão de Verificação
                     </h4>
                 </div>
@@ -212,15 +185,11 @@
                     </div>
                     <div class="flex justify-center space-x-4">
                         <button class="btn-success px-8 py-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
+                            <i class="bi bi-check-lg me-2"></i>
                             Aprovar Verificação
                         </button>
                         <button class="btn-warning px-8 py-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <i class="bi bi-x-lg me-2"></i>
                             Rejeitar Verificação
                         </button>
                     </div>

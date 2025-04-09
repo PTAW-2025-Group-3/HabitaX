@@ -23,10 +23,10 @@
                         'filters' => ['Por Aprovar', 'Aprovados', 'Rejeitados'],
                         'headers' => ['#', 'Nome do Anunciante', 'Contacto', 'Data de Pedido', 'Documentos', 'Status', 'Ações'],
                         'rows' => [
-                            ['#5644', 'João Silva', '+351 912 345 678', '15/03/2025 - 14:55', '✅ Sim', '<span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">Por Aprovar</span>', '<a href="' . route('verification-advertiser.show', ['id' => 5644]) . '" class="btn-secondary px-3 py-1">Ver Detalhes</a>'],
-                            ['#6112', 'Maria Santos', '+351 963 123 456', '16/03/2025 - 12:33', '✅ Sim', '⏳ Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
-                            ['#6141', 'Ricardo Lopes', '+351 917 654 321', '17/03/2025 - 19:43', '✅ Sim', '⏳ Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
-                            ['#6535', 'Sofia Almeida', '+351 918 222 333', '18/03/2025 - 15:46', '✅ Sim', '⏳ Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
+                            ['#5644', 'João Silva', '+351 912 345 678', '15/03/2025 - 14:55', 'Sim', '<span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">Por Aprovar</span>', '<a href="' . route('verification-advertiser.show', ['id' => 5644]) . '" class="btn-secondary px-3 py-1">Ver Detalhes</a>'],
+                            ['#6112', 'Maria Santos', '+351 963 123 456', '16/03/2025 - 12:33', 'Sim', 'Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
+                            ['#6141', 'Ricardo Lopes', '+351 917 654 321', '17/03/2025 - 19:43', 'Sim', 'Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
+                            ['#6535', 'Sofia Almeida', '+351 918 222 333', '18/03/2025 - 15:46', 'Sim', 'Por Aprovar', '<button class="btn-secondary px-3 py-1">Ver Detalhes</button>'],
                         ]
                     ],
                     [

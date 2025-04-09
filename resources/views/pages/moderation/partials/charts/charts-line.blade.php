@@ -1,7 +1,7 @@
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<div class="bg-white rounded-xl shadow-sm border border-gray overflow-hidden">
     <div class="p-6">
-        <h3 class="text-lg font-semibold text-gray-800">Contas Suspensas</h3>
-        <p class="text-sm text-gray-500 mt-1">Últimos 6 meses</p>
+        <h3 class="text-lg font-semibold text-gray-secondary">Contas Suspensas</h3>
+        <p class="text-sm text-gray mt-1">Últimos 6 meses</p>
     </div>
     <div class="px-6 pb-6">
         <div class="h-52">
@@ -30,7 +30,7 @@
                 </defs>
             </svg>
         </div>
-        <div class="flex justify-between text-xs text-gray-500 mt-2">
+        <div class="flex justify-between text-xs text-gray mt-2">
             <span>Nov</span>
             <span>Dez</span>
             <span>Jan</span>
