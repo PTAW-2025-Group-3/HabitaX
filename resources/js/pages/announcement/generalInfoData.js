@@ -1,58 +1,60 @@
 import $ from 'jquery';
 
-const generalInfoData = {
-  propertyTypes: [
-    "Apartment",
-    "House",
-    "Land",
-    "Warehouse",
-    "Commercial Space",
-    "Garage",
-    "Farm",
-    "Office",
-    "Rural Property"
-  ],
-  typologies: [
-    "T0", "T1", "T2", "T3", "T4", "T5", "T6 or more",
-    "Studio", "Loft", "Open Space"
-  ],
-  conditions: [
-    "New",
-    "Renovated",
-    "Used",
-    "To Renovate",
-    "Under Construction"
-  ],
-  energyCertifications: [
-    "A+", "A", "B", "C", "D", "E", "F", "G", "Exempt"
-  ]
+const dadosInformacaoGeral = {
+    tiposPropriedade: [
+        "Apartamento",
+        "Moradia",
+        "Terreno",
+        "Armazém",
+        "Espaço Comercial",
+        "Garagem",
+        "Quinta",
+        "Escritório",
+        "Propriedade Rural"
+    ],
+    tipologias: [
+        "T0", "T1", "T2", "T3", "T4", "T5", "T6 ou mais",
+        "Estúdio", "Loft", "Open Space"
+    ],
+    estadosConservacao: [
+        "Novo",
+        "Renovado",
+        "Usado",
+        "Por Renovar",
+        "Em Construção"
+    ],
+    certificacoesEnergeticas: [
+        "A+", "A", "B", "C", "D", "E", "F", "G", "Isento"
+    ]
 };
 
 $(document).ready(function () {
-  const {
-    propertyTypes,
-    typologies,
-    conditions,
-    energyCertifications
-  } = generalInfoData;
+    const {
+        tiposPropriedade,
+        tipologias,
+        estadosConservacao,
+        certificacoesEnergeticas
+    } = dadosInformacaoGeral;
 
-  $('#property-type').empty().append('<option disabled selected>Select Property Type</option>');
-  $('#typology').empty().append('<option disabled selected>Select Typology</option>');
-  $('#condition').empty().append('<option disabled selected>Select Condition</option>');
-  $('#energy-certification').empty().append('<option disabled selected>Select Certification</option>');
+    // Limpar e definir opções iniciais
+    $('#property-type').empty().append('<option disabled selected>Seleciona o tipo de propriedade</option>');
+    $('#typology').empty().append('<option disabled selected>Seleciona a tipologia</option>');
+    $('#condition').empty().append('<option disabled selected>Seleciona o estado</option>');
+    $('#energy-certification').empty().append('<option disabled selected>Seleciona a certificação</option>');
 
-  propertyTypes.forEach(type =>
-    $('#property-type').append(`<option value="${type}">${type}</option>`)
-  );
-  typologies.forEach(typology =>
-    $('#typology').append(`<option value="${typology}">${typology}</option>`)
-  );
-  conditions.forEach(cond =>
-    $('#condition').append(`<option value="${cond}">${cond}</option>`)
-  );
-  energyCertifications.forEach(cert =>
-    $('#energy-certification').append(`<option value="${cert}">${cert}</option>`)
-  );
+    // Preencher os selects com os dados
+    tiposPropriedade.forEach(tipo =>
+        $('#property-type').append(`<option value="${tipo}">${tipo}</option>`)
+    );
+    tipologias.forEach(tipologia =>
+        $('#typology').append(`<option value="${tipologia}">${tipologia}</option>`)
+    );
+    estadosConservacao.forEach(estado =>
+        $('#condition').append(`<option value="${estado}">${estado}</option>`)
+    );
+    certificacoesEnergeticas.forEach(cert =>
+        $('#energy-certification').append(`<option value="${cert}">${cert}</option>`)
+    );
 
-  console.log('✅ General info populated successfully');
+    console.log('✅ Informação geral carregada com sucesso!');
 });

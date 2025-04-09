@@ -4,15 +4,20 @@
 <div class="p-6">
     <div class="max-w-7xl mx-auto">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Meus Favoritos</h2>
-            <div class="flex items-center space-x-4">
-                <select class="border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-800 focus:border-blue-800 sm:text-sm">
-                    <option>Ordenar por</option>
+            <h2 class="text-2xl font-bold text-gray-secondary">Meus Favoritos</h2>
+            <div class="relative flex items-center space-x-4 w-full sm:w-auto">
+                <select
+                    class="py-2 pl-4 pr-10 w-full sm:w-auto border border-gray-300 rounded-md shadow-sm appearance-none
+               text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-blue-800 transition-all">
+                    <option disabled selected>Ordenar por</option>
                     <option>Preço: Menor para Maior</option>
                     <option>Preço: Maior para Menor</option>
                     <option>Data: Mais Recente</option>
                     <option>Data: Mais Antiga</option>
                 </select>
+                <div class="pointer-events-none absolute right-3 inset-y-0 flex items-center text-gray">
+                    <i class="bi bi-chevron-down text-sm"></i>
+                </div>
             </div>
         </div>
 
@@ -20,8 +25,8 @@
             {{-- Property Card 1 --}}
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Property" 
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                         alt="Property"
                          class="w-full h-48 object-cover">
                     <button class="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
                         <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -43,8 +48,8 @@
             {{-- Property Card 2 --}}
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Property" 
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                         alt="Property"
                          class="w-full h-48 object-cover">
                     <button class="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
                         <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -53,7 +58,7 @@
                     </button>
                 </div>
                 <div class="p-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Apartamento T2 Moderno</h3>
+                    <h3 class="text-lg font-semibold text-gray-secondary">Apartamento T2 Moderno</h3>
                     <p class="text-sm text-gray-500 mb-2">Lisboa, Portugal</p>
                     <p class="text-lg font-bold text-blue-800">275.000€</p>
                     <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
@@ -66,8 +71,8 @@
             {{-- Property Card 3 --}}
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Property" 
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                         alt="Property"
                          class="w-full h-48 object-cover">
                     <button class="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100">
                         <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -76,7 +81,7 @@
                     </button>
                 </div>
                 <div class="p-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Moradia T5 com Jardim</h3>
+                    <h3 class="text-lg font-semibold text-gray-secondary">Moradia T5 com Jardim</h3>
                     <p class="text-sm text-gray-500 mb-2">Braga, Portugal</p>
                     <p class="text-lg font-bold text-blue-800">720.000€</p>
                     <div class="mt-4 flex items-center justify-between text-sm text-gray-500">

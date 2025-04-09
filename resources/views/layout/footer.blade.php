@@ -4,7 +4,9 @@
         {{--About Section --}}
         <div>
             <div class="flex items-center mb-4 space-x-3">
-                <div class="w-10 h-10 bg-indigo-600 rounded-full shadow-xl"></div>
+                <div class="w-10 h-10 bg-gradient-to-r from-indigo-600 to-blue-900 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 overflow-hidden">
+                    <img src="{{ asset('images/logos/habitaxLogo.png') }}" alt="HabitaXLogo" class="mt-1 object-cover">
+                </div>
                 <span class="text-2xl font-bold text-white tracking-tight">Habita<span class="text-indigo-400">X</span></span>
             </div>
             <p class="text-gray-400 leading-relaxed text-sm">
@@ -17,18 +19,18 @@
             <h3 class="text-white font-semibold mb-4 text-lg">Links: </h3>
             <ul class="space-y-2 text-sm">
                 <li><a href="/" class="hover:text-indigo-400 transition">Home</a></li>
-                <li><a href="#" class="hover:text-indigo-400 transition">Sobre Nós</a></li>
-                <li><a href="#" class="hover:text-indigo-400 transition">Contacte-nos</a></li>
-                <li><a href="#" class="hover:text-indigo-400 transition">Iniciar Sessão</a></li>
-                <li><a href="#" class="hover:text-indigo-400 transition">Publicar Anúncio</a></li>
+                <li><a href="/about" class="hover:text-indigo-400 transition">Sobre Nós</a></li>
+                <li><a href="/contact" class="hover:text-indigo-400 transition">Contacte-nos</a></li>
+                <li><a href="/login" class="hover:text-indigo-400 transition">Iniciar Sessão</a></li>
+                <li><a href="/create" class="hover:text-indigo-400 transition">Publicar Anúncio</a></li>
             </ul>
         </div>
 
         {{--Newsletter --}}
         <div>
-            <h3 class="text-white font-semibold mb-4 text-lg">Subscribe</h3>
+            <h3 class="text-white font-semibold mb-4 text-lg">Encontra o lugar certo, no momento certo.</h3>
             <p class="text-gray-400 text-sm mb-4">
-                Subscreve a nossa newsletter para receber as mais recentes ofertas e insights sobre propriedades.
+                Subscreve a nossa newsletter para receber novas oportunidades e conselhos imobiliários diretamente no teu email.
             </p>
             <form class="flex flex-col sm:flex-row gap-3">
                 <input type="email" placeholder="exemplo@email.com"

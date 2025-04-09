@@ -1,5 +1,5 @@
 <div class="bg-white shadow-lg rounded-xl p-6 mb-8 border border-gray-200">
-    <h2 class="text-xl font-semibold text-blue-700 mb-6">Localização</h2>
+    <h2 class="text-xl font-bold text-primary mb-6">Localização</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 

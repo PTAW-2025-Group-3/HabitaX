@@ -1,5 +1,5 @@
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-    <h2 class="text-2xl font-semibold mb-4 text-blue-700">Fotografias da Propriedade</h2>
+    <h2 class="text-xl font-bold mb-4 text-primary">Fotografias da Propriedade</h2>
     <p class="text-sm text-gray-500 mb-4">Envia imagens de alta qualidade da propriedade. Máximo de 10 fotografias permitidas.</p>
 
     <form action="#" method="POST" enctype="multipart/form-data">

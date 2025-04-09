@@ -1,5 +1,5 @@
 <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-    <h2 class="text-xl font-semibold text-blue-700 mb-4">Informação Adicional</h2>
+    <h2 class="text-xl font-bold text-primary mb-4">Informação Adicional</h2>
 
     {{-- Área + Ano + Divisões --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">

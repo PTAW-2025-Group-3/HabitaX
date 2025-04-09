@@ -1,5 +1,5 @@
 <div class="bg-white shadow rounded-xl p-6 border border-gray-300">
-    <h2 class="text-xl font-bold text-blue-700 mb-4">Detalhes da Propriedade</h2>
+    <h2 class="text-xl font-bold text-primary mb-4">Detalhes da Propriedade</h2>
 
     {{-- Título --}}
     <div class="mb-4">

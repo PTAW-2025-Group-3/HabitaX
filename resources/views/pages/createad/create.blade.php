@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-5xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8 text-secondary">Criar Propriedade</h1>
+        <h1 class="text-3xl font-bold mb-8 text-primary">Criar Propriedade</h1>
 
         <form action="{{ route('pages.createad.store') }}" method="POST" enctype="multipart/form-data"
               class="space-y-8">
