@@ -15,7 +15,7 @@
                     allowfullscreen=""
                     loading="lazy">
                 </iframe>
-                <button class="absolute bottom-2 right-2 px-3 py-2 btn-secondary">
+                <button class="absolute bottom-2 right-2 px-3 py-2 btn-primary">
                     <i class="bi bi-arrows-fullscreen mr-1"></i> Expandir
                 </button>
             </div>
@@ -251,20 +251,6 @@
             if (preselected) applyActiveStyle(preselected);
         });
 
-        // Dropdown com chevron animado
-        document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
-            const chevron = wrapper.querySelector('.chevron');
-
-            wrapper.addEventListener('click', () => {
-                chevron.classList.toggle('rotate-90');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!wrapper.contains(e.target)) {
-                    chevron.classList.remove('rotate-90');
-                }
-            });
-        });
     });
 </script>
 

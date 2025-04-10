@@ -54,5 +54,5 @@ $(document).ready(function () {
     $('#energy-certification').append(`<option value="${cert}">${cert}</option>`)
   );
 
-  console.log('✅ General info populated successfully');
+  console.log('General info populated successfully');
 });

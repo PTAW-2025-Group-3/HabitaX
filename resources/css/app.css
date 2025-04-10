@@ -49,6 +49,11 @@
     font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
 }
 
+.btn-secondary-no-hover {
+    @apply inline-flex items-center justify-center bg-indigo-500 text-white hover:bg-indigo-400
+    font-semibold rounded-xl shadow-md transition-all duration-300;
+}
+
 .btn-gray {
     @apply inline-flex items-center justify-center bg-gray-200 text-black hover:bg-gray-300
     font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;
@@ -124,6 +129,13 @@
     @apply w-20 h-20 flex items-center justify-center rounded-full bg-gray-100 mb-4 transition duration-300 group-hover:scale-110;
 }
 
+/* Estilo especifico para a numeração das páginas*/
+.pagination{
+    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 hover:text-blue-600 hover:shadow-md text-gray-600
+}
 
+.page-selected{
+    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out text-white bg-blue-600
+}
 
 

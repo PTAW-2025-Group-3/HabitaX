@@ -49,5 +49,5 @@ $(document).ready(function () {
   bathroomCounts.forEach(b => $('#bathrooms').append(`<option value="${b}">${b}</option>`));
   garageSpots.forEach(g => $('#garage').append(`<option value="${g}">${g}</option>`));
 
-  console.log('✅ Additional info populated successfully!');
+  console.log('Additional info populated successfully!');
 });

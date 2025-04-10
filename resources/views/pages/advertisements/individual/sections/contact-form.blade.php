@@ -4,17 +4,17 @@
     <form class="space-y-3">
         <div>
             <label class="block text-sm">O seu email</label>
-            <input type="email" class="w-full border rounded p-2" placeholder="exemplo@email.com">
+            <input type="email" class="w-full form-input" placeholder="exemplo@email.com">
         </div>
         <div>
             <label class="block text-sm">O seu telefone</label>
-            <input type="tel" class="w-full border rounded p-2" placeholder="+351...">
+            <input type="tel" class="w-full form-input" placeholder="+351...">
         </div>
         <div>
             <label class="block text-sm">Mensagem</label>
-            <textarea class="w-full border rounded p-2" rows="3" placeholder="Estou interessado neste imóvel..."></textarea>
+            <textarea class="w-full form-input" rows="3" placeholder="Estou interessado neste imóvel..."></textarea>
         </div>
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Enviar Contacto</button>
+        <button type="submit" class="w-full py-2 btn-secondary-no-hover">Enviar Contacto</button>
     </form>
     <div class="text-center mt-2">
         <a href="#" class="text-sm text-blue-600 hover:underline">Ver Telefone</a>

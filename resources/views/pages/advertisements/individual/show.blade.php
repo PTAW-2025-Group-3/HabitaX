@@ -26,7 +26,7 @@
                 <div class="text-lg font-semibold text-gray-700">{{ $ad->type }} em {{ $ad->location }}</div>
                 <div class="text-sm text-gray-500">{{ $ad->details }}</div>
             </div>
-            <div class="text-2xl font-bold text-blue-600">{{ number_format($ad->price, 0, ',', '.') }}€</div>
+            <div class="text-4xl font-bold text-secondary">{{ number_format($ad->price, 0, ',', '.') }}€</div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6">

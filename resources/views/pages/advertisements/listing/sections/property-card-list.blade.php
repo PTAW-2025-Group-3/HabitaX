@@ -8,7 +8,7 @@
                 <p class="text-xl font-bold text-blue-800 mt-2">{{ $property['price'] }}</p>
                 <p class="mt-2 text-gray-700 line-clamp-2">{{ $property['description'] }}</p>
                 <div class="mt-4 flex space-x-2">
-                    <button class="px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-lg text-sm hover:bg-blue-50">Ligar</button>
+                    <button class="px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-lg text-sm hover:bg-blue-50">Ver Telefone</button>
                     <button class="px-4 py-2 bg-blue-900 text-white rounded-lg text-sm hover:bg-blue-800">Contactar</button>
                 </div>
             </div>

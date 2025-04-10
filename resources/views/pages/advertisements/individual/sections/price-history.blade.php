@@ -9,9 +9,7 @@
             <div class="text-sm text-gray-500">preço médio</div>
             <div class="text-xs mt-1 text-green-600 font-semibold">● On Track</div>
         </div>
-        <div>
-            <span class="inline-block px-3 py-1 bg-blue-600 text-white text-sm rounded shadow">Este Mês</span>
-        </div>
+
     </div>
 
     <canvas id="priceHistoryChart" height="130"></canvas>

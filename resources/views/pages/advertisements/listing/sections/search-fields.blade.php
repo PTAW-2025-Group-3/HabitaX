@@ -2,10 +2,9 @@
     <!-- Tipo de Imóvel -->
     <div class="w-full md:w-1/2">
         <label for="property-type" class="block text-gray-800 font-semibold mb-2">Tipo de Imóvel</label>
-        <div class="relative">
+        <div class="relative dropdown-wrapper">
             <select id="property-type"
-                    class="p-3 pl-4 pr-10 w-full
-                     bg-white border border-gray-300 rounded-xl shadow-sm appearance-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all;">
+                    class="p-3 pl-4 pr-10 w-full dropdown-select">
                 <option selected>Moradias</option>
                 <option>Apartamentos</option>
                 <option>Terrenos</option>
@@ -40,26 +39,4 @@
 
 </div>
 
-<script>
-    // Script para o menu dropdown do tipo de imóvel
-    document.addEventListener('DOMContentLoaded', function () {
-        const select = document.getElementById('property-type');
-        const chevron = document.querySelector('.chevron');
-
-        let isOpen = false;
-
-        select.addEventListener('click', function () {
-            isOpen = !isOpen;
-            chevron.classList.toggle('rotate-90', isOpen);
-        });
-
-        // Fecha o menu se o utilizador clicar fora
-        document.addEventListener('click', function (e) {
-            if (!select.contains(e.target)) {
-                chevron.classList.remove('rotate-90');
-                isOpen = false;
-            }
-        });
-    });
-</script>
 
