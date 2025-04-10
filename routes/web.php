@@ -60,20 +60,31 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Account Settings Routes
+    // Account Routes
     Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
     Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password');
     Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
-    // Favorites and Properties Routes
     Route::get('/favorites', function () {
         return view('pages.account.sections.favorites');
     })->name('favorites');
 
+    Route::get('/advertiser-verification', function () {
+        return view('pages.account.sections.advertiser-verification');
+    })->name('advertiser-verification');
+
+    Route::get('/my-ads', function () {
+        return view('pages.account.sections.my-ads');
+    })->name('my-ads');
+
     Route::get('/my-properties', function () {
         return view('pages.account.sections.my-properties');
     })->name('my-properties');
+
+    Route::get('/contact-requests', function () {
+        return view('pages.account.sections.contact-requests');
+    })->name('contact-requests');
 
 });
 

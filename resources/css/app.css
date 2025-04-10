@@ -40,6 +40,10 @@
     @apply bg-indigo-600;
 }
 
+.bg-alt{
+    @apply bg-blue-500;
+}
+
 .btn-primary {
     @apply inline-flex items-center justify-center bg-blue-900 text-white hover:bg-blue-800
     font-semibold rounded-xl shadow-md transition-all duration-300 hover:scale-105 active:scale-95;

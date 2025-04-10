@@ -1,6 +1,6 @@
 <table class="w-full text-sm">
     <thead>
-    <tr class="bg-gray-50 text-left text-gray-600">
+    <tr class="bg-gray-50 text-left text-gray-secondary">
         @foreach ($headers as $header)
             <th class="px-6 py-3 font-medium">{{ $header }}</th>
         @endforeach

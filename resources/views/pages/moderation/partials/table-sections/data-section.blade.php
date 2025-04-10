@@ -1,5 +1,5 @@
 <div class="mt-10">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray overflow-hidden">
 
         @include('pages.moderation.partials.table-sections.section-header', ['title' => $section['title'], 'filters' => $section['filters']])
 

@@ -7,15 +7,11 @@
             <!-- Cabeçalho com ícone -->
             <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100">
                 <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i class="bi bi-check-circle text-emerald-500 me-2" style="font-size: 1.5rem;"></i>
                     <h2 class="text-lg font-semibold text-gray-900">Reativar Utilizador</h2>
                 </div>
                 <button class="text-gray-400 hover:text-gray-500 focus:outline-none" onclick="closeModal('reativarModal')">
-                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </button>
             </div>
 

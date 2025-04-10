@@ -39,13 +39,13 @@
                     <div>
                         <label for="first_name" class="block text-sm font-semibold text-gray">Nome</label>
                         <input type="text" id="first_name" name="first_name"
-                               class="form-contact-input"
+                               class="form-input"
                                placeholder="João">
                     </div>
                     <div>
                         <label for="last_name" class="block text-sm font-semibold text-gray">Apelido</label>
                         <input type="text" id="last_name" name="last_name"
-                               class="form-contact-input"
+                               class="form-input"
                                placeholder="Silva">
                     </div>
                 </div>
@@ -54,13 +54,13 @@
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray">Email</label>
                         <input type="email" id="email" name="email"
-                               class="form-contact-input"
+                               class="form-input"
                                placeholder="joao.silva@exemplo.com">
                     </div>
                     <div>
                         <label for="phone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
                         <input type="text" id="phone" name="phone"
-                               class="form-contact-input"
+                               class="form-input"
                                placeholder="+351 912 345 678">
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray">Mensagem</label>
                     <textarea id="message" name="message" rows="4"
-                              class="form-contact-input"
+                              class="form-input"
                               placeholder="Escreva a sua mensagem aqui..."></textarea>
                 </div>
 
