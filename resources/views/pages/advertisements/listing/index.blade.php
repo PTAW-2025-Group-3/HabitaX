@@ -18,21 +18,5 @@
         </div>
     </div>
 
-{{--  JS a ser usado em todos os componentes da Página--}}
-    <script>
-        // Dropdown com chevron animado
-        document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
-            const chevron = wrapper.querySelector('.chevron');
 
-            wrapper.addEventListener('click', () => {
-                chevron.classList.toggle('rotate-90');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!wrapper.contains(e.target)) {
-                    chevron.classList.remove('rotate-90');
-                }
-            });
-        });
-    </script>
 @endsection

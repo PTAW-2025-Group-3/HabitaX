@@ -2,12 +2,12 @@
 <nav class="w-full fixed top-0 z-50 backdrop-blur-xl bg-white/70 shadow-lg border-b border-gray-200">
     <div class="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
         {{-- Logo & Name --}}
-        <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-gradient-to-r from-indigo-600 to-blue-900 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 overflow-hidden">
                 <img src="{{ asset('images/logos/habitaxLogo.png') }}" alt="HabitaXLogo" class="mt-1 object-cover">
             </div>
             <span class="text-2xl font-bold text-gray-secondary tracking-tight">Habita<span class="text-secondary">X</span></span>
-        </div>
+        </a>
 
         {{-- Mobile Menu Button --}}
         <div class="md:hidden">

@@ -2,7 +2,7 @@
     <!-- Tipo de Imóvel -->
     <div class="w-full md:w-1/2">
         <label for="property-type" class="block text-gray-800 font-semibold mb-2">Tipo de Imóvel</label>
-        <div class="relative dropdown-wrapper">
+        <div class="relative">
             <select id="property-type"
                     class="p-3 pl-4 pr-10 w-full dropdown-select">
                 <option selected>Moradias</option>
@@ -10,7 +10,7 @@
                 <option>Terrenos</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500">
-                <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
             type="text"
             id="location"
             value="Aveiro"
-            class="w-full px-5 py-3 text-gray-800 bg-white border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+            class="w-full px-5 py-3 form-input-big"
         />
     </div>
 
@@ -36,7 +36,34 @@
             <span>Pesquisar</span>
         </button>
     </div>
-
 </div>
+
+<script>
+    // Código especifico para o chevron (dá drop up por algum motivo)
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.getElementById('property-type');
+        const icon = select.parentElement.querySelector('i');
+
+        let isOpen = false;
+
+        select.addEventListener('click', () => {
+            isOpen = !isOpen;
+
+            icon.classList.remove('bi-chevron-right', 'bi-dash');
+            icon.classList.add(isOpen ? 'bi-dash' : 'bi-chevron-right');
+        });
+
+        // Fecha se clicar fora do select
+        document.addEventListener('click', (e) => {
+            if (!select.contains(e.target) && isOpen) {
+                isOpen = false;
+                icon.classList.remove('bi-dash');
+                icon.classList.add('bi-chevron-right');
+            }
+        });
+    });
+</script>
+
+
 
 

@@ -46,4 +46,22 @@
 {{-- Page-specific JS Scripts --}}
 @stack('scripts')
 </body>
+
+{{--  JS a ser usado em todos os componentes da Aplicação--}}
+<script>
+    // Dropdown com chevron animado
+    document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
+        const chevron = wrapper.querySelector('.chevron');
+
+        wrapper.addEventListener('click', () => {
+            chevron.classList.toggle('rotate-90');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                chevron.classList.remove('rotate-90');
+            }
+        });
+    });
+</script>
 </html>

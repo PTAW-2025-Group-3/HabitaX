@@ -24,17 +24,16 @@
             </div>
 
             {{-- Property Category --}}
-            <div class="relative">
+            <div class="relative dropdown-wrapper">
                 <select
-                    class="py-2 pl-4 pr-10 w-full h-10 rounded-md bg-back text-sm text-gray-secondary shadow appearance-none
-               focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all">
+                    class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
                     <option>Moradias</option>
                     <option>Apartamentos</option>
                     <option>Terrenos</option>
                     <option>Comércio</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                    <i class="bi bi-chevron-down text-sm"></i>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
 
@@ -44,8 +43,8 @@
                    class="w-56 md:w-72 px-5 py-2 rounded-md bg-back text-gray-secondary shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" />
 
             {{-- Search Button --}}
-            <button type="submit" class="px-3 py-3 btn-primary">
-                <i class="bi bi-search w-5 h-5" style="font-size: 1.25rem; line-height: 1; stroke-width: 2;"></i>
+            <button type="submit" class="px-3 py-3 btn-primary h-12 w-12">
+                <i class="bi bi-search text-lg"></i>
             </button>
         </form>
     </div>
