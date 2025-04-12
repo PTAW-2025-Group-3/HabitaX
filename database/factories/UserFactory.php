@@ -25,10 +25,20 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'telephone' => fake()->numerify('91#######'),
+            'profilePhoto_url' => fake()->imageUrl(200, 200, 'people'),
+            'userType' => fake()->randomElement(['user', 'moderator', 'admin']),
+            'advertiserNumber' => null,
+            'staffNumber' => null,
+            'bio' => fake()->paragraph(),
+            'email_notifications' => true,
+            'message_notifications' => true,
+            'public_profile' => true,
+            'show_email' => false,
         ];
     }
 

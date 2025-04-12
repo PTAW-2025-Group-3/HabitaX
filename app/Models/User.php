@@ -27,6 +27,11 @@ class User extends Authenticatable
         'message_notifications',
         'public_profile',
         'show_email',
+        'telephone',
+        'profilePhoto_url',
+        'userType',
+        'advertiserNumber',
+        'staffNumber',
     ];
 
     /**
@@ -50,5 +55,8 @@ class User extends Authenticatable
         'message_notifications' => 'boolean',
         'public_profile' => 'boolean',
         'show_email' => 'boolean',
+        'telephone' => 'integer',
+        'advertiserNumber' => 'integer',
+        'staffNumber' => 'integer',
     ];
 }
