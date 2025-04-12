@@ -47,6 +47,17 @@ class UserSeeder extends Seeder
                 [
                     'name' => $user['name'],
                     'password' => Hash::make($user['password']),
+
+                    'telephone' => rand(910000000, 939999999),
+                    'profilePhoto_url' => 'https://via.placeholder.com/150',
+                    'userType' => 'user',
+                    'advertiserNumber' => rand(10000, 99999),
+                    'staffNumber' => rand(10000, 99999),
+                    'bio' => 'Sou um utilizador ativo da plataforma.',
+                    'email_notifications' => true,
+                    'message_notifications' => true,
+                    'public_profile' => true,
+                    'show_email' => false,
                 ]
             );
         }
