@@ -25,7 +25,7 @@ class AdvertisementCollection extends Model
     protected $primaryKey = ['collection_id', 'advertisement_id'];
 
     /**
-     * Desativa timestamps padrão (porque usas `addedAt`).
+     * Desativa timestamps padrão (porque usa `addedAt`).
      */
     public $timestamps = false;
 

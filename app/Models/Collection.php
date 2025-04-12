@@ -37,8 +37,7 @@ class Collection extends Model
     public function advertisements()
     {
         return $this->belongsToMany(Advertisement::class, 'advertisement_collection')
-            ->withPivot('addedAt')
-            ->withTimestamps();
+            ->withPivot('addedAt');
     }
 
 }
