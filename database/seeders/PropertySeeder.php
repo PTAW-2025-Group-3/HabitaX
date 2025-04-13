@@ -15,13 +15,13 @@ class PropertySeeder extends Seeder
     {
         Property::factory()->count(50)->create()->each(function ($property) {
             $property->update([
-                'images' => json_encode([
+                'images' => [
                     "https://picsum.photos/seed/{$property->id}-1/600/400",
                     "https://picsum.photos/seed/{$property->id}-2/600/400",
                     "https://picsum.photos/seed/{$property->id}-3/600/400",
                     "https://picsum.photos/seed/{$property->id}-4/600/400",
                     "https://picsum.photos/seed/{$property->id}-5/600/400"
-                ]),
+                ],
             ]);
         });
     }

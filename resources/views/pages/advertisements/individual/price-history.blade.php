@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between">
         <div>
             <div class="text-2xl font-bold text-gray-900">
-                {{ number_format(end($ad->price_history)['price'], 0, ',', '.') }}€
+                {{ number_format(end($price_history)['price'], 0, ',', '.') }}€
             </div>
             <div class="text-sm text-gray-500">preço médio</div>
             <div class="text-xs mt-1 text-green-600 font-semibold">● On Track</div>
@@ -21,10 +21,10 @@
         document.addEventListener('DOMContentLoaded', function () {
             const prices = @json(array_map(function ($item) {
                 return $item['price'];
-            }, $ad->price_history));
+            }, $price_history));
             const labels = @json(array_map(function ($item) {
                 return date('M Y', strtotime($item['date']));
-            }, $ad->price_history));
+            }, $price_history));
 
             new Chart(document.getElementById('priceHistoryChart').getContext('2d'), {
                 type: 'line',

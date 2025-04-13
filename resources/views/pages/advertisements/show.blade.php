@@ -9,13 +9,13 @@
         <div class="grid grid-cols-3 gap-4">
             <!-- Main Image -->
             <div class="col-span-2">
-                <img src="{{ $ad->property->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow"
+                <img src="{{ $property->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow"
                      alt="Main Image">
             </div>
 
             <!-- Gallery Thumbnails -->
             <div class="grid grid-cols-2 grid-rows-3 gap-2">
-                @foreach($ad->property->images as $image)
+                @foreach($property->images as $image)
                     @if(!$loop->first)
                         <div class="h-[150px]">
                             <img src="{{ $image }}" class="w-full h-full object-cover rounded-lg shadow" alt="Thumbnail">
@@ -27,7 +27,7 @@
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
-                <div class="text-lg font-semibold text-gray-700">{{ $ad->transaction_type }} em {{ $ad->property->location }}</div>
+                <div class="text-lg font-semibold text-gray-700">{{ $ad->transaction_type }} em {{ $property->location }}</div>
                 <div class="text-sm text-gray-500">{{ $ad->description }}</div>
             </div>
             <div class="text-4xl font-bold text-secondary">{{ number_format($ad->price, 0, ',', '.') }}€</div>

@@ -102,11 +102,7 @@ class AdvertisementController extends Controller
             })
             ->toArray();
 
-        $ad = (object) $ad->toArray();
-        $ad->property = $property;
-        $ad->price_history = $price_history;
-
-        return view('pages.advertisements.show', ['ad' => $ad]);
+        return view('pages.advertisements.show', ['ad' => $ad, 'property' => $property, 'price_history' => $price_history]);
     }
 
 
