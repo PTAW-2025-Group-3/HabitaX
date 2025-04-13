@@ -15,9 +15,9 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Ali Rezaei',
-                'email' => 'ali@example.com',
-                'password' => 'password1'
+                'name' => 'Kousha Rezaei',
+                'email' => 'kosharezae@yahoo.com',
+                'password' => 'passwordKousha'
             ],
             [
                 'name' => 'Sara Moshiri',
@@ -47,7 +47,6 @@ class UserSeeder extends Seeder
                 [
                     'name' => $user['name'],
                     'password' => Hash::make($user['password']),
-
                     'telephone' => rand(910000000, 939999999),
                     'profilePhoto_url' => 'https://via.placeholder.com/150',
                     'userType' => 'user',

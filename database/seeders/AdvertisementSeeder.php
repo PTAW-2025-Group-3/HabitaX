@@ -10,18 +10,21 @@ class AdvertisementSeeder extends Seeder
 {
     public function run(): void
     {
-        // Verifica se há propriedades disponíveis
+        // Retrieve all properties
         $properties = Property::all();
 
         if ($properties->isEmpty()) {
-            $this->command->warn('Nenhuma propriedade encontrada. Corre o PropertySeeder primeiro.');
+            $this->command->warn('No properties found. Run the PropertySeeder first.');
             return;
         }
 
-        // Cria 10 anúncios com propriedades existentes
-        foreach ($properties->take(10) as $property) {
+        $this->command->info("Found {$properties->count()} properties.");
+
+        // Create advertisements for all properties
+        foreach ($properties as $property) {
             Advertisement::create([
                 'reference' => fake()->unique()->numberBetween(100000, 999999),
+                'title' => fake()-> sentence(6),
                 'description' => fake()->paragraph(3),
                 'transaction_type' => fake()->randomElement(['sale', 'rent']),
                 'price' => fake()->randomFloat(2, 10000, 750000),

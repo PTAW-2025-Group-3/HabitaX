@@ -14,6 +14,7 @@ class Advertisement extends Model
      */
     protected $fillable = [
         'reference',
+        'title',
         'description',
         'transaction_type',
         'price',

@@ -9,22 +9,26 @@
         <div class="grid grid-cols-3 gap-4">
             <!-- Main Image -->
             <div class="col-span-2">
-                <img src="/images/{{ $ad->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow"
+                <img src="{{ $ad->property->images[0] }}" class="w-full h-[450px] object-cover rounded-lg shadow"
                      alt="Main Image">
             </div>
 
             <!-- Gallery Thumbnails -->
             <div class="grid grid-cols-2 grid-rows-3 gap-2">
-                @foreach(array_slice($ad->images, 1, 6) as $img)
-                    <img src="/images/{{ $img }}" class="w-full h-[140px] object-cover rounded" alt="Thumbnail">
+                @foreach($ad->property->images as $image)
+                    @if(!$loop->first)
+                        <div class="h-[150px]">
+                            <img src="{{ $image }}" class="w-full h-full object-cover rounded-lg shadow" alt="Thumbnail">
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
-                <div class="text-lg font-semibold text-gray-700">{{ $ad->type }} em {{ $ad->location }}</div>
-                <div class="text-sm text-gray-500">{{ $ad->details }}</div>
+                <div class="text-lg font-semibold text-gray-700">{{ $ad->transaction_type }} em {{ $ad->property->location }}</div>
+                <div class="text-sm text-gray-500">{{ $ad->description }}</div>
             </div>
             <div class="text-4xl font-bold text-secondary">{{ number_format($ad->price, 0, ',', '.') }}€</div>
         </div>
@@ -40,25 +44,25 @@
                     <div class="bg-gray-50 p-4 rounded shadow">
                         <h3 class="font-semibold">Equipamentos</h3>
                         <ul class="list-disc list-inside">
-                            @foreach($ad->equipments as $eq)
-                                <li>{{ $eq }}</li>
-                            @endforeach
+                            {{--                            @foreach($ad->equipments as $eq)--}}
+                            {{--                                <li>{{ $eq }}</li>--}}
+                            {{--                            @endforeach--}}
                         </ul>
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded shadow">
                         <h3 class="font-semibold">Características Específicas</h3>
                         <ul class="list-disc list-inside">
-                            @foreach($ad->specs as $spec)
-                                <li>{{ $spec }}</li>
-                            @endforeach
+                            {{--                            @foreach($ad->specs as $spec)--}}
+                            {{--                                <li>{{ $spec }}</li>--}}
+                            {{--                            @endforeach--}}
                         </ul>
                     </div>
                 </section>
 
-                @include('pages.advertisements.individual.sections.price-history', ['ad' => $ad])
-                @include('pages.advertisements.individual.sections.market-stats', ['ad' => $ad])
-                @include('pages.advertisements.individual.sections.loan-simulator', ['ad' => $ad])
+                @include('pages.advertisements.individual.price-history', ['ad' => $ad])
+{{--                @include('pages.advertisements.individual.market-stats', ['ad' => $ad])--}}
+                @include('pages.advertisements.individual.loan-simulator', ['ad' => $ad])
             </div>
 
             <div class="space-y-4">
@@ -69,7 +73,7 @@
                         <button class="w-full bg-white py-2 text-blue-500 font-semibold border-t">Ver no mapa</button>
                     </div>
 
-                    @include('pages.advertisements.individual.sections.contact-form', ['ad' => $ad])
+                    @include('pages.advertisements.individual.contact-form', ['ad' => $ad])
                 </div>
             </div>
         </div>

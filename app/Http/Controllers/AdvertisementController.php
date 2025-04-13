@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
+use App\Models\PriceHistory;
+use App\Models\Property;
 use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
@@ -9,6 +12,7 @@ class AdvertisementController extends Controller
     public function index(Request $request)
     {
         $location = $request->input('location');
+        /*
         $properties = [
             [
                 'image' => 'images/properties/mesao-frio.jpg',
@@ -50,13 +54,25 @@ class AdvertisementController extends Controller
                 'logo' => 'images/agents/img.png',
                 'agency' => 'Home LUSA'
             ]
-        ];
+        ];*/
+        // esta mal mas por agora deixa estar
+        $advertisements = Advertisement::where('state', 'active')
+            ->when($location, function ($query) use ($location) {
+                return $query->where('location', 'LIKE', "%{$location}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+        foreach ($advertisements as $ad) {
+            $ad->property = Property::find($ad->property_id);
+        }
+        $totalResults = $advertisements->total();
 
-        return view('pages.advertisements.listing.index', compact('properties', 'location'));
+        return view('pages.advertisements.index', compact('advertisements', 'location', 'totalResults'));
     }
 
     public function show($id)
     {
+        /*
         $ad = [
             'title' => 'Casa da Pedreira - Casa de Hóspedes Elegante C/Piscina Privada',
             'images' => ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg'],
@@ -71,9 +87,26 @@ class AdvertisementController extends Controller
             'price_history' => [470000, 475000, 480000, 478000, 485000, 488000, 495000],
             'area_average' => 350000,
             'monthly_ads' => [22, 19, 25, 21, 35, 28],
-        ];
+        ];*/
+        $ad = Advertisement::find($id);
+        $property = Property::find($ad->property_id);
+        $price_history = PriceHistory::where('advertisement_id', $ad->id)
+            ->orderBy('register_date', 'desc')
+            ->take(6)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'price' => $item->price,
+                    'date' => $item->register_date->format('d/m/Y'),
+                ];
+            })
+            ->toArray();
 
-        return view('pages.advertisements.individual.show', ['ad' => (object) $ad]);
+        $ad = (object) $ad->toArray();
+        $ad->property = $property;
+        $ad->price_history = $price_history;
+
+        return view('pages.advertisements.show', ['ad' => $ad]);
     }
 
 
