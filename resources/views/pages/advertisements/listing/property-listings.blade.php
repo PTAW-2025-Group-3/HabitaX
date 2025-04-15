@@ -1,5 +1,8 @@
 <div class="w-full md:w-3/4">
-    <h1 class="text-xl font-semibold mb-4">{{ $totalResults }} anúncios encontrados, Moradias em Aveiro</h1>
+    <!-- Header Section -->
+    <h1 class="text-xl font-semibold mb-4">
+        {{ $totalResults }} anúncios encontrados, Moradias em Aveiro
+    </h1>
 
     @include('pages.advertisements.listing.view-toggle-and-sort')
 
@@ -19,7 +22,14 @@
         </div>
     </template>
 
-    <div class="mt-8 flex justify-center">
-        @include('pages.advertisements.listing.pagination')
+    <!-- Pagination Section -->
+    <div class="mt-6">
+        @if($advertisements->isEmpty())
+            <p>No advertisements found.</p>
+        @else
+            {{ $advertisements->links('vendor.pagination.tailwind') }}
+        @endif
     </div>
 </div>
+
+

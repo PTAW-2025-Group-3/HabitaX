@@ -13,7 +13,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        Property::factory()->count(50)->create()->each(function ($property) {
+        Property::factory()->count(200)->create()->each(function ($property) {
             $property->update([
                 'images' => [
                     "https://picsum.photos/seed/{$property->id}-1/600/400",

@@ -3,6 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
 
 @keyframes fade-in {
@@ -134,12 +135,12 @@
 }
 
 /* Estilo especifico para a numeração das páginas*/
-.pagination{
-    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 hover:text-blue-600 hover:shadow-md text-gray-600
-}
+/*.pagination{*/
+/*    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 hover:text-blue-600 hover:shadow-md text-gray-600*/
+/*}*/
 
-.page-selected{
-    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out text-white bg-blue-600
-}
+/*.page-selected{*/
+/*    @apply flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ease-in-out text-white bg-blue-600*/
+/*}*/
 
 

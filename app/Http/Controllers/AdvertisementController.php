@@ -6,6 +6,7 @@ use App\Models\Advertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdvertisementController extends Controller
 {
@@ -61,7 +62,7 @@ class AdvertisementController extends Controller
                 return $query->where('location', 'LIKE', "%{$location}%");
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(5);
         foreach ($advertisements as $ad) {
             $ad->property = Property::find($ad->property_id);
         }
