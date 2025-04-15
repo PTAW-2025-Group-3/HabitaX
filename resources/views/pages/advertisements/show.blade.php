@@ -53,9 +53,9 @@
                     <div class="bg-gray-50 p-4 rounded shadow">
                         <h3 class="font-semibold">Características Específicas</h3>
                         <ul class="list-disc list-inside">
-                            {{--                            @foreach($ad->specs as $spec)--}}
-                            {{--                                <li>{{ $spec }}</li>--}}
-                            {{--                            @endforeach--}}
+                            @foreach($attributes as $attribute)
+                                <li>{{ $attribute['name'] }}: {{ $attribute['value'] }}</li>
+                            @endforeach
                         </ul>
                     </div>
                 </section>

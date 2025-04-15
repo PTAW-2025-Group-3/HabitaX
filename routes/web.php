@@ -35,6 +35,10 @@ Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->na
 Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.createad.create');
 Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
 
+// Administrative Division Routes
+// Distritos, Municípios e Freguesias
+//Route::get
+
 // Moderation Route
 Route::get('/mod', function () {
     return view('pages.moderation.moderation-dashboard');
