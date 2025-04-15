@@ -14,6 +14,7 @@ class AdvertisementFactory extends Factory
     {
         return [
             'reference' => $this->faker->unique()->numberBetween(100000, 999999),
+            'title' => $this->faker->sentence(6),
             'description' => $this->faker->paragraph(3),
             'transaction_type' => $this->faker->randomElement(['sale', 'rent']),
             'price' => $this->faker->randomFloat(2, 10000, 750000),

@@ -3,11 +3,11 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label class="text-sm font-medium">Preço do Imóvel</label>
-            <input type="text" class="w-full border rounded p-2" value="{{ number_format($ad->price, 0, ',', '.') }}€" disabled>
+            <input type="text" class="w-full border rounded p-2" value="{{ number_format($property->price, 0, ',', '.') }}€" disabled>
         </div>
         <div>
             <label class="text-sm font-medium">Entrada Inicial (25%)</label>
-            <input type="text" class="w-full border rounded p-2" value="{{ number_format($ad->price * 0.25, 0, ',', '.') }}€" disabled>
+            <input type="text" class="w-full border rounded p-2" value="{{ number_format($property->price * 0.25, 0, ',', '.') }}€" disabled>
         </div>
         <div>
             <label class="text-sm font-medium">Prazo em Anos</label>
@@ -19,7 +19,7 @@
         </div>
         <div>
             <label class="text-sm font-medium">Montante de Empréstimo</label>
-            <input type="text" class="w-full border rounded p-2" value="{{ number_format($ad->price * 0.75, 0, ',', '.') }}€" disabled>
+            <input type="text" class="w-full border rounded p-2" value="{{ number_format($property->price * 0.75, 0, ',', '.') }}€" disabled>
         </div>
         <div>
             <label class="text-sm font-medium">Prestação Mensal (simulada)</label>

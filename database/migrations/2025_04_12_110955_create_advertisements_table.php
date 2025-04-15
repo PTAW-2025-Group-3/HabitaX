@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('advertisements', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('reference')->unique();
+            // title max 255 chars
+            $table->string('title', 255);
             $table->text('description');
             $table->enum('transaction_type', ['sale', 'rent']);
             $table->float('price');

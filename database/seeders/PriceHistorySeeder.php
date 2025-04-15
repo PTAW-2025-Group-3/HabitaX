@@ -14,12 +14,12 @@ class PriceHistorySeeder extends Seeder
         $ads = Advertisement::all();
 
         if ($ads->isEmpty()) {
-            $this->command->warn('⚠️ Nenhum anúncio encontrado. Corre os seeders de anúncios primeiro.');
+            $this->command->warn('Nenhum anúncio encontrado. Corre os seeders de anúncios primeiro.');
             return;
         }
 
         foreach ($ads as $ad) {
-            $numRegistos = rand(1, 5);
+            $numRegistos = rand(3, 10);
             $startPrice = rand(50000, 400000);
             $date = Carbon::now()->subDays($numRegistos * 10);
 
