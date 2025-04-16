@@ -1,15 +1,19 @@
 <div class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
     <!-- Tipo de Imóvel -->
     <div class="w-full md:w-1/2">
-        <label for="property-type" class="block text-gray-800 font-semibold mb-2">Tipo de Imóvel</label>
-        <div class="relative">
+        <label for="property-type" class="block text-gray-secondary font-semibold mb-2">
+            Tipo de Imóvel
+        </label>
+
+        <div class="relative dropdown-wrapper w-full">
             <select id="property-type"
                     class="p-3 pl-4 pr-10 w-full dropdown-select">
                 <option selected>Moradias</option>
                 <option>Apartamentos</option>
                 <option>Terrenos</option>
+                <option>Comércio</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500">
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
                 <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
             </div>
         </div>
@@ -17,7 +21,7 @@
 
     <!-- Local -->
     <div class="w-full md:w-1/2">
-        <label for="location" class="block text-gray-800 font-semibold mb-2">Local</label>
+        <label for="location" class="block text-gray-secondary font-semibold mb-2">Local</label>
         <input
             type="text"
             id="location"

@@ -3,78 +3,108 @@
 @section('title', 'Sign In')
 
 @section('content')
-<section class="min-h-screen flex items-center justify-center px-4 py-12">
-  <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-8 overflow-hidden animate-fade-in">
+    <section class="min-h-screen grid place-content-start justify-center pt-16 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-6xl flex flex-col lg:flex-row bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden animate-fade-in">
 
-    {{-- Decorative Blur --}}
-    <div class="absolute -top-12 -left-12 w-40 h-40 bg-indigo-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
-    <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-purple-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
+            {{-- Image Section (Left) --}}
+            <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1515263487990-61b07816b324?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                     alt="Modern apartment living room"
+                     class="object-cover w-full h-full">
+            </div>
 
-    {{-- Title --}}
-    <h2 class="relative text-3xl font-bold text-center text-gray-800 dark:text-white mb-6 z-10">
-      Bem-Vindo de Volta
-    </h2>
+            {{-- Form Section (Right) --}}
+            <div class="w-full lg:w-1/2 p-5 sm:p-8 lg:p-12 relative">
+                {{-- Decorative Blur --}}
+                <div class="absolute -top-12 -left-12 w-32 sm:w-40 h-32 sm:h-40 bg-indigo-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
+                <div class="absolute -bottom-12 -right-12 w-32 sm:w-40 h-32 sm:h-40 bg-purple-300 opacity-20 rounded-full filter blur-2xl z-0"></div>
 
-    {{-- Flash Message --}}
-    @if(session('status'))
-      <div class="relative mb-4 text-sm text-green-600 z-10">
-        {{ session('status') }}
-      </div>
-    @endif
+                {{-- Title --}}
+                <div class="text-center mb-6 relative z-10">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
+                        HabitaX | Login
+                    </h2>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Faça login para retomar a sua experiência.
+                    </p>
+                </div>
 
-    {{-- Validation Errors --}}
-    @if ($errors->any())
-      <div class="relative mb-4 text-sm text-red-600 z-10">
-        <ul class="list-disc pl-5">
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-      </div>
-    @endif
+                {{-- Flash Message --}}
+                @if(session('status'))
+                    <div class="relative mb-4 p-3 bg-green-50 text-xs sm:text-sm text-green-600 rounded-lg z-10">
+                        {{ session('status') }}
+                    </div>
+                @endif
 
-    {{-- Login Form --}}
-    <form method="POST" action="{{ route('login') }}" class="relative space-y-5 z-10">
-      @csrf
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div class="relative mb-4 p-3 bg-red-50 text-xs sm:text-sm text-red-600 rounded-lg z-10">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-      {{-- Email --}}
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
-        <input id="email" name="email" type="email" required autofocus
-               class="w-full mt-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-      </div>
+                {{-- Login Form --}}
+                <form method="POST" action="{{ route('login') }}" class="relative space-y-5 z-10">
+                    @csrf
 
-      {{-- Password --}}
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
-        <input id="password" name="password" type="password" required
-               class="w-full mt-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-      </div>
+                    {{-- Email --}}
+                    <div class="relative">
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
+                        <div class="relative mt-1">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input id="email" name="email" type="email" required autofocus
+                                   class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
+                                   placeholder="seu@email.com">
+                        </div>
+                    </div>
 
-      {{-- Remember Me --}}
-      <div class="flex items-center justify-between">
-        <label class="flex items-center space-x-2">
-          <input type="checkbox" name="remember" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
-          <span class="text-sm text-gray-600 dark:text-gray-300">Guardar Autenticação</span>
-        </label>
-        <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:underline">Esqueceu a password?</a>
-      </div>
+                    {{-- Password --}}
+                    <div class="relative">
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+                        <div class="relative mt-1">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input id="password" name="password" type="password" required
+                                   class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
+                                   placeholder="••••••••">
+                        </div>
+                    </div>
 
-      {{-- Submit --}}
-      <div>
-        <button type="submit"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl shadow-md transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
-          LogIn
-        </button>
-      </div>
-    </form>
 
-    {{-- Divider --}}
-    <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
-      Não tem conta ainda?
-      <a href="{{ route('register') }}" class="text-indigo-600 hover:underline">Registar</a>
-    </div>
+                    {{-- Remember Me --}}
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="remember"
+                                   class="h-4 w-4 text-secondary border-gray-300 rounded">
+                            <span class="text-sm text-white">Guardar Autenticação</span>
+                        </label>
+                        <a href="{{ route('password.request') }}" class="text-sm text-secondary hover:underline">
+                            Esqueceu a password?
+                        </a>
+                    </div>
 
-  </div>
-</section>
+                    {{-- Submit --}}
+                    <div>
+                        <button type="submit"
+                                class="btn-secondary w-full py-3">
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                {{-- Divider --}}
+                <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-300">
+                    Não tem conta ainda?
+                    <a href="{{ route('register') }}" class="text-secondary font-medium hover:underline">Registar</a>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection

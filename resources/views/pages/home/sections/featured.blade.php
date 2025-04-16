@@ -1,14 +1,13 @@
-{{-- resources/views/home/featured.blade.php --}}
-<section class="bg-gray-100 pt-3 pb-20 px-6 lg:px-24">
+<section class="bg-back pt-1 pb-6 md:pb-20 px-4 md:px-6 lg:px-24">
     <div class="max-w-7xl mx-auto">
 
       {{-- Section Heading --}}
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-secondary mb-14">
+      <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-gray-secondary mb-8 md:mb-14">
         As Nossas <span class="text-secondary">Melhores Ofertas</span>
       </h2>
 
       {{-- Properties Grid --}}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
 
         @php
           $properties = [
@@ -28,21 +27,21 @@
             class="group home-ads-style">
 
             {{-- Image with zoom effect --}}
-            <div class="overflow-hidden h-48">
+            <div class="overflow-hidden h-40 sm:h-44 md:h-48">
               <img src="{{ asset('images/' . $property['img']) }}"
                    alt="property image"
                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" />
             </div>
 
             {{-- Content --}}
-            <div class="p-5">
-              <h3 class="text-sm text-gray font-medium mb-1">
+            <div class="p-4 md:p-5">
+              <h3 class="text-xs sm:text-sm text-gray font-medium mb-1">
                 {{ $property['location'] }}
               </h3>
-              <p class="text-xl font-bold text-gray-secondary leading-tight">
+              <p class="text-lg sm:text-xl font-bold text-gray-secondary leading-tight">
                 {{ $property['price'] }}
               </p>
-              <p class="text-sm text-gray capitalize mt-1">
+              <p class="text-xs sm:text-sm text-gray capitalize mt-1">
                 {{ $property['type'] }}
               </p>
             </div>
