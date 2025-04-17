@@ -20,6 +20,8 @@ class Advertisement extends Model
         'price',
         'state',
         'property_id',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -35,6 +37,19 @@ class Advertisement extends Model
     public function property()
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Relação: atualizada por um utilizador.
+     */
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function collections()

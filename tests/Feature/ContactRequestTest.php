@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Advertisement;
 use App\Models\ContactRequest;
 use App\Models\Property;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 use App\Models\Parish;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,7 +20,7 @@ class ContactRequestTest extends TestCase
         parent::setUp();
 
         // Criar dados obrigatórios
-        TypeProperty::factory()->create();
+        PropertyType::factory()->create();
         Parish::factory()->create();
     }
 

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_attribute_types', function (Blueprint $table) {
+        Schema::create('property_type_attributes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('property_type')->constrained('type_properties')->onDelete('cascade');
+            $table->foreignId('property_type')->constrained('property_types')->onDelete('cascade');
             $table->foreignId('attribute_id')->constrained('property_attributes')->onDelete('cascade');
             $table->boolean('required')->default(false);
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_attribute_types');
+        Schema::dropIfExists('property_type_attributes');
     }
 };

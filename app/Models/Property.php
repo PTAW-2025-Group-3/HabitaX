@@ -19,7 +19,7 @@ class Property extends Model
         'images',
         'is_active',
         'is_verified',
-        'type_property',
+        'property_type',
         'parish_id',
         'created_by',
         'updated_by',
@@ -29,7 +29,7 @@ class Property extends Model
      * Casts automáticos de campos JSON e booleanos.
      */
     protected $casts = [
-        'images' => 'array',
+        'images' => 'json',
         'is_active' => 'boolean',
         'is_verified' => 'boolean',
     ];
@@ -39,7 +39,7 @@ class Property extends Model
      */
     public function type()
     {
-        return $this->belongsTo(TypeProperty::class, 'type_property');
+        return $this->belongsTo(PropertyType::class, 'type_property');
     }
 
     /**
@@ -69,6 +69,21 @@ class Property extends Model
     public function values()
     {
         return $this->hasMany(\App\Models\PropertyValue::class);
+    }
+
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class);
+    }
+
+    public function priceHistory()
+    {
+        return $this->hasMany(PriceHistory::class);
+    }
+
+    public function verifications()
+    {
+        return $this->hasMany(PropertyVerification::class);
     }
 
 }

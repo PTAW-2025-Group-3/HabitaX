@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Property;
-use App\Models\PropertyAttributeType;
+use App\Models\PropertyTypeAttribute;
 use App\Models\PropertyValue;
 
 class PropertyValueSeeder extends Seeder
@@ -14,43 +14,49 @@ class PropertyValueSeeder extends Seeder
         $properties = Property::all();
 
         foreach ($properties as $property) {
-            // Buscar atributos aplicáveis ao type_property
-            $attributeTypes = PropertyAttributeType::where('property_type', $property->type_property)->get();
+            $attributeTypes = PropertyTypeAttribute::where('property_type', $property->type_property)->get();
 
-            foreach ($attributeTypes as $attrType) {
-                // Evitar duplicações
-                if (PropertyValue::where('property_id', $property->id)
-                    ->where('attribute_id', $attrType->attribute_id)->exists()) {
+            $usedAttributeIds = [];
+
+            // First pass - assign one value per unique attribute
+            foreach ($attributeTypes as $type) {
+                $attr = $type->attribute;
+
+                if (in_array($attr->id, $usedAttributeIds)) {
                     continue;
                 }
 
-                // Gerar valor consoante o tipo
-                $attribute = $attrType->attribute;
-                $value = null;
+                $this->createPropertyValue($property->id, $attr->id);
+                $usedAttributeIds[] = $attr->id;
+            }
 
-                switch ($attribute->type) {
-                    case 'number':
-                        $value = fake()->numberBetween($attribute->minimal_value ?? 0, $attribute->maximal_value ?? 10);
-                        break;
-                    case 'boolean':
-                        $value = fake()->boolean();
-                        break;
-                    case 'text':
-                        $value = fake()->text($attribute->max_char ?? 100);
-                        break;
-                    case 'select':
-                        $value = fake()->randomElement($attribute->options ?? []);
-                        break;
-                    default:
-                        $value = 'N/A';
+            // Second pass - randomly assign more until there are 5
+            while (count($usedAttributeIds) < 5) {
+                $remaining = $attributeTypes->whereNotIn('attribute_id', $usedAttributeIds);
+
+                if ($remaining->isEmpty()) {
+                    break;
                 }
 
-                PropertyValue::create([
-                    'property_id' => $property->id,
-                    'attribute_id' => $attribute->id,
-                    'value' => (string) $value,
-                ]);
+                $randomAttr = $remaining->random()->attribute;
+                $this->createPropertyValue($property->id, $randomAttr->id);
+                $usedAttributeIds[] = $randomAttr->id;
             }
         }
+    }
+
+    private function createPropertyValue(int $propertyId, int $attributeId): void
+    {
+        PropertyValue::create([
+            'property_id' => $propertyId,
+            'attribute_id' => $attributeId,
+            'value' => (string) $this->generateValueFromId($attributeId),
+        ]);
+    }
+
+    private function generateValueFromId(int $attributeId): string
+    {
+        // Customize based on attribute ID or type if needed
+        return rand(1, 100); // Example stub
     }
 }

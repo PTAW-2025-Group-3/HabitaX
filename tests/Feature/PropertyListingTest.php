@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Parish;
 use App\Models\Property;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,7 +18,7 @@ class PropertyListingTest extends TestCase
         parent::setUp();
 
         // Garante dados obrigatórios para criação de propriedades
-        TypeProperty::factory()->count(2)->create();
+        PropertyType::factory()->count(2)->create();
         Parish::factory()->count(2)->create();
     }
 

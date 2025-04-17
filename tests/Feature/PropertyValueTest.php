@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Models\Parish;
 use App\Models\Property;
 use App\Models\PropertyAttribute;
-use App\Models\PropertyAttributeType;
+use App\Models\PropertyTypeAttribute;
 use App\Models\PropertyValue;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -28,7 +28,7 @@ class PropertyValueTest extends TestCase
         $user = User::factory()->create();
 
         // Criar tipo de propriedade
-        $type = TypeProperty::factory()->create();
+        $type = PropertyType::factory()->create();
 
         // Criar atributos
         $attributes = PropertyAttribute::factory()->count(3)->create([
@@ -37,7 +37,7 @@ class PropertyValueTest extends TestCase
 
         // Ligar atributos ao tipo usando PropertyAttributeType
         foreach ($attributes as $attribute) {
-            PropertyAttributeType::create([
+            PropertyTypeAttribute::create([
                 'property_type' => $type->id,
                 'attribute_id' => $attribute->id,
                 'required' => true,
@@ -49,7 +49,7 @@ class PropertyValueTest extends TestCase
 
         // Criar propriedade com este tipo
         $property = Property::factory()->create([
-            'type_property' => $type->id,
+            'property_type' => $type->id,
             'created_by' => $user->id,
             'updated_by' => $user->id,
         ]);

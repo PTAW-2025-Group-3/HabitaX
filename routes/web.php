@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\VerificationAdvertiserController;
 use Illuminate\Support\Facades\Route;
@@ -31,9 +32,15 @@ Route::get('/about', function () {
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/my', [AdvertisementController::class, 'my'])->name('advertisements.my');
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
-Route::get('/create', [AdvertisementController::class, 'create'])->name('pages.createad.create');
-Route::post('/create/store', [AdvertisementController::class, 'store'])->name('pages.createad.store');
+
+// Property Routes
+Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/my', [PropertyController::class, 'my'])->name('properties.my');
+Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
+Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
+Route::post('/properties/create/store', [PropertyController::class, 'store'])->name('properties.store');
 
 // Administrative Division Routes
 // Distritos, Municípios e Freguesias
@@ -77,14 +84,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/advertiser-verification', function () {
         return view('pages.account.sections.advertiser-verification');
     })->name('advertiser-verification');
-
-    Route::get('/my-ads', function () {
-        return view('pages.account.sections.my-ads');
-    })->name('my-ads');
-
-    Route::get('/my-properties', function () {
-        return view('pages.account.sections.my-properties');
-    })->name('my-properties');
 
     Route::get('/contact-requests', function () {
         return view('pages.account.sections.contact-requests');

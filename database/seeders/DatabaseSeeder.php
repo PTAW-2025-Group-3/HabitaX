@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(TypePropertySeeder::class);
+        $this->call(PropertyTypeSeeder::class);
         $this->call(UserSeeder::class);
 
         $this->call([
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PriceHistorySeeder::class);
         $this->call(PropertyVerificationSeeder::class);
         $this->call(PropertyAttributeSeeder::class);
-        $this->call(PropertyAttributeTypeSeeder::class);
+        $this->call(PropertyTypeAttributeSeeder::class);
         $this->call(PropertyValueSeeder::class);
 
     }

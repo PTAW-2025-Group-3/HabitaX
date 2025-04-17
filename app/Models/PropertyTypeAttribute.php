@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PropertyAttributeType extends Model
+class PropertyTypeAttribute extends Model
 {
     use HasFactory;
 
@@ -21,7 +21,7 @@ class PropertyAttributeType extends Model
 
     public function typeProperty()
     {
-        return $this->belongsTo(TypeProperty::class, 'property_type');
+        return $this->belongsTo(PropertyType::class, 'property_type');
     }
 
     public function attribute()

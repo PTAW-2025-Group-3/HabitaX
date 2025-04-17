@@ -6,7 +6,7 @@ use App\Models\Advertisement;
 use App\Models\Collection;
 use App\Models\Parish;
 use App\Models\Property;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class CollectionTest extends TestCase
         parent::setUp();
 
         // Create required data for tests
-        TypeProperty::factory()->create();
+        PropertyType::factory()->create();
         Parish::factory()->create();
     }
 
@@ -30,11 +30,11 @@ class CollectionTest extends TestCase
             $user = User::factory()->create();
         }
 
-        $typeProperty = TypeProperty::first();
+        $typeProperty = PropertyType::first();
         $parish = Parish::first();
 
         return Property::factory()->create([
-            'type_property' => $typeProperty->id,
+            'property_type' => $typeProperty->id,
             'parish_id' => $parish->id,
             'created_by' => $user->id,
             'updated_by' => $user->id,

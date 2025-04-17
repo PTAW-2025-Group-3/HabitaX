@@ -19,10 +19,13 @@ return new class extends Migration
             $table->text('description');
             $table->enum('transaction_type', ['sale', 'rent']);
             $table->float('price');
-            $table->timestamps(); // cria automaticamente created_at e updated_at
             $table->enum('state', ['pending', 'active', 'archived'])->default('pending');
 
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+
+            $table->timestamps();
         });
     }
 

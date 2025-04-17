@@ -20,12 +20,25 @@ class AdvertisementController extends Controller
                 return $query->where('location', 'LIKE', "%{$location}%");
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->paginate(10);
 
         if ($request->ajax()) {
             return view('pages.advertisements.listing.property-listings', compact('advertisements'))->render();
         }
         return view('pages.advertisements.index', compact('advertisements', 'location'));
+    }
+
+    public function my(Request $request)
+    {
+        $ads = Advertisement::where('created_by', auth()->user()->getKey())
+            ->with('property')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($request->ajax()) {
+            return view('pages.advertisements.listing.property-listings', compact('ads'))->render();
+        }
+        return view('pages.advertisements.my', compact('ads'));
     }
 
     public function show($id)
@@ -47,7 +60,7 @@ class AdvertisementController extends Controller
             ->toArray();
         $price_history = PriceHistory::where('advertisement_id', $ad->id)
             ->orderBy('register_date', 'desc')
-            ->take(6)
+            ->limit(5)
             ->get()
             ->map(function ($item) {
                 return [
@@ -61,20 +74,5 @@ class AdvertisementController extends Controller
             'ad' => $ad, 'property' => $property,
             'attributes' => $attributes, 'price_history' => $price_history
         ]);
-    }
-
-
-    // Show the Create Announcement Form
-    public function create()
-    {
-        return view('pages.createad.create');
-    }
-
-    // Handle the form submission and store the announcement
-    public function store(Request $request)
-    {
-        // TODO: Validate and save the announcement here
-
-        return redirect()->route('dashboard')->with('success', 'Announcement created successfully.');
     }
 }

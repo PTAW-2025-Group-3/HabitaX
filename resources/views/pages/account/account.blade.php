@@ -42,14 +42,14 @@
                                 </a>
 
 
-                                <a href="{{ route('my-properties') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('my-properties') ? 'bg-gray-50' : '' }}">
+                                <a href="{{ route('properties.my') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('properties.my') ? 'bg-gray-50' : '' }}">
                                     <i class="bi bi-house-door-fill me-3 text-gray-400 group-hover:text-gray"></i>
                                     Minhas Propriedades
                                 </a>
 
-                                <a href="{{ route('my-ads') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('my-ads') ? 'bg-gray-50' : '' }}">
+                                <a href="{{ route('advertisements.my') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('advertisements.my') ? 'bg-gray-50' : '' }}">
                                     <i class="bi bi-megaphone-fill me-3 text-gray-400 group-hover:text-gray"></i>
                                     Meus Anúncios
                                 </a>

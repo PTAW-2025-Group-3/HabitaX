@@ -31,6 +31,7 @@ class AdvertisementSeeder extends Seeder
 //                'state' => fake()->randomElement(['pending', 'active', 'archived']),
                 'state' => fake()->randomElement(['active']),
                 'property_id' => $property->id,
+                'created_by' => $property->created_by,
             ]);
         }
     }

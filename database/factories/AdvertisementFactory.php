@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Property;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -12,6 +13,8 @@ class AdvertisementFactory extends Factory
 {
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first();
+
         return [
             'reference' => $this->faker->unique()->numberBetween(100000, 999999),
             'title' => $this->faker->sentence(6),
@@ -20,6 +23,8 @@ class AdvertisementFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10000, 750000),
             'state' => $this->faker->randomElement(['pending', 'active', 'archived']),
             'property_id' => Property::inRandomOrder()->first()?->id,
+            'created_by' => $user?->id,
+            'updated_by' => $user?->id,
         ];
     }
 }

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 
-class TypePropertySeeder extends Seeder
+class PropertyTypeSeeder extends Seeder
 {
     public function run(): void
     {
@@ -23,7 +23,7 @@ class TypePropertySeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            TypeProperty::firstOrCreate(
+            PropertyType::firstOrCreate(
                 ['name' => $type['name']],
                 ['description' => $type['description']]
             );

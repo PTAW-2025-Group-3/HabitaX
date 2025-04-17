@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Parish;
 use App\Models\Property;
 use App\Models\PropertyVerification;
-use App\Models\TypeProperty;
+use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +19,7 @@ class PropertyVerificationTest extends TestCase
         parent::setUp();
 
         // Garante que existem dados obrigatórios
-        TypeProperty::factory()->count(3)->create();
+        PropertyType::factory()->count(3)->create();
         Parish::factory()->count(3)->create();
     }
 
