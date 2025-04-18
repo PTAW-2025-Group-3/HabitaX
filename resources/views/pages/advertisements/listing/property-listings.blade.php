@@ -1,4 +1,5 @@
 <div class="w-full md:w-3/4">
+    <div class="property-listings-container">
     <!-- Header Section -->
     <h1 class="text-xl font-semibold mb-4">
         {{ $advertisements->total() }} anúncios encontrados, Moradias em Aveiro
@@ -34,5 +35,5 @@
         {{ $advertisements->links('vendor.pagination.tailwind') }}
     </div>
 </div>
-
+</div>
 

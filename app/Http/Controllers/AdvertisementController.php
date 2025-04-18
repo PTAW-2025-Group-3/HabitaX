@@ -14,18 +14,68 @@ class AdvertisementController extends Controller
 {
     public function index(Request $request)
     {
-        $location = $request->input('location');
-        $advertisements = Advertisement::where('state', 'active')
-            ->when($location, function ($query) use ($location) {
-                return $query->where('location', 'LIKE', "%{$location}%");
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Advertisement::with(['property'])
+            ->where('state', 'active')
+            ->join('properties', 'advertisements.property_id', '=', 'properties.id')
+            ->select('advertisements.*');
+
+        // Filtro por localização
+        if ($request->filled('location')) {
+            $query->where('location', 'LIKE', "%{$request->location}%");
+        }
+
+        // Filtro por tempo de publicação
+        if ($request->filled('time_period')) {
+            $timePeriod = $request->time_period;
+            $now = now();
+
+            if ($timePeriod === '24h') {
+                $query->where('advertisements.created_at', '>=', $now->subDay());
+            } elseif ($timePeriod === '3d') {
+                $query->where('advertisements.created_at', '>=', $now->subDays(3));
+            } elseif ($timePeriod === '7d') {
+                $query->where('advertisements.created_at', '>=', $now->subDays(7));
+            } elseif ($timePeriod === '30d') {
+                $query->where('advertisements.created_at', '>=', $now->subDays(30));
+            }
+        }
+
+        // Filtro por preço
+        if ($request->filled('min_price') && is_numeric($request->min_price)) {
+            $query->where('price', '>=', (float)$request->min_price);
+        }
+        if ($request->filled('max_price') && is_numeric($request->max_price)) {
+            $query->where('price', '<=', (float)$request->max_price);
+        }
+
+        // Filtro por tamanho (área total)
+        if ($request->filled('min_area') && is_numeric($request->min_area)) {
+            $query->where('properties.total_area', '>=', (float)$request->min_area);
+        }
+        if ($request->filled('max_area') && is_numeric($request->max_area)) {
+            $query->where('properties.total_area', '<=', (float)$request->max_area);
+        }
+
+        // Ordenação
+        switch ($request->input('sort', 'recent')) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            default: // 'recent' ou padrão
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $advertisements = $query->paginate(10);
 
         if ($request->ajax()) {
             return view('pages.advertisements.listing.property-listings', compact('advertisements'))->render();
         }
-        return view('pages.advertisements.index', compact('advertisements', 'location'));
+
+        return view('pages.advertisements.index', compact('advertisements'));
     }
 
     public function my(Request $request)
