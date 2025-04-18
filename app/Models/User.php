@@ -32,6 +32,7 @@ class User extends Authenticatable
         'userType',
         'advertiserNumber',
         'staffNumber',
+        'is_suspended',
     ];
 
     /**
@@ -58,5 +59,6 @@ class User extends Authenticatable
         'telephone' => 'integer',
         'advertiserNumber' => 'integer',
         'staffNumber' => 'integer',
+        'is_suspended' => 'boolean',
     ];
 }

@@ -1,9 +1,9 @@
 @php
     $stats = [
-        ['label' => 'Utilizadores Ativos', 'value' => 5320],
-        ['label' => 'Anúncios Publicados', 'value' => 12540],
-        ['label' => 'Anúncios Reportados', 'value' => 1520],
-        ['label' => 'Utilizadores Registados', 'value' => 12],
+        ['label' => 'Utilizadores Ativos', 'value' => $activeUsers ?? 0],
+        ['label' => 'Anúncios Publicados', 'value' => $publishedAds ?? 0],
+        ['label' => 'Anúncios Reportados', 'value' => $reportedAds ?? 0],
+        ['label' => 'Utilizadores Registados', 'value' => $totalUsers ?? 0],
     ];
 @endphp
 

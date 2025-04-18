@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\VerificationAdvertiserController;
@@ -56,9 +57,14 @@ Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController:
 Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
 
 // Administration Route
-Route::get('/admin', function () {
-    return view('pages.administration.index');
-})->name('administration');
+Route::get('/admin', [App\Http\Controllers\AdministrationController::class, 'index'])
+    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
+    ->name('admin.index');
+Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
+Route::post('/admin/users/{user}/toggle-suspension', [AdministrationController::class, 'toggleSuspension'])
+    ->name('admin.users.toggle-suspension');
+Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
+    ->name('admin.users.update-role');
 
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
