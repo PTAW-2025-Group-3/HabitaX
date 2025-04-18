@@ -6,10 +6,7 @@ use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\VerificationAdvertiserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AdvertisementController;
-
-use Illuminate\Support\Facades\Auth;
 
 // Home Page
 Route::get('/', function () {
@@ -32,15 +29,20 @@ Route::get('/about', function () {
 
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
-Route::get('/advertisements/my', [AdvertisementController::class, 'my'])->name('advertisements.my');
+Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
+    Route::get('/advertisements/my', 'my')->name('advertisements.my');
+    // create, edit, delete
+});
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 // Property Routes
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
-Route::get('/properties/my', [PropertyController::class, 'my'])->name('properties.my');
-Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
-Route::post('/properties/create/store', [PropertyController::class, 'store'])->name('properties.store');
-Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
+Route::middleware('auth')->controller(PropertyController::class)->group(function () {
+    Route::get('/properties/my', 'my')->name('properties.my');
+    Route::get('/properties/create', 'create')->name('properties.create');
+    Route::post('/properties/create/store', 'store')->name('properties.store');
+    Route::get('/properties/{id}', 'show')->name('properties.show');
+});
 
 // Administrative Division Routes
 // Distritos, Municípios e Freguesias
@@ -89,17 +91,6 @@ Route::middleware('auth')->group(function () {
         return view('pages.account.sections.contact-requests');
     })->name('contact-requests');
 
-});
-
-// Registration Routes
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
-
-// Profile Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Auth (login, logout, etc.)
