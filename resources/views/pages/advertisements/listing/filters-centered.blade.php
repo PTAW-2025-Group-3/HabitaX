@@ -1,4 +1,5 @@
 <div class="w-full md:w-1/4">
+    <form method="GET" action="{{ route('advertisements.index') }}" id="filters-form">
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
         <h2 class="font-bold text-2xl mb-6 text-primary text-center">Filtros</h2>
 
@@ -109,11 +110,12 @@
                 <i class="bi bi-clock-history mr-2 text-secondary"></i> Publicação
             </h3>
             <div class="relative dropdown-wrapper">
-                <select class="p-2 pl-4 pr-10 dropdown-select">
-                    <option>Últimas 24 horas</option>
-                    <option>Últimos 3 dias</option>
-                    <option>Última semana</option>
-                    <option>Último mês</option>
+                <select name="time_period" class="p-2 pl-4 pr-10 dropdown-select">
+                    <option value="">Qualquer tempo</option>
+                    <option value="24h" {{ request('time_period') == '24h' ? 'selected' : '' }}>Últimas 24 horas</option>
+                    <option value="3d" {{ request('time_period') == '3d' ? 'selected' : '' }}>Últimos 3 dias</option>
+                    <option value="7d" {{ request('time_period') == '7d' ? 'selected' : '' }}>Última semana</option>
+                    <option value="30d" {{ request('time_period') == '30d' ? 'selected' : '' }}>Último mês</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
@@ -128,25 +130,15 @@
                 <i class="bi bi-currency-euro mr-2 text-secondary"></i> Preço
             </h3>
             <div class="grid grid-cols-2 gap-3">
-                <div class="relative dropdown-wrapper">
-                    <select class="p-2 pl-4 pr-10 dropdown-select">
-                        <option>Mínimo</option>
-                        <option>100.000€</option>
-                        <option>200.000€</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
-                    </div>
+                <div class="relative">
+                    <input type="number" name="min_price" placeholder="Mínimo (€)"
+                           value="{{ request('min_price') }}"
+                           class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                 </div>
-                <div class="relative dropdown-wrapper">
-                    <select class="p-2 pl-4 pr-10 dropdown-select">
-                        <option>Máximo</option>
-                        <option>500.000€</option>
-                        <option>1.000.000€</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
-                    </div>
+                <div class="relative">
+                    <input type="number" name="max_price" placeholder="Máximo (€)"
+                           value="{{ request('max_price') }}"
+                           class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                 </div>
             </div>
         </div>
@@ -157,25 +149,15 @@
                 <i class="bi bi-arrows-expand mr-2 text-secondary"></i> Tamanho
             </h3>
             <div class="grid grid-cols-2 gap-3">
-                <div class="relative dropdown-wrapper">
-                    <select class="p-2 pl-4 pr-10 dropdown-select">
-                        <option>Mínimo</option>
-                        <option>50 m²</option>
-                        <option>100 m²</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
-                    </div>
+                <div class="relative">
+                    <input type="number" name="min_area" placeholder="Mínimo (m²)"
+                           value="{{ request('min_area') }}"
+                           class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                 </div>
-                <div class="relative dropdown-wrapper">
-                    <select class="p-2 pl-4 pr-10 dropdown-select">
-                        <option>Máximo</option>
-                        <option>200 m²</option>
-                        <option>500 m²</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
-                    </div>
+                <div class="relative">
+                    <input type="number" name="max_area" placeholder="Máximo (m²)"
+                           value="{{ request('max_area') }}"
+                           class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                 </div>
             </div>
         </div>
@@ -204,11 +186,17 @@
 
         <!-- Aplicar Filtros -->
         <div class="mt-8">
-            <button class="w-full py-3 btn-secondary">
+            <button type="submit" class="w-full py-3 btn-secondary">
                 <i class="bi bi-funnel-fill mr-2"></i> Aplicar Filtros
             </button>
+            @if(request()->hasAny(['time_period', 'min_price', 'max_price', 'min_area', 'max_area']))
+                <a href="{{ route('advertisements.index') }}" class="mt-2 block text-center text-sm text-secondary hover:underline">
+                    Limpar filtros
+                </a>
+            @endif
         </div>
     </div>
+    </form>
 </div>
 
 <script>
