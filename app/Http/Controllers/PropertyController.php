@@ -14,6 +14,8 @@ class PropertyController extends Controller
 
     public function my(Request $request) {
         $properties = Property::where('created_by', auth()->user()->getKey())
+            ->with('property_type')
+            ->with('parish')
             ->orderBy('created_at', 'desc')
             ->get();
         return view('pages.properties.my', compact('properties'));

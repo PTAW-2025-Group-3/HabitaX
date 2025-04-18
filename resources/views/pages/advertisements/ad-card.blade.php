@@ -1,4 +1,6 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" data-status="active">
+<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+     data-status="{{ $ad->status }}">
+    {{-- Ad Status --}}
     <a href="{{ route('advertisements.show', $ad->id) }}" class="block">
         <div class="relative">
             <img src=" {{ $ad->property->images[0] }}"

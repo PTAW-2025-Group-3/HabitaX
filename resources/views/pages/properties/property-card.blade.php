@@ -10,8 +10,10 @@
         </div>
         <div class="p-4">
             <h3 class="text-lg font-semibold text-primary">{{ $property->title }}</h3>
+{{--            <p class="text-sm text-gray mb-2">{{ $property->parish_id->name }}</p>--}}
+{{--            <p class="text-lg font-bold text-secondary">{{ $property->property_type->name }}</p>--}}
             <p class="text-sm text-gray mb-2">{{ \App\Models\Parish::find($property->parish_id)->name }}</p>
-            <p class="text-lg font-bold text-secondary">275.000€</p>
+            <p class="text-lg font-bold text-secondary">{{ \App\Models\PropertyType::find($property->property_type)->name }}</p>
             <div class="mt-4 flex items-center justify-between">
                 <span class="text-sm text-gray">Inserido há {{ \Carbon\Carbon::parse($property->created_at)->diffForHumans() }}</span>
                 <div class="flex space-x-2">

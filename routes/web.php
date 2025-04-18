@@ -38,9 +38,9 @@ Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->na
 // Property Routes
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/my', [PropertyController::class, 'my'])->name('properties.my');
-Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
 Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
 Route::post('/properties/create/store', [PropertyController::class, 'store'])->name('properties.store');
+Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
 
 // Administrative Division Routes
 // Distritos, Municípios e Freguesias

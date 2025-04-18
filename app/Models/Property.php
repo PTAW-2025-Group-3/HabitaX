@@ -66,6 +66,11 @@ class Property extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    public function property_type()
+    {
+        return $this->belongsTo(PropertyType::class, 'property_type');
+    }
+
     public function values()
     {
         return $this->hasMany(\App\Models\PropertyValue::class);
