@@ -6,7 +6,7 @@ use App\Models\Advertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
 use App\Models\PropertyAttribute;
-use App\Models\PropertyValue;
+use App\Models\PropertyParameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -98,7 +98,7 @@ class AdvertisementController extends Controller
         if (!$ad || !$property) {
             return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');
         }
-        $attributes = PropertyValue::where('property_id', $property->id)
+        $attributes = PropertyParameter::where('property_id', $property->id)
             ->with('attribute')
             ->get()
             ->map(function ($item) {

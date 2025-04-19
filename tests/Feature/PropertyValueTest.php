@@ -6,7 +6,7 @@ use App\Models\Parish;
 use App\Models\Property;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyTypeAttribute;
-use App\Models\PropertyValue;
+use App\Models\PropertyParameter;
 use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,7 +56,7 @@ class PropertyValueTest extends TestCase
 
         // Criar valores APENAS para os atributos ligados ao tipo
         foreach ($attributes as $attribute) {
-            PropertyValue::create([
+            PropertyParameter::create([
                 'property_id' => $property->id,
                 'attribute_id' => $attribute->id,
                 'value' => 'Valor de teste',

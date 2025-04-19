@@ -11,6 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('property_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->longText('description');
+            $table->string('icon')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -36,6 +45,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('property_types');
         Schema::dropIfExists('properties');
     }
 };

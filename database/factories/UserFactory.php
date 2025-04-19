@@ -39,6 +39,7 @@ class UserFactory extends Factory
             'message_notifications' => true,
             'public_profile' => true,
             'show_email' => false,
+            'is_suspended' => false,
         ];
     }
 

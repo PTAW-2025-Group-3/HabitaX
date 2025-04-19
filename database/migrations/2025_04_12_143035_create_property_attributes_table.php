@@ -16,15 +16,32 @@ return new class extends Migration
 
             $table->string('name');
             $table->enum('type', ['text', 'number', 'boolean', 'select']);
-            $table->boolean('isActive')->default(true);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_required')->default(false);
+            $table->decimal('minimal', 19, 0)->nullable();
+            $table->decimal('maximal', 19, 0)->nullable();
+            $table->string('unit')->nullable();
 
-            $table->decimal('minimal_value', 19, 0)->nullable(); // para type number
-            $table->decimal('maximal_value', 19, 0)->nullable();
+            $table->timestamps();
+        });
 
-            $table->integer('min_char')->nullable(); // para type text
-            $table->integer('max_char')->nullable();
+        Schema::create('property_attribute_options', function (Blueprint $table) {
+            $table->id();
 
-            $table->json('options')->nullable(); // para type select
+            $table->foreignId('property_attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->string('name');
+            $table->integer('order')->default(0);
+            $table->string('icon_url')->nullable();
+
+            $table->timestamps();
+        });
+
+        Schema::create('property_type_attributes', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('property_type')->constrained('property_types')->onDelete('cascade');
+            $table->foreignId('attribute_id')->constrained('property_attributes')->onDelete('cascade');
+            $table->boolean('required')->default(false);
 
             $table->timestamps();
         });
@@ -36,5 +53,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('property_attributes');
+        Schema::dropIfExists('property_attribute_options');
+        Schema::dropIfExists('property_type_attributes');
     }
 };

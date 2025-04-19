@@ -12,18 +12,17 @@ class PropertyAttribute extends Model
     protected $fillable = [
         'name',
         'type',
-        'isActive',
-        'minimal_value',
-        'maximal_value',
-        'min_char',
-        'max_char',
-        'options',
+        'is_active',
+        'is_required',
+        'minimal',
+        'maximal',
+        'unit',
     ];
 
     protected $casts = [
-        'isActive' => 'boolean',
-        'minimal_value' => 'decimal:0',
-        'maximal_value' => 'decimal:0',
-        'options' => 'array',
+        'is_active' => 'boolean',
+        'is_required' => 'boolean',
+        'minimal' => 'decimal:0',
+        'maximal' => 'decimal:0',
     ];
 }

@@ -7,13 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class PropertyType extends Model
 {
-    protected $fillable = ['name', 'description'];
-    /** @use HasFactory<\Database\Factories\PropertyTypeFactory> */
     use HasFactory;
+    /** @use HasFactory<\Database\Factories\PropertyTypeFactory> */
+    protected $fillable = ['name', 'description', 'icon', 'is_active'];
 
     public function attributes()
     {
-        return $this->hasMany(PropertyAttribute::class, 'property_type_id');
+        return $this->hasManyThrough(
+            PropertyAttribute::class,
+            PropertyTypeAttribute::class,
+            'property_type',
+            'id',
+            'id',
+            'attribute_id'
+        );
     }
 
     public function properties()

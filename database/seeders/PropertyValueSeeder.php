@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Property;
 use App\Models\PropertyTypeAttribute;
-use App\Models\PropertyValue;
+use App\Models\PropertyParameter;
 
 class PropertyValueSeeder extends Seeder
 {
@@ -47,7 +47,7 @@ class PropertyValueSeeder extends Seeder
 
     private function createPropertyValue(int $propertyId, int $attributeId): void
     {
-        PropertyValue::create([
+        PropertyParameter::create([
             'property_id' => $propertyId,
             'attribute_id' => $attributeId,
             'value' => (string) $this->generateValueFromId($attributeId),

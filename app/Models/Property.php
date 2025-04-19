@@ -71,9 +71,9 @@ class Property extends Model
         return $this->belongsTo(PropertyType::class, 'property_type');
     }
 
-    public function values()
+    public function parameters()
     {
-        return $this->hasMany(\App\Models\PropertyValue::class);
+        return $this->hasMany(PropertyParameter::class);
     }
 
     public function advertisements()

@@ -14,12 +14,11 @@ class PropertyAttributeFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'type' => $this->faker->randomElement(['text', 'number', 'boolean', 'select']),
-            'isActive' => $this->faker->boolean(90),
-            'minimal_value' => null,
-            'maximal_value' => null,
-            'min_char' => null,
-            'max_char' => null,
-            'options' => null,
+            'is_active' => $this->faker->boolean(90),
+            'is_required' => $this->faker->boolean(50),
+            'minimal' => null,
+            'maximal' => null,
+            'unit' => null,
         ];
     }
 }

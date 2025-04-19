@@ -7,7 +7,7 @@ use App\Models\PropertyAttribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PropertyValue>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PropertyParameter>
  */
 class PropertyValueFactory extends Factory
 {

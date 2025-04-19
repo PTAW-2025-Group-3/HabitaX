@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('denunciation_reasons', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
         Schema::create('denunciations', function (Blueprint $table) {
             $table->id();
 
@@ -34,6 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('denunciation_reasons');
         Schema::dropIfExists('denunciations');
     }
 };

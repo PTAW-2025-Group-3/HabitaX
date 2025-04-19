@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PropertyValue extends Model
+class PropertyParameter extends Model
 {
     use HasFactory;
 
@@ -17,7 +17,7 @@ class PropertyValue extends Model
 
     public function property()
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(Property::class, 'property_id');
     }
 
     public function attribute()

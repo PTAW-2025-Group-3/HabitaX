@@ -19,6 +19,8 @@ class PropertyTypeFactory extends Factory
         return [
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(10),
+            'icon' => $this->faker->imageUrl(640, 480, 'business', true),
+            'is_active' => $this->faker->boolean(),
         ];
     }
 }
