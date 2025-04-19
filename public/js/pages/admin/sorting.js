@@ -1,128 +1,135 @@
 function initSorting() {
     const tableBody = document.getElementById('userTableBody');
-    const sortDropdownButton = document.getElementById('sortDropdownButton');
-    const sortDropdownMenu = document.getElementById('sortDropdownMenu');
+    const paginationContainer = document.getElementById('pagination-container');
     const sortableColumns = document.querySelectorAll('.sortable-column');
-    const sortOptions = document.querySelectorAll('.sort-option');
-    const currentSortLabel = document.getElementById('currentSortLabel');
-    let userRows = document.querySelectorAll('.user-row');
+    const searchInput = document.getElementById('userSearchInput');
 
-    // Variables
-    let currentSort = 'created_at';
-    let currentOrder = 'desc';
+    // Get sort parameters from URL
+    function getUrlParameter(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
 
-    // Função para mostrar ícones de ordenação
+    // Initialize global sort variables
+    window.currentSort = getUrlParameter('sort') || 'created_at';
+    window.currentOrder = getUrlParameter('order') || 'desc';
+    let currentSort = window.currentSort;
+    let currentOrder = window.currentOrder;
+
+    // Update sort icons in column headers
     function updateSortIcons() {
         sortableColumns.forEach(column => {
             const sortIcon = column.querySelector('.sort-icon');
             const columnSort = column.dataset.sort;
 
-            if (columnSort === currentSort) {
-                sortIcon.innerHTML = currentOrder === 'asc'
-                    ? '<i class="bi bi-arrow-up"></i>'
-                    : '<i class="bi bi-arrow-down"></i>';
-            } else {
-                sortIcon.innerHTML = '';
+            if (sortIcon) {
+                if (columnSort === currentSort) {
+                    sortIcon.innerHTML = currentOrder === 'asc'
+                        ? '<i class="bi bi-arrow-up"></i>'
+                        : '<i class="bi bi-arrow-down"></i>';
+                } else {
+                    sortIcon.innerHTML = '';
+                }
             }
         });
     }
 
-    // Função para ordenar os usuários
+    // Fetch sorted data from server
     function sortUsers() {
-        userRows = document.querySelectorAll('.user-row');
-        const rows = Array.from(userRows);
+        if (!tableBody) return;
 
-        rows.sort((a, b) => {
-            let valueA = a.dataset[currentSort];
-            let valueB = b.dataset[currentSort];
+        const searchTerm = searchInput?.value?.trim() || '';
+        const ajaxUrl = `/admin/users?sort=${currentSort}&order=${currentOrder}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
 
-            // Converter para números se for id ou timestamp
-            if (currentSort === 'id' || currentSort === 'created_at') {
-                valueA = parseInt(valueA);
-                valueB = parseInt(valueB);
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="p-4 text-center">
+                    <div class="flex justify-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+                    </div>
+                    <p class="mt-2 text-gray-600">Carregando utilizadores...</p>
+                </td>
+            </tr>
+        `;
+
+        fetch(ajaxUrl, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
             }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.users && data.pagination) {
+                    tableBody.innerHTML = data.users;
+                    if (paginationContainer) {
+                        paginationContainer.innerHTML = data.pagination;
+                    }
 
-            // Comparar valores
-            if (valueA < valueB) {
-                return currentOrder === 'asc' ? -1 : 1;
-            }
-            if (valueA > valueB) {
-                return currentOrder === 'asc' ? 1 : -1;
-            }
-            return 0;
-        });
+                    // Update UI indicators and rebind events
+                    if (typeof window.updateUserStatusIndicators === 'function') {
+                        window.updateUserStatusIndicators();
+                    }
 
-        // Reordenar no DOM
-        rows.forEach(row => {
-            tableBody.appendChild(row);
-        });
+                    updateSortIcons();
 
-        // Atualizar ícones
-        updateSortIcons();
+                    // Don't call initializeAfterUpdate as it would create an infinite loop
+                    if (typeof window.setupSuspensionButtons === 'function') window.setupSuspensionButtons();
+                    if (typeof window.setupPermissionsButtons === 'function') window.setupPermissionsButtons();
+                    if (typeof window.setupPaginationLinks === 'function') window.setupPaginationLinks();
+
+                    // Update URL with sort parameters
+                    history.pushState({}, '', ajaxUrl);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            })
+            .catch(error => {
+                tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="p-4 text-center text-red-500">
+                        <i class="bi bi-exclamation-triangle mr-2"></i>
+                        Erro ao carregar utilizadores. Por favor, tente novamente.
+                    </td>
+                </tr>
+            `;
+                console.error('Erro ao buscar usuários:', error);
+            });
     }
 
-    // Mostrar/esconder dropdown de ordenação
-    sortDropdownButton.addEventListener('click', function() {
-        sortDropdownMenu.classList.toggle('hidden');
-    });
+    // Column header sorting
+    if (sortableColumns && sortableColumns.length > 0) {
+        sortableColumns.forEach(column => {
+            column.addEventListener('click', function() {
+                const columnSort = column.dataset.sort;
+                if (!columnSort) return;
 
-    // Fechar dropdown ao clicar fora
-    document.addEventListener('click', function(event) {
-        if (!sortDropdownButton.contains(event.target) && !sortDropdownMenu.contains(event.target)) {
-            sortDropdownMenu.classList.add('hidden');
-        }
-    });
+                if (columnSort === currentSort) {
+                    currentOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort = columnSort;
+                    currentOrder = 'asc';
+                }
 
-    // Eventos para opções de ordenação no dropdown
-    sortOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            currentSort = this.dataset.sort;
-            currentOrder = this.dataset.order;
-            currentSortLabel.textContent = this.textContent.trim();
-            sortDropdownMenu.classList.add('hidden');
-            sortUsers();
+                window.currentSort = currentSort;
+                window.currentOrder = currentOrder;
+
+                updateSortIcons();
+                sortUsers();
+            });
         });
-    });
-
-    // Eventos para colunas ordenáveis
-    sortableColumns.forEach(column => {
-        column.addEventListener('click', function() {
-            const columnSort = this.dataset.sort;
-
-            // Se clicar na mesma coluna, inverte a ordem
-            if (columnSort === currentSort) {
-                currentOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSort = columnSort;
-                currentOrder = 'asc';
-            }
-
-            // Atualizar o texto no dropdown
-            const matchingOption = Array.from(sortOptions).find(
-                option => option.dataset.sort === currentSort && option.dataset.order === currentOrder
-            );
-
-            if (matchingOption) {
-                currentSortLabel.textContent = matchingOption.textContent.trim();
-            } else {
-                // Texto personalizado quando não há correspondência exata no dropdown
-                const sortLabels = {
-                    'id': 'ID',
-                    'name': 'Nome',
-                    'email': 'Email',
-                    'created_at': 'Data de Registo'
-                };
-
-                currentSortLabel.textContent = `${sortLabels[currentSort]} (${currentOrder === 'asc' ? 'A-Z' : 'Z-A'})`;
-            }
-
-            sortUsers();
-        });
-    });
+    }
 
     // Export for use in other modules
     window.sortUsers = sortUsers;
+    window.updateSortIcons = updateSortIcons;
 
-    // Initialize sorting
-    sortUsers();
+    // Initialize UI without fetching data
+    updateSortIcons();
 }
+
+document.addEventListener('DOMContentLoaded', initSorting);

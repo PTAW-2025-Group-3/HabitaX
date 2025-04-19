@@ -61,8 +61,8 @@ Route::get('/admin', [App\Http\Controllers\AdministrationController::class, 'ind
     ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
     ->name('admin.index');
 Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
-Route::post('/admin/users/{user}/toggle-suspension', [AdministrationController::class, 'toggleSuspension'])
-    ->name('admin.users.toggle-suspension');
+Route::post('/admin/users/{user}/toggle-status', [AdministrationController::class, 'toggleStatus'])
+    ->name('admin.users.toggle-status');
 Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
     ->name('admin.users.update-role');
 

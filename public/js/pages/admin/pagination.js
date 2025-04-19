@@ -1,16 +1,36 @@
 function initPagination() {
     const tableBody = document.getElementById('userTableBody');
     const paginationContainer = document.getElementById('pagination-container');
+    const searchInput = document.getElementById('userSearchInput');
+
+    // Usar variáveis globais exportadas do sorting.js
+    const currentSort = () => window.currentSort || 'created_at';
+    const currentOrder = () => window.currentOrder || 'desc';
 
     function setupPaginationLinks() {
         const paginationLinks = document.querySelectorAll('#pagination-container a');
 
         paginationLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const url = this.getAttribute('href');
 
-                // Mostrar indicador de carregamento
+                const pageMatch = url.match(/page=(\d+)/);
+                if (!pageMatch) {
+                    console.error('Invalid pagination URL:', url);
+                    return;
+                }
+
+                const page = pageMatch[1];
+                const searchTerm = searchInput?.value?.trim() || '';
+                const sort = currentSort();
+                const order = currentOrder();
+
+                const ajaxUrl = `/admin/users?page=${page}` +
+                    `&sort=${encodeURIComponent(sort)}` +
+                    `&order=${encodeURIComponent(order)}` +
+                    (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '');
+
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="6" class="p-4 text-center">
@@ -22,41 +42,34 @@ function initPagination() {
                     </tr>
                 `;
 
-                // Converter URL de paginação para endpoint AJAX
-                const ajaxUrl = '/admin/users?page=' + url.split('page=')[1];
-
-                // Fetch data
                 fetch(ajaxUrl, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        // Update table
                         tableBody.innerHTML = data.users;
-
-                        // Update pagination
                         paginationContainer.innerHTML = data.pagination;
-
-                        // Make sure status indicators match data attributes
                         updateUserStatusIndicators();
-
-                        // Initialize everything after update
                         initializeAfterUpdate();
 
-                        // Update URL without page reload
-                        history.pushState({}, '', url);
+                        history.pushState({}, '', ajaxUrl);
                     })
                     .catch(error => {
                         tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="p-4 text-center text-red-500">
-                                <i class="bi bi-exclamation-triangle mr-2"></i>
-                                Erro ao carregar utilizadores. Por favor, tente novamente.
-                            </td>
-                        </tr>
-                    `;
+                            <tr>
+                                <td colspan="6" class="p-4 text-center text-red-500">
+                                    <i class="bi bi-exclamation-triangle mr-2"></i>
+                                    Erro ao carregar utilizadores. Por favor, tente novamente.
+                                </td>
+                            </tr>
+                        `;
                         console.error('Erro ao buscar usuários:', error);
                     });
             });
@@ -67,51 +80,38 @@ function initPagination() {
         const userRows = document.querySelectorAll('.user-row');
 
         userRows.forEach(row => {
-            const isSuspended = row.dataset.suspended === 'true';
+            const state = row.dataset.state;
             const statusCell = row.querySelector('td:nth-child(5)');
-            const actionButton = row.querySelector('.suspend-user-btn');
 
-            if (statusCell) {
-                if (isSuspended) {
-                    statusCell.innerHTML = `
-                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-red-100 text-red-600">
-                            Suspenso
-                        </span>
-                    `;
-                    if (actionButton) actionButton.textContent = 'Reativar';
-                } else {
-                    statusCell.innerHTML = `
-                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-700">
-                            Ativo
-                        </span>
-                    `;
-                    if (actionButton) actionButton.textContent = 'Suspender';
-                }
-            }
+            if (!state || !statusCell) return;
+
+            const badgeMap = {
+                active: 'Ativo|bg-green-100 text-green-700',
+                suspended: 'Suspenso|bg-yellow-100 text-yellow-600',
+                banned: 'Banido|bg-red-100 text-red-600',
+                archived: 'Arquivado|bg-gray-100 text-gray-600'
+            };
+
+            const fallback = 'Desconhecido|bg-gray-200 text-gray-700';
+            const [label, style] = (badgeMap[state] || fallback).split('|');
+
+            statusCell.innerHTML = `<span class="inline-block px-2 py-1 text-xs rounded-full font-semibold ${style}">${label}</span>`;
         });
     }
 
     function initializeAfterUpdate() {
         setupPaginationLinks();
 
-        // Call the exported functions from other modules
-        if (window.updateUserRows) window.updateUserRows();
-        if (window.setupSuspensionButtons) window.setupSuspensionButtons();
-        if (window.setupPermissionsButtons) window.setupPermissionsButtons();
-        if (window.sortUsers) window.sortUsers();
+        if (typeof window.setupSuspensionButtons === 'function') window.setupSuspensionButtons();
+        if (typeof window.setupPermissionsButtons === 'function') window.setupPermissionsButtons();
     }
 
-    // Export for use in other modules
     window.setupPaginationLinks = setupPaginationLinks;
     window.initializeAfterUpdate = initializeAfterUpdate;
     window.updateUserStatusIndicators = updateUserStatusIndicators;
 
-    // Initialize pagination
     setupPaginationLinks();
-
-    // Run on initial page load to ensure correct status display
     updateUserStatusIndicators();
 }
 
-// Run initialization when DOM is ready
 document.addEventListener('DOMContentLoaded', initPagination);

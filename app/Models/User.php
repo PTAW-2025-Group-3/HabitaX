@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,7 +33,7 @@ class User extends Authenticatable
         'userType',
         'advertiserNumber',
         'staffNumber',
-        'is_suspended',
+        'state',
     ];
 
     /**
@@ -59,6 +60,5 @@ class User extends Authenticatable
         'telephone' => 'integer',
         'advertiserNumber' => 'integer',
         'staffNumber' => 'integer',
-        'is_suspended' => 'boolean',
     ];
 }
