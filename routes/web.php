@@ -65,6 +65,12 @@ Route::post('/admin/users/{user}/toggle-status', [AdministrationController::clas
     ->name('admin.users.toggle-status');
 Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
     ->name('admin.users.update-role');
+Route::get('/admin/user-roles-data', [AdministrationController::class, 'getUserRolesData'])
+    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
+    ->name('admin.user-roles-data');
+
+
+
 
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {

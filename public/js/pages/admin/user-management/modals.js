@@ -86,14 +86,14 @@ function initModals() {
                             const statusCell = userRow.querySelector('td:nth-child(5)');
                             const suspendBtn = userRow.querySelector('.state-user-btn');
 
-                            userRow.dataset.userState = data.status;
+                            userRow.dataset.userState = data.state;
                             if (suspendBtn) {
-                                suspendBtn.dataset.userState = data.status;
+                                suspendBtn.dataset.userState = data.state;
                             }
 
                             if (statusCell) {
                                 const badgeMap = {
-                                    suspended: 'Suspenso|bg-red-100 text-red-600',
+                                    suspended: 'Suspenso|bg-yellow-100 text-yellow-600',
                                     active: 'Ativo|bg-green-100 text-green-700',
                                     banned: 'Banido|bg-red-100 text-red-600',
                                     archived: 'Arquivado|bg-gray-100 text-gray-600',
@@ -101,6 +101,30 @@ function initModals() {
                                 const [label, style] = badgeMap[data.state].split('|');
                                 statusCell.innerHTML = `<span class="inline-block px-2 py-1 text-xs rounded-full font-semibold ${style}">${label}</span>`;
                             }
+                        }
+
+                        // Update stats from the response
+                        if (data.stats) {
+                            // Find the stat elements by looking for h3 elements with the correct text content
+                            const statElements = document.querySelectorAll('.bg-white.p-5.rounded-xl.shadow');
+
+                            statElements.forEach(statElement => {
+                                const labelElement = statElement.querySelector('h3');
+
+                                if (labelElement && labelElement.textContent.trim() === 'Utilizadores Ativos') {
+                                    const valueElement = statElement.querySelector('p');
+                                    if (valueElement) {
+                                        valueElement.textContent = new Intl.NumberFormat('pt-PT').format(data.stats.activeUsers);
+                                    }
+                                }
+
+                                if (labelElement && labelElement.textContent.trim() === 'Utilizadores Registados') {
+                                    const valueElement = statElement.querySelector('p');
+                                    if (valueElement) {
+                                        valueElement.textContent = new Intl.NumberFormat('pt-PT').format(data.stats.totalUsers);
+                                    }
+                                }
+                            });
                         }
 
                         closeSuspensionModal();
@@ -193,6 +217,11 @@ function initModals() {
                     if (data.success) {
                         const btn = document.querySelector(`.permissions-btn[data-user-id="${permissionsUserId}"]`);
                         if (btn) btn.dataset.userRole = newRole;
+
+                        if (window.updateUserRolesChart) {
+                            window.updateUserRolesChart();
+                        }
+
                         showToast('Permissões atualizadas com sucesso.', 'success');
                         closePermissionsModal();
                     } else {

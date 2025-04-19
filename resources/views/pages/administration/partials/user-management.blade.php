@@ -67,7 +67,7 @@
                     <td class="p-4 text-gray-500">{{ $user->created_at->format('d/m/Y - H:i') }}</td>
                     <td class="p-4">
                         @if ($user->state === 'suspended')
-                            <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-red-100 text-red-600">
+                            <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-yellow-100 text-yellow-600">
                         Suspenso
                     </span>
                         @elseif ($user->state === 'active')
@@ -115,8 +115,8 @@
 @include('pages.administration.partials.modals.suspend-user')
 @include('pages.administration.partials.modals.permissions-user')
 
-<script src="{{ asset('js/pages/admin/user-search.js') }}"></script>
-<script src="{{ asset('js/pages/admin/sorting.js') }}"></script>
-<script src="{{ asset('js/pages/admin/modals.js') }}"></script>
-<script src="{{ asset('js/pages/admin/pagination.js') }}"></script>
-<script src="{{ asset('js/pages/admin/user-management.js') }}"></script>
+<script src="{{ asset('js/pages/admin/user-management/user-search.js') }}"></script>
+<script src="{{ asset('js/pages/admin/user-management/sorting.js') }}"></script>
+<script src="{{ asset('js/pages/admin/user-management/modals.js') }}"></script>
+<script src="{{ asset('js/pages/admin/user-management/pagination.js') }}"></script>
+<script src="{{ asset('js/pages/admin/user-management/user-management.js') }}"></script>
