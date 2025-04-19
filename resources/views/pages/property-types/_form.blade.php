@@ -4,6 +4,7 @@
         @method($method)
     @endisset
 
+    {{--  name  --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="name" class="block text-sm font-semibold text-primary">Nome</label>
@@ -13,11 +14,20 @@
         </div>
     </div>
 
-{{--    description--}}
+    {{--   description   --}}
     <div>
         <label for="description" class="block text-sm font-semibold text-primary">Descrição</label>
         <textarea name="description" id="description" placeholder="Ex: Unidade habitacional destinada a habitação."
                   class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">{{ old('description', $propertyType->description ?? '') }}</textarea>
+    </div>
+
+    {{--  is_active  --}}
+    <div class="flex items-center">
+        <input type="hidden" name="is_active" value="0">
+        <input type="checkbox" name="is_active" id="is_active" value="1"
+               {{ old('is_active', $propertyType->is_active ?? false) ? 'checked' : '' }}
+               class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+        <label for="is_active" class="ml-2 block text-sm font-semibold text-primary">Ativo</label>
     </div>
 
     {{-- Validation Errors --}}
@@ -46,15 +56,18 @@
     const initial = @json($propertyType ?? []);
     const nome = document.getElementById('name');
     const description = document.getElementById('description');
+    const isActive = document.getElementById('is_active');
     const submitButton = document.getElementById('submit-button');
     const form = document.querySelector('form');
 
     function updateButtonState() {
-        const currentName = nome.value.trim();
-        const currentDescription = description.value.trim();
+        const nameChanged = nome.value.trim() !== initial.name;
+        const descriptionChanged = description.value.trim() !== initial.description;
+        const isActiveChanged = isActive.checked !== initial.is_active;
 
-        submitButton.disabled = (currentName === initial.name && currentDescription === initial.description);
+        submitButton.disabled = !nameChanged && !descriptionChanged && !isActiveChanged;
     }
     nome.addEventListener('input', updateButtonState);
     description.addEventListener('input', updateButtonState);
+    isActive.addEventListener('change', updateButtonState);
 </script>

@@ -10,7 +10,7 @@ class PropertyTypeController extends Controller
 {
     public function index()
     {
-        $propertyTypes = PropertyType::all();
+        $propertyTypes = PropertyType::with('attributes')->paginate(10);
 
         return view('pages.property-types.index', compact('propertyTypes'));
     }
@@ -25,6 +25,8 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'icon' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
         ]);
 
         PropertyType::create($request->all());
@@ -53,6 +55,8 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'icon' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
         ]);
 
         $propertyType = PropertyType::findOrFail($id);

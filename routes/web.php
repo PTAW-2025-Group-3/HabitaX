@@ -56,31 +56,21 @@ Route::middleware('auth')->controller(PropertyController::class)->group(function
 Route::get('/mod', function () {
     return view('pages.moderation.moderation-dashboard');
 })->name('moderation');
-Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])->name('reported-advertisement.show');
-Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])->name('verification-advertiser.show');
+Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
+    ->name('reported-advertisement.show');
+Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
+    ->name('verification-advertiser.show');
 
 // Administration Route
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdministrationController::class, 'index'])->name('admin.index');
     Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
-    Route::post('/admin/users/{user}/toggle-suspension', [AdministrationController::class, 'toggleSuspension'])
-        ->name('admin.users.toggle-suspension');
+    Route::post('/admin/users/{user}/toggle-status', [AdministrationController::class, 'toggleStatus'])
+        ->name('admin.users.toggle-status');
     Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
         ->name('admin.users.update-role');
-Route::get('/admin', [App\Http\Controllers\AdministrationController::class, 'index'])
-    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
-    ->name('admin.index');
-Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
-Route::post('/admin/users/{user}/toggle-status', [AdministrationController::class, 'toggleStatus'])
-    ->name('admin.users.toggle-status');
-Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
-    ->name('admin.users.update-role');
-Route::get('/admin/user-roles-data', [AdministrationController::class, 'getUserRolesData'])
-    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
-    ->name('admin.user-roles-data');
-
-
-
+    Route::get('/admin/user-roles-data', [AdministrationController::class, 'getUserRolesData'])
+        ->name('admin.user-roles-data');
 
     Route::get('/admin/attributes', [PropertyAttributeController::class, 'index'])->name('attributes.index');
     Route::get('/admin/attributes/create', [PropertyAttributeController::class, 'create'])->name('attributes.create');
@@ -95,9 +85,10 @@ Route::get('/admin/user-roles-data', [AdministrationController::class, 'getUserR
     Route::get('/admin/property-types/{id}/edit', [PropertyTypeController::class, 'edit'])->name('property-types.edit');
     Route::put('/admin/property-types/{id}', [PropertyTypeController::class, 'update'])->name('property-types.update');
     Route::delete('/admin/property-types/{id}', [PropertyTypeController::class, 'destroy'])->name('property-types.destroy');
-    Route::get('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'editAttributes'])->name('property-types.attributes.edit');
-    Route::post('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'updateAttributes'])->name('property-types.attributes.update');
-
+    Route::get('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'editAttributes'])
+        ->name('property-types.attributes.edit');
+    Route::post('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'updateAttributes'])
+        ->name('property-types.attributes.update');
 });
 
 // Authenticated Routes (User must be logged in)
