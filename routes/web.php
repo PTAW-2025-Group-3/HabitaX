@@ -44,7 +44,7 @@ Route::get('/properties', [PropertyController::class, 'index'])->name('propertie
 Route::middleware('auth')->controller(PropertyController::class)->group(function () {
     Route::get('/properties/my', 'my')->name('properties.my');
     Route::get('/properties/create', 'create')->name('properties.create');
-    Route::post('/properties', 'store')->name('properties.store');
+    Route::post('/properties/create/store', 'store')->name('properties.store');
     Route::get('/properties/{id}', 'show')->name('properties.show');
 });
 
@@ -67,6 +67,20 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         ->name('admin.users.toggle-suspension');
     Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
         ->name('admin.users.update-role');
+Route::get('/admin', [App\Http\Controllers\AdministrationController::class, 'index'])
+    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
+    ->name('admin.index');
+Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
+Route::post('/admin/users/{user}/toggle-status', [AdministrationController::class, 'toggleStatus'])
+    ->name('admin.users.toggle-status');
+Route::post('/admin/users/{user}/update-role', [AdministrationController::class, 'updateRole'])
+    ->name('admin.users.update-role');
+Route::get('/admin/user-roles-data', [AdministrationController::class, 'getUserRolesData'])
+    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
+    ->name('admin.user-roles-data');
+
+
+
 
     Route::get('/admin/attributes', [PropertyAttributeController::class, 'index'])->name('attributes.index');
     Route::get('/admin/attributes/create', [PropertyAttributeController::class, 'create'])->name('attributes.create');
