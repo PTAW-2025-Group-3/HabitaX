@@ -10,22 +10,24 @@ class PropertyTypeAttribute extends Model
     use HasFactory;
 
     protected $fillable = [
-        'property_type',
-        'attribute_id',
-        'required',
+        'property_type_id',
+        'property_attribute_id',
+        'is_required',
+        'is_active',
     ];
 
     protected $casts = [
-        'required' => 'boolean',
+        'is_required' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
-    public function typeProperty()
+    public function property_type()
     {
-        return $this->belongsTo(PropertyType::class, 'property_type');
+        return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
-    public function attribute()
+    public function property_attribute()
     {
-        return $this->belongsTo(PropertyAttribute::class, 'attribute_id');
+        return $this->belongsTo(PropertyAttribute::class, 'property_attribute_id');
     }
 }

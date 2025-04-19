@@ -13,18 +13,11 @@ class PropertyType extends Model
 
     public function attributes()
     {
-        return $this->hasManyThrough(
-            PropertyAttribute::class,
-            PropertyTypeAttribute::class,
-            'property_type',
-            'id',
-            'id',
-            'attribute_id'
-        );
+        return $this->belongsToMany(PropertyAttribute::class, 'property_type_attributes', 'property_type_id', 'property_attribute_id');
     }
 
     public function properties()
     {
-        return $this->hasMany(Property::class, 'property_type');
+        return $this->hasMany(Property::class, 'property_type_id');
     }
 }

@@ -37,6 +37,8 @@
                         <td class="border px-4 py-2">
                             <a href="{{ route('property-types.edit', ['id' => $propertyType->id]) }}" class="text-blue-500">Editar</a>
                             |
+                            <a href="{{ route('property-types.attributes.edit', ['id' => $propertyType->id]) }}" class="text-blue-500">Gerir Atributos</a>
+                            |
                             <form action="{{ route('property-types.destroy', ['id' => $propertyType->id]) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')

@@ -81,6 +81,9 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/property-types/{id}/edit', [PropertyTypeController::class, 'edit'])->name('property-types.edit');
     Route::put('/admin/property-types/{id}', [PropertyTypeController::class, 'update'])->name('property-types.update');
     Route::delete('/admin/property-types/{id}', [PropertyTypeController::class, 'destroy'])->name('property-types.destroy');
+    Route::get('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'editAttributes'])->name('property-types.attributes.edit');
+    Route::post('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'updateAttributes'])->name('property-types.attributes.update');
+
 });
 
 // Authenticated Routes (User must be logged in)

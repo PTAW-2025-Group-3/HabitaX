@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\AttributeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,7 @@ class PropertyAttribute extends Model
     ];
 
     protected $casts = [
+        'type' => AttributeType::class,
         'is_active' => 'boolean',
         'is_required' => 'boolean',
         'minimal' => 'decimal:0',

@@ -28,7 +28,7 @@ class PropertyFactory extends Factory
             'is_verified' => false,
 
             // Foreign keys com dados reais e o mesmo user para created/updated
-            'property_type' => PropertyType::inRandomOrder()->first()?->id,
+            'property_type_id' => PropertyType::inRandomOrder()->first()?->id,
             'parish_id' => Parish::inRandomOrder()->first()?->id,
             'created_by' => $user?->id,
             'updated_by' => $user?->id,

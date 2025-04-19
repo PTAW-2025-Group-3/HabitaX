@@ -1,5 +1,6 @@
 <?php
 
+use App\AttributeType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->enum('type', ['text', 'number', 'boolean', 'select']);
+            $table->enum('type', array_map(fn($type) => $type->value, AttributeType::cases()))
+                ->default(AttributeType::TEXT->value);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_required')->default(false);
             $table->decimal('minimal', 19, 0)->nullable();
@@ -39,9 +41,10 @@ return new class extends Migration
         Schema::create('property_type_attributes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('property_type')->constrained('property_types')->onDelete('cascade');
-            $table->foreignId('attribute_id')->constrained('property_attributes')->onDelete('cascade');
-            $table->boolean('required')->default(false);
+            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
+            $table->foreignId('property_attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->boolean('is_required')->default(false);
+            $table->boolean('is_active')->default(true);
 
             $table->timestamps();
         });

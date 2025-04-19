@@ -11,38 +11,20 @@ class PropertyTypeAttributeSeeder extends Seeder
 {
     public function run(): void
     {
-        // Exemplo de atributos existentes
-        $attrs = PropertyAttribute::pluck('id', 'name')->toArray();
-        $types = PropertyType::pluck('id', 'name')->toArray();
+        $propertyTypes = PropertyType::all();
+        $propertyAttributes = PropertyAttribute::all();
 
-        // Associação para "Apartamento"
-        if (isset($types['Apartamento'])) {
-            PropertyTypeAttribute::create([
-                'property_type' => $types['Apartamento'],
-                'attribute_id' => $attrs['Número de Quartos'] ?? null,
-                'required' => true,
-            ]);
+        foreach ($propertyTypes as $propertyType) {
+            $attributes = $propertyAttributes->random(rand(1, 3))->pluck('id');
 
-            PropertyTypeAttribute::create([
-                'property_type' => $types['Apartamento'],
-                'attribute_id' => $attrs['Tem Elevador'] ?? null,
-                'required' => false,
-            ]);
-        }
-
-        // Associação para "Moradia"
-        if (isset($types['Moradia'])) {
-            PropertyTypeAttribute::create([
-                'property_type' => $types['Moradia'],
-                'attribute_id' => $attrs['Número de Quartos'] ?? null,
-                'required' => true,
-            ]);
-
-            PropertyTypeAttribute::create([
-                'property_type' => $types['Moradia'],
-                'attribute_id' => $attrs['Vista'] ?? null,
-                'required' => false,
-            ]);
+            foreach ($attributes as $attributeId) {
+                PropertyTypeAttribute::create([
+                    'property_type_id' => $propertyType->id,
+                    'property_attribute_id' => $attributeId,
+                    'is_required' => rand(0, 1) === 1,
+                    'is_active' => true,
+                ]);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,15 @@ class PropertyTypeController extends Controller
         return view('pages.property-types.edit', compact('propertyType'));
     }
 
+    public function editAttributes(Request $request, $id)
+    {
+        $propertyType = PropertyType::findOrFail($id);
+        $allAttributes = PropertyAttribute::all();
+        $propertyTypeAttributes = $propertyType->attributes()->pluck('property_attribute_id')->toArray();
+
+        return view('pages.property-types.attributes', compact('propertyType', 'allAttributes', 'propertyTypeAttributes'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -49,6 +59,17 @@ class PropertyTypeController extends Controller
         $propertyType->update($request->all());
 
         return redirect()->route('property-types.index')->with('success', 'Property type updated successfully.');
+    }
+
+    public function updateAttributes(Request $request, $id)
+    {
+        $propertyType = PropertyType::findOrFail($id);
+        $attributes = $request->input('attributes', []);
+
+        // Sync the attributes with the property type
+        $propertyType->attributes()->sync($attributes);
+
+        return redirect()->route('property-types.index')->with('success', 'Property type attributes updated successfully.');
     }
 
     public function destroy($id)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AttributeType;
 use App\Models\PropertyAttribute;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class PropertyAttributeController extends Controller
 
     public function create()
     {
-        return view('pages.attributes.create');
+        $attributeTypes = AttributeType::cases();
+        return view('pages.attributes.create', compact('attributeTypes'));
     }
 
     public function store(Request $request)
@@ -42,8 +44,9 @@ class PropertyAttributeController extends Controller
     public function edit(Request $request, $id)
     {
         $attribute = PropertyAttribute::findOrFail($id);
+        $attributeTypes = AttributeType::cases();
 
-        return view('pages.attributes.edit', compact('attribute'));
+        return view('pages.attributes.edit', compact('attribute', 'attributeTypes'));
     }
 
     public function update(Request $request, $id)

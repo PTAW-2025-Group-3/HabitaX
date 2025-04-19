@@ -18,6 +18,15 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+
+            $table->string('nome')->nullable();
+            $table->integer('telephone')->nullable();
+            $table->string('profilePhoto_url')->nullable();
+            $table->enum('userType', ['user', 'moderator', 'admin'])->nullable();
+            $table->integer('advertiserNumber')->nullable();
+            $table->integer('staffNumber')->nullable();
+            $table->boolean('is_suspended')->default(false);
+
             $table->timestamps();
         });
 

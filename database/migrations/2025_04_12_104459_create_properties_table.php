@@ -30,7 +30,7 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
 
             // Foreign keys
-            $table->foreignId('property_type')->constrained('property_types')->onDelete('cascade');
+            $table->foreignId('property_type_id')->constrained('property_types')->onDelete('cascade');
             $table->foreignId('parish_id')->constrained('parishes')->onDelete('cascade');
 
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');

@@ -14,7 +14,7 @@ class PropertyValueSeeder extends Seeder
         $properties = Property::all();
 
         foreach ($properties as $property) {
-            $attributeTypes = PropertyTypeAttribute::where('property_type', $property->type_property)->get();
+            $attributeTypes = PropertyTypeAttribute::where('property_type_id', $property->type_property)->get();
 
             $usedAttributeIds = [];
 
@@ -49,7 +49,7 @@ class PropertyValueSeeder extends Seeder
     {
         PropertyParameter::create([
             'property_id' => $propertyId,
-            'attribute_id' => $attributeId,
+            'property_attribute_id' => $attributeId,
             'value' => (string) $this->generateValueFromId($attributeId),
         ]);
     }

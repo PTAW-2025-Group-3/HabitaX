@@ -19,7 +19,7 @@ class Property extends Model
         'images',
         'is_active',
         'is_verified',
-        'property_type',
+        'property_type_id',
         'parish_id',
         'created_by',
         'updated_by',
@@ -68,7 +68,7 @@ class Property extends Model
 
     public function property_type()
     {
-        return $this->belongsTo(PropertyType::class, 'property_type');
+        return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
     public function parameters()

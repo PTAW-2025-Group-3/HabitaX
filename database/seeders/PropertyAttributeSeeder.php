@@ -9,42 +9,14 @@ class PropertyAttributeSeeder extends Seeder
 {
     public function run(): void
     {
-        $attributes = [
-            [
-                'name' => 'Número de Quartos',
-                'type' => 'number',
-                'minimal' => 0,
-                'maximal' => 10,
-            ],
-            [
-                'name' => 'Número de Casas de Banho',
-                'type' => 'number',
-                'minimal' => 0,
-                'maximal' => 5,
-            ],
-            [
-                'name' => 'Tem Elevador',
-                'type' => 'boolean',
-            ],
-            [
-                'name' => 'Vista',
-                'type' => 'select',
-            ],
-            [
-                'name' => 'Notas Adicionais',
-                'type' => 'text',
-                'minimal' => 10,
-                'maximal' => 255,
-            ],
-        ];
+        PropertyAttribute::factory()->count(10)->create([
+            'is_active' => true,
+            'is_required' => false,
+        ]);
 
-        foreach ($attributes as $attr) {
-            PropertyAttribute::firstOrCreate(
-                ['name' => $attr['name']],
-                array_merge([
-                    'is_active' => true,
-                ], $attr)
-            );
-        }
+        PropertyAttribute::factory()->count(5)->create([
+            'is_active' => true,
+            'is_required' => true,
+        ]);
     }
 }

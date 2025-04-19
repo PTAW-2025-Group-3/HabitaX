@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\AttributeType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -13,7 +14,7 @@ class PropertyAttributeFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'type' => $this->faker->randomElement(['text', 'number', 'boolean', 'select']),
+            'type' => $this->faker->randomElement(AttributeType::cases())->value,
             'is_active' => $this->faker->boolean(90),
             'is_required' => $this->faker->boolean(50),
             'minimal' => null,
