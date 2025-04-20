@@ -81,7 +81,7 @@ class AdvertisementController extends Controller
 
     public function my(Request $request)
     {
-        $ads = Advertisement::where('created_by', auth()->user()->getKey())
+        $ads = auth()->user()->advertisements()
             ->with('property')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -98,7 +98,10 @@ class AdvertisementController extends Controller
         $favorites = FavoriteAdvertisement::where('user_id', $user->id)
             ->with(['advertisement.property'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($favorite) {
+                return $favorite->advertisement;
+            });
         return view('pages.advertisements.favorites', compact('favorites'));
     }
 
@@ -135,5 +138,10 @@ class AdvertisementController extends Controller
             'ad' => $ad, 'property' => $property,
             'attributes' => $attributes, 'price_history' => $price_history
         ]);
+    }
+
+    public function help()
+    {
+        return view('pages.advertisements.help');
     }
 }

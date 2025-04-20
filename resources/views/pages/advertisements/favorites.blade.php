@@ -31,7 +31,7 @@
                     <div class="home-ads-style">
                         <div class="relative">
                             <img
-                                src="{{ $favorite->advertisement->property->images[0] }}"
+                                src="{{ $favorite->property->images[0] }}"
                                 alt="Property"
                                 class="w-full h-48 object-cover">
                             <button
@@ -41,9 +41,9 @@
                             </button>
                         </div>
                         <div class="p-5">
-                            <h3 class="text-lg font-semibold text-gray-secondary">{{ $favorite->advertisement->property->title }}</h3>
-                            <p class="text-sm text-gray mb-2">{{ $favorite->advertisement->property->parish->name }}</p>
-                            <p class="text-lg font-bold text-primary">{{ $favorite->advertisement->price }}€</p>
+                            <h3 class="text-lg font-semibold text-gray-secondary">{{ $favorite->property->title }}</h3>
+                            <p class="text-sm text-gray mb-2">{{ $favorite->property->parish->name }}</p>
+                            <p class="text-lg font-bold text-primary">{{ $favorite->price }}€</p>
                             <div class="mt-4 flex items-center justify-between text-sm">
                                 <span class="text-gray">Adicionado há {{ \Carbon\Carbon::parse($favorite->created_at)->diffForHumans() }}</span>
                                 <button class="text-red hover:text-red-700 font-medium transition-colors">Remover</button>

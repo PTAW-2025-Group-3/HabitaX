@@ -10,7 +10,7 @@
             @include('pages.about.sections.title', [
                 'title' => 'Sobre Nós',
                 'class' => '',
-                'slot' => 'Somos um grupo de cinco desenvolvedores do curso de Tecnologias de Informação da Estga-UA, apaixonados por tecnologia e inovação.
+                'slot' => 'Somos um grupo de cinco desenvolvedores do curso de Tecnologias de Informação da ESTGA-UA, apaixonados por tecnologia e inovação.
                 Criámos este projeto com o objetivo de facilitar a compra, venda e aluguer de imóveis em Portugal inteiro,
                 conectando pessoas às suas casas ideais.'
             ])

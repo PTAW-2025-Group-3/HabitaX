@@ -13,7 +13,7 @@ class PropertyController extends Controller
     }
 
     public function my(Request $request) {
-        $properties = Property::where('created_by', auth()->user()->getKey())
+        $properties = auth()->user()->properties()
             ->with('property_type')
             ->with('parish')
             ->orderBy('created_at', 'desc')

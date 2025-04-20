@@ -9,7 +9,12 @@ class PropertyType extends Model
 {
     use HasFactory;
     /** @use HasFactory<\Database\Factories\PropertyTypeFactory> */
-    protected $fillable = ['name', 'description', 'icon', 'is_active'];
+    protected $fillable = [
+        'name',
+        'description',
+        'icon',
+        'is_active'
+    ];
 
     public function attributes()
     {

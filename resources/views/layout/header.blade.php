@@ -25,6 +25,10 @@
                 Home
                 <span class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-secondary group-hover:w-full transition-all duration-300"></span>
             </a>
+            <a href="{{ route('advertisements.index') }}" class="relative group text-gray-secondary font-medium text-lg transition-all duration-300">
+                Anúncios
+                <span class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-secondary group-hover:w-full transition-all duration-300"></span>
+            </a>
             <a href="{{url('/about')}}" class="relative group text-gray-secondary font-medium text-lg transition-all duration-300">
                 Sobre Nós
                 <span class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-secondary group-hover:w-full transition-all duration-300"></span>
@@ -80,13 +84,21 @@
                             </svg>
                             Favoritos
                         </a>
-                        <a href="{{ route('properties.my') }}"
-                           class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                            Minhas Propriedades
-                        </a>
+                        {{--   estas opções serão visiveis apos verificação de anunciante   --}}
+                        @if(auth()->user()->advertiser_number)
+                            <a href="{{ route('properties.my') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                Minhas Propriedades
+                            </a>
+                            <a href="{{ route('advertisements.my') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
+                                <i class="bi bi-megaphone mr-3"></i>
+                                Meus Anúncios
+                            </a>
+                        @endif
                         <a href="{{ route('settings') }}"
                            class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
                             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +123,7 @@
                 </div>
             @endguest
             {{-- Criar anuncio Button --}}
-            <a href="{{ route('properties.create') }}"
+            <a href="{{ route('advertisements.help') }}"
                class="relative px-6 py-2 btn-primary">
                 <span class="z-10">Publicar Anúncio</span>
             </a>

@@ -10,22 +10,22 @@ class AdvertiserVerification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'verification_annunciant_state',
+        'verification_advertiser_state',
         'submissionDate',
         'validationDate',
         'document_url',
         'photo_url',
-        'validatedBy',
-        'submittedBy',
-        'submittedAt',
-        'validatedAt',
+        'validated_by',
+        'submitted_by',
+        'submitted_at',
+        'validated_at',
     ];
 
     protected $casts = [
-        'submissionDate' => 'datetime',
-        'validationDate' => 'datetime',
-        'submittedAt' => 'datetime',
-        'validatedAt' => 'datetime',
+        'submission_date' => 'datetime',
+        'validation_date' => 'datetime',
+        'submitted_at' => 'datetime',
+        'validated_at' => 'datetime',
     ];
 
     /**
@@ -33,7 +33,7 @@ class AdvertiserVerification extends Model
      */
     public function submitter()
     {
-        return $this->belongsTo(User::class, 'submittedBy');
+        return $this->belongsTo(User::class, 'submitted_by');
     }
 
     /**
@@ -41,19 +41,19 @@ class AdvertiserVerification extends Model
      */
     public function validator()
     {
-        return $this->belongsTo(User::class, 'validatedBy');
+        return $this->belongsTo(User::class, 'validated_by');
     }
 
     protected static function booted()
     {
         static::created(function ($verification) {
             if (
-                $verification->verification_annunciant_state === 1 &&
+                $verification->verification_advertiser_state === 1 &&
                 $verification->submitter &&
-                !$verification->submitter->advertiserNumber
+                !$verification->submitter->advertiser_number
             ) {
-                $verification->submitter?->update([
-                    'advertiserNumber' => rand(10000, 99999),
+                $verification->submitter->update([
+                    'advertiser_number' => rand(10000, 99999),
                 ]);
             }
         });

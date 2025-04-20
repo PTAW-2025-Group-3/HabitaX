@@ -19,7 +19,7 @@ class ContactRequest extends Model
         'email',
         'telephone',
         'message',
-        'sentAt',
+        'sent_at',
         'state',
     ];
 
@@ -27,7 +27,7 @@ class ContactRequest extends Model
      * Casts automáticos.
      */
     protected $casts = [
-        'sentAt' => 'datetime',
+        'sent_at' => 'datetime',
     ];
 
     /**

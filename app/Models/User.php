@@ -14,11 +14,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -29,28 +24,18 @@ class User extends Authenticatable
         'public_profile',
         'show_email',
         'telephone',
-        'profilePhoto_url',
+        'profile_photo_url',
         'user_type',
-        'advertiserNumber',
-        'staffNumber',
+        'advertiser_number',
+        'staff_number',
         'state',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'email_notifications' => 'boolean',
@@ -58,7 +43,17 @@ class User extends Authenticatable
         'public_profile' => 'boolean',
         'show_email' => 'boolean',
         'telephone' => 'integer',
-        'advertiserNumber' => 'integer',
-        'staffNumber' => 'integer',
+        'advertiser_number' => 'integer',
+        'staff_number' => 'integer',
     ];
+
+    public function properties()
+    {
+        return $this->hasMany(Property::class, 'created_by');
+    }
+
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class, 'created_by');
+    }
 }

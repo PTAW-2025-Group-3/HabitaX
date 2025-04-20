@@ -15,7 +15,7 @@ class AdvertiserVerificationTest extends TestCase
     {
         // Criar utilizador sem advertiserNumber
         $user = User::factory()->create([
-            'advertiserNumber' => null,
+            'advertiser_number' => null,
         ]);
 
         // Verificar que começa sem advertiserNumber
@@ -23,15 +23,15 @@ class AdvertiserVerificationTest extends TestCase
 
         // Criar verificação aprovada (1 = approved)
         AdvertiserVerification::create([
-            'verification_annunciant_state' => 1,
-            'submissionDate' => now()->subDays(3),
-            'validationDate' => now(),
+            'verification_advertiser_state' => 1,
+            'submission_date' => now()->subDays(3),
+            'validation_date' => now(),
             'document_url' => 'https://example.com/doc.pdf',
             'photo_url' => 'https://example.com/photo.jpg',
-            'submittedBy' => $user->id,
-            'validatedBy' => $user->id,
-            'submittedAt' => now()->subDays(3),
-            'validatedAt' => now(),
+            'submitted_by' => $user->id,
+            'validated_by' => $user->id,
+            'submitted_at' => now()->subDays(3),
+            'validated_at' => now(),
         ]);
 
         // Refrescar utilizador

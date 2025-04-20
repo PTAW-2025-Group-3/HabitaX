@@ -45,7 +45,7 @@ class ContactRequestTest extends TestCase
             'email' => 'joao.silva@example.com',
             'telephone' => '912345678',
             'message' => 'Estou interessado neste imóvel. Quando posso visitar?',
-            'sentAt' => now(),
+            'sent_at' => now(),
             'state' => 'new',
         ]);
 

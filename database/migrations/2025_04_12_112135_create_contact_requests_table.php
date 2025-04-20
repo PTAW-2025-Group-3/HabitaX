@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('telephone');
             $table->text('message');
-            $table->timestamp('sentAt')->default(now());
+            $table->timestamp('sent_at')->default(now());
             $table->enum('state', ['new', 'read', 'archived'])->default('new');
 
             $table->timestamps();

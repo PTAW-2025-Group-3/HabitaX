@@ -32,7 +32,7 @@ class ContactRequestSeeder extends Seeder
                 'email' => $user->email,
                 'telephone' => rand(910000000, 939999999),
                 'message' => fake()->paragraph(3),
-                'sentAt' => now()->subDays(rand(0, 10)),
+                'sent_at' => now()->subDays(rand(0, 10)),
                 'state' => fake()->randomElement(['new', 'read', 'archived']),
             ]);
         }

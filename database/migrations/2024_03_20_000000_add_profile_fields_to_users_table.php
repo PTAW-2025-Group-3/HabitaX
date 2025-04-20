@@ -19,10 +19,10 @@ return new class extends Migration
             $table->boolean('show_email')->default(false);
 
             $table->integer('telephone')->nullable();
-            $table->string('profilePhoto_url')->nullable();
+            $table->string('profile_photo_url')->nullable();
             $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
-            $table->integer('advertiserNumber')->nullable();
-            $table->integer('staffNumber')->nullable();
+            $table->integer('advertiser_number')->nullable();
+            $table->integer('staff_number')->nullable();
             $table->enum('state', ['active', 'suspended', 'banned', 'archived'])->default('active')->after('user_type');
         });
     }

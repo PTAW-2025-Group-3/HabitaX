@@ -14,19 +14,19 @@ return new class extends Migration
         Schema::create('advertiser_verifications', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedTinyInteger('verification_annunciant_state')->default(0); // exemplo: 0=pending, 1=approved, 2=rejected
+            $table->unsignedTinyInteger('verification_advertiser_state')->default(0); // exemplo: 0=pending, 1=approved, 2=rejected
 
-            $table->timestamp('submissionDate')->nullable();
-            $table->timestamp('validationDate')->nullable();
+            $table->timestamp('submission_date')->nullable();
+            $table->timestamp('validation_date')->nullable();
 
             $table->string('document_url')->nullable();
             $table->string('photo_url')->nullable();
 
-            $table->foreignId('validatedBy')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('submittedBy')->constrained('users')->onDelete('cascade');
+            $table->foreignId('validated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
 
-            $table->timestamp('submittedAt')->nullable();
-            $table->timestamp('validatedAt')->nullable();
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('validated_at')->nullable();
 
             $table->timestamps(); // created_at, updated_at
         });

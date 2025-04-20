@@ -32,6 +32,7 @@ Route::get('/about', function () {
 })->name('about');
 
 // Advertisement Routes
+Route::get('/advertisements/help', [AdvertisementController::class, 'help'])->name('advertisements.help');
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
 Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
     // create, edit, delete
