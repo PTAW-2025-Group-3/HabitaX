@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
+use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\PropertyAttributeController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTypeController;
@@ -110,9 +111,7 @@ Route::middleware('auth')->group(function () {
         return view('account.advertiser-verification');
     })->name('advertiser-verification');
 
-    Route::get('/contact-requests', function () {
-        return view('account.contact-requests');
-    })->name('contact-requests');
+    Route::get('/contact-requests', [ContactRequestController::class, 'index'])->name('contact-requests.index');
 
 });
 

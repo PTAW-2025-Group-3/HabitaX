@@ -54,8 +54,8 @@
                                     Meus Anúncios
                                 </a>
 
-                                <a href="{{ route('contact-requests') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('contact-requests') ? 'bg-gray-50' : '' }}">
+                                <a href="{{ route('contact-requests.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('contact-requests.index') ? 'bg-gray-50' : '' }}">
                                     <i class="bi bi-envelope-fill me-3 text-gray-400 group-hover:text-gray"></i>
                                     Pedidos de Contacto
                                 </a>

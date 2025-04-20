@@ -19,28 +19,14 @@ class ContactRequest extends Model
         'email',
         'telephone',
         'message',
-        'sent_at',
         'state',
     ];
 
-    /**
-     * Casts automáticos.
-     */
-    protected $casts = [
-        'sent_at' => 'datetime',
-    ];
-
-    /**
-     * Relação: pedido foi criado por um utilizador.
-     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Relação: pedido está associado a um anúncio.
-     */
     public function advertisement()
     {
         return $this->belongsTo(Advertisement::class);

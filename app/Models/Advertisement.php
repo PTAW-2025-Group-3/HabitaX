@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Advertisement extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'reference',
         'title',
@@ -28,5 +28,15 @@ class Advertisement extends Model
     public function property()
     {
         return $this->belongsTo(Property::class, 'property_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function requests()
+    {
+        return $this->hasMany(ContactRequest::class, 'advertisement_id');
     }
 }

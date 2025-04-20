@@ -14,15 +14,14 @@ return new class extends Migration
         Schema::create('contact_requests', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('advertisement_id')->constrained('advertisements')->onDelete('cascade');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-
             $table->string('name');
             $table->string('email');
             $table->string('telephone');
             $table->text('message');
-            $table->timestamp('sent_at')->default(now());
-            $table->enum('state', ['new', 'read', 'archived'])->default('new');
+            $table->enum('state', ['unread', 'read', 'archived',])->default('unread');
+
+            $table->foreignId('advertisement_id')->constrained('advertisements')->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
 
             $table->timestamps();
         });

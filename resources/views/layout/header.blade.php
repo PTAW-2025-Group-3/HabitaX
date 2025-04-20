@@ -86,6 +86,11 @@
                         </a>
                         {{--   estas opções serão visiveis apos verificação de anunciante   --}}
                         @if(auth()->user()->advertiser_number)
+                            <a href="{{ route('contact-requests.index') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
+                                <i class="bi bi-envelope mr-3"></i>
+                                Pedidos de Contacto
+                            </a>
                             <a href="{{ route('properties.my') }}"
                                class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
                                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
