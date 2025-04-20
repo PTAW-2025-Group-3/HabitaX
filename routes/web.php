@@ -8,6 +8,7 @@ use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\VerificationAdvertiserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ModeratorMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdvertisementController;
@@ -50,18 +51,16 @@ Route::middleware('auth')->controller(PropertyController::class)->group(function
     Route::get('/properties/{id}', 'show')->name('properties.show');
 });
 
-// Administrative Division Routes
-// Distritos, Municípios e Freguesias
-//Route::get
-
 // Moderation Route
-Route::get('/mod', function () {
-    return view('pages.moderation.moderation-dashboard');
-})->name('moderation');
-Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
-    ->name('reported-advertisement.show');
-Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
-    ->name('verification-advertiser.show');
+Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
+    Route::get('/mod', function () {
+        return view('pages.moderation.index');
+    })->name('moderation');
+    Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
+        ->name('reported-advertisement.show');
+    Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
+        ->name('verification-advertiser.show');
+});
 
 // Administration Route
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
@@ -91,9 +90,10 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         ->name('property-types.attributes.edit');
     Route::post('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'updateAttributes'])
         ->name('property-types.attributes.update');
+
+    // Distritos, Municípios e Freguesias
 });
 
-// Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -107,11 +107,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
     Route::get('/advertiser-verification', function () {
-        return view('pages.account.advertiser-verification');
+        return view('account.advertiser-verification');
     })->name('advertiser-verification');
 
     Route::get('/contact-requests', function () {
-        return view('pages.account.contact-requests');
+        return view('account.contact-requests');
     })->name('contact-requests');
 
 });

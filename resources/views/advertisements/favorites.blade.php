@@ -1,4 +1,4 @@
-@extends('pages.account.account-layout')
+@extends('account.account-layout')
 
 @section('title', 'Anúncios Favoritos')
 

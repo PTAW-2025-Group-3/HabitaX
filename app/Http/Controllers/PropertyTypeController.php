@@ -12,12 +12,12 @@ class PropertyTypeController extends Controller
     {
         $propertyTypes = PropertyType::with('attributes')->paginate(10);
 
-        return view('pages.property-types.index', compact('propertyTypes'));
+        return view('property-types.index', compact('propertyTypes'));
     }
 
     public function create()
     {
-        return view('pages.property-types.create');
+        return view('property-types.create');
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class PropertyTypeController extends Controller
     {
         $propertyType = PropertyType::findOrFail($id);
 
-        return view('pages.property-types.edit', compact('propertyType'));
+        return view('property-types.edit', compact('propertyType'));
     }
 
     public function editAttributes(Request $request, $id)
@@ -47,7 +47,7 @@ class PropertyTypeController extends Controller
         $allAttributes = PropertyAttribute::all();
         $propertyTypeAttributes = $propertyType->attributes()->pluck('property_attribute_id')->toArray();
 
-        return view('pages.property-types.attributes', compact('propertyType', 'allAttributes', 'propertyTypeAttributes'));
+        return view('property-types.attributes', compact('propertyType', 'allAttributes', 'propertyTypeAttributes'));
     }
 
     public function update(Request $request, $id)

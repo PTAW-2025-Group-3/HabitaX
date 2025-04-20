@@ -8,7 +8,7 @@
     <div class="mb-4">
         <a href="{{ route('attributes.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Back to Attributes</a>
     </div>
-    @include('pages.attributes._form', [
+    @include('attributes._form', [
         'action' => route('attributes.store'),
         'method' => 'POST',
         'buttonText' => 'Create Attribute',

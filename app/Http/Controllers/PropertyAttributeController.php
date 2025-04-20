@@ -11,13 +11,13 @@ class PropertyAttributeController extends Controller
     public function index(Request $request)
     {
         $attributes = PropertyAttribute::orderBy('created_at', 'desc')->paginate(10);
-        return view('pages.attributes.index', compact('attributes'));
+        return view('attributes.index', compact('attributes'));
     }
 
     public function create()
     {
         $attributeTypes = AttributeType::cases();
-        return view('pages.attributes.create', compact('attributeTypes'));
+        return view('attributes.create', compact('attributeTypes'));
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class PropertyAttributeController extends Controller
         $attribute = PropertyAttribute::findOrFail($id);
         $attributeTypes = AttributeType::cases();
 
-        return view('pages.attributes.edit', compact('attribute', 'attributeTypes'));
+        return view('attributes.edit', compact('attribute', 'attributeTypes'));
     }
 
     public function update(Request $request, $id)

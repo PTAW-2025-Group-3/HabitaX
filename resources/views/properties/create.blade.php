@@ -10,12 +10,12 @@
               class="space-y-8">
             @csrf
 
-            @include('pages.properties.create.details')
-            @include('pages.properties.create.location')
-            @include('pages.properties.create.general-info')
-            @include('pages.properties.create.additional-info')
-            @include('pages.properties.create.documents')
-            @include('pages.properties.create.photos')
+            @include('properties.create.details')
+            @include('properties.create.location')
+            @include('properties.create.general-info')
+            @include('properties.create.additional-info')
+            @include('properties.create.documents')
+            @include('properties.create.photos')
 
             <div class="flex justify-end">
                 <button type="submit" class="btn-secondary px-6 py-2 rounded-md">

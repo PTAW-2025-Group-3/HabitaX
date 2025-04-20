@@ -60,9 +60,9 @@
                     </div>
                 </section>
 
-                @include('pages.advertisements.individual.price-history', ['ad' => $ad])
+                @include('advertisements.individual.price-history', ['ad' => $ad])
 {{--                @include('pages.advertisements.individual.market-stats', ['ad' => $ad])--}}
-                @include('pages.advertisements.individual.loan-simulator', ['ad' => $ad])
+                @include('advertisements.individual.loan-simulator', ['ad' => $ad])
             </div>
 
             <div class="space-y-4">
@@ -73,7 +73,7 @@
                         <button class="w-full bg-white py-2 text-blue-500 text-sm md:text-base font-semibold border-t">Ver no mapa</button>
                     </div>
 
-                    @include('pages.advertisements.individual.contact-form', ['ad' => $ad])
+                    @include('advertisements.individual.contact-form', ['ad' => $ad])
                 </div>
             </div>
         </div>
