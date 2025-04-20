@@ -1,18 +1,24 @@
 @extends('layout.app')
 
-@section('title', 'Adicionar Tipo de Propriedade')
+@section('title', 'Criar Tipo de Propriedade')
 
 @section('content')
     <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-4">Adicionar Tipo de Propriedade</h1>
-        <div class="mb-4">
-            <a href="{{ route('property-types.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Voltar para
-                Tipos de Propriedade</a>
+        <div class="mt-12 animate-fade-in">
+            <div class="mb-4">
+                <a href="{{ route('property-types.index') }}" class="btn-primary px-4 py-2 rounded-lg flex items-center w-fit">
+                    <i class="bi bi-arrow-left mr-2"></i>
+                    Voltar para Tipos de Propriedade
+                </a>
+            </div>
+
+            <h2 class="text-xl font-bold text-primary mb-6">Criar Tipo de Propriedade</h2>
+
+            @include('property-types._form', [
+                'action' => route('property-types.store'),
+                'buttonText' => 'Criar Tipo de Propriedade',
+                'propertyType' => null
+            ])
         </div>
-        @include('property-types._form', [
-            'action' => route('property-types.store'),
-            'buttonText' => 'Adicionar Tipo de Propriedade',
-            'propertyType' => null
-        ])
     </div>
 @endsection

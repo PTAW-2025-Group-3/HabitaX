@@ -4,49 +4,78 @@
 
 @section('content')
     <div class="container mx-auto p-4">
-        <div class="mb-4">
-            <a href="{{ route('property-types.edit', ['id' => $propertyType->id]) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Voltar para Tipo de Propriedade</a>
+        <div class="mb-6">
+            <a href="{{ route('property-types.index', ['id' => $propertyType->id]) }}" class="btn-primary px-4 py-2">
+                <i class="bi bi-arrow-left mr-2"></i>
+                Voltar para Tipo de Propriedade
+            </a>
         </div>
-        <div class="container mx-auto p-4">
-            <h2 class="text-xl font-bold mb-4">Gerir Atributos do Tipo de Propriedade: {{ $propertyType->name }}</h2>
-            <form id="attribute-form" method="POST" action="{{ route('property-types.attributes.update', $propertyType->id) }}"  class="bg-white p-6 rounded-lg shadow-md space-y-4">
+
+        <div class="mt-12 animate-fade-in">
+            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de Propriedade: {{ $propertyType->name }}</h2>
+
+            <form id="attribute-form" method="POST" action="{{ route('property-types.attributes.update', $propertyType->id) }}" class="space-y-4">
                 @csrf
-                <div class="mb-4">
-                    <label for="filter" class="block text-sm font-medium text-gray-700">Filtrar Atributos:</label>
-                    <select id="filter" class="mt-1 block w-1/3 pl-3 pr-10 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="all">Todos</option>
-                        <option value="selected">Selecionados</option>
-                        <option value="not-selected">Não Selecionados</option>
-                    </select>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
+                    <div class="relative flex-grow md:max-w-xl">
+                        <div class="relative dropdown-wrapper w-full sm:w-auto">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray">
+                                <i class="bi bi-funnel"></i>
+                            </div>
+                            <select id="filter"
+                                    class="py-2 pl-10 pr-10 w-full h-10 dropdown-select">
+                                <option value="all">Todos os Atributos</option>
+                                <option value="selected">Atributos Selecionados</option>
+                                <option value="not-selected">Atributos Não Selecionados</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                                <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
-                    <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2 text-left">Nome de Atributo</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center">Assinado</th>
-                    </tr>
-                    </thead>
-                    <tbody id="attribute-table">
-                    @foreach($allAttributes as $attribute)
-                        <tr class="hover:bg-gray-50">
-                            <td class="border border-gray-300 px-4 py-2">{{ $attribute->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                <input
-                                    type="checkbox"
-                                    name="attributes[]"
-                                    value="{{ $attribute->id }}"
-                                    {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                    class="attribute-checkbox w-5 h-5">
-                            </td>
+                <!-- Tabela de atributos -->
+                <div class="overflow-x-auto rounded-xl shadow bg-white">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-blue-100 text-left">
+                        <tr>
+                            <th class="p-4">
+                                <div class="flex items-center">
+                                    Nome de Atributo
+                                </div>
+                            </th>
+                            <th class="p-4 text-center">
+                                <div class="flex items-center justify-center">
+                                    Assinado
+                                </div>
+                            </th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody id="attribute-table">
+                        @foreach($allAttributes as $attribute)
+                            <tr class="border-t hover:bg-gray-50 transition">
+                                <td class="p-4 font-medium">{{ $attribute->name }}</td>
+                                <td class="p-4 text-center">
+                                    <input
+                                        type="checkbox"
+                                        name="attributes[]"
+                                        value="{{ $attribute->id }}"
+                                        {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
+                                        class="attribute-checkbox w-5 h-5 cursor-pointer accent-blue-600">
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-                <button type="submit" id="submit-button" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50" disabled>
-                    Submeter
-                </button>
+                <div class="flex justify-end mt-6">
+                    <button type="submit" id="submit-button" class="btn-primary px-6 py-3 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="bi bi-save mr-2"></i>
+                        Guardar Alterações
+                    </button>
+                </div>
             </form>
         </div>
     </div>

@@ -9,12 +9,14 @@
             <label for="name" class="block text-sm font-semibold text-primary">Nome</label>
             <input type="text" name="name" id="name" placeholder="Ex: Tamanho"
                    value="{{ old('name', $attribute->name ?? '') }}"
-                   class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+                   class="form-input">
         </div>
-        <div>
-            <label for="type" class="block text-sm font-semibold text-primary">Tipo</label>
-            <select name="type" id="type"
-                    class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+        <div class="relative dropdown-wrapper w-full sm:w-auto">
+            <label for="type" class="block text-sm font-semibold text-primary mb-1">Tipo</label>
+            <select
+                name="type"
+                id="type"
+                class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
                 <option value="" disabled selected>Selecione o tipo</option>
                 @foreach ($attributeTypes as $type)
                     <option value="{{ $type->value }}"
@@ -23,8 +25,12 @@
                     </option>
                 @endforeach
             </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 pt-5 text-gray">
+                <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+            </div>
         </div>
-        @if(($attribute->type ?? '') === 'number')
+
+    @if(($attribute->type ?? '') === 'number')
             <div>
                 <label for="unit" class="block text-sm font-semibold text-primary">Unidade</label>
                 <input type="text" name="unit" id="unit"
@@ -49,7 +55,7 @@
     </div>
     <div class="pt-4">
         <button type="submit"
-                class="w-full rounded-md bg-primary py-2 px-4 text-center font-semibold text-white shadow hover:bg-primary-dark transition">
+                class="btn-primary w-full py-2 px-4 hover:scale-100">
             {{ $buttonText }}
         </button>
     </div>
