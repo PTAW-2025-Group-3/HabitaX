@@ -17,6 +17,13 @@ return new class extends Migration
             $table->boolean('message_notifications')->default(true);
             $table->boolean('public_profile')->default(true);
             $table->boolean('show_email')->default(false);
+
+            $table->integer('telephone')->nullable();
+            $table->string('profilePhoto_url')->nullable();
+            $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
+            $table->integer('advertiserNumber')->nullable();
+            $table->integer('staffNumber')->nullable();
+            $table->enum('state', ['active', 'suspended', 'banned', 'archived'])->default('active')->after('user_type');
         });
     }
 
@@ -35,4 +42,4 @@ return new class extends Migration
             ]);
         });
     }
-}; 
+};

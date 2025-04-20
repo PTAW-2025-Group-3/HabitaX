@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
+use App\Models\FavoriteAdvertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
 use App\Models\PropertyAttribute;
@@ -89,6 +90,16 @@ class AdvertisementController extends Controller
             return view('pages.advertisements.listing.property-listings', compact('ads'))->render();
         }
         return view('pages.advertisements.my', compact('ads'));
+    }
+
+    public function favorites()
+    {
+        $user = auth()->user();
+        $favorites = FavoriteAdvertisement::where('user_id', $user->id)
+            ->with(['advertisement.property'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('pages.advertisements.favorites', compact('favorites'));
     }
 
     public function show($id)

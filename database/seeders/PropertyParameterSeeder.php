@@ -7,7 +7,7 @@ use App\Models\Property;
 use App\Models\PropertyTypeAttribute;
 use App\Models\PropertyParameter;
 
-class PropertyValueSeeder extends Seeder
+class PropertyParameterSeeder extends Seeder
 {
     public function run(): void
     {

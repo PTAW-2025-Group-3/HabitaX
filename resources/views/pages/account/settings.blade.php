@@ -1,4 +1,6 @@
-@extends('pages.account.account')
+@extends('pages.account.account-layout')
+
+@section('title', 'Configurações da Conta')
 
 @section('account-content')
 <div class="animate-fade-in">

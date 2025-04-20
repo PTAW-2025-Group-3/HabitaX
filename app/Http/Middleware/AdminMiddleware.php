@@ -13,7 +13,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || auth()->user()->userType !== 'admin') {
+        if (!auth()->check() || auth()->user()->user_type !== 'admin') {
             return redirect('/')->with('error', 'Acesso não autorizado.');
         }
 

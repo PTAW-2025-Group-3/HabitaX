@@ -30,7 +30,7 @@ class User extends Authenticatable
         'show_email',
         'telephone',
         'profilePhoto_url',
-        'userType',
+        'user_type',
         'advertiserNumber',
         'staffNumber',
         'state',

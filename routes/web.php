@@ -34,8 +34,9 @@ Route::get('/about', function () {
 // Advertisement Routes
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
 Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
-    Route::get('/advertisements/my', 'my')->name('advertisements.my');
     // create, edit, delete
+    Route::get('/advertisements/my', 'my')->name('advertisements.my');
+    Route::get('/advertisements/favorites', 'favorites')->name('advertisements.favorites');
 });
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
@@ -93,12 +94,6 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
 // Authenticated Routes (User must be logged in)
 Route::middleware('auth')->group(function () {
-
-    // User Account Page
-    Route::get('/account', function () {
-        return view('pages.account.account');
-    })->name('account');
-
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -110,16 +105,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
-    Route::get('/favorites', function () {
-        return view('pages.account.sections.favorites');
-    })->name('favorites');
-
     Route::get('/advertiser-verification', function () {
-        return view('pages.account.sections.advertiser-verification');
+        return view('pages.account.advertiser-verification');
     })->name('advertiser-verification');
 
     Route::get('/contact-requests', function () {
-        return view('pages.account.sections.contact-requests');
+        return view('pages.account.contact-requests');
     })->name('contact-requests');
 
 });

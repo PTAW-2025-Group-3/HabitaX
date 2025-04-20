@@ -1,4 +1,6 @@
-@extends('pages.account.account')
+@extends('pages.account.account-layout')
+
+@section('title', 'Pedidos de Contacto')
 
 @section('account-content')
 <div class="bg-white rounded-xl shadow-lg p-6 animate-fade-in">

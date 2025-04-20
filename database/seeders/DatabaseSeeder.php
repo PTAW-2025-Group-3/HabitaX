@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(PropertyTypeSeeder::class);
         $this->call(UserSeeder::class);
 
         $this->call([
@@ -22,19 +21,18 @@ class DatabaseSeeder extends Seeder
             ParishSeeder::class,
         ]);
 
-        $this->call(PropertySeeder::class);
-        $this->call(AdvertisementSeeder::class);
-        $this->call(ContactRequestSeeder::class);
-        $this->call(CollectionSeeder::class);
-        $this->call(AdvertisementCollectionSeeder::class);
-        $this->call(AdvertiserVerificationSeeder::class);
-        $this->call(DenunciationReasonSeeder::class);
-        $this->call(DenunciationSeeder::class);
-        $this->call(PriceHistorySeeder::class);
-        $this->call(PropertyVerificationSeeder::class);
+        $this->call(PropertyTypeSeeder::class);
         $this->call(PropertyAttributeSeeder::class);
         $this->call(PropertyTypeAttributeSeeder::class);
-        $this->call(PropertyValueSeeder::class);
-
+        $this->call(PropertySeeder::class);
+        $this->call(PropertyVerificationSeeder::class);
+        $this->call(PropertyParameterSeeder::class);
+        $this->call(AdvertisementSeeder::class);
+        $this->call(PriceHistorySeeder::class);
+        $this->call(AdvertiserVerificationSeeder::class);
+        $this->call(FavoriteAdvertisementSeeder::class);
+        $this->call(ContactRequestSeeder::class);
+        $this->call(DenunciationReasonSeeder::class);
+        $this->call(DenunciationSeeder::class);
     }
 }

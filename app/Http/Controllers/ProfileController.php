@@ -11,7 +11,7 @@ class ProfileController extends Controller
 {
     public function edit()
     {
-        return view('pages.account.sections.profile');
+        return view('pages.account.profile');
     }
 
     public function update(Request $request)
@@ -92,6 +92,6 @@ class ProfileController extends Controller
 
     public function settings()
     {
-        return view('pages.account.sections.settings');
+        return view('pages.account.settings');
     }
 }

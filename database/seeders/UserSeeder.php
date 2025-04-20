@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'name' => 'Kousha Rezaei',
                 'email' => 'kosharezae@yahoo.com',
                 'password' => 'passwordKousha',
-                'userType' => 'admin'
+                'user_type' => 'admin'
             ],
             [
                 'name' => 'Sara Moshiri',
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
                     'password' => Hash::make($user['password']),
                     'telephone' => rand(910000000, 939999999),
                     'profilePhoto_url' => 'https://via.placeholder.com/150',
-                    'userType' => $user['userType'] ?? 'user',
+                    'user_type' => $user['user_type'] ?? 'user',
                     'advertiserNumber' => rand(10000, 99999),
                     'staffNumber' => rand(10000, 99999),
                     'bio' => 'Sou um utilizador ativo da plataforma.',

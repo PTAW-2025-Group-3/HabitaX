@@ -94,7 +94,7 @@
                         <button class="btn-secondary text-xs px-2 py-1 permissions-btn"
                                 data-user-id="{{ $user->id }}"
                                 data-user-name="{{ $user->name }}"
-                                data-user-role="{{ $user->userType ?? 'user' }}">
+                                data-user-role="{{ $user->user_type ?? 'user' }}">
                             Permissões
                         </button>
                     </td>

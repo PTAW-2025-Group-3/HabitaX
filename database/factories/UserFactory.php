@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'telephone' => fake()->numerify('91#######'),
             'profilePhoto_url' => fake()->imageUrl(200, 200, 'people'),
-            'userType' => fake()->randomElement(['user', 'moderator', 'admin']),
+            'user_type' => fake()->randomElement(['user', 'moderator', 'admin']),
             'advertiserNumber' => null,
             'staffNumber' => null,
             'bio' => fake()->paragraph(),

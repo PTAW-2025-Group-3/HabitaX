@@ -29,12 +29,12 @@ class AdministrationController extends Controller
                     ->count()
             );
         }
-        
+
         $userRoleLabels = ['Utilizadores', 'Moderadores', 'Administradores'];
         $userRoleData = [
-            User::where('userType', 'user')->orWhereNull('userType')->count(),
-            User::where('userType', 'moderator')->count(),
-            User::where('userType', 'admin')->count()
+            User::where('user_type', 'user')->orWhereNull('user_type')->count(),
+            User::where('user_type', 'moderator')->count(),
+            User::where('user_type', 'admin')->count()
         ];
 
         return view('pages.administration.index', [
@@ -128,11 +128,11 @@ class AdministrationController extends Controller
             'role' => 'required|in:user,moderator,admin'
         ]);
 
-        $user->update(['userType' => $request->role]);
+        $user->update(['user_type' => $request->role]);
 
         return response()->json([
             'success' => true,
-            'role' => $user->userType,
+            'role' => $user->user_type,
             'message' => 'Tipo de utilizador atualizado com sucesso.',
             'stats' => [
                 'activeUsers' => User::where('state', 'active')->count(),
@@ -146,9 +146,9 @@ class AdministrationController extends Controller
         // Fix the method by using direct counts instead of pluck
         return response()->json([
             'userRoleData' => [
-                User::where('userType', 'user')->orWhereNull('userType')->count(),
-                User::where('userType', 'moderator')->count(),
-                User::where('userType', 'admin')->count()
+                User::where('user_type', 'user')->orWhereNull('user_type')->count(),
+                User::where('user_type', 'moderator')->count(),
+                User::where('user_type', 'admin')->count()
             ],
             'activeUsers' => User::where('state', 'active')->count(),
             'totalUsers' => User::count()
