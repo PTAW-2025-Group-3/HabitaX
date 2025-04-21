@@ -36,7 +36,7 @@ return new class extends Migration
 
             $table->foreignId('property_attribute_id')->constrained('property_attributes')->cascadeOnDelete();
             $table->string('name');
-            $table->integer('order')->default(0);
+            $table->integer('order')->nullable();
             $table->string('icon_url')->nullable();
 
             $table->timestamps();

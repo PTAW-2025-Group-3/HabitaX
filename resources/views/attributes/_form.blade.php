@@ -124,9 +124,8 @@
             </div>
         </div>
     </div>
-    <div class="pt-4">
-        <button type="submit"
-                class="btn-primary w-full py-2 px-4 hover:scale-100">
+    <div class="md:col-span-2">
+        <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex items-center">
             {{ $buttonText }}
         </button>
     </div>

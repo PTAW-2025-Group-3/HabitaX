@@ -1,3 +1,4 @@
+@php use App\Enums\AttributeType; @endphp
 @extends('layout.app')
 
 @section('title', 'Atributos')
@@ -49,7 +50,9 @@
                                     Obrigatório
                                 </div>
                             </th>
-                            <th class="p-4">Ações</th>
+                            <th class="p-4 text-right">
+                                <div class="mr-2">Ações</div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -59,32 +62,40 @@
                                 <td class="p-4 text-gray-600">{{ $attribute->type }}</td>
                                 <td class="p-4 text-center">
                                     @if ($attribute->is_active)
-                                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-700">
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-700">
                                             Sim
                                         </span>
                                     @else
-                                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600">
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600">
                                             Não
                                         </span>
                                     @endif
                                 </td>
                                 <td class="p-4 text-center">
                                     @if ($attribute->is_required)
-                                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-700">
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-700">
                                             Sim
                                         </span>
                                     @else
-                                        <span class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600">
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600">
                                             Não
                                         </span>
                                     @endif
                                 </td>
-                                <td class="p-4 space-x-1">
-                                    <a href="{{ route('attributes.edit', ['id' => $attribute->id]) }}" class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
+                                <td class="p-4 text-right space-x-1">
+                                    @if($attribute->type == AttributeType::SELECT_SINGLE || $attribute->type == AttributeType::SELECT_MULTIPLE)
+                                        <a href="{{ route('attribute-options.index', ['id' => $attribute->id]) }}"
+                                           class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
+                                            <i class="bi bi-list-ul mr-1"></i> Opções
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('attributes.edit', ['id' => $attribute->id]) }}"
+                                       class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
                                         <i class="bi bi-pencil mr-1"></i> Editar
-                                    </a>
-                                    <a href="{{ route('attribute-options.index', ['id' => $attribute->id]) }}" class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
-                                        <i class="bi bi-list-ul mr-1"></i> Opções
                                     </a>
                                     <button type="button"
                                             onclick="showDeleteModal('{{ $attribute->id }}', '{{ $attribute->name }}')"

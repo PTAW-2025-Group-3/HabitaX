@@ -35,4 +35,9 @@ class PropertyAttribute extends Model
         'min_date' => 'date',
         'max_date' => 'date',
     ];
+
+    public function options()
+    {
+        return $this->hasMany(PropertyAttributeOption::class);
+    }
 }

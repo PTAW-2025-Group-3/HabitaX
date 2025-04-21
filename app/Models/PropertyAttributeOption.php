@@ -14,9 +14,15 @@ class PropertyAttributeOption extends Model
         'name',
         'order',
         'icon_url',
+        'property_attribute_id',
     ];
 
     protected $casts = [
         'order' => 'integer',
     ];
+
+    public function propertyAttribute()
+    {
+        return $this->belongsTo(PropertyAttribute::class);
+    }
 }

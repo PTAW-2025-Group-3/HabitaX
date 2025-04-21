@@ -82,7 +82,18 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::put('/admin/attributes/{id}', [PropertyAttributeController::class, 'update'])->name('attributes.update');
     Route::delete('/admin/attributes/{id}', [PropertyAttributeController::class, 'destroy'])->name('attributes.destroy');
 
-    Route::get('/admin/attributes/{id}/options', [PropertyAttributeOptionController::class, 'index'])->name('attribute-options.index');
+    Route::get('/admin/attributes/{id}/options', [PropertyAttributeOptionController::class, 'index'])
+        ->name('attribute-options.index');
+    Route::get('/admin/attributes/{id}/options/create', [PropertyAttributeOptionController::class, 'create'])
+        ->name('attribute-options.create');
+    Route::post('/admin/attributes/{id}/options', [PropertyAttributeOptionController::class, 'store'])
+        ->name('attribute-options.store');
+    Route::get('/admin/attribute-options/{id}/edit', [PropertyAttributeOptionController::class, 'edit'])
+        ->name('attribute-options.edit');
+    Route::put('/admin/attribute-options/{id}', [PropertyAttributeOptionController::class, 'update'])
+        ->name('attribute-options.update');
+    Route::delete('/admin/attribute-options/{id}', [PropertyAttributeOptionController::class, 'destroy'])
+        ->name('attribute-options.destroy');
 
     Route::get('/admin/property-types', [PropertyTypeController::class, 'index'])->name('property-types.index');
     Route::get('/admin/property-types/create', [PropertyTypeController::class, 'create'])->name('property-types.create');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\AttributeType;
 use App\Models\PropertyAttribute;
+use App\Models\PropertyAttributeOption;
 use Illuminate\Http\Request;
 
 class PropertyAttributeController extends Controller
@@ -29,17 +30,21 @@ class PropertyAttributeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:text,number,boolean,select',
+            'type' => 'required|string|in:' . implode(',', array_map(fn($type) => $type->value, AttributeType::cases())),
             'is_active' => 'required|boolean',
             'is_required' => 'required|boolean',
-            'minimal' => 'nullable|numeric',
-            'maximal' => 'nullable|numeric',
+            'min_value' => 'nullable|numeric',
+            'max_value' => 'nullable|numeric',
             'unit' => 'nullable|string|max:50',
+            'min_length' => 'nullable|integer|min:1',
+            'max_length' => 'nullable|integer|min:1',
+            'min_date' => 'nullable|date_format:d-m-Y',
+            'max_date' => 'nullable|date_format:d-m-Y',
         ]);
 
-        PropertyAttribute::create($request->all());
+        PropertyAttributeOption::create($request->all());
 
-        return redirect()->route('attributes.index')->with('success', 'Property attribute created successfully.');
+        return redirect()->route('attribute-options.index')->with('success', 'Option created successfully.');
     }
 
     public function edit(Request $request, $id)
@@ -61,9 +66,13 @@ class PropertyAttributeController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'is_required' => 'required|boolean',
-            'minimal' => 'nullable|numeric',
-            'maximal' => 'nullable|numeric',
+            'min_value' => 'nullable|numeric',
+            'max_value' => 'nullable|numeric',
             'unit' => 'nullable|string|max:50',
+            'min_length' => 'nullable|integer|min:1',
+            'max_length' => 'nullable|integer|min:1',
+            'min_date' => 'nullable|date_format:d-m-Y',
+            'max_date' => 'nullable|date_format:d-m-Y',
         ]);
 
         $attribute = PropertyAttribute::findOrFail($id);
