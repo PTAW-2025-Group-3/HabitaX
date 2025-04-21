@@ -3,34 +3,62 @@
 @section('title', 'Advertisement Details')
 
 @section('content')
-    <div class="max-w-screen-xl mx-auto p-2 md:p-4 space-y-4 md:space-y-6">
-        <h1 class="text-xl md:text-3xl font-bold">{{ $ad->title }}</h1>
+    <div class="max-w-screen-xl mx-auto p-2 md:p-4 space-y-6 animate-fade-in">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-            <!-- Main Image -->
-            <div class="col-span-1 md:col-span-2">
-                <img src="{{ $property->images[0] }}" class="w-full h-[250px] md:h-[450px] object-cover rounded-lg shadow"
-                     alt="Main Image">
-            </div>
-
-            <!-- Gallery Thumbnails -->
-            <div class="grid grid-cols-2 grid-rows-2 md:grid-rows-3 gap-2">
-                @foreach($property->images as $image)
-                    @if(!$loop->first && $loop->index < 5)
-                        <div class="h-[100px] md:h-[150px]">
-                            <img src="{{ $image }}" class="w-full h-full object-cover rounded-lg shadow" alt="Thumbnail">
-                        </div>
-                    @endif
-                @endforeach
+        <!-- Header do anúncio  -->
+        <div class="bg-gradient-to-r bg-white rounded-2xl shadow-md p-5 md:p-7 space-y-4 mt-6 md:mt-12">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                <div class="space-y-1">
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-primary flex items-center gap-2">
+                        <i class="bi bi-house-door-fill text-secondary"></i>
+                        {{ $ad->title }}
+                    </h1>
+                    <div class="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-600">
+                <span class="inline-flex items-center gap-1">
+                    <i class="bi bi-geo-alt text-secondary"></i> {{ $property->country }}
+                </span>
+                        <span class="inline-flex items-center gap-1">
+                    <i class="bi bi-geo-alt text-secondary"></i> {{ $property->parish->name }}, {{ $property->parish->municipality->name }}
+                </span>
+                        <span class="inline-flex items-center gap-1">
+                    <i class="bi bi-arrow-left-right text-secondary"></i> {{ $ad->transaction_type }}
+                </span>
+                    </div>
+                </div>
+                <div class="text-3xl md:text-4xl font-bold text-secondary">
+                    {{ number_format($ad->price, 0, ',', '.') }}€
+                </div>
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <div>
-                <div class="text-base md:text-lg font-semibold text-gray-700">{{ $ad->transaction_type }} em {{ $property->location }}</div>
-                <div class="text-xs md:text-sm text-gray-500">{{ $ad->description }}</div>
+        <!-- Galeria com layout 50/50 -->
+        <div class="grid grid-cols-12 gap-2 md:gap-4 relative">
+            <div class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
+                <img src="{{ $property->images[0] }}"
+                     class="w-full h-full object-cover rounded-lg shadow" alt="Imagem Principal">
             </div>
-            <div class="text-2xl md:text-4xl font-bold text-secondary">{{ number_format($ad->price, 0, ',', '.') }}€</div>
+
+            <div class="col-span-12 md:col-span-6 grid grid-cols-2 grid-rows-2 gap-2 h-[300px] md:h-[500px]">
+                @foreach($property->images as $image)
+                    @if(!$loop->first && $loop->index < 5)
+                        <div>
+                            <img src="{{ $image }}"
+                                 class="w-full h-full object-cover rounded-lg shadow" alt="Miniatura">
+                        </div>
+                    @endif
+                @endforeach
+
+                @for($i = count($property->images); $i < 5; $i++)
+                    <div class="bg-gray-100 rounded-lg shadow"></div>
+                @endfor
+            </div>
+
+            @if(count($property->images) > 5)
+                <a href="#todas-fotos"
+                   class="absolute bottom-2 right-2 bg-white bg-opacity-80 backdrop-blur px-3 py-1.5 text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
+                    Mostrar todas as fotos
+                </a>
+            @endif
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
@@ -61,21 +89,30 @@
                 </section>
 
                 @include('advertisements.individual.price-history', ['ad' => $ad])
-{{--                @include('pages.advertisements.individual.market-stats', ['ad' => $ad])--}}
                 @include('advertisements.individual.loan-simulator', ['ad' => $ad])
             </div>
 
-            <div class="space-y-4">
-                <div class="space-y-4">
-                    <div class="rounded overflow-hidden shadow">
-                        <iframe src="https://www.google.com/maps/embed?..." class="w-full h-48 border-0"
-                                allowfullscreen="" loading="lazy"></iframe>
-                        <button class="w-full bg-white py-2 text-blue-500 text-sm md:text-base font-semibold border-t">Ver no mapa</button>
+            <div class="space-y-6 animate-fade-in">
+                <!-- Mapa com estilo moderno -->
+                <div class="bg-gradient-to-tr from-indigo-50 to-white rounded-2xl shadow-md overflow-hidden">
+                    <div class="h-48 md:h-56">
+                        <iframe
+                            src="https://www.google.com/maps/embed?..."
+                            class="w-full h-full border-0"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
                     </div>
-
-                    @include('advertisements.individual.contact-form', ['ad' => $ad])
+                    <button
+                        class="w-full text-blue-600 hover:text-blue-700 bg-white text-sm md:text-base font-semibold py-3 border-t border-indigo-100 transition">
+                        <i class="bi bi-geo-alt-fill mr-1"></i> Ver no mapa
+                    </button>
                 </div>
+
+                @include('advertisements.individual.contact-form', ['ad' => $ad])
             </div>
+
         </div>
     </div>
 @endsection

@@ -72,21 +72,17 @@ class AdvertisementController extends Controller
                 ];
             })
             ->toArray();
-        $price_history = PriceHistory::where('advertisement_id', $ad->id)
-            ->orderBy('register_date', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'price' => $item->price,
-                    'date' => $item->register_date->format('d/m/Y'),
-                ];
-            })
-            ->toArray();
+
+        // Get PriceHistory as a collection of model instances
+        $priceHistory = PriceHistory::where('advertisement_id', $ad->id)
+            ->orderBy('register_date', 'asc')
+            ->get();
 
         return view('advertisements.show', [
-            'ad' => $ad, 'property' => $property,
-            'attributes' => $parameters, 'price_history' => $price_history
+            'ad' => $ad,
+            'property' => $property,
+            'attributes' => $parameters,
+            'priceHistory' => $priceHistory
         ]);
     }
 
