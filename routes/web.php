@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PropertyAttributeController;
 use App\Http\Controllers\PropertyAttributeOptionController;
 use App\Http\Controllers\PropertyController;
@@ -16,9 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdvertisementController;
 
 // Home Page
-Route::get('/', function () {
-    return view('pages.home.home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Dashboard (after login)
 Route::get('/dashboard', function () {

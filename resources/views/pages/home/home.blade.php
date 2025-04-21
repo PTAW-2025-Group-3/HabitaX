@@ -8,10 +8,10 @@
   @include('pages.home.sections.search-bar')
 
   {{-- Featured Properties --}}
-  @include('pages.home.sections.featured')
+  @include('pages.home.sections.featured', ['featuredAds' => $featuredAds])
 
   {{-- Property Types --}}
-  @include('pages.home.sections.property-types')
+  @include('pages.home.sections.property-types', ['propertyCounts' => $propertyTypes])
 
   {{-- Client Testimonials --}}
   @include('pages.home.sections.client-testimonials')

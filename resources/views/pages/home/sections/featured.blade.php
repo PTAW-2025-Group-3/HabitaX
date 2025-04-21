@@ -1,53 +1,41 @@
-<section class="bg-back pt-1 pb-6 md:pb-20 px-4 md:px-6 lg:px-24">
+<section class="py-16 px-4 bg-gray-100">
     <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-10">
+            As Nossas <span class="text-secondary">Melhores Ofertas</span>
+        </h2>
 
-      {{-- Section Heading --}}
-      <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-gray-secondary mb-8 md:mb-14">
-        As Nossas <span class="text-secondary">Melhores Ofertas</span>
-      </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            @foreach ($featuredAds as $ad)
+                <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block">
+                    <div class="group home-ads-style">
+                        <!-- Imagem -->
+                        <img
+                            src="{{ $ad->property->images[0] ?? 'https://via.placeholder.com/400x300?text=Sem+Imagem' }}"
+                            alt="Imagem do imóvel"
+                            class="w-full h-48 object-cover"/>
 
-      {{-- Properties Grid --}}
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+                        <!-- Informações -->
+                        <div class="p-4">
+                            <p class="text-gray-700 font-medium mb-1">
+                                {{ $ad->property->location->city ?? 'Portugal' }},
+                                {{ $ad->property->location->district ?? '' }}
+                            </p>
 
-        @php
-          $properties = [
-            ['img' => 'img1.jpg', 'location' => 'Mesão Frio (Santo André)', 'price' => '250.000€', 'type' => 'for sale'],
-            ['img' => 'img2.jpg', 'location' => 'Espinho, Portugal', 'price' => '78€ / night', 'type' => 'monthly rental'],
-            ['img' => 'img3.jpg', 'location' => 'Braga, Portugal', 'price' => '159.000€', 'type' => 'for sale'],
-            ['img' => 'img4.jpg', 'location' => 'Vila Nova Poiares, Portugal', 'price' => '325.000€', 'type' => 'for sale'],
-            ['img' => 'img5.jpg', 'location' => 'Gemeses, Portugal', 'price' => '176€ / night', 'type' => 'weekly rental'],
-            ['img' => 'img6.jpg', 'location' => 'Castelo Branco, Portugal', 'price' => '15€ / night', 'type' => 'weekly rental'],
-            ['img' => 'img7.jpg', 'location' => 'Chaves, Portugal', 'price' => '155.000€', 'type' => 'for sale'],
-            ['img' => 'img8.jpg', 'location' => 'Gemeses, Portugal', 'price' => '225€ / night', 'type' => 'weekly rental'],
-          ];
-        @endphp
+                            <p class="text-xl font-bold text-gray-900 mb-1">
+                                {{ number_format($ad->price, 2, '.', '') }}€
+                                @if($ad->type === 'rental')
+                                    <span
+                                        class="text-sm font-normal text-gray-600">/ {{ $ad->rental_type ?? 'A Discutir ' }}</span>
+                                @endif
+                            </p>
 
-        @foreach($properties as $property)
-          <div
-            class="group home-ads-style">
-
-            {{-- Image with zoom effect --}}
-            <div class="overflow-hidden h-40 sm:h-44 md:h-48">
-              <img src="{{ asset('images/' . $property['img']) }}"
-                   alt="property image"
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" />
-            </div>
-
-            {{-- Content --}}
-            <div class="p-4 md:p-5">
-              <h3 class="text-xs sm:text-sm text-gray font-medium mb-1">
-                {{ $property['location'] }}
-              </h3>
-              <p class="text-lg sm:text-xl font-bold text-gray-secondary leading-tight">
-                {{ $property['price'] }}
-              </p>
-              <p class="text-xs sm:text-sm text-gray capitalize mt-1">
-                {{ $property['type'] }}
-              </p>
-            </div>
-          </div>
-        @endforeach
-
-      </div>
+                            <p class="text-sm text-gray-500">
+                                {{ $ad->type === 'sale' ? 'For Sale' : 'Rental' }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
     </div>
-  </section>
+</section>

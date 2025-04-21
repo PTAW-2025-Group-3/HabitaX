@@ -25,4 +25,9 @@ class PropertyType extends Model
     {
         return $this->hasMany(Property::class, 'property_type_id');
     }
+
+    public function count()
+    {
+        return $this->properties()->count();
+    }
 }
