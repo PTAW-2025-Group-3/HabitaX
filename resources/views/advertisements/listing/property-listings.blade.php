@@ -32,7 +32,7 @@
         </template>
 
         <div class="mt-6">
-            {{ $advertisements->links('vendor.pagination.tailwind') }}
+            {{ $advertisements->links() }}
         </div>
     </div>
 </div>

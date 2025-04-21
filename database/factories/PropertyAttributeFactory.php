@@ -15,7 +15,8 @@ class PropertyAttributeFactory extends Factory
         $type = $this->faker->randomElement(AttributeType::cases())->value;
 
         $data = [
-            'name' => $this->faker->word(),
+            'name' => $this->faker->unique()->word(),
+            'description' => $this->faker->sentence(),
             'type' => $type,
             'is_active' => $this->faker->boolean(90),
             'is_required' => $this->faker->boolean(),

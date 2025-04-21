@@ -26,9 +26,6 @@
     </div>
   </section>
 
-  {{-- Load jQuery (if not already loaded) --}}
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
   {{-- Add this CSS for mobile scrolling --}}
   <style>
     .scrollbar-hide::-webkit-scrollbar {

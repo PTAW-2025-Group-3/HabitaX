@@ -1,4 +1,4 @@
-@php use App\Enums\AttributeType;@endphp
+@php use App\Enums\AttributeType;use Carbon\Carbon;@endphp
 <form method="POST" action="{{ $action }}" class="bg-white p-6 rounded-lg shadow-md space-y-4">
     @csrf
     @isset($method)
@@ -47,7 +47,7 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
-        {{--    Apenas para os tipos numeros --}}
+        {{--   Apenas para os tipos numeros   --}}
         <div id="number-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
             <div>
                 <label for="minimal" class="block text-sm font-semibold text-primary">Valor mínimo</label>
@@ -80,7 +80,7 @@
                 @enderror
             </div>
         </div>
-        {{--    Apenas para os tipo texto --}}
+        {{--   Apenas para os tipo texto   --}}
         <div id="text-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
             <div>
                 <label for="min_length" class="block text-sm font-semibold text-primary">Minimo de caracteres</label>
@@ -99,6 +99,29 @@
                        placeholder="Ex: 100"
                        class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
                 @error('max_length')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+        {{--   Apenas para o tipo data  --}}
+        <div id="date-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+            <div>
+                <label for="min_date" class="block text-sm font-semibold text-primary">Data mínima</label>
+                <input type="text" name="min_date" id="min_date"
+                       value="{{ old('min_date', isset($attribute->min_date) ? Carbon::parse($attribute->min_date)->format('d/m/Y') : '') }}"
+                       placeholder="DD/MM/YYYY"
+                       class="form-input">
+                @error('min_date')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div>
+                <label for="max_date" class="block text-sm font-semibold text-primary">Data máxima</label>
+                <input type="text" name="max_date" id="max_date"
+                       value="{{ old('max_date', isset($attribute->max_date) ? Carbon::parse($attribute->max_date)->format('d/m/Y') : '') }}"
+                       placeholder="DD/MM/YYYY"
+                       class="form-input">
+                @error('max_date')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -133,33 +156,54 @@
 
 @push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const typeSelect = document.getElementById('type');
-            const numberFields = document.getElementById('number-fields');
-            const textFields = document.getElementById('text-fields');
+        $(document).ready(function () {
+            const typeSelect = $('#type');
+            const numberFields = $('#number-fields');
+            const textFields = $('#text-fields');
+            const dateFields = $('#date-fields');
 
             function toggleFields() {
-                const selectedType = typeSelect.value;
+                const selectedType = typeSelect.val();
                 switch (selectedType) {
                     case '{{ AttributeType::INT->value }}':
                     case '{{ AttributeType::FLOAT->value }}':
-                        numberFields.classList.remove('hidden');
-                        textFields.classList.add('hidden');
+                        numberFields.removeClass('hidden');
+                        textFields.addClass('hidden');
+                        dateFields.addClass('hidden');
                         break;
                     case '{{ AttributeType::TEXT->value }}':
                     case '{{ AttributeType::LONG_TEXT->value }}':
-                        textFields.classList.remove('hidden');
-                        numberFields.classList.add('hidden');
+                        textFields.removeClass('hidden');
+                        numberFields.addClass('hidden');
+                        dateFields.addClass('hidden');
+                        break;
+                    case '{{ AttributeType::DATE->value }}':
+                        numberFields.addClass('hidden');
+                        textFields.addClass('hidden');
+                        dateFields.removeClass('hidden');
                         break;
                     default:
-                        numberFields.classList.add('hidden');
-                        textFields.classList.add('hidden');
+                        numberFields.addClass('hidden');
+                        textFields.addClass('hidden');
+                        dateFields.addClass('hidden');
                         break;
                 }
             }
 
             toggleFields();
-            typeSelect.addEventListener('change', toggleFields);
+            typeSelect.on('change', toggleFields);
+
+            // add / to date input
+            $('#min_date, #max_date').on('input', function () {
+                const value = $(this).val().replace(/\D/g, '');
+                if (value.length > 2 && value.length <= 4) {
+                    $(this).val(value.replace(/(\d{2})(\d+)/, '$1/$2'));
+                } else if (value.length > 4) {
+                    $(this).val(value.replace(/(\d{2})(\d{2})(\d+)/, '$1/$2/$3'));
+                } else {
+                    $(this).val(value);
+                }
+            });
         });
     </script>
 

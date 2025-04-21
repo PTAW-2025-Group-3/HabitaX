@@ -21,8 +21,8 @@ class PropertyAttributeOption extends Model
         'order' => 'integer',
     ];
 
-    public function propertyAttribute()
+    public function attribute()
     {
-        return $this->belongsTo(PropertyAttribute::class);
+        return $this->belongsTo(PropertyAttribute::class, 'property_attribute_id');
     }
 }
