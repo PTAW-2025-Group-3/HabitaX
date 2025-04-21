@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PropertyAttributeOptionFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'name' => $this->faker->word(),
             'order' => $this->faker->randomNumber(2),
-            'icon_url' => $this->faker->imageUrl(200, 200, 'abstract'),
+            'icon_url' => $this->generateIconUrl(),
         ];
+    }
+
+    private function generateIconUrl(): string
+    {
+        return 'https://picsum.photos/200/200?random=' . rand(1, 1000);
     }
 }

@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('property_attributes', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
             $table->enum('type', array_map(fn($type) => $type->value, AttributeType::cases()))
                 ->default(AttributeType::TEXT->value);
             $table->boolean('is_active')->default(true);

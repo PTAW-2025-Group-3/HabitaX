@@ -43,8 +43,7 @@ class PropertyAttributeOptionController extends Controller
     public function edit($id)
     {
         $option = PropertyAttributeOption::findOrFail($id);
-        $attribute = $option->propertyAttribute;
-        return view('attribute-options.edit', compact('option', 'attribute'));
+        return view('attribute-options.edit', compact('option'));
     }
 
     public function update(Request $request, $id)

@@ -45,7 +45,7 @@
                                     Ativo
                                 </div>
                             </th>
-                            <th class="p-4">Ações</th>
+                            <th class="p-4 text-right">Ações</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -73,14 +73,14 @@
                                             </span>
                                     @endif
                                 </td>
-                                <td class="p-4 space-x-1">
-                                    <a href="{{ route('property-types.edit', ['id' => $propertyType->id]) }}"
-                                       class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
-                                        <i class="bi bi-pencil mr-1"></i> Editar
-                                    </a>
+                                <td class="p-4 space-x-1 text-right">
                                     <a href="{{ route('property-types.attributes.edit', ['id' => $propertyType->id]) }}"
                                        class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
                                         <i class="bi bi-gear mr-1"></i> Gerir Atributos
+                                    </a>
+                                    <a href="{{ route('property-types.edit', ['id' => $propertyType->id]) }}"
+                                       class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
+                                        <i class="bi bi-pencil mr-1"></i> Editar
                                     </a>
                                     <button type="button"
                                             onclick="showDeleteModal('{{ $propertyType->id }}', '{{ $propertyType->name }}')"
