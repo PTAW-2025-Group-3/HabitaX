@@ -45,6 +45,16 @@
                                     Nome de Atributo
                                 </div>
                             </th>
+                            <th class="p-4">
+                                <div class="flex items-center">
+                                    Tipo de Atributo
+                                </div>
+                            </th>
+                            <th class="p-4">
+                                <div class="flex items-center">
+                                    Descrição
+                                </div>
+                            </th>
                             <th class="p-4 text-center">
                                 <div class="flex items-center justify-center">
                                     Assinado
@@ -56,6 +66,12 @@
                         @foreach($allAttributes as $attribute)
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $attribute->name }}</td>
+                                <td class="p-4">
+                                    {{ $attribute->type }}
+                                </td>
+                                <td class="p-4">
+                                    {{ $attribute->description }}
+                                </td>
                                 <td class="p-4 text-center">
                                     <input
                                         type="checkbox"

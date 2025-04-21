@@ -20,9 +20,4 @@ class PropertyType extends Model
     {
         return $this->belongsToMany(PropertyAttribute::class, 'property_type_attributes', 'property_type_id', 'property_attribute_id');
     }
-
-    public function properties()
-    {
-        return $this->hasMany(Property::class, 'property_type_id');
-    }
 }

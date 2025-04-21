@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('property_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->longText('description');
+            $table->string('name')->unique();
+            $table->longText('description')->nullable();
             $table->string('icon')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
