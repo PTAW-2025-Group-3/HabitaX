@@ -104,6 +104,26 @@
                                 Meus Anúncios
                             </a>
                         @endif
+                        {{-- Apenas visivel para moderadores --}}
+                        @if(auth()->user()->isModerator())
+                            <a href="{{ route('moderation') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 0v4m0-4h4m-4 0H8m8 8H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2z" />
+                                </svg>
+                                Painel de Moderação
+                            </a>
+                        @endif
+                        {{-- Apenas visivel para administradores --}}
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.index') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 0v4m0-4h4m-4 0H8m8 8H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2z" />
+                                </svg>
+                                Painel de Administração
+                            </a>
+                        @endif
                         <a href="{{ route('settings') }}"
                            class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
                             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +148,7 @@
                 </div>
             @endguest
             {{-- Criar anuncio Button --}}
-            <a href="{{ route('advertisements.help') }}"
+            <a href="{{ auth()->check() ? route('properties.create') : route('advertisements.help') }}"
                class="relative px-6 py-2 btn-primary">
                 <span class="z-10">Publicar Anúncio</span>
             </a>

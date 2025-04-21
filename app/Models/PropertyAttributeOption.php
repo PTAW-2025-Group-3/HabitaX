@@ -19,9 +19,4 @@ class PropertyAttributeOption extends Model
     protected $casts = [
         'order' => 'integer',
     ];
-
-    public function property_attributes()
-    {
-        return $this->belongsToMany(PropertyAttribute::class, 'property_attribute_option_property_attribute', 'property_attribute_option_id', 'property_attribute_id');
-    }
 }

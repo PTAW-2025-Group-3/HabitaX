@@ -56,4 +56,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Advertisement::class, 'created_by');
     }
+
+    public function isAdmin()
+    {
+        return $this->user_type === 'admin';
+    }
+
+    public function isModerator()
+    {
+        return $this->user_type === 'moderator' || $this->user_type === 'admin';
+    }
 }

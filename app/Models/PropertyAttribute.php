@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\AttributeType;
+use App\Enums\AttributeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,16 +15,24 @@ class PropertyAttribute extends Model
         'type',
         'is_active',
         'is_required',
-        'minimal',
-        'maximal',
+        'min_value',
+        'max_value',
         'unit',
+        'min_length',
+        'max_length',
+        'min_date',
+        'max_date',
     ];
 
     protected $casts = [
         'type' => AttributeType::class,
         'is_active' => 'boolean',
         'is_required' => 'boolean',
-        'minimal' => 'decimal:0',
-        'maximal' => 'decimal:0',
+        'min_value' => 'float',
+        'max_value' => 'float',
+        'min_length' => 'integer',
+        'max_length' => 'integer',
+        'min_date' => 'date',
+        'max_date' => 'date',
     ];
 }

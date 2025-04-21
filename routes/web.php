@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\PropertyAttributeController;
+use App\Http\Controllers\PropertyAttributeOptionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\ReportedAdvertisementController;
@@ -80,6 +81,8 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/attributes/{id}/edit', [PropertyAttributeController::class, 'edit'])->name('attributes.edit');
     Route::put('/admin/attributes/{id}', [PropertyAttributeController::class, 'update'])->name('attributes.update');
     Route::delete('/admin/attributes/{id}', [PropertyAttributeController::class, 'destroy'])->name('attributes.destroy');
+
+    Route::get('/admin/attributes/{id}/options', [PropertyAttributeOptionController::class, 'index'])->name('attribute-options.index');
 
     Route::get('/admin/property-types', [PropertyTypeController::class, 'index'])->name('property-types.index');
     Route::get('/admin/property-types/create', [PropertyTypeController::class, 'create'])->name('property-types.create');

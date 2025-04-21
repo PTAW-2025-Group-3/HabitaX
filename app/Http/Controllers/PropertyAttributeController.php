@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AttributeType;
+use App\Enums\AttributeType;
 use App\Models\PropertyAttribute;
 use Illuminate\Http\Request;
 
@@ -28,6 +28,7 @@ class PropertyAttributeController extends Controller
         ]);
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'type' => 'required|string|in:text,number,boolean,select',
             'is_active' => 'required|boolean',
             'is_required' => 'required|boolean',
@@ -57,7 +58,7 @@ class PropertyAttributeController extends Controller
         ]);
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|in:text,number,boolean,select',
+            'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'is_required' => 'required|boolean',
             'minimal' => 'nullable|numeric',

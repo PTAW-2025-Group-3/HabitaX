@@ -1,6 +1,6 @@
 <?php
 
-use App\AttributeType;
+use App\Enums\AttributeType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,9 +20,13 @@ return new class extends Migration
                 ->default(AttributeType::TEXT->value);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_required')->default(false);
-            $table->decimal('minimal', 19, 0)->nullable();
-            $table->decimal('maximal', 19, 0)->nullable();
+            $table->float('min_value')->nullable();
+            $table->float('max_value')->nullable();
             $table->string('unit')->nullable();
+            $table->integer('min_length')->nullable();
+            $table->integer('max_length')->nullable();
+            $table->date('min_date')->nullable();
+            $table->date('max_date')->nullable();
 
             $table->timestamps();
         });
