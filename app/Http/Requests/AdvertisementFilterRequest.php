@@ -22,6 +22,7 @@ class AdvertisementFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'property_type' => 'nullable|exists:property_types,id',
             'location' => 'nullable|string|max:255',
             'time_period' => 'nullable|in:24h,3d,7d,30d',
             'min_price' => 'nullable|numeric|min:0',
@@ -37,56 +38,55 @@ class AdvertisementFilterRequest extends FormRequest
      */
     public function applyFilters($query)
     {
+        // Filtro por tipo de propriedade
+        if ($this->filled('property_type')) {
+            $query->whereHas('property', function ($q) {
+                $q->where('property_type_id', $this->property_type);
+            });
+        }
+
+        // Filtros adicionais
         if ($this->filled('location')) {
             $query->where('location', 'LIKE', "%{$this->location}%");
+        }
+
+        if ($this->filled('min_price')) {
+            $query->where('price', '>=', $this->min_price);
+        }
+
+        if ($this->filled('max_price')) {
+            $query->where('price', '<=', $this->max_price);
+        }
+
+        if ($this->filled('min_area')) {
+            $query->whereHas('property', fn($q) =>
+            $q->where('total_area', '>=', $this->min_area)
+            );
+        }
+
+        if ($this->filled('max_area')) {
+            $query->whereHas('property', fn($q) =>
+            $q->where('total_area', '<=', $this->max_area)
+            );
         }
 
         if ($this->filled('time_period')) {
             $now = now();
             switch ($this->time_period) {
-                case '24h':
-                    $query->where('advertisements.created_at', '>=', $now->subDay());
-                    break;
-                case '3d':
-                    $query->where('advertisements.created_at', '>=', $now->subDays(3));
-                    break;
-                case '7d':
-                    $query->where('advertisements.created_at', '>=', $now->subDays(7));
-                    break;
-                case '30d':
-                    $query->where('advertisements.created_at', '>=', $now->subDays(30));
-                    break;
+                case '24h': $query->where('advertisements.created_at', '>=', $now->subDay()); break;
+                case '3d':  $query->where('advertisements.created_at', '>=', $now->subDays(3)); break;
+                case '7d':  $query->where('advertisements.created_at', '>=', $now->subDays(7)); break;
+                case '30d': $query->where('advertisements.created_at', '>=', $now->subDays(30)); break;
             }
         }
 
-        if ($this->filled('min_price')) {
-            $query->where('price', '>=', (float)$this->min_price);
-        }
-
-        if ($this->filled('max_price')) {
-            $query->where('price', '<=', (float)$this->max_price);
-        }
-
-        if ($this->filled('min_area')) {
-            $query->where('properties.total_area', '>=', (float)$this->min_area);
-        }
-
-        if ($this->filled('max_area')) {
-            $query->where('properties.total_area', '<=', (float)$this->max_area);
-        }
-
         switch ($this->input('sort', 'recent')) {
-            case 'price_asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price_desc':
-                $query->orderBy('price', 'desc');
-                break;
-            default:
-                $query->orderBy('created_at', 'desc');
-                break;
+            case 'price_asc':  $query->orderBy('price', 'asc'); break;
+            case 'price_desc': $query->orderBy('price', 'desc'); break;
+            default:           $query->orderBy('advertisements.created_at', 'desc'); break;
         }
 
         return $query;
     }
+
 }

@@ -28,10 +28,10 @@
             <div class="relative dropdown-wrapper w-full sm:w-auto">
                 <select
                     class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
-                    <option>Moradias</option>
-                    <option>Apartamentos</option>
-                    <option>Terrenos</option>
-                    <option>Comércio</option>
+                    <option value="all">Todos</option>
+                    @foreach($propertyTypes as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
