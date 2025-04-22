@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -40,6 +41,21 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        $user = DB::table('users')->where('email', $this->input('email') )->first();
+
+        if($user && in_array($user->state, ['suspended', 'banned', 'archived'])){
+            $stateMessage = match ($user->state) {
+                'suspended' => 'A sua conta foi suspensa. Se acha isto estranho, contacte via suporte.',
+                'banned' => 'A sua conta foi banida por violar os nossos termos de serviço.',
+                'archived' => 'A sua conta está arquivada, por favor contacte via suporte.',
+                'default' => 'A sua conta não está ativa.'
+            };
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'email' => $stateMessage,
+            ]);
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

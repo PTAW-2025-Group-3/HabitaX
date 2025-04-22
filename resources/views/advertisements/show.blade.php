@@ -29,6 +29,24 @@
                     {{ number_format($ad->price, 0, ',', '.') }}€
                 </div>
             </div>
+
+            <!-- Botões de ação - adicionados aqui -->
+            <div class="flex flex-wrap justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
+                <button id="shareBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
+                    <i class="bi bi-share-fill"></i>
+                    <span class="text-sm font-medium">Partilhar</span>
+                </button>
+
+                <button id="favoriteBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg transition-colors">
+                    <i class="bi bi-heart"></i>
+                    <span class="text-sm font-medium">Favoritos</span>
+                </button>
+
+                <button id="reportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
+                    <i class="bi bi-flag"></i>
+                    <span class="text-sm font-medium">Reportar</span>
+                </button>
+            </div>
         </div>
 
         <!-- Galeria com layout 50/50 -->
@@ -116,3 +134,14 @@
         </div>
     </div>
 @endsection
+@include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reportBtn = document.getElementById('reportBtn');
+        reportBtn.addEventListener('click', function() {
+            if (typeof openReportModal === 'function') {
+                openReportModal();
+            }
+        });
+    });
+</script>
