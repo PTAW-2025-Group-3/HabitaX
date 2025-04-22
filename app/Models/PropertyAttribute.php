@@ -12,6 +12,7 @@ class PropertyAttribute extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'type',
         'is_active',
         'is_required',

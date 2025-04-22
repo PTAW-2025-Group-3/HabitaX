@@ -4,24 +4,38 @@
         @method('PUT')
     @endif
 
-    <div class="bg-white shadow-lg rounded-xl p-6 mb-8 border border-gray-200">
-        <h2 class="text-xl font-bold text-primary mb-6">Tipo de Propriedade</h2>
+    <div id="details-section">
+        @include('properties.create.details')
+    </div>
 
-        <div>
-            <label for="property_type_id" class="block text-sm font-medium text-gray-600 mb-1">Selecione o tipo de propriedade</label>
-            <div class="relative">
+    <div id="location-section">
+        @include('properties.create.location')
+    </div>
+
+    <div class="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 animate-fade-in">
+        <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+            <i class="bi bi-building text-2xl text-primary mr-3"></i>
+            <h2 class="text-2xl font-bold text-primary">Tipo de Propriedade</h2>
+        </div>
+
+        <div class="transition-all duration-300 hover:shadow-md p-4 rounded-xl hover:bg-gray-50">
+            <label for="property_type_id" class="block text-sm font-semibold text-gray-secondary mb-3 flex items-center">
+                <i class="bi bi-house-gear mr-2 text-secondary"></i>
+                Selecione o tipo de propriedade
+            </label>
+
+            <div class="relative dropdown-wrapper w-full sm:w-auto">
                 <select name="property_type_id" id="property_type_id"
-                        class="py-2 pl-3 pr-10 w-full bg-white border border-gray-300 rounded-lg shadow-sm
-                               appearance-none text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                    <option value="">Selecione</option>
+                        class="dropdown-select py-3 pl-4 pr-10 w-full text-base">
+                    <option value="" disabled selected>Escolha o tipo de imóvel</option>
                     @foreach($propertyTypes as $propertyType)
                         <option value="{{ $propertyType->id }}" {{ old('property_type_id', $selectedPropertyType ?? '') == $propertyType->id ? 'selected' : '' }}>
                             {{ $propertyType->name }}
                         </option>
                     @endforeach
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-                    <i class="bi bi-chevron-down text-sm"></i>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
@@ -45,6 +59,7 @@
             const container = document.getElementById('dynamic-attributes');
 
             function loadAttributes(typeId) {
+                // Load attributes
                 fetch(`/property-type/${typeId}/attributes/html`)
                     .then(res => res.text())
                     .then(html => {
