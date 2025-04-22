@@ -10,8 +10,15 @@
                 <a href="">
                     <div class="home-property-card-style p-4 md:p-6">
                         {{-- Ícone --}}
-                        <div class="home-icon-style mb-2 md:mb-3 w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full overflow-hidden">
-                            <img src="{{ $type->icon_url }}" alt="{{ $type->name }} Icon" class="w-full h-full object-cover">
+                        <div class="home-icon-style mb-2 md:mb-3">
+                            @if(str_starts_with($type['icon'], 'bi'))
+                                <i class="{{ $type['icon'] }} text-3xl md:text-4xl lg:text-5xl"></i>
+                            @else
+                                @php
+                                    $svgPath = asset('icons/' . Str::after($type['icon'], 'svg-') . '.svg');
+                                @endphp
+                                <img src="{{ $svgPath }}" alt="{{ $type['name'] }}" class="w-8 md:w-10 lg:w-12">
+                            @endif
                         </div>
 
                         {{-- Nome --}}
