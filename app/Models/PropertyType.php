@@ -12,7 +12,7 @@ class PropertyType extends Model
     protected $fillable = [
         'name',
         'description',
-        'icon',
+        'icon_url',
         'is_active'
     ];
 
@@ -24,10 +24,5 @@ class PropertyType extends Model
     public function properties()
     {
         return $this->hasMany(Property::class, 'property_type_id');
-    }
-
-    public function count()
-    {
-        return $this->properties()->count();
     }
 }

@@ -23,10 +23,12 @@ class PropertyTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            PropertyType::firstOrCreate(
-                ['name' => $type['name']],
-                ['description' => $type['description']]
-            );
+            PropertyType::factory()
+                ->create([
+                    'name' => $type['name'],
+                    'description' => $type['description'],
+                    'is_active' => true,
+                ]);
         }
     }
 }

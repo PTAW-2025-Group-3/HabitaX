@@ -11,7 +11,7 @@ class PropertyAttributeController extends Controller
 {
     public function index(Request $request)
     {
-        $attributes = PropertyAttribute::orderBy('created_at', 'desc')->paginate(10);
+        $attributes = PropertyAttribute::orderBy('updated_at', 'desc')->paginate(10);
         return view('attributes.index', compact('attributes'));
     }
 
@@ -36,10 +36,12 @@ class PropertyAttributeController extends Controller
             'min_value' => 'nullable|numeric',
             'max_value' => 'nullable|numeric',
             'unit' => 'nullable|string|max:50',
-            'min_length' => 'nullable|integer|min:1',
-            'max_length' => 'nullable|integer|min:1',
-            'min_date' => 'nullable|date_format:d/m/Y|before:max_date',
-            'max_date' => 'nullable|date_format:d/m/Y|after:min_date',
+            'min_length' => 'nullable|integer',
+            'max_length' => 'nullable|integer',
+            'min_date' => 'nullable|date_format:Y-m-d',
+            'max_date' => 'nullable|date_format:Y-m-d',
+            'min_options' => 'nullable|integer|less_than:max_options',
+            'max_options' => 'nullable|integer|greater_than:min_options',
         ]);
 
         PropertyAttribute::create($request->all());
@@ -69,10 +71,12 @@ class PropertyAttributeController extends Controller
             'min_value' => 'nullable|numeric',
             'max_value' => 'nullable|numeric',
             'unit' => 'nullable|string|max:50',
-            'min_length' => 'nullable|integer|min:1',
-            'max_length' => 'nullable|integer|min:1',
-            'min_date' => 'nullable|date_format:d/m/Y|before:max_date',
-            'max_date' => 'nullable|date_format:d/m/Y|after:min_date',
+            'min_length' => 'nullable|integer',
+            'max_length' => 'nullable|integer',
+            'min_date' => 'nullable|date_format:Y-m-d',
+            'max_date' => 'nullable|date_format:Y-m-d',
+            'min_options' => 'nullable|integer',
+            'max_options' => 'nullable|integer',
         ]);
 
         $attribute = PropertyAttribute::findOrFail($id);

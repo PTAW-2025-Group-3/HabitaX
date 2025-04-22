@@ -20,6 +20,8 @@ class PropertyAttribute extends Model
         'unit',
         'min_length',
         'max_length',
+        "min_options",
+        "max_options",
         'min_date',
         'max_date',
     ];
@@ -32,6 +34,8 @@ class PropertyAttribute extends Model
         'max_value' => 'float',
         'min_length' => 'integer',
         'max_length' => 'integer',
+        'min_options' => 'integer',
+        'max_options' => 'integer',
         'min_date' => 'date',
         'max_date' => 'date',
     ];

@@ -47,12 +47,11 @@ class PropertyAttributeFactory extends Factory
                 break;
 
             case AttributeType::SELECT_SINGLE->value:
-            case AttributeType::SELECT_MULTIPLE->value:
-                // No additional fields for these types in this example
                 break;
 
-            default:
-                // Handle other types or fallback logic
+            case AttributeType::SELECT_MULTIPLE->value:
+                $data['min_options'] = $this->faker->optional(0.8)->numberBetween(0, 2);
+                $data['max_options'] = $this->faker->optional()->numberBetween(5, 8);
                 break;
         }
 

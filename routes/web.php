@@ -51,6 +51,9 @@ Route::middleware('auth')->controller(PropertyController::class)->group(function
     Route::post('/properties/create/store', 'store')->name('properties.store');
     Route::get('/properties/{id}', 'show')->name('properties.show');
 });
+Route::get('/property-type/{id}/attributes', [PropertyTypeController::class, 'getAttributes'])
+    ->name('property-type.attributes');
+Route::get('/property-type/{id}/attributes/html', [PropertyTypeController::class, 'loadAttributes']);
 
 // Moderation Route
 Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {

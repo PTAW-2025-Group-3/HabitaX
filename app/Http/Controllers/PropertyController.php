@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Property;
+use App\Models\PropertyType;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -29,7 +30,13 @@ class PropertyController extends Controller
 
     public function create(Request $request)
     {
-        return view('properties.create');
+        $propertyTypes = PropertyType::where('is_active', true)
+            ->with('attributes')
+            ->with('attributes.options')
+            ->orderBy('name')
+            ->get();
+
+        return view('properties.create', compact('propertyTypes'));
     }
 
     public function store(Request $request)

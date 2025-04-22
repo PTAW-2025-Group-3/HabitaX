@@ -50,22 +50,22 @@
         {{--   Apenas para os tipos numeros   --}}
         <div id="number-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
             <div>
-                <label for="minimal" class="block text-sm font-semibold text-primary">Valor mínimo</label>
-                <input type="number" name="minimal" id="minimal"
-                       value="{{ old('minimal', $attribute->minimal ?? '') }}"
+                <label for="min_value" class="block text-sm font-semibold text-primary">Valor mínimo</label>
+                <input type="number" name="min_value" id="min_value"
+                       value="{{ old('min_value', $attribute->min_value ?? '') }}"
                        placeholder="Ex: 0"
                        class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
-                @error('minimal')
+                @error('min_value')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
             <div>
-                <label for="maximal" class="block text-sm font-semibold text-primary">Valor máximo</label>
-                <input type="number" name="maximal" id="maximal"
-                       value="{{ old('maximal', $attribute->maximal ?? '') }}"
+                <label for="max_value" class="block text-sm font-semibold text-primary">Valor máximo</label>
+                <input type="number" name="max_value" id="max_value"
+                       value="{{ old('max_value', $attribute->max_value ?? '') }}"
                        placeholder="Ex: 100"
                        class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
-                @error('maximal')
+                @error('max_value')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -103,13 +103,35 @@
                 @enderror
             </div>
         </div>
+        {{--   Apenas para o tipo escolha multipla   --}}
+        <div id="multiple-choice-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+            <div>
+                <label for="min_options" class="block text-sm font-semibold text-primary">Mínimo de opções</label>
+                <input type="number" name="min_options" id="min_options"
+                       value="{{ old('min_options', $attribute->min_options ?? '') }}"
+                       placeholder="Ex: 1"
+                       class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+                @error('min_options')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div>
+                <label for="max_options" class="block text-sm font-semibold text-primary">Máximo de opções</label>
+                <input type="number" name="max_options" id="max_options"
+                       value="{{ old('max_options', $attribute->max_options ?? '') }}"
+                       placeholder="Ex: 3"
+                       class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+                @error('max_options')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
         {{--   Apenas para o tipo data  --}}
         <div id="date-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
             <div>
                 <label for="min_date" class="block text-sm font-semibold text-primary">Data mínima</label>
-                <input type="text" name="min_date" id="min_date"
-                       value="{{ old('min_date', isset($attribute->min_date) ? Carbon::parse($attribute->min_date)->format('d/m/Y') : '') }}"
-                       placeholder="DD/MM/YYYY"
+                <input type="date" name="min_date" id="min_date"
+                       value="{{ old('min_date', isset($attribute->min_date) ? Carbon::parse($attribute->min_date)->format('Y-m-d') : '') }}"
                        class="form-input">
                 @error('min_date')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -117,9 +139,8 @@
             </div>
             <div>
                 <label for="max_date" class="block text-sm font-semibold text-primary">Data máxima</label>
-                <input type="text" name="max_date" id="max_date"
-                       value="{{ old('max_date', isset($attribute->max_date) ? Carbon::parse($attribute->max_date)->format('d/m/Y') : '') }}"
-                       placeholder="DD/MM/YYYY"
+                <input type="date" name="max_date" id="max_date"
+                       value="{{ old('max_date', isset($attribute->max_date) ? Carbon::parse($attribute->max_date)->format('Y-m-d') : '') }}"
                        class="form-input">
                 @error('max_date')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -161,49 +182,54 @@
             const numberFields = $('#number-fields');
             const textFields = $('#text-fields');
             const dateFields = $('#date-fields');
+            const multipleChoiceFields = $('#multiple-choice-fields');
+            const fields = [numberFields, textFields, multipleChoiceFields, dateFields];
 
+            function toggleFieldVisibility(fieldToShow, fields) {
+                fields.forEach(field => {
+                    if (field === fieldToShow) {
+                        field.removeClass('hidden');
+                    } else {
+                        field.addClass('hidden');
+                    }
+                });
+            }
             function toggleFields() {
                 const selectedType = typeSelect.val();
                 switch (selectedType) {
                     case '{{ AttributeType::INT->value }}':
                     case '{{ AttributeType::FLOAT->value }}':
-                        numberFields.removeClass('hidden');
-                        textFields.addClass('hidden');
-                        dateFields.addClass('hidden');
+                        toggleFieldVisibility(numberFields, fields);
                         break;
                     case '{{ AttributeType::TEXT->value }}':
                     case '{{ AttributeType::LONG_TEXT->value }}':
-                        textFields.removeClass('hidden');
-                        numberFields.addClass('hidden');
-                        dateFields.addClass('hidden');
+                        toggleFieldVisibility(textFields, fields);
+                        break;
+                    case '{{ AttributeType::SELECT_MULTIPLE->value }}':
+                        toggleFieldVisibility(multipleChoiceFields, fields);
                         break;
                     case '{{ AttributeType::DATE->value }}':
-                        numberFields.addClass('hidden');
-                        textFields.addClass('hidden');
-                        dateFields.removeClass('hidden');
+                        toggleFieldVisibility(dateFields, fields);
                         break;
                     default:
-                        numberFields.addClass('hidden');
-                        textFields.addClass('hidden');
-                        dateFields.addClass('hidden');
+                        toggleFieldVisibility(null, fields);
                         break;
+                }
+            }
+            function changeStep() {
+                const selectedType = typeSelect.val();
+                if (selectedType === '{{ AttributeType::INT->value }}') {
+                    $('#min_value').attr('step', '1');
+                    $('#max_value').attr('step', '1');
+                } else if (selectedType === '{{ AttributeType::FLOAT->value }}') {
+                    $('#min_value').attr('step', '0.01');
+                    $('#max_value').attr('step', '0.01');
                 }
             }
 
             toggleFields();
             typeSelect.on('change', toggleFields);
-
-            // add / to date input
-            $('#min_date, #max_date').on('input', function () {
-                const value = $(this).val().replace(/\D/g, '');
-                if (value.length > 2 && value.length <= 4) {
-                    $(this).val(value.replace(/(\d{2})(\d+)/, '$1/$2'));
-                } else if (value.length > 4) {
-                    $(this).val(value.replace(/(\d{2})(\d{2})(\d+)/, '$1/$2/$3'));
-                } else {
-                    $(this).val(value);
-                }
-            });
+            typeSelect.on('change', changeStep);
         });
     </script>
 

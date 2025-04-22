@@ -15,7 +15,7 @@ class PropertyTypeAttributeSeeder extends Seeder
         $propertyAttributes = PropertyAttribute::all();
 
         foreach ($propertyTypes as $propertyType) {
-            $attributes = $propertyAttributes->random(rand(1, 3))->pluck('id');
+            $attributes = $propertyAttributes->random(rand(3, 6))->pluck('id');
 
             foreach ($attributes as $attributeId) {
                 PropertyTypeAttribute::create([

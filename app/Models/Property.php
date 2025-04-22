@@ -81,7 +81,7 @@ class Property extends Model
         return $this->hasMany(Advertisement::class);
     }
 
-    public function priceHistory()
+    public function price_history()
     {
         return $this->hasMany(PriceHistory::class);
     }

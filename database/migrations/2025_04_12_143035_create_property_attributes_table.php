@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('unit')->nullable();
             $table->integer('min_length')->nullable();
             $table->integer('max_length')->nullable();
+            $table->integer('min_options')->nullable();
+            $table->integer('max_options')->nullable();
             $table->date('min_date')->nullable();
             $table->date('max_date')->nullable();
 

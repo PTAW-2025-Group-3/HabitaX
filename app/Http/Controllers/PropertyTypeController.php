@@ -17,6 +17,28 @@ class PropertyTypeController extends Controller
         return view('property-types.index', compact('propertyTypes'));
     }
 
+    public function getAttributes($id)
+    {
+        $propertyType = PropertyType::with('attributes.options')->find($id);
+
+        if (!$propertyType) {
+            return response()->json(['success' => false, 'message' => 'Property type not found'], 404);
+        }
+
+        return response()->json(['success' => true, 'attributes' => $propertyType->attributes]);
+    }
+
+    public function loadAttributes($typeId)
+    {
+        $attributes = PropertyType::find($typeId)
+            ->attributes()
+            ->with('options')
+            ->orderBy('name')
+            ->get();
+
+        return view('properties.partials.attributes', compact('attributes'));
+    }
+
     public function create()
     {
         return view('property-types.create');

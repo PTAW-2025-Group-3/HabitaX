@@ -9,17 +9,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PropertyTypeFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(10),
-            'icon' => $this->faker->imageUrl(640, 480, 'business'),
+            'icon_url' => 'https://picsum.photos/seed/' . $this->faker->randomNumber(3) . '/200/200',
             'is_active' => $this->faker->boolean(),
         ];
     }

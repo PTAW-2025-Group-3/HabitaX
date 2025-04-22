@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\AttributeType;
 use App\Models\PropertyAttributeOption;
-use App\Models\PropertyType;
 use Illuminate\Database\Seeder;
 use App\Models\PropertyAttribute;
 
@@ -15,19 +14,30 @@ class PropertyAttributeSeeder extends Seeder
         foreach (AttributeType::cases() as $typeCase) {
             $type = $typeCase->value;
 
-            // Generate 2 to 4 attributes for each type
-            $count = fake()->numberBetween(1, 3);
+            $count = fake()->numberBetween(3, 6);
 
             for ($i = 0; $i < $count; $i++) {
                 $attribute = PropertyAttribute::factory()->create([
                     'type' => $type,
                 ]);
 
-                // Create options only if the type is "select single" or "select multiple"
-                if (in_array($type, [AttributeType::SELECT_SINGLE->value, AttributeType::SELECT_MULTIPLE->value])) {
-                    PropertyAttributeOption::factory()->count(rand(3, 10))->create([
-                        'property_attribute_id' => $attribute->id,
-                    ]);
+                // Generate options for select types
+                switch ($type) {
+                    case AttributeType::SELECT_SINGLE->value:
+                        PropertyAttributeOption::factory()->count(rand(3, 10))->create([
+                            'property_attribute_id' => $attribute->id,
+                        ]);
+                        break;
+
+                    case AttributeType::SELECT_MULTIPLE->value:
+                        PropertyAttributeOption::factory()->count(rand(3, 10))->create([
+                            'property_attribute_id' => $attribute->id,
+                        ]);
+                        $attribute->update([
+                            'min_options' => fake()->numberBetween(0, 2),
+                            'max_options' => fake()->numberBetween(4, 8),
+                        ]);
+                        break;
                 }
             }
         }

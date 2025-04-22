@@ -14,12 +14,7 @@ class PropertyAttributeOptionFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'order' => $this->faker->randomNumber(2),
-            'icon_url' => $this->generateIconUrl(),
+            'icon_url' => 'https://picsum.photos/seed/' . $this->faker->randomNumber(3) . '/200/200',
         ];
-    }
-
-    private function generateIconUrl(): string
-    {
-        return 'https://picsum.photos/200/200?random=' . rand(1, 1000);
     }
 }
