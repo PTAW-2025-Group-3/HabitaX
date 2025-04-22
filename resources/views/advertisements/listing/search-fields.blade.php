@@ -6,12 +6,11 @@
         </label>
 
         <div class="relative dropdown-wrapper w-full">
-            <select id="property-type"
-                    class="p-3 pl-4 pr-10 w-full dropdown-select">
-                <option selected>Moradias</option>
-                <option>Apartamentos</option>
-                <option>Terrenos</option>
-                <option>Comércio</option>
+            <select id="property-type" class="p-3 pl-4 pr-10 w-full dropdown-select">
+                <option value="all">Todos</option>
+                @foreach($propertyTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                @endforeach
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
                 <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
