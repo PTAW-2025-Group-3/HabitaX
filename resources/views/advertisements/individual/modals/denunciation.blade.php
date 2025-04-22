@@ -1,4 +1,4 @@
-<div id="reportModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-0 transition-all duration-300 hidden">
+<div id="reportModal" hidden class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-0 transition-all duration-300 hidden">
     <div class="modal-content relative w-full max-w-md transform scale-95 opacity-0 transition-all duration-300">
         <!-- Cartão com efeito de vidro -->
         <div class="bg-white bg-opacity-90 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-gray-100 animate-fade-in">
@@ -75,71 +75,91 @@
         </div>
     </div>
 </div>
-
 <script>
-    function openReportModal() {
-        const reportModal = document.getElementById('reportModal');
-        reportModal.classList.remove('hidden');
-        setTimeout(() => {
-            reportModal.querySelector('.modal-content').classList.add('scale-100', 'opacity-100');
-            reportModal.classList.add('bg-opacity-50');
-        }, 50);
-    }
-
-    function closeReportModal() {
-        const reportModal = document.getElementById('reportModal');
-        reportModal.querySelector('.modal-content').classList.remove('scale-100', 'opacity-100');
-        reportModal.classList.remove('bg-opacity-50');
-        setTimeout(() => {
-            reportModal.classList.add('hidden');
-        }, 300);
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
-        const reportModal = document.getElementById('reportModal');
-        const closeModal = document.getElementById('closeReportModal');
-        const cancelReport = document.getElementById('cancelReport');
-        const reportForm = document.getElementById('reportForm');
+        const modal = document.getElementById('reportModal');
+        if (modal) {
+            modal.removeAttribute('hidden');
+        }
 
-        closeModal.addEventListener('click', closeReportModal);
-        cancelReport.addEventListener('click', closeReportModal);
+        window.openReportModal = function() {
+            const modal = document.getElementById('reportModal');
+            if (!modal) return console.error('Report modal not found');
 
-        reportModal.addEventListener('click', function(e) {
-            if (e.target === reportModal) {
-                closeReportModal();
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('bg-opacity-50');
+                const content = modal.querySelector('.modal-content');
+                if (content) {
+                    content.classList.add('scale-100', 'opacity-100');
+                    content.classList.remove('scale-95', 'opacity-0');
+                }
+            }, 10);
+        };
+
+        window.closeReportModal = function() {
+            const modal = document.getElementById('reportModal');
+            if (!modal) return;
+
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
             }
-        });
-
-        reportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const adId = this.querySelector('input[name="ad_id"]').value;
-            const reason = document.getElementById('reportReason').value;
-            const description = document.getElementById('reportDescription').value;
-
-            if (!reason) {
-                alert('Por favor, selecione um motivo para a denúncia.');
-                return;
-            }
-
-            console.log('Denúncia enviada:', { adId, reason, description });
-
-            const submitBtn = document.getElementById('submitReport');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="bi bi-check-circle-fill mr-2"></i> Enviado!';
-            submitBtn.classList.remove('btn-primary');
-            submitBtn.classList.add('btn-success');
+            modal.classList.remove('bg-opacity-50');
 
             setTimeout(() => {
-                closeReportModal();
-                setTimeout(() => {
-                    reportForm.reset();
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Enviar denúncia';
-                    submitBtn.classList.remove('btn-success');
-                    submitBtn.classList.add('btn-primary');
-                }, 300);
-            }, 1500);
-        });
+                modal.classList.add('hidden');
+            }, 300);
+        };
+
+        const closeBtn = document.getElementById('closeReportModal');
+        const cancelBtn = document.getElementById('cancelReport');
+        const form = document.getElementById('reportForm');
+
+        if (closeBtn) closeBtn.addEventListener('click', window.closeReportModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', window.closeReportModal);
+
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) window.closeReportModal();
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const adId = this.querySelector('input[name="ad_id"]').value;
+                const reason = document.getElementById('reportReason').value;
+                const description = document.getElementById('reportDescription').value;
+
+                if (!reason) {
+                    alert('Please select a reason for the report.');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitReport');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="bi bi-check-circle-fill mr-2"></i> Sent!';
+                    submitBtn.classList.remove('btn-primary');
+                    submitBtn.classList.add('btn-success');
+
+                    console.log('Report submitted:', { adId, reason, description });
+
+                    setTimeout(() => {
+                        window.closeReportModal();
+                        setTimeout(() => {
+                            form.reset();
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Submit Report';
+                            submitBtn.classList.remove('btn-success');
+                            submitBtn.classList.add('btn-primary');
+                        }, 300);
+                    }, 1500);
+                }
+            });
+        }
     });
 </script>

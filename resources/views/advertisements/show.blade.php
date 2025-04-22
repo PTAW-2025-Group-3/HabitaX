@@ -135,13 +135,20 @@
     </div>
 @endsection
 @include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
+
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const reportBtn = document.getElementById('reportBtn');
-        reportBtn.addEventListener('click', function() {
-            if (typeof openReportModal === 'function') {
-                openReportModal();
-            }
-        });
+        if (reportBtn) {
+            reportBtn.addEventListener('click', function() {
+                if (typeof openReportModal === 'function') {
+                    openReportModal();
+                } else {
+                    console.error('openReportModal function not found');
+                }
+            });
+        }
     });
 </script>
+@endpush
