@@ -1,17 +1,6 @@
 import $ from 'jquery';
 
 const dadosInformacaoGeral = {
-    tiposPropriedade: [
-        "Apartamento",
-        "Moradia",
-        "Terreno",
-        "Armazém",
-        "Espaço Comercial",
-        "Garagem",
-        "Quinta",
-        "Escritório",
-        "Propriedade Rural"
-    ],
     tipologias: [
         "T0", "T1", "T2", "T3", "T4", "T5", "T6 ou mais",
         "Estúdio", "Loft", "Open Space"
@@ -37,15 +26,11 @@ $(document).ready(function () {
     } = dadosInformacaoGeral;
 
     // Limpar e definir opções iniciais
-    $('#property-type').empty().append('<option disabled selected>Seleciona o tipo de propriedade</option>');
     $('#typology').empty().append('<option disabled selected>Seleciona a tipologia</option>');
     $('#condition').empty().append('<option disabled selected>Seleciona o estado</option>');
     $('#energy-certification').empty().append('<option disabled selected>Seleciona a certificação</option>');
 
-    // Preencher os selects com os dados
-    tiposPropriedade.forEach(tipo =>
-        $('#property-type').append(`<option value="${tipo}">${tipo}</option>`)
-    );
+
     tipologias.forEach(tipologia =>
         $('#typology').append(`<option value="${tipologia}">${tipologia}</option>`)
     );

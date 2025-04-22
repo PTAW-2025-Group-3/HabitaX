@@ -8,6 +8,7 @@ use App\Models\FavoriteAdvertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
 use App\Models\PropertyParameter;
+use App\Models\PropertyType;
 use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
@@ -20,13 +21,15 @@ class AdvertisementController extends Controller
 
         $query = $request->applyFilters($query);
 
+
+        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
         $advertisements = $query->paginate(10);
 
         if ($request->ajax()) {
             return view('advertisements.listing.property-listings', compact('advertisements'))->render();
         }
 
-        return view('advertisements.index', compact('advertisements'));
+        return view('advertisements.index', compact('advertisements', 'propertyTypes'));
     }
 
     public function my(Request $request)
@@ -86,8 +89,16 @@ class AdvertisementController extends Controller
         ]);
     }
 
+    public function showSearchFields()
+    {
+        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
+
+        return view('advertisements.listing.search-fields', compact('propertyTypes'));
+    }
+
     public function help()
     {
         return view('advertisements.help');
     }
+
 }
