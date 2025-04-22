@@ -15,15 +15,16 @@ class AdvertisementController extends Controller
 {
     public function index(AdvertisementFilterRequest $request)
     {
+        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
+
         $query = Advertisement::where('state', 'active')
             ->with('property')
             ->select('advertisements.*');
 
         $query = $request->applyFilters($query);
 
+        $advertisements = $query->paginate(10 );
 
-        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
-        $advertisements = $query->paginate(10);
 
         if ($request->ajax()) {
             return view('advertisements.listing.property-listings', compact('advertisements'))->render();
@@ -87,13 +88,6 @@ class AdvertisementController extends Controller
             'attributes' => $parameters,
             'priceHistory' => $priceHistory
         ]);
-    }
-
-    public function showSearchFields()
-    {
-        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
-
-        return view('advertisements.listing.search-fields', compact('propertyTypes'));
     }
 
     public function help()
