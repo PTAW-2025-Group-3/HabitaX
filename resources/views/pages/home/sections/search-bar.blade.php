@@ -38,9 +38,31 @@
                 </div>
             </div>
 
-            {{-- Location Field --}}
-            <input type="text" placeholder="Localização, Cidade, Zona"
-                   class="w-full sm:w-56 md:w-72 px-5 py-2 rounded-md bg-back text-gray-secondary shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all" />
+            {{-- District Field --}}
+            <div class="relative dropdown-wrapper w-full sm:w-auto">
+                <select id="districtSelect" name="district" class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
+                    <option value="">Selecione um Distrito</option>
+                    @foreach(App\Models\District::orderBy('name')->get() as $district)
+                        <option value="{{ $district->id }}" data-municipalities='@json($district->municipalities)'>
+                            {{ $district->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                </div>
+            </div>
+
+            {{-- Municipality Field --}}
+            <div class="relative dropdown-wrapper w-full sm:w-auto" id="municipalityWrapper">
+                <select id="municipalitySelect" name="municipality"
+                        class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
+                    <option value="">Selecione um Concelho</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                </div>
+            </div>
 
             {{-- Search Button --}}
             <button type="submit" class="px-3 py-3 btn-primary h-12 w-full sm:w-12">
@@ -54,16 +76,15 @@
 {{-- Espaçador para versão mobile para evitar sobreposição --}}
 <div class="h-16 block md:hidden"></div>
 
-{{-- JavaScript for toggle effect --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Toggle Comprar/Arrendar
         const buyBtn = document.getElementById('buyBtn');
         const rentBtn = document.getElementById('rentBtn');
 
         buyBtn.addEventListener('click', () => {
             buyBtn.classList.add('bg-primary', 'text-white');
             buyBtn.classList.remove('bg-gray-100', 'text-gray-800');
-
             rentBtn.classList.remove('bg-blue-900', 'text-white');
             rentBtn.classList.add('bg-gray-100', 'text-gray-800');
         });
@@ -71,9 +92,27 @@
         rentBtn.addEventListener('click', () => {
             rentBtn.classList.add('bg-blue-900', 'text-white');
             rentBtn.classList.remove('bg-gray-100', 'text-gray-800');
-
             buyBtn.classList.remove('bg-primary', 'text-white');
             buyBtn.classList.add('bg-gray-100', 'text-gray-800');
         });
+
+        // 2. Lógica Distritos e Concelhos
+        const districtSelect = document.getElementById('districtSelect');
+        const municipalityWrapper = document.getElementById('municipalityWrapper');
+        const municipalitySelect = document.getElementById('municipalitySelect');
+
+        districtSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const municipalities = JSON.parse(selectedOption.getAttribute('data-municipalities') || '[]');
+
+            // Reset e preenchimento dos concelhos
+            municipalitySelect.innerHTML = '<option value="">Selecione um Concelho</option>';
+
+            municipalities.forEach(municipality => {
+                const option = new Option(municipality.name, municipality.id);
+                municipalitySelect.add(option);
+            });
+        });
+
     });
 </script>
