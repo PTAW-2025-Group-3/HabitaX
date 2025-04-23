@@ -24,19 +24,15 @@
                     <label for="reportReason" class="block text-sm font-medium text-gray-700">
                         Motivo da denúncia <span class="text-red">*</span>
                     </label>
-                    <div class="relative">
-                        <select id="reportReason" name="reason" class="dropdown-select px-4 py-2.5" required>
+                    <div class="relative dropdown-wrapper w-full sm:w-auto">
+                        <select id="reportReason" name="reason" class="py-2 pl-4 pr-10 w-full h-10 dropdown-select" required>
                             <option value="" disabled selected>Selecione um motivo</option>
-                            <option value="false_info">Informações falsas</option>
-                            <option value="scam">Possível fraude</option>
-                            <option value="inappropriate">Conteúdo inapropriado</option>
-                            <option value="duplicate">Anúncio duplicado</option>
-                            <option value="unavailable">Propriedade indisponível</option>
-                            <option value="wrong_price">Preço incorreto</option>
-                            <option value="other">Outro motivo</option>
+                            @foreach($denunciationReasons as $reason)
+                                <option value="{{ $reason->id }}">{{ $reason->name }}</option>
+                            @endforeach
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
-                            <i class="bi bi-chevron-down"></i>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                            <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                         </div>
                     </div>
                 </div>
@@ -130,34 +126,70 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
+                @if(!auth()->check())
+                alert('Faça login ou registe-se para denunciar um anúncio.');
+                window.closeReportModal();
+                // Será que faria sentido redirecionar para a página de login? rever isto
+                // window.location.href = '{{ route("login") }}';
+                return;
+                @endif
+
                 const adId = this.querySelector('input[name="ad_id"]').value;
-                const reason = document.getElementById('reportReason').value;
+                const reasonId = document.getElementById('reportReason').value;
                 const description = document.getElementById('reportDescription').value;
 
-                if (!reason) {
-                    alert('Please select a reason for the report.');
+                if (!reasonId) {
+                    alert('Por favor, selecione um motivo para a denúncia.');
                     return;
                 }
 
                 const submitBtn = document.getElementById('submitReport');
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="bi bi-check-circle-fill mr-2"></i> Sent!';
-                    submitBtn.classList.remove('btn-primary');
-                    submitBtn.classList.add('btn-success');
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split mr-2"></i> A enviar...';
 
-                    console.log('Report submitted:', { adId, reason, description });
+                    // Create the fetch request to the denunciations.store endpoint
+                    fetch('{{ route("denunciations.store") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            advertisement_id: adId,
+                            reason_id: reasonId,
+                            description: description
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Erro na submissão');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            submitBtn.innerHTML = '<i class="bi bi-check-circle-fill mr-2"></i> Enviado!';
+                            submitBtn.classList.remove('btn-primary');
+                            submitBtn.classList.add('btn-success');
 
-                    setTimeout(() => {
-                        window.closeReportModal();
-                        setTimeout(() => {
-                            form.reset();
+                            setTimeout(() => {
+                                window.closeReportModal();
+                                setTimeout(() => {
+                                    form.reset();
+                                    submitBtn.disabled = false;
+                                    submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Enviar denúncia';
+                                    submitBtn.classList.remove('btn-success');
+                                    submitBtn.classList.add('btn-primary');
+                                }, 300);
+                            }, 1500);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
                             submitBtn.disabled = false;
-                            submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Submit Report';
-                            submitBtn.classList.remove('btn-success');
-                            submitBtn.classList.add('btn-primary');
-                        }, 300);
-                    }, 1500);
+                            submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Enviar denúncia';
+                            alert('Ocorreu um erro ao enviar a denúncia. Por favor, tente novamente.');
+                        });
                 }
             });
         }

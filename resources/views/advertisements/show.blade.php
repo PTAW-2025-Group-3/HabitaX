@@ -134,8 +134,7 @@
         </div>
     </div>
 @endsection
-@include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
-
+@include('advertisements.individual.modals.denunciation', ['denunciationReasons' => $denunciationReasons, 'adId' => $ad->id])
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {

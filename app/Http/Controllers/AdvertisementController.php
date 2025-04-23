@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdvertisementFilterRequest;
 use App\Models\Advertisement;
+use App\Models\DenunciationReason;
 use App\Models\FavoriteAdvertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
@@ -77,6 +78,8 @@ class AdvertisementController extends Controller
             })
             ->toArray();
 
+        $denunciationReasons = DenunciationReason::where('is_active', true)->get();
+
         // Get PriceHistory as a collection of model instances
         $priceHistory = PriceHistory::where('advertisement_id', $ad->id)
             ->orderBy('register_date', 'asc')
@@ -86,7 +89,8 @@ class AdvertisementController extends Controller
             'ad' => $ad,
             'property' => $property,
             'attributes' => $parameters,
-            'priceHistory' => $priceHistory
+            'priceHistory' => $priceHistory,
+            'denunciationReasons' => $denunciationReasons
         ]);
     }
 
