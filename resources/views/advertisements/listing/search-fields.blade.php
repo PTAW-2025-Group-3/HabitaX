@@ -1,3 +1,4 @@
+<form method="GET" action="{{ route('advertisements.index') }}">
 <div class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
     {{-- Tipo de Imóvel --}}
     <div class="w-full md:w-1/4">
@@ -82,15 +83,17 @@
         </div>
     </div>
 
-    <div class="mt-6 flex justify-end">
+
+    {{-- Botão Pesquisar --}}
+    <div class="w-full md:w-1/4 flex items-end">
         <button type="submit"
-                class="bg-primary hover:bg-primary-dark text-white font-medium py-1 px-4 rounded-lg shadow-sm transition duration-200 flex items-center gap-2 text-base">
-            <i class="bi bi-search text-base"></i>
+                class="w-full p-3 pl-4 pr-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 h-[48px]">
+            <i class="bi bi-search text-lg"></i>
             Pesquisar
         </button>
     </div>
 </div>
-
+</form>
 {{-- JavaScript para lógica dinâmica --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {

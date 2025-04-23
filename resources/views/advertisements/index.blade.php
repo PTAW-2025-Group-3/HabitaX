@@ -5,7 +5,7 @@
 @section('content')
     <div class="bg-back w-full min-h-screen" x-data="{ view: 'grid' }">
         <div class="max-w-7xl mx-auto px-4 py-6">
-            <div class="max-w-4xl mx-auto p-8 rounded">
+            <div class="w-full p-8 rounded">
                 @include('advertisements.listing.toggle-buttons')
                 <div class="w-full h-px bg-gray-400 mb-6"></div>
                 @include('advertisements.listing.search-fields', [

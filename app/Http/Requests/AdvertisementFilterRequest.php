@@ -29,14 +29,16 @@ class AdvertisementFilterRequest extends FormRequest
             'min_area' => 'nullable|numeric|min:0',
             'max_area' => 'nullable|numeric|min:0',
             'sort' => 'nullable|in:recent,price_asc,price_desc',
+            'district' => 'nullable|exists:districts,id',
+            'municipality' => 'nullable|exists:municipalities,id',
+            'parish' => 'nullable|exists:parishes,id',
+            'property_type' => 'nullable|exists:property_types,id',
         ];
     }
 
-    /**
-     * Apply filters to the query.
-     */
     public function applyFilters($query)
     {
+        // filtros existentes
         if ($this->filled('location')) {
             $query->where('location', 'LIKE', "%{$this->location}%");
         }
@@ -68,13 +70,43 @@ class AdvertisementFilterRequest extends FormRequest
         }
 
         if ($this->filled('min_area')) {
-            $query->where('properties.total_area', '>=', (float)$this->min_area);
+            $query->whereHas('property', function ($q) {
+                $q->where('total_area', '>=', (float)$this->min_area);
+            });
         }
 
         if ($this->filled('max_area')) {
-            $query->where('properties.total_area', '<=', (float)$this->max_area);
+            $query->whereHas('property', function ($q) {
+                $q->where('total_area', '<=', (float)$this->max_area);
+            });
         }
 
+        // filtros novos
+        if ($this->filled('property_type')) {
+            $query->whereHas('property', function ($q) {
+                $q->where('property_type_id', $this->property_type);
+            });
+        }
+
+        if ($this->filled('district')) {
+            $query->whereHas('property.parish.municipality.district', function ($q) {
+                $q->where('id', $this->district);
+            });
+        }
+
+        if ($this->filled('municipality')) {
+            $query->whereHas('property.parish.municipality', function ($q) {
+                $q->where('id', $this->municipality);
+            });
+        }
+
+        if ($this->filled('parish')) {
+            $query->whereHas('property.parish', function ($q) {
+                $q->where('id', $this->parish);
+            });
+        }
+
+        // ordenação
         switch ($this->input('sort', 'recent')) {
             case 'price_asc':
                 $query->orderBy('price', 'asc');
