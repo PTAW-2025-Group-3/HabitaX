@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdvertisementFilterRequest;
 use App\Models\Advertisement;
+use App\Models\DenunciationReason;
 use App\Models\FavoriteAdvertisement;
 use App\Models\PriceHistory;
 use App\Models\Property;
@@ -101,6 +102,8 @@ class AdvertisementController extends Controller
             })
             ->toArray();
 
+        $denunciationReasons = DenunciationReason::where('is_active', true)->get();
+
         $priceHistory = PriceHistory::where('advertisement_id', $ad->id)
             ->orderBy('register_date', 'asc')
             ->get();
@@ -109,15 +112,9 @@ class AdvertisementController extends Controller
             'ad' => $ad,
             'property' => $property,
             'attributes' => $parameters,
-            'priceHistory' => $priceHistory
+            'priceHistory' => $priceHistory,
+            'denunciationReasons' => $denunciationReasons,
         ]);
-    }
-
-    public function showSearchFields()
-    {
-        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
-
-        return view('advertisements.listing.search-fields', compact('propertyTypes'));
     }
 
     public function help()

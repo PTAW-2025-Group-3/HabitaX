@@ -3,7 +3,9 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
+use App\Http\Controllers\DenunciationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
 use App\Http\Controllers\PropertyAttributeOptionController;
 use App\Http\Controllers\PropertyController;
@@ -44,6 +46,10 @@ Route::middleware('auth')->controller(AdvertisementController::class)->group(fun
 });
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
+Route::middleware('auth')->group(function () {
+    Route::post('/denunciations', [DenunciationController::class, 'store'])->name('denunciations.store');
+});
+
 // Property Routes
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::middleware('auth')->controller(PropertyController::class)->group(function () {
@@ -58,13 +64,17 @@ Route::get('/property-type/{id}/attributes/html', [PropertyTypeController::class
 
 // Moderation Route
 Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
-    Route::get('/mod', function () {
-        return view('pages.moderation.index');
-    })->name('moderation');
+    Route::get('/mod', [ModerationController::class, 'index'])->name('moderation');
     Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
         ->name('reported-advertisement.show');
     Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
         ->name('verification-advertiser.show');
+    Route::post('/mod/reported-advertisement/{id}/approve', [ReportedAdvertisementController::class, 'approve'])
+        ->name('reported-advertisement.approve');
+    Route::post('/mod/reported-advertisement/{id}/reject', [ReportedAdvertisementController::class, 'reject'])
+        ->name('reported-advertisement.reject');
+    Route::get('/mod/advertisement/{advertisementId}/history', [ReportedAdvertisementController::class, 'history'])
+        ->name('reported-advertisement.history');
 });
 
 // Administration Route

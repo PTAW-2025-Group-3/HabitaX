@@ -8,14 +8,15 @@
             <div class="w-full p-8 rounded">
                 @include('advertisements.listing.toggle-buttons')
                 <div class="w-full h-px bg-gray-400 mb-6"></div>
+
                 @include('advertisements.listing.search-fields', [
-    'propertyTypes' => $propertyTypes,
-    'districts' => $districts,
-    'selectedDistrict' => $selectedDistrict,
-    'selectedMunicipality' => $selectedMunicipality,
-    'selectedParish' => $selectedParish,
-    'selectedType' => $selectedType,
-])
+                    'propertyTypes' => $propertyTypes,
+                    'districts' => $districts,
+                    'selectedDistrict' => $selectedDistrict,
+                    'selectedMunicipality' => $selectedMunicipality,
+                    'selectedParish' => $selectedParish,
+                    'selectedType' => $selectedType,
+                ])
             </div>
 
             <div class="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 mt-8">
