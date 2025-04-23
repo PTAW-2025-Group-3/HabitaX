@@ -54,7 +54,7 @@
             </div>
 
             {{-- Municipality Field --}}
-            <div class="relative dropdown-wrapper w-full sm:w-auto hidden" id="municipalityWrapper">
+            <div class="relative dropdown-wrapper w-full sm:w-auto" id="municipalityWrapper">
                 <select id="municipalitySelect" name="municipality"
                         class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
                     <option value="">Selecione um Concelho</option>
@@ -108,15 +108,11 @@
             // Reset e preenchimento dos concelhos
             municipalitySelect.innerHTML = '<option value="">Selecione um Concelho</option>';
 
-            if (municipalities.length > 0) {
-                municipalities.forEach(municipality => {
-                    const option = new Option(municipality.name, municipality.id);
-                    municipalitySelect.add(option);
-                });
-                municipalityWrapper.classList.remove('hidden');
-            } else {
-                municipalityWrapper.classList.add('hidden');
-            }
+            municipalities.forEach(municipality => {
+                const option = new Option(municipality.name, municipality.id);
+                municipalitySelect.add(option);
+            });
         });
+
     });
 </script>
