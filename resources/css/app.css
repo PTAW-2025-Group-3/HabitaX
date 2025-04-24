@@ -21,6 +21,21 @@
     animation: fade-in 0.6s ease-out both;
 }
 
+@keyframes fadeScaleOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.animate-fade-scale-out {
+    animation: fadeScaleOut 300ms ease-in-out forwards;
+}
+
 .text-primary {
     @apply text-blue-900;
 }
