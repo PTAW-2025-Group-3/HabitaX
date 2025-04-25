@@ -1,5 +1,7 @@
 @extends('layout.app')
 
+@section('title', 'Revisão da Denúncia')
+
 @section('content')
     <div class="container mx-auto py-8 px-4">
         <div class="max-w-4xl mx-auto">
@@ -7,11 +9,11 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
                 <!-- Header -->
                 <div class="bg-primary text-white p-6">
-                    <h3 class="text-2xl font-bold text-center mb-2">Revisão do Report</h3>
+                    <h3 class="text-2xl font-bold text-center mb-2">Revisão da Denúncia</h3>
                     <div class="flex justify-center">
                         @switch($denunciation->report_state)
                             @case(0)
-                                <span class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Estado Atual: Em Análise</span>
+                                <span class="bg-yellow-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Estado Atual: Por Resolver</span>
                                 @break
                             @case(1)
                                 <span class="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Estado Atual: Aprovado</span>

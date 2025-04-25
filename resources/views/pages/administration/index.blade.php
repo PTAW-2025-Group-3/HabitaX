@@ -3,10 +3,14 @@
 @section('title', 'Administration')
 
 @section('content')
-    <div class="container mx-auto p-4">
-        @include('pages.administration.partials.stats')
-        @include('pages.administration.partials.charts')
-        @include('pages.administration.partials.user-management')
+    <div class="container mx-auto px-4 pt-4 pb-8">
+        @include('pages.administration.partials.header')
+
+        <div class="mt-6">
+            @include('pages.administration.partials.stats')
+            @include('pages.administration.partials.charts')
+            @include('pages.administration.partials.user-management')
+        </div>
 
         <div class="mt-6 bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-gray-secondary mb-4">Configurações de Propriedades</h2>

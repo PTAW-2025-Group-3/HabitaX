@@ -2,11 +2,11 @@
     <div class="flex flex-col md:flex-row justify-between items-center">
         <!-- Seção de título e data -->
         <div class="space-y-2 text-center md:text-left mb-6 md:mb-0">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Painel de Moderação</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Painel de Administração</h1>
             <p class="text-sm md:text-base text-blue-100">{{ now()->locale('pt_PT')->isoFormat('dddd, DD [de] MMMM [de] YYYY') }}</p>
         </div>
 
-        <!-- Seção de avatar e informações do moderador -->
+        <!-- Seção de avatar e informações do administrador -->
         <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-3">
                 <!-- Avatar com borda sutil e sombra -->
@@ -17,9 +17,7 @@
                 @endif
                 <div>
                     <p class="font-medium text-lg text-white">{{ auth()->user()->name }}</p>
-                    <p class="text-xs text-blue-100">
-                        {{ auth()->user()->isAdmin() ? 'Administrador' : 'Moderador' }}
-                    </p>
+                    <p class="text-xs text-blue-100">Administrador</p>
                 </div>
             </div>
         </div>

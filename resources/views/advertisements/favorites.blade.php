@@ -28,43 +28,50 @@
             </div>
 
             <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($favorites as $favorite)
-                    @php
-                        $advertisement = optional($favorite->advertisement);
-                        $property = optional($advertisement->property);
-                        $image = $property->images[0] ?? asset('images/property-placeholder.jpg');
-                        $title = $advertisement->title ?? 'Imóvel indisponível';
-                        $parishName = optional($property->parish)->name ?? 'Localização indisponível';
-                        $price = $advertisement->price ?? 0;
-                    @endphp
+                @if($favorites->isEmpty())
+                    <div class="col-span-full text-center py-8">
+                        <i class="bi bi-heart text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-400">Você não tem anúncios favoritos</p>
+                    </div>
+                @else
+                    @foreach($favorites as $favorite)
+                        @php
+                            $advertisement = optional($favorite->advertisement);
+                            $property = optional($advertisement->property);
+                            $image = $property->images[0] ?? asset('images/property-placeholder.jpg');
+                            $title = $advertisement->title ?? 'Imóvel indisponível';
+                            $parishName = optional($property->parish)->name ?? 'Localização indisponível';
+                            $price = $advertisement->price ?? 0;
+                        @endphp
 
-                    <div class="home-ads-style favorite-card"
-                         data-id="{{ $favorite->id }}"
-                         data-price="{{ $price }}"
-                         data-date="{{ $favorite->created_at->timestamp }}">
-                        <div class="relative">
-                            <img
-                                src="{{ $image }}"
-                                alt="{{ $title }}"
-                                class="w-full h-48 object-cover">
-                            <button
-                                class="absolute top-3 right-3 p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center justify-center favorite-btn"
-                                data-id="{{ $favorite->id }}"
-                                style="width: 32px; height: 32px;">
-                                <i class="bi bi-heart-fill text-red text-sm"></i>
-                            </button>
-                        </div>
-                        <div class="p-5">
-                            <h3 class="text-lg font-semibold text-gray-secondary">{{ $title }}</h3>
-                            <p class="text-sm text-gray mb-2">{{ $parishName }}</p>
-                            <p class="text-lg font-bold text-primary">{{ $price }}€</p>
-                            <div class="mt-4 flex items-center justify-between text-sm">
-                                <span class="text-gray">Adicionado {{ $favorite->created_at->diffForHumans() }}</span>
-                                <button class="text-red hover:text-red-700 font-medium transition-colors remove-favorite" data-id="{{ $favorite->id }}">Remover</button>
+                        <div class="home-ads-style favorite-card"
+                             data-id="{{ $favorite->id }}"
+                             data-price="{{ $price }}"
+                             data-date="{{ $favorite->created_at->timestamp }}">
+                            <div class="relative">
+                                <img
+                                    src="{{ $image }}"
+                                    alt="{{ $title }}"
+                                    class="w-full h-48 object-cover">
+                                <button
+                                    class="absolute top-3 right-3 p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center justify-center favorite-btn"
+                                    data-id="{{ $favorite->id }}"
+                                    style="width: 32px; height: 32px;">
+                                    <i class="bi bi-heart-fill text-red text-sm"></i>
+                                </button>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-gray-secondary">{{ $title }}</h3>
+                                <p class="text-sm text-gray mb-2">{{ $parishName }}</p>
+                                <p class="text-lg font-bold text-primary">{{ $price }}€</p>
+                                <div class="mt-4 flex items-center justify-between text-sm">
+                                    <span class="text-gray">Adicionado {{ $favorite->created_at->diffForHumans() }}</span>
+                                    <button class="text-red hover:text-red-700 font-medium transition-colors remove-favorite" data-id="{{ $favorite->id }}">Remover</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
 
             <div class="mt-8 text-center">

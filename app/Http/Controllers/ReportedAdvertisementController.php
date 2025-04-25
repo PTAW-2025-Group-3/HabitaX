@@ -13,9 +13,10 @@ class ReportedAdvertisementController extends Controller
     {
         $denunciations = Denunciation::with(['creator', 'advertisement', 'reason'])
             ->orderBy('submitted_at', 'desc')
+            ->orderBy('id', 'desc') // Add a secondary sort by primary key
             ->paginate(5);
 
-        // Transforma cada denúncia num Presenter
+        // Transform each denunciation into a Presenter
         $presented = $denunciations->map(fn($d) => new DenunciationPresenter($d));
 
         return [
