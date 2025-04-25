@@ -8,4 +8,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        cors: true,
+    },
+    build: {
+        outDir: 'public/build',
+        // manifest: true,
+        emptyOutDir: true,
+    }
 });

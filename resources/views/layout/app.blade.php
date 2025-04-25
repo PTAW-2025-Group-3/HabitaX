@@ -14,7 +14,18 @@
     <!-- Styles and Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @if (app()->environment('production'))
+        @php
+            $manifest = file_exists(public_path('build/manifest.json'))
+                ? json_decode(file_get_contents(public_path('build/manifest.json')), true)
+                : null;
+        @endphp
+        <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
+        <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
 </head>
 
 <body class="font-sans antialiased bg-back">
