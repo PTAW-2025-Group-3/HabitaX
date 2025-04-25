@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyTypeController extends Controller
 {
     public function index()
     {
         $propertyTypes = PropertyType::with('attributes')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->paginate(10);
 
         return view('property-types.index', compact('propertyTypes'));
@@ -49,11 +50,18 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name',
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|string|max:255',
+            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
             'is_active' => 'boolean',
         ]);
 
-        PropertyType::create($request->all());
+        $iconPath = $request->file('icon') ? $request->file('icon')->store('icons', 'public') : null;
+
+        PropertyType::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon' => $iconPath,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+        ]);
 
         return redirect()->route('property-types.index')->with('success', 'Property type created successfully.');
     }
@@ -70,12 +78,28 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name,' . $id,
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|string|max:255',
+            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
             'is_active' => 'boolean',
         ]);
 
         $propertyType = PropertyType::findOrFail($id);
-        $propertyType->update($request->all());
+
+        if ($request->hasFile('icon')) {
+            if ($propertyType->icon && Storage::disk('public')->exists($propertyType->icon)) {
+                Storage::disk('public')->delete($propertyType->icon);
+            }
+
+            $iconPath = $request->file('icon')->store('icons', 'public');
+        } else {
+            $iconPath = $propertyType->icon;
+        }
+
+        $propertyType->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon_path' => $iconPath,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+        ]);
 
         return redirect()->route('property-types.index')->with('success', 'Property type updated successfully.');
     }

@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
                     'user_type' => $user['user_type'] ?? 'user',
                     'advertiser_number' => rand(10000, 99999),
                     'staff_number' => rand(10000, 99999),
-                    'bio' => 'Sou um utilizador ativo da plataforma.',
+                    'bio' => 'Sou um negro.',
                     'email_notifications' => true,
                     'message_notifications' => true,
                     'public_profile' => true,

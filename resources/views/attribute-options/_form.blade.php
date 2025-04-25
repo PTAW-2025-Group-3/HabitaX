@@ -1,4 +1,4 @@
-<form action="{{ $action }}" method="POST" class="bg-white p-6 rounded-lg shadow-md space-y-4">
+<form action="{{ $action }}" method="POST" class="bg-white p-6 rounded-lg shadow-md space-y-4" enctype="multipart/form-data">
     @csrf
     @if ($method !== 'POST')
         @method($method)
@@ -15,11 +15,9 @@
             @enderror
         </div>
         <div>
-            <label for="icon_url" class="block text-sm font-semibold text-primary">Ícone (URL)</label>
-            <input type="text" name="icon_url" id="icon_url" placeholder="Ex: https://example.com/icon.png"
-                   value="{{ old('icon_url', $option->icon_url ?? '') }}"
-                   class="form-input">
-            @error('icon_url')
+            <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
+            <input type="file" name="icon" id="icon" accept=".svg,.png,.jpg,.jpeg,.webp" class="form-input">
+            @error('icon')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>

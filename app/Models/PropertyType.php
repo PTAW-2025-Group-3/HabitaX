@@ -12,7 +12,7 @@ class PropertyType extends Model
     protected $fillable = [
         'name',
         'description',
-        'icon_url',
+        'icon_path',
         'is_active'
     ];
 

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
             $table->integer('advertiser_number')->nullable();
             $table->integer('staff_number')->nullable();
-            $table->enum('state', ['active', 'suspended', 'banned', 'archived'])->default('active')->after('user_type');
+            $table->enum('state', ['active', 'suspended', 'banned', 'archived'])->default('active');
         });
     }
 
@@ -39,6 +39,13 @@ return new class extends Migration
                 'message_notifications',
                 'public_profile',
                 'show_email',
+
+                'telephone',
+                'profile_photo_url',
+                'user_type',
+                'advertiser_number',
+                'staff_number',
+                'state',
             ]);
         });
     }

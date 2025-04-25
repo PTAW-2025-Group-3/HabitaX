@@ -37,6 +37,11 @@
                             </th>
                             <th class="p-4">
                                 <div class="flex items-center">
+                                    Icone
+                                </div>
+                            </th>
+                            <th class="p-4">
+                                <div class="flex items-center">
                                     Atributos
                                 </div>
                             </th>
@@ -52,6 +57,14 @@
                         @foreach ($propertyTypes as $propertyType)
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $propertyType->name }}</td>
+                                <td class="p-4">
+                                    @if ($propertyType->icon_path)
+                                        <img src="{{ Storage::url($propertyType->icon_path) }}" alt="{{ $propertyType->name }} Icon"
+                                             class="w-8 h-8 rounded-full">
+                                    @else
+                                        <span class="text-gray-500">Sem ícone</span>
+                                    @endif
+                                </td>
                                 <td class="p-4">
                                     @foreach ($propertyType->attributes as $attribute)
                                         <span

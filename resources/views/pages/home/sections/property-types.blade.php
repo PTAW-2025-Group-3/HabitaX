@@ -9,15 +9,13 @@
             @foreach ($propertyTypes as $type)
                 <a href="">
                     <div class="home-property-card-style p-4 md:p-6">
-                        {{-- Ícone --}}
+                        {{-- Icon --}}
                         <div class="home-icon-style mb-2 md:mb-3">
-                            @if(str_starts_with($type['icon'], 'bi'))
-                                <i class="{{ $type['icon'] }} text-3xl md:text-4xl lg:text-5xl"></i>
+                            @if ($type->icon_path)
+                                <img src="{{ Storage::url($type->icon_path) }}" alt="{{ $type->name }} Icon"
+                                     class="rounded-full">
                             @else
-                                @php
-                                    $svgPath = asset('icons/' . Str::after($type['icon'], 'svg-') . '.svg');
-                                @endphp
-                                <img src="{{ $svgPath }}" alt="{{ $type['name'] }}" class="w-8 md:w-10 lg:w-12">
+                                <span class="text-gray-500">Sem ícone</span>
                             @endif
                         </div>
 

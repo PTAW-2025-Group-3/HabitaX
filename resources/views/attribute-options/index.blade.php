@@ -39,8 +39,9 @@
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $option->name }}</td>
                                 <td class="p-4">
-                                    @if ($option->icon_url)
-                                        <img src="{{ $option->icon_url }}" alt="Ícone" class="h-6 w-6">
+                                    @if ($option->icon_path)
+                                        <img src="{{ Storage::url($option->icon_path) }}" alt="{{ $option->name }} Icon"
+                                             class="w-8 h-8 rounded-full">
                                     @else
                                         <span class="text-gray-500">Sem ícone</span>
                                     @endif
