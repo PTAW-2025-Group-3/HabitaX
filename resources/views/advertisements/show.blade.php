@@ -37,9 +37,11 @@
                     <span class="text-sm font-medium">Partilhar</span>
                 </button>
 
-                <button id="favoriteBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg transition-colors">
-                    <i class="bi bi-heart"></i>
-                    <span class="text-sm font-medium">Favoritos</span>
+                <button id="favoriteBtn"
+                        data-ad-id="{{ $ad->id }}"
+                        class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
+                    <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                    <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
                 </button>
 
                 <button id="reportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
@@ -136,18 +138,131 @@
 @endsection
 @include('advertisements.individual.modals.denunciation', ['denunciationReasons' => $denunciationReasons, 'adId' => $ad->id])
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const reportBtn = document.getElementById('reportBtn');
-        if (reportBtn) {
-            reportBtn.addEventListener('click', function() {
-                if (typeof openReportModal === 'function') {
-                    openReportModal();
-                } else {
-                    console.error('openReportModal function not found');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Report button handler
+            const reportBtn = document.getElementById('reportBtn');
+            if (reportBtn) {
+                reportBtn.addEventListener('click', function() {
+                    if (typeof openReportModal === 'function') {
+                        openReportModal();
+                    } else {
+                        console.error('openReportModal function not found');
+                    }
+                });
+            }
+
+            // Toast notification function
+            function showToast(message, type = 'info') {
+                // Create toast container if it doesn't exist
+                let toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) {
+                    toastContainer = document.createElement('div');
+                    toastContainer.id = 'toast-container';
+                    toastContainer.className = 'fixed bottom-4 right-4 z-50 flex flex-col gap-2';
+                    document.body.appendChild(toastContainer);
                 }
-            });
-        }
-    });
-</script>
+
+                // Create toast
+                const toast = document.createElement('div');
+                toast.className = `py-2 px-4 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in max-w-xs text-sm font-medium`;
+
+                // Set color based on type
+                switch(type) {
+                    case 'success':
+                        toast.classList.add('bg-green-50', 'text-green-800', 'border-l-4', 'border-green-500');
+                        toast.innerHTML = `<i class="bi bi-check-circle-fill text-green-500"></i> ${message}`;
+                        break;
+                    case 'error':
+                        toast.classList.add('bg-red-50', 'text-red-800', 'border-l-4', 'border-red-500');
+                        toast.innerHTML = `<i class="bi bi-x-circle-fill text-red-500"></i> ${message}`;
+                        break;
+                    default:
+                        toast.classList.add('bg-blue-50', 'text-blue-800', 'border-l-4', 'border-blue-500');
+                        toast.innerHTML = `<i class="bi bi-info-circle-fill text-blue-500"></i> ${message}`;
+                }
+
+                // Add to container
+                toastContainer.appendChild(toast);
+
+                // Remove after delay
+                setTimeout(() => {
+                    toast.classList.add('animate-fade-out');
+                    setTimeout(() => {
+                        toast.remove();
+                        if (toastContainer.children.length === 0) {
+                            toastContainer.remove();
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            // Favorite button handler
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            if (favoriteBtn) {
+                favoriteBtn.addEventListener('click', function() {
+                    @auth
+                    const adId = this.dataset.adId;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    // Store button elements and current state
+                    const heartIcon = this.querySelector('i');
+                    const buttonText = this.querySelector('span');
+                    const isCurrentlyFavorite = heartIcon.classList.contains('bi-heart-fill');
+
+                    // Animate heart immediately
+                    if (!isCurrentlyFavorite) {
+                        heartIcon.classList.replace('bi-heart', 'bi-heart-fill');
+                        this.classList.replace('bg-rose-50', 'bg-rose-100');
+                        buttonText.textContent = 'Adicionado';
+                        showToast('Anúncio adicionado aos favoritos!', 'success');
+                    } else {
+                        heartIcon.classList.replace('bi-heart-fill', 'bi-heart');
+                        this.classList.replace('bg-rose-100', 'bg-rose-50');
+                        buttonText.textContent = 'Favoritos';
+                        showToast('Anúncio removido dos favoritos', 'info');
+                    }
+
+                    // Use FormData instead of JSON
+                    const formData = new FormData();
+                    formData.append('_token', csrfToken);
+
+                    fetch(`/advertisements/${adId}/favorite`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData,
+                        credentials: 'same-origin'
+                    })
+                        .then(response => {
+                            console.log('Response status:', response.status);
+                            // Just handle based on status code, don't try to parse JSON
+                            if (response.ok) {
+                                console.log('Favorite toggled successfully');
+                            } else {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Only revert UI changes on error
+                            if (isCurrentlyFavorite) {
+                                heartIcon.classList.replace('bi-heart', 'bi-heart-fill');
+                                this.classList.replace('bg-rose-50', 'bg-rose-100');
+                                buttonText.textContent = 'Adicionado';
+                            } else {
+                                heartIcon.classList.replace('bi-heart-fill', 'bi-heart');
+                                this.classList.replace('bg-rose-100', 'bg-rose-50');
+                                buttonText.textContent = 'Favoritos';
+                            }
+                            showToast('Ocorreu um erro. Tente novamente.', 'error');
+                        });
+                    @else
+                        window.location.href = "{{ route('login') }}?redirect={{ url()->current() }}";
+                    @endauth
+                });
+            }
+        });
+    </script>
 @endpush

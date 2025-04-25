@@ -72,15 +72,13 @@ class AdvertisementController extends Controller
     {
         $user = auth()->user();
         $favorites = FavoriteAdvertisement::where('user_id', $user->id)
-            ->with(['advertisement.property'])
+            ->with('advertisement.property.parish.municipality')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($favorite) {
-                return $favorite->advertisement;
-            });
+            ->get();
 
         return view('advertisements.favorites', compact('favorites'));
     }
+
 
     public function show($id)
     {

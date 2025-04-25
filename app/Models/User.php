@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Advertisement::class, 'created_by');
     }
 
+    public function favoriteAdvertisements()
+    {
+        return $this->hasMany(FavoriteAdvertisement::class);
+    }
+
     public function isAdmin()
     {
         return $this->user_type === 'admin';

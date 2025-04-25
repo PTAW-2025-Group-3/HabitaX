@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\DenunciationController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
@@ -48,6 +49,12 @@ Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->na
 
 Route::middleware('auth')->group(function () {
     Route::post('/denunciations', [DenunciationController::class, 'store'])->name('denunciations.store');
+
+    // Favorites routes
+    Route::post('/advertisements/{advertisement}/favorite', [FavoriteController::class, 'toggle'])
+        ->name('advertisements.favorite.toggle');
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 });
 
 // Property Routes

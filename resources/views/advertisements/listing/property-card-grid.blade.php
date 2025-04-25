@@ -20,8 +20,14 @@
                         </div>
                         {{-- Favorito e Share --}}
                         <div class="flex space-x-1 ">
-                            <button class="text-gray-500 hover:text-red-500 transition-colors h-10 w-10 rounded-full hover:bg-gray-100">
-                                <i class="bi bi-heart "></i>
+                            @php
+                                $isFavorite = auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id);
+                            @endphp
+
+                            <button
+                                data-ad-id="{{ $ad->id }}"
+                                class="favorite-btn transition-colors h-10 w-10 rounded-full hover:bg-gray-100 {{ $isFavorite ? 'text-red-500' : 'text-gray-500' }}">
+                                <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                             </button>
                             <button class="text-gray-500 hover:text-gray-900 transition-colors h-10 w-10 rounded-full hover:bg-gray-100">
                                 <i class="bi bi-share"></i>
@@ -48,8 +54,63 @@
         </div>
     </a>
 </div>
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
 
+            favoriteButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
+                    @auth
+                    const adId = this.dataset.adId;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const heartIcon = this.querySelector('i');
 
+                    // Evita cliques repetidos rápidos
+                    if (this.dataset.loading === 'true') return;
+                    this.dataset.loading = 'true';
 
+                    fetch(`/advertisements/${adId}/favorite`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    })
+                        .then(response => {
+                            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success && heartIcon) {
+                                if (data.isFavorite) {
+                                    heartIcon.classList.replace('bi-heart', 'bi-heart-fill');
+                                    this.classList.remove('text-gray-500');
+                                    this.classList.add('text-red-500');
+                                } else {
+                                    heartIcon.classList.replace('bi-heart-fill', 'bi-heart');
+                                    this.classList.remove('text-red-500');
+                                    this.classList.add('text-gray-500');
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao atualizar favorito:', error);
+                        })
+                        .finally(() => {
+                            this.dataset.loading = 'false';
+                        });
+                    @else
+                        window.location.href = "{{ route('login') }}?redirect={{ url()->current() }}";
+                    @endauth
+                });
+            });
+        });
+    </script>
+@endpush
 
