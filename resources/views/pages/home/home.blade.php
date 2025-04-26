@@ -15,6 +15,7 @@
 
   {{-- Client Testimonials --}}
   @include('pages.home.sections.client-testimonials', ['propertyTypes' => $propertyTypes])
+
   {{-- District Listing --}}
   @include('pages.home.sections.district-listing')
 

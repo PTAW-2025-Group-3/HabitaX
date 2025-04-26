@@ -33,18 +33,15 @@
     {{--  icon  --}}
     <div>
         <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
-        @if (isset($propertyType) && $propertyType->icon_path)
-            <div class="mt-2">
-                <img id="icon-preview" src="{{ Storage::url($propertyType->icon_path) }}" alt="{{ $propertyType->name }} Icon"
-                     class="w-8 h-8 md:w-10 md:h-10 rounded-full">
-            </div>
-        @else
-            <div class="mt-2">
-                <img id="icon-preview" src="#" alt="Preview" class="w-8 h-8 md:w-10 md:h-10 rounded-full hidden">
-            </div>
-        @endif
-        <input type="file" name="icon" id="icon" accept=".svg,.png,.jpg,.jpeg,.webp"
-               class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+        <div class="w-1/2 mt-1">
+            <input
+                type="file"
+                class="filepond"
+                name="icon"
+                id="icon"
+                accept="image/png, image/svg+xml"
+            />
+        </div>
     </div>
     {{-- Validation Errors --}}
     @if ($errors->any())
@@ -59,48 +56,21 @@
 
     <div class="pt-4">
         <button
-            type="submit" id="submit-button" disabled
+            type="submit" id="submit-button"
             class="btn-primary px-4 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             Submeter
         </button>
     </div>
 </form>
 
-{{--  gerir estado da botão de submissão  --}}
-<script>
-    $(document).ready(function () {
-        // ativar ou desativar o botão de submissão
-        const initial = @json($propertyType ?? []);
-        const nome = document.getElementById('name');
-        const description = document.getElementById('description');
-        const isActive = document.getElementById('is_active');
-        const iconInput = document.getElementById('icon');
-        const iconPreview = document.getElementById('icon-preview');
-        const submitButton = document.getElementById('submit-button');
-
-        function updateButtonState() {
-            const nameChanged = nome.value.trim() !== initial.name;
-            const descriptionChanged = description.value.trim() !== initial.description;
-            const isActiveChanged = isActive.checked !== initial.is_active;
-            const iconChanged = iconInput.files.length > 0;
-
-            submitButton.disabled = !nameChanged && !descriptionChanged && !isActiveChanged && !iconChanged;
-        }
-
-        nome.addEventListener('input', updateButtonState);
-        description.addEventListener('input', updateButtonState);
-        isActive.addEventListener('change', updateButtonState);
-        iconInput.addEventListener('change', updateButtonState);
-        iconInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    iconPreview.src = e.target.result;
-                    iconPreview.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // FilePond.create(document.querySelector('input[type="file"]'), {
+            //     imageEditorAfterWriteImage: (res) => {
+            //         return res.dest;
+            //     },
+            // });
         });
-    });
-</script>
+    </script>
+@endpush

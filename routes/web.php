@@ -5,6 +5,7 @@ use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\DenunciationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
@@ -55,6 +56,9 @@ Route::middleware('auth')->group(function () {
         ->name('advertisements.favorite.toggle');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+    // File Upload
+    Route::post('uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
 });
 
 // Property Routes

@@ -28,8 +28,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN rm -f public/hot
 
 RUN composer install --optimize-autoloader --no-dev
-RUN npm install
-RUN npm run build
 
 # === Stage 2: Runtime
 FROM php:8.3-fpm-alpine
@@ -47,12 +45,6 @@ RUN apk add --no-cache \
 
 COPY .env.production /var/www/.env
 COPY --from=build /var/www /var/www
-
-
-# Laravel config cache
-RUN php artisan config:clear && php artisan config:cache
-RUN php artisan route:clear && php artisan route:cache
-RUN php artisan view:clear && php artisan view:cache
 
 EXPOSE 9000
 

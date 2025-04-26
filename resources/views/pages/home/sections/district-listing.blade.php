@@ -22,20 +22,22 @@
       <div id="district-content" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6 text-xs md:text-sm text-gray-secondary font-medium">
         {{-- Dynamic content here --}}
       </div>
-
     </div>
-  </section>
+</section>
 
-  {{-- Add this CSS for mobile scrolling --}}
-  <style>
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+{{-- Add this CSS for mobile scrolling --}}
+@push('styles')
+    <style>
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+@endpush
 
-  {{-- Load Script --}}
-  <script src="{{ asset('js/pages/home/districtListing.js') }}"></script>
+@push('scripts')
+    <script type="module" src="{{ asset('js/pages/home/districtListing.js') }}"></script>
+@endpush
