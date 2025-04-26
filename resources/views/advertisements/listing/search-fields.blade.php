@@ -6,7 +6,7 @@
                 Tipo de Imóvel
             </label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="type" id="property-type" class="p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="type" id="property-type" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Todos</option>
                     @foreach($propertyTypes as $type)
                         <option value="{{ $type->id }}" {{ $selectedType == $type->id ? 'selected' : '' }}>
@@ -22,9 +22,10 @@
 
         {{-- Distrito --}}
         <div class="w-full md:w-1/4">
-            <label for="districtSelect" class="block text-gray-secondary font-semibold mb-2">Distrito</label>
+            <label for="districtSelect"
+                   class="block text-gray-secondary font-semibold mb-2">Distrito</label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="district" id="districtSelect" class="p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="district" id="districtSelect" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Distrito</option>
                     @foreach($districts as $district)
                         <option value="{{ $district->id }}"
@@ -42,9 +43,9 @@
 
         {{-- Concelho --}}
         <div class="w-full md:w-1/4">
-            <label for="municipalitySelect" class="block text-gray-secondary font-semibold mb-2">Concelho</label>
+            <label for="municipalitySelect" class=" block text-gray-secondary font-semibold mb-2">Concelho</label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="municipality" id="municipalitySelect" class="p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="municipality" id="municipalitySelect" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Concelho</option>
                     @if($selectedDistrict)
                         @foreach($districts->find($selectedDistrict)?->municipalities ?? [] as $municipality)
@@ -64,9 +65,10 @@
 
         {{-- Freguesia --}}
         <div class="w-full md:w-1/4">
-            <label for="parishSelect" class="block text-gray-secondary font-semibold mb-2">Freguesia</label>
+            <label for="parishSelect"
+                   class="special-chevron block text-gray-secondary font-semibold mb-2">Freguesia</label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="parish" id="parishSelect" class="p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="parish" id="parishSelect" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Freguesia</option>
                     @if($selectedMunicipality)
                         @foreach(\App\Models\Parish::where('municipality_id', $selectedMunicipality)->get() as $parish)
@@ -92,6 +94,35 @@
         </div>
     </div>
 </form>
+
+<script>
+    // Código específico para o chevron (ícone)
+    document.addEventListener('DOMContentLoaded', function () {
+        const selects = document.querySelectorAll('.special-chevron');
+
+        selects.forEach(chevron => {
+            const wrapper = chevron.parentElement; // div.dropdown-wrapper
+            const icon = wrapper.querySelector('i');
+            let isOpen = false;
+
+            chevron.addEventListener('click', (e) => {
+                e.stopPropagation(); // impedir que propague o click para o document
+                isOpen = !isOpen;
+
+                icon.classList.remove('bi-chevron-right', 'bi-dash');
+                icon.classList.add(isOpen ? 'bi-dash' : 'bi-chevron-right');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target) && isOpen) {
+                    isOpen = false;
+                    icon.classList.remove('bi-dash');
+                    icon.classList.add('bi-chevron-right');
+                }
+            });
+        });
+    });
+</script>
 
 {{-- JavaScript para lógica dinâmica --}}
 <script>
@@ -126,26 +157,6 @@
                 opt.value = p.id;
                 opt.text = p.name;
                 parishSelect.appendChild(opt);
-            });
-        });
-
-        // Chevrons animação
-        document.querySelectorAll('select').forEach(select => {
-            const icon = select.parentElement.querySelector('i');
-            select.addEventListener('click', () => {
-                icon.classList.toggle('bi-dash');
-                icon.classList.toggle('bi-chevron-right');
-            });
-        });
-
-        // Reset chevrons ao clicar fora
-        document.addEventListener('click', function (e) {
-            document.querySelectorAll('select').forEach(select => {
-                if (!select.contains(e.target)) {
-                    const icon = select.parentElement.querySelector('i');
-                    icon.classList.remove('bi-dash');
-                    icon.classList.add('bi-chevron-right');
-                }
             });
         });
     });
