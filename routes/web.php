@@ -133,6 +133,10 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     // Distritos, Municípios e Freguesias
 });
 
+// This route should be accessible to guests for contact request
+Route::post('/contact-requests', [ContactRequestController::class, 'store'])
+    ->name('contact-requests.store');
+
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -149,8 +153,10 @@ Route::middleware('auth')->group(function () {
         return view('account.advertiser-verification');
     })->name('advertiser-verification');
 
-    Route::get('/contact-requests', [ContactRequestController::class, 'index'])->name('contact-requests.index');
-
+    Route::get('/contact-requests', [ContactRequestController::class, 'index'])
+            ->name('contact-requests.index');
+    Route::patch('/contact-requests/{contactRequest}/status', [ContactRequestController::class, 'updateStatus'])
+            ->name('contact-requests.update-status');
 });
 
 // Auth (login, logout, etc.)

@@ -22,4 +22,59 @@ class ContactRequestController extends Controller
         return view('contact-requests.index', compact('messages', 'ads'));
 //        return view('account.contact-requests', compact('messages')); // reservado para comparar com a versão inicial
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'advertisement_id' => 'required|exists:advertisements,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'telephone' => 'required|string|min:9',
+            'message' => 'required|string|min:10',
+        ]);
+
+        $contactRequest = ContactRequest::create([
+            'advertisement_id' => $validated['advertisement_id'],
+            'created_by' => auth()->check() ? auth()->id() : null,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'telephone' => $validated['telephone'],
+            'message' => $validated['message'],
+            'state' => 'unread',
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pedido de contacto enviado com sucesso!',
+                'data' => $contactRequest,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'O seu pedido de contacto foi enviado com sucesso!');
+    }
+
+    public function updateStatus(Request $request, ContactRequest $contactRequest)
+    {
+        // Verificar se o utilizador autenticado é dono do anúncio relacionado
+        if ($contactRequest->advertisement->created_by !== auth()->id()) {
+            abort(403, 'Não autorizado.');
+        }
+
+        // Validar o novo estado
+        $validated = $request->validate([
+            'state' => 'required|in:unread,read,archived',
+        ]);
+
+        // Atualizar o estado
+        $contactRequest->state = $validated['state'];
+        $contactRequest->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Estado do pedido atualizado com sucesso',
+            'data' => $contactRequest
+        ]);
+    }
+
 }

@@ -1,7 +1,9 @@
 <div class="bg-gradient-to-tr bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
     <div class="flex items-center justify-between border-b border-indigo-100 pb-4">
         <h3 class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
-            <i class="bi bi-person-lines-fill text-secondary text-2xl"></i>
+            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
             Contactar o Anunciante
         </h3>
         <span class="bg-indigo-100 text-secondary text-xs md:text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
@@ -9,27 +11,149 @@
         </span>
     </div>
 
-    <form class="space-y-4 text-sm md:text-base">
+    <div id="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center {{ session('success') ? '' : 'hidden' }}">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ session('success') ?? 'O seu pedido de contacto foi enviado com sucesso!' }}</span>
+    </div>
+
+    <form method="POST" action="{{ route('contact-requests.store') }}" id="contactForm" class="space-y-4 text-sm md:text-base">
+        @csrf
+        <input type="hidden" name="advertisement_id" value="{{ $ad->id }}">
+
         <div>
-            <label class="block text-gray-600 text-xs md:text-sm mb-1">O seu email</label>
-            <input type="email" class="form-input" placeholder="exemplo@email.com">
+            <label for="name" class="block text-gray-600 text-xs md:text-sm mb-1">O seu nome</label>
+            <input type="text" id="name" name="name" class="form-input @error('name') border-red-300 @enderror"
+                   placeholder="O seu nome" value="{{ auth()->user()?->name ?? old('name') }}" required>
+            @error('name')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
+
         <div>
-            <label class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
-            <input type="tel" class="form-input" placeholder="+351...">
+            <label for="email" class="block text-gray-600 text-xs md:text-sm mb-1">O seu email</label>
+            <input type="email" id="email" name="email" class="form-input @error('email') border-red-300 @enderror"
+                   placeholder="exemplo@email.com" value="{{ auth()->user()?->email ?? old('email') }}" required>
+            @error('email')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
+
         <div>
-            <label class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
-            <textarea class="form-input" rows="4" placeholder="Estou interessado neste imóvel..."></textarea>
+            <label for="telephone" class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
+            <input type="tel" id="telephone" name="telephone" class="form-input @error('telephone') border-red-300 @enderror"
+                   placeholder="+351..." value="{{ old('telephone') }}" required>
+            @error('telephone')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
-        <button type="submit" class="btn-secondary w-full py-3">
-            <i class="bi bi-send-fill mr-2"></i> Enviar Contacto
+
+        <div>
+            <label for="message" class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
+            <textarea id="message" name="message" class="form-input @error('message') border-red-300 @enderror"
+                      rows="4" placeholder="Estou interessado neste imóvel..." required>{{ old('message') }}</textarea>
+            @error('message')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-secondary w-full py-3 flex items-center justify-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            <span id="submitBtnText">Enviar Contacto</span>
         </button>
     </form>
 
     <div class="text-center">
-        <a href="#" class="text-sm text-blue-600 font-medium hover:underline">
-            <i class="bi bi-telephone-fill mr-1"></i> Ver número de telefone
+        <a href="#" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Ver número de telefone
         </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = document.getElementById('submitBtnText');
+        const successMessage = document.getElementById('successMessage');
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Prevent default submission to handle with ajax
+                e.preventDefault();
+
+                // Change button text and add loading state
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75');
+                submitBtnText.textContent = 'A enviar...';
+
+                // Submit the form with fetch
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        // Parse the JSON response regardless of status code
+                        return response.json().then(data => {
+                            if (response.ok) {
+                                return data;
+                            } else {
+                                // If response is not ok, throw the data which contains validation errors
+                                throw data;
+                            }
+                        });
+                    })
+                    .then(data => {
+                        // Success handling
+                        successMessage.classList.remove('hidden');
+                        form.reset();
+
+                        // Keep email if user is logged in
+                        const userEmail = "{{ auth()->user()?->email ?? '' }}";
+                        if (userEmail) {
+                            document.getElementById('email').value = userEmail;
+                        }
+
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    })
+                    .catch(errors => {
+                        console.error('Error:', errors);
+                        // Clear previous error messages
+                        document.querySelectorAll('.text-red-500').forEach(el => el.remove());
+
+                        // Display validation errors if they exist
+                        if (errors.errors) {
+                            Object.keys(errors.errors).forEach(field => {
+                                const input = form.querySelector(`[name="${field}"]`);
+                                if (input) {
+                                    input.classList.add('border-red-300');
+                                    const errorMsg = document.createElement('p');
+                                    errorMsg.className = 'text-red-500 text-xs mt-1';
+                                    errorMsg.textContent = errors.errors[field][0];
+                                    input.parentNode.appendChild(errorMsg);
+                                }
+                            });
+                        }
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-75');
+                        submitBtnText.textContent = 'Enviar Contacto';
+                    });
+            });
+        }
+    });
+</script>
