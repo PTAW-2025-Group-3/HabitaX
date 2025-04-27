@@ -1,4 +1,32 @@
 <form method="GET" action="{{ route('advertisements.index') }}">
+
+{{--    Toggle Buttons--}}
+    <div class="relative w-full max-w-md mx-auto mb-8">
+        <div class="flex bg-gray-300 rounded-2xl relative overflow-hidden">
+                <!-- Slider Azul -->
+            <div
+                id="slider"
+                class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-all duration-300 z-0"
+            ></div>
+
+            <!-- Botões -->
+            <div
+               id="btn-comprar"
+               class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+            >
+                Comprar
+            </div>
+            <div
+               id="btn-arrendar"
+               class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+            >
+                Arrendar
+            </div>
+        </div>
+    </div>
+{{--    Separador --}}
+    <div class="w-full h-px bg-gray-400 mb-6"></div>
+
     <div class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
         {{-- Tipo de Imóvel --}}
         <div class="w-full md:w-1/4">
@@ -161,3 +189,51 @@
         });
     });
 </script>
+
+{{--Toggle Buttons JavaScript--}}
+<script>
+    const btnComprar = document.getElementById("btn-comprar");
+    const btnArrendar = document.getElementById("btn-arrendar");
+    const slider = document.getElementById("slider");
+
+    let selected = null; // Controla o botão atualmente ativo
+
+    btnComprar.addEventListener("click", () => {
+        if (selected === "comprar") {
+            // Se já estava selecionado, deseleciona
+            selected = null;
+            slider.style.display = "none";
+            btnComprar.classList.remove("text-white", "font-semibold");
+            btnComprar.classList.add("text-gray-800");
+        } else {
+            selected = "comprar";
+            slider.style.display = "block";
+            slider.style.left = "0%";
+            btnComprar.classList.add("text-white", "font-semibold");
+            btnComprar.classList.remove("text-gray-800");
+            btnArrendar.classList.remove("text-white", "font-semibold");
+            btnArrendar.classList.add("text-gray-800");
+        }
+    });
+
+    btnArrendar.addEventListener("click", () => {
+        if (selected === "arrendar") {
+            selected = null;
+            slider.style.display = "none";
+            btnArrendar.classList.remove("text-white", "font-semibold");
+            btnArrendar.classList.add("text-gray-800");
+        } else {
+            selected = "arrendar";
+            slider.style.display = "block";
+            slider.style.left = "50%";
+            btnArrendar.classList.add("text-white", "font-semibold");
+            btnArrendar.classList.remove("text-gray-800");
+            btnComprar.classList.remove("text-white", "font-semibold");
+            btnComprar.classList.add("text-gray-800");
+        }
+    });
+
+    // Inicialmente sem seleção
+    slider.style.display = "none";
+</script>
+

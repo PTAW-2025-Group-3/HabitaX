@@ -25,7 +25,7 @@
                 $testemunhos = [
                   [
                     ['nome' => 'John Doe I', 'imagem' => 'images/clien1.jpg', 'profissao' => 'Arquiteto', 'mensagem' => 'O HabitaX ajudou-me a arrendar o apartamento rapidamente. Em menos de uma semana já tinha interessados. Recomendo pela segurança e facilidade.'],
-                    ['nome' => 'John Doe II', 'imagem' => 'images/client2.jpg', 'profissao' => 'Professor Assistente', 'mensagem' => 'Encontrei exatamente o que procurava para o meu estúdio. A plataforma é rápida e o proprietário respondeu de imediato!']
+                    ['nome' => 'John Doe II', 'imagem' => 'images/client2.jpg', 'profissao' => 'Professor Assistente', 'mensagem' => 'Encontrei exatamente o que procurava para o meu estúdio de tatuagem. A plataforma é rápida e o proprietário respondeu de imediato!']
                   ],
                   [
                     ['nome' => 'Jane Doe', 'imagem' => 'images/client3.jpg', 'profissao' => 'Freelancer', 'mensagem' => 'I found a perfect place in Lisbon. HabitaX makes things really easy!'],
@@ -39,7 +39,7 @@
                     <div id="testimonial-group-{{ $index + 1 }}"
                          class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-4xl {{ $index !== 0 ? 'hidden' : '' }}">
                         @foreach ($grupo as $cliente)
-                            <div class="bg-gray-50 border border-indigo-200 rounded-lg p-4 sm:p-6 shadow hover:shadow-lg transition">
+                            <div class="bg-gray-50 border border-indigo-200 rounded-lg p-4 h-72 sm:p-6 shadow hover:shadow-lg transition flex items-center justify-center flex-col">
                                 <img src="{{ asset($cliente['imagem']) }}" alt="{{ $cliente['nome'] }}"
                                      class="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-3 sm:mb-4 border-2 border-secondary" />
                                 <h4 class="text-base sm:text-lg font-semibold text-gray-800">{{ $cliente['nome'] }}</h4>

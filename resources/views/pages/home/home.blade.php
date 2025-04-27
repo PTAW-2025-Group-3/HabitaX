@@ -14,8 +14,7 @@
   @include('pages.home.sections.property-types', ['propertyTypes' => $propertyTypes])
 
   {{-- Client Testimonials --}}
-  @include('pages.home.sections.client-testimonials', ['propertyTypes' => $propertyTypes])
+  @include('pages.home.sections.client-testimonials')
   {{-- District Listing --}}
-  @include('pages.home.sections.district-listing')
-
+  @include('pages.home.sections.district-listing', ['adsPerDistrict' => $adsPerDistrict])
 @endsection
