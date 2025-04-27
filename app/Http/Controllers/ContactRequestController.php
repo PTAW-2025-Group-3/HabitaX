@@ -10,17 +10,42 @@ class ContactRequestController extends Controller
 {
     public function index(Request $request)
     {
-        $ads = Advertisement::where('created_by', auth()->user()->id)
-            ->whereHas('requests')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $messages = ContactRequest::whereHas('advertisement', function ($query) {
-                $query->where('created_by', auth()->user()->id);
+        // Check if user has any advertisements (is an advertiser)
+        $isAdvertiser = Advertisement::where('created_by', auth()->id())->exists();
+
+        // Default to 'sent' for non-advertisers, otherwise use the request parameter
+        $requestType = $isAdvertiser ? $request->get('type', 'received') : 'sent';
+
+        if ($requestType === 'received') {
+            // Anúncios para filtro (para pedidos recebidos)
+            $ads = Advertisement::where('created_by', auth()->user()->id)
+                ->whereHas('requests')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Pedidos recebidos (para anúncios do utilizador)
+            $messages = ContactRequest::with('user')
+                ->whereHas('advertisement', function ($query) {
+                    $query->where('created_by', auth()->user()->id);
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            // Anúncios para filtro (anúncios aos quais o utilizador enviou mensagens)
+            $ads = Advertisement::whereHas('requests', function($query) {
+                $query->where('created_by', auth()->id());
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        return view('contact-requests.index', compact('messages', 'ads'));
-//        return view('account.contact-requests', compact('messages')); // reservado para comparar com a versão inicial
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Pedidos enviados pelo utilizador
+            $messages = ContactRequest::with(['advertisement.user'])
+                ->where('created_by', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        }
+
+        return view('contact-requests.index', compact('messages', 'ads', 'requestType', 'isAdvertiser'));
     }
 
     public function store(Request $request)

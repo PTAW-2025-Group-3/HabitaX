@@ -39,4 +39,8 @@ class Advertisement extends Model
     {
         return $this->hasMany(ContactRequest::class, 'advertisement_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
