@@ -55,7 +55,7 @@ const fakeData = {
     ]
   }
 };
-  
+
   function renderDistricts(type = 'comprar', category = 'moradias') {
     const items = fakeData[type][category];
     const html = items.map(item => `
@@ -65,11 +65,11 @@ const fakeData = {
     `).join('');
     $('#district-content').html(html);
   }
-  
+
   $(document).ready(function () {
     // Initial Render
     renderDistricts();
-  
+
     // Top Tab Switch
     $('.top-tab').click(function () {
       $('.top-tab').removeClass('active border-indigo-500 text-indigo-600').addClass('text-gray-700');
@@ -78,7 +78,7 @@ const fakeData = {
       const category = $('.second-tab.active').data('category') || 'moradias';
       renderDistricts(type, category);
     });
-  
+
     // Second Tab Switch
     $('.second-tab').click(function () {
       $('.second-tab').removeClass('bg-indigo-100 text-indigo-700 active').addClass('bg-white');
@@ -87,8 +87,7 @@ const fakeData = {
       const type = $('.top-tab.text-indigo-600').data('type') || 'comprar';
       renderDistricts(type, category);
     });
-  
+
     // Default Select
     $('.second-tab[data-category="moradias"]').addClass('active bg-indigo-100 text-indigo-700');
   });
-  

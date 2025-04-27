@@ -5,46 +5,62 @@
     @endisset
 
     {{--  name  --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+    <div class="flex flex-col">
+        <div class="mb-4">
             <label for="name" class="block text-sm font-semibold text-primary">Nome</label>
             <input type="text" name="name" id="name" placeholder="Ex: Moradia"
                    value="{{ old('name', $propertyType->name ?? '') }}"
                    class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
         </div>
+        @error('name')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--   description   --}}
-    <div>
-        <label for="description" class="block text-sm font-semibold text-primary">Descrição</label>
-        <textarea name="description" id="description" placeholder="Ex: Unidade habitacional destinada a habitação."
-                  class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">{{ old('description', $propertyType->description ?? '') }}</textarea>
+    <div class="flex flex-col">
+        <div class="mb-4">
+            <label for="description" class="block text-sm font-semibold text-primary">Descrição</label>
+            <textarea name="description" id="description" placeholder="Ex: Unidade habitacional destinada a habitação."
+                      class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">{{ old('description', $propertyType->description ?? '') }}</textarea>
+        </div>
+        @error('description')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--  is_active  --}}
-    <div class="flex items-center">
-        <input type="hidden" name="is_active" value="0">
-        <input type="checkbox" name="is_active" id="is_active" value="1"
-               {{ old('is_active', $propertyType->is_active ?? false) ? 'checked' : '' }}
-               class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
-        <label for="is_active" class="ml-2 block text-sm font-semibold text-primary">Ativo</label>
+    <div class="flex flex-col">
+        <div class="flex items-center mb-4">
+            <input type="hidden" name="is_active" value="0">
+            <input type="checkbox" name="is_active" id="is_active" value="1"
+                   {{ old('is_active', $propertyType->is_active ?? false) ? 'checked' : '' }}
+                   class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+            <label for="is_active" class="ml-2 block text-sm font-semibold text-primary">Ativo</label>
+        </div>
+        @error('is_active')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--  icon  --}}
-    <div>
+    <div class="flex flex-col">
         <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
-        @if (isset($propertyType) && $propertyType->icon_path)
-            <div class="mt-2">
-                <img id="icon-preview" src="{{ Storage::url($propertyType->icon_path) }}" alt="{{ $propertyType->name }} Icon"
-                     class="w-8 h-8 md:w-10 md:h-10 rounded-full">
-            </div>
-        @else
-            <div class="mt-2">
-                <img id="icon-preview" src="#" alt="Preview" class="w-8 h-8 md:w-10 md:h-10 rounded-full hidden">
-            </div>
-        @endif
-        <input type="file" name="icon" id="icon" accept=".svg,.png,.jpg,.jpeg,.webp"
-               class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
+        <div class="mt-1 w-1/2">
+            <input
+                type="file"
+                class="filepond"
+                name="icon"
+                id="icon"
+                accept="image/png, image/svg+xml, image/webp"
+            />
+        </div>
     </div>
     {{-- Validation Errors --}}
     @if ($errors->any())
@@ -59,48 +75,38 @@
 
     <div class="pt-4">
         <button
-            type="submit" id="submit-button" disabled
+            type="submit" id="submit-button"
             class="btn-primary px-4 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             Submeter
         </button>
     </div>
 </form>
 
-{{--  gerir estado da botão de submissão  --}}
-<script>
-    $(document).ready(function () {
-        // ativar ou desativar o botão de submissão
-        const initial = @json($propertyType ?? []);
-        const nome = document.getElementById('name');
-        const description = document.getElementById('description');
-        const isActive = document.getElementById('is_active');
-        const iconInput = document.getElementById('icon');
-        const iconPreview = document.getElementById('icon-preview');
-        const submitButton = document.getElementById('submit-button');
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const existingImage = {!! $propertyType->icon_path ? json_encode(Storage::url($propertyType->icon_path)) : 'null' !!};
 
-        function updateButtonState() {
-            const nameChanged = nome.value.trim() !== initial.name;
-            const descriptionChanged = description.value.trim() !== initial.description;
-            const isActiveChanged = isActive.checked !== initial.is_active;
-            const iconChanged = iconInput.files.length > 0;
+            const pondOptions = {
+                //
+            };
 
-            submitButton.disabled = !nameChanged && !descriptionChanged && !isActiveChanged && !iconChanged;
-        }
-
-        nome.addEventListener('input', updateButtonState);
-        description.addEventListener('input', updateButtonState);
-        isActive.addEventListener('change', updateButtonState);
-        iconInput.addEventListener('change', updateButtonState);
-        iconInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    iconPreview.src = e.target.result;
-                    iconPreview.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+            if (existingImage) {
+                pondOptions.files = [
+                    {
+                        source: existingImage,
+                        options: {
+                            type: 'local',
+                            file: {},
+                            metadata: {
+                                poster: existingImage
+                            }
+                        }
+                    }
+                ];
             }
+
+            FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
-    });
-</script>
+    </script>
+@endpush

@@ -11,7 +11,8 @@
             O teu Espaço, <span class="text-gray-300 font-light">a tua Escolha</span>
         </h2>
 
-        <form action="{{ route('advertisements.index') }}" method="GET" class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-2 lg:gap-4 items-center">
+        <form action="{{ route('advertisements.index') }}" method="GET"
+              class="flex flex-col sm:flex-row flex-wrap sm:flex-nowrap justify-center gap-3 md:gap-2 lg:gap-4 items-center">
             {{-- Property Type Toggle --}}
             <div class="flex gap-0.5 w-full sm:w-auto">
                 <button type="button" id="buyBtn"

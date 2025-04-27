@@ -45,6 +45,15 @@
         {{--   Dynamic attributes will be loaded here   --}}
     </div>
 
+    <div id="images" class="mb-8 border w-full border-gray-200 rounded-xl p-8 bg-white shadow-xl animate-fade-in">
+        <input
+            type="file"
+            class="filepond"
+            name="images"
+            id="images"
+        />
+    </div>
+
     <div class="flex justify-end">
         <button type="submit" class="btn-secondary px-6 py-2 rounded-md">
             {{ $buttonText }}
@@ -81,6 +90,31 @@
             if (typeSelector.value) {
                 loadAttributes(typeSelector.value);
             }
+
+            // FilePond customization
+            const existingImages = {{ json_encode($property->images ?? null) }};
+            const pondOptions = {
+                maxFiles: 20,
+                allowMultiple: true,
+                allowReorder: true,
+                imagePreviewHeight: 200,
+                acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+            };
+            if (existingImages) {
+                pondOptions.files = [
+                    {
+                        source: existingImages.map(image => image.path),
+                        options: {
+                            type: 'local',
+                            file: {},
+                            metadata: {
+                                poster: existingImages.map(image => image.path)
+                            }
+                        }
+                    }
+                ];
+            }
+            FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>
 @endpush

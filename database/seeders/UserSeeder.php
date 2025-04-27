@@ -43,21 +43,11 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            User::updateOrCreate(
-                ['email' => $user['email']], // Prevent duplicate seed
-                [
+            User::factory()
+                ->create([
+                    'email' => $user['email'], // Prevent duplicate seed
                     'name' => $user['name'],
                     'password' => Hash::make($user['password']),
-                    'telephone' => rand(910000000, 939999999),
-                    'profile_photo_url' => 'https://via.placeholder.com/150',
-                    'user_type' => $user['user_type'] ?? 'user',
-                    'advertiser_number' => rand(10000, 99999),
-                    'staff_number' => rand(10000, 99999),
-                    'bio' => 'Sou um negro.',
-                    'email_notifications' => true,
-                    'message_notifications' => true,
-                    'public_profile' => true,
-                    'show_email' => false,
                 ]
             );
         }

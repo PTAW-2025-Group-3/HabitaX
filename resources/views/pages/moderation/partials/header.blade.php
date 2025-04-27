@@ -10,11 +10,12 @@
         <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-3">
                 <!-- Avatar com borda sutil e sombra -->
-                @if(auth()->user()->profile_photo_url)
-                    <img src="https://i.pravatar.cc/150?u={{ auth()->user()->id }}" alt="Profile" class="h-16 w-16 rounded-full border-4 border-white/30 shadow-lg object-cover">
-                @else
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=0D8ABC&color=fff" alt="Profile" class="h-16 w-16 rounded-full border-4 border-white/30 shadow-lg">
-                @endif
+{{--                @if(auth()->user()->profile_picture_path)--}}
+                    <img src="{{ auth()->user()->getProfilePictureUrl() }}" alt="Profile"
+                         class="h-16 w-16 rounded-full border-4 border-white/30 shadow-lg object-cover bg-gray-50">
+{{--                @else--}}
+{{--                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=0D8ABC&color=fff" alt="Profile" class="h-16 w-16 rounded-full border-4 border-white/30 shadow-lg">--}}
+{{--                @endif--}}
                 <div>
                     <p class="font-medium text-lg text-white">{{ auth()->user()->name }}</p>
                     <p class="text-xs text-blue-100">

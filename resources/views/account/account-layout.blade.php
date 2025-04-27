@@ -1,7 +1,6 @@
 @extends('layout.app')
 
 @section('title', 'Minha Conta')
-
 @section('content')
     <div class="min-h-screen bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -11,7 +10,7 @@
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="p-6">
                             <div class="flex items-center space-x-4">
-                                <img src="https://i.pravatar.cc/40?u={{ auth()->user()->id }}"
+                                <img src="{{ auth()->user()->getProfilePictureUrl() }}"
                                      alt="Profile"
                                      class="w-12 h-12 rounded-full">
                                 <div>
@@ -77,6 +76,4 @@
             </div>
         </div>
     </div>
-
-    @stack('scripts')
 @endsection

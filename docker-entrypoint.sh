@@ -7,4 +7,13 @@ chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 # Create symbolic link for storage
 php artisan storage:link || true
 
+# Build frontend
+npm install
+npm run build
+
+# Clear and cache Laravel stuff
+php artisan config:clear && php artisan config:cache
+php artisan route:clear && php artisan route:cache
+php artisan view:clear && php artisan view:cache
+
 exec php-fpm

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -24,7 +25,7 @@ class User extends Authenticatable
         'public_profile',
         'show_email',
         'telephone',
-        'profile_photo_url',
+        'profile_picture_path',
         'user_type',
         'advertiser_number',
         'staff_number',
@@ -46,6 +47,15 @@ class User extends Authenticatable
         'advertiser_number' => 'integer',
         'staff_number' => 'integer',
     ];
+
+    // get image url
+    public function getProfilePictureUrl()
+    {
+        if ($this->profile_picture_path) {
+            return Storage::url($this->profile_picture_path);
+        }
+        return asset('images/default-pfp-habitax.png');
+    }
 
     public function properties()
     {

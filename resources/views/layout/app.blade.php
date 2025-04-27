@@ -7,25 +7,13 @@
 
     <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Styles and Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    @if (app()->environment('production'))
-        @php
-            $manifest = file_exists(public_path('build/manifest.json'))
-                ? json_decode(file_get_contents(public_path('build/manifest.json')), true)
-                : null;
-        @endphp
-        <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
-        <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
-    @else
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
+    @stack('styles')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased bg-back">
@@ -55,12 +43,25 @@
     @include('layout.footer')
 </div>
 
+{{-- Image Cropping --}}
+<template id="tui-editor-template">
+    <div id="tui-editor-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex flex-col items-center justify-center p-4">
+        <div id="tui-editor-container" class="w-full max-w-5xl bg-white rounded shadow-lg overflow-hidden"></div>
+        <div class="flex gap-4 mt-4">
+            <button id="tui-editor-confirm" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
+                Confirmar
+            </button>
+            <button id="tui-editor-cancel" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</template>
+
 {{-- Page-specific JS Scripts --}}
 @stack('scripts')
-</body>
 
-{{--  JS a ser usado em todos os componentes da Aplicação--}}
-<script>
+<script type="module">
     // Dropdown com chevron animado
     document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
         const chevron = wrapper.querySelector('.chevron');
@@ -76,4 +77,5 @@
         });
     });
 </script>
+</body>
 </html>

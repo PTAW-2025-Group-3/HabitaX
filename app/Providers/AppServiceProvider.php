@@ -15,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\Faker\Generator::class, function () {
+            return \Faker\Factory::create('pt_PT');
+        });
     }
 
     /**
@@ -25,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
         User::observe(UserObserver::class);
-//        if (app()->environment('production')) {
-//            URL::forceScheme('https');
-//        }
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }

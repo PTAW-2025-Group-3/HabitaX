@@ -19,12 +19,17 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'bio' => ['nullable', 'string', 'max:1000'],
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'bio' => 'nullable|string|max:1000',
         ]);
 
+        $imagePath = $request->file('image') ? $request->file('image')
+            ->store('profile_images', 'public') : null;
+
         $user->update([
+            'profile_picture_path' => $imagePath,
             'name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,

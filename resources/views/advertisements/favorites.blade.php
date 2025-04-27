@@ -11,10 +11,8 @@
                 <p class="text-gray">
                     Aqui estão os imóveis que marcou como favoritos.
                 </p>
-                <div class="relative w-full sm:w-auto">
-                    <select
-                        id="sortFavorites"
-                        class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
+                <div class="relative dropdown-wrapper w-full sm:w-auto">
+                    <select id="sortFavorites" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
                         <option disabled selected>Ordenar por</option>
                         <option value="price_asc">Preço: Menor para Maior</option>
                         <option value="price_desc">Preço: Maior para Menor</option>
@@ -22,7 +20,7 @@
                         <option value="date_asc">Data: Mais Antiga</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                        <i class="chevron bi bi-chevron-down transition-transform duration-300 ease-in-out"></i>
+                        <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
                 </div>
             </div>

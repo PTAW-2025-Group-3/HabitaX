@@ -5,6 +5,7 @@ use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\DenunciationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
         ->name('advertisements.favorite.toggle');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+    // File Upload
+    Route::post('uploads/temp', [FileUploadController::class, 'temp'])->name('uploads.temp');
+    Route::delete('/upload/revert', [FileUploadController::class, 'revertTemp'])->name('uploads.revert');
 });
 
 // Property Routes
@@ -129,10 +134,14 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     // Distritos, Municípios e Freguesias
 });
 
+// This route should be accessible to guests for contact request
+Route::post('/contact-requests', [ContactRequestController::class, 'store'])
+    ->name('contact-requests.store');
+
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Account Routes
@@ -145,8 +154,10 @@ Route::middleware('auth')->group(function () {
         return view('account.advertiser-verification');
     })->name('advertiser-verification');
 
-    Route::get('/contact-requests', [ContactRequestController::class, 'index'])->name('contact-requests.index');
-
+    Route::get('/contact-requests', [ContactRequestController::class, 'index'])
+            ->name('contact-requests.index');
+    Route::patch('/contact-requests/{contactRequest}/status', [ContactRequestController::class, 'updateStatus'])
+            ->name('contact-requests.update-status');
 });
 
 // Auth (login, logout, etc.)

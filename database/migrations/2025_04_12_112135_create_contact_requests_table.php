@@ -21,7 +21,12 @@ return new class extends Migration
             $table->enum('state', ['unread', 'read', 'archived',])->default('unread');
 
             $table->foreignId('advertisement_id')->constrained('advertisements')->onDelete('cascade');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
 
             $table->timestamps();
         });
