@@ -10,32 +10,23 @@
         <div class="space-y-6 sm:space-y-8">
             <!-- Informações de Perfil -->
             <div class="bg-gray-50 rounded-lg p-4 sm:p-6 border border-gray-200">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mb-6">
-                    <div class="flex-shrink-0 relative group mx-auto sm:mx-0 mb-4 sm:mb-0">
-                        <img src="https://i.pravatar.cc/150?u={{ auth()->user()->id }}"
-                             alt="Profile"
-                             class="h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover border-2 border-indigo-100">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                            <span class="text-white text-sm">Mudar foto</span>
-                        </div>
-                    </div>
-                    <div class="text-center sm:text-left">
-                        <h3 class="text-xl font-medium text-primary">{{ auth()->user()->name }}</h3>
-                        <p class="text-gray">{{ auth()->user()->email }}</p>
-                        <div class="mt-3 flex flex-wrap justify-center sm:justify-start gap-2">
-                            <button class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800">
-                                <i class="bi bi-camera mr-1"></i> Alterar foto
-                            </button>
-                            <button class="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                <i class="bi bi-trash mr-1"></i> Remover
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-4 sm:space-y-6">
+                <form action="{{ route('profile.update') }}" method="POST" class="space-y-4 sm:space-y-6" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <div class="text-center sm:text-left mb-1">
+                        <h3 class="text-xl font-medium text-primary">{{ auth()->user()->name }}</h3>
+                        <p class="text-gray">{{ auth()->user()->email }}</p>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="image" class="block text-gray-secondary font-medium mb-2">Foto de perfil</label>
+                        <input
+                            type="file"
+                            class="filepond"
+                            name="image"
+                            id="image"
+                        />
+                    </div>
 
                     <div>
                         <label for="name" class="block text-gray-secondary font-medium mb-2">Nome</label>
@@ -83,12 +74,47 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Script para preview da foto de perfil quando for implementado o upload
-            });
-        </script>
-    @endpush
 @endsection
+
+@push('styles')
+    <style>
+        .filepond--root {
+            height: auto;
+            max-width: 300px;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const existingImage = {!! auth()->user()->profile_picture_path ? json_encode(Storage::url(auth()->user()->profile_picture_path)) : 'null' !!};
+            const pondOptions = {
+                imageCropAspectRatio: '1:1',
+                imagePreviewMaxHeight: 300,
+                imageResizeTargetWidth: 200,
+                imageResizeTargetHeight: 200,
+                acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+            };
+            if (existingImage) {
+                FilePond.setOptions({
+                    files: [{
+                        source: existingImage,
+                        options: {
+                            type: 'local',
+                            file: {
+                                name: existingImage.split('/').pop(),
+                                size: 123456, // fake size
+                                type: 'image/jpeg/png/jpg/webp', // fake type
+                            },
+                            metadata: {
+                                poster: existingImage
+                            }
+                        }
+                    }]
+                });
+            }
+            FilePond.setOptions(pondOptions);
+        });
+    </script>
+@endpush

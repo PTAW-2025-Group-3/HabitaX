@@ -5,41 +5,60 @@
     @endisset
 
     {{--  name  --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+    <div class="flex flex-col">
+        <div class="mb-4">
             <label for="name" class="block text-sm font-semibold text-primary">Nome</label>
             <input type="text" name="name" id="name" placeholder="Ex: Moradia"
                    value="{{ old('name', $propertyType->name ?? '') }}"
                    class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">
         </div>
+        @error('name')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--   description   --}}
-    <div>
-        <label for="description" class="block text-sm font-semibold text-primary">Descrição</label>
-        <textarea name="description" id="description" placeholder="Ex: Unidade habitacional destinada a habitação."
-                  class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">{{ old('description', $propertyType->description ?? '') }}</textarea>
+    <div class="flex flex-col">
+        <div class="mb-4">
+            <label for="description" class="block text-sm font-semibold text-primary">Descrição</label>
+            <textarea name="description" id="description" placeholder="Ex: Unidade habitacional destinada a habitação."
+                      class="mt-1 w-full rounded-md border border-gray-300 px-4 py-2 focus:border-primary focus:ring-primary">{{ old('description', $propertyType->description ?? '') }}</textarea>
+        </div>
+        @error('description')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--  is_active  --}}
-    <div class="flex items-center">
-        <input type="hidden" name="is_active" value="0">
-        <input type="checkbox" name="is_active" id="is_active" value="1"
-               {{ old('is_active', $propertyType->is_active ?? false) ? 'checked' : '' }}
-               class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
-        <label for="is_active" class="ml-2 block text-sm font-semibold text-primary">Ativo</label>
+    <div class="flex flex-col">
+        <div class="flex items-center mb-4">
+            <input type="hidden" name="is_active" value="0">
+            <input type="checkbox" name="is_active" id="is_active" value="1"
+                   {{ old('is_active', $propertyType->is_active ?? false) ? 'checked' : '' }}
+                   class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+            <label for="is_active" class="ml-2 block text-sm font-semibold text-primary">Ativo</label>
+        </div>
+        @error('is_active')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 
     {{--  icon  --}}
-    <div>
+    <div class="flex flex-col">
         <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
-        <div class="w-1/2 mt-1">
+        <div class="mt-1 w-1/2">
             <input
                 type="file"
                 class="filepond"
                 name="icon"
                 id="icon"
-                accept="image/png, image/svg+xml"
+                accept="image/png, image/svg+xml, image/webp"
             />
         </div>
     </div>
@@ -66,11 +85,28 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // FilePond.create(document.querySelector('input[type="file"]'), {
-            //     imageEditorAfterWriteImage: (res) => {
-            //         return res.dest;
-            //     },
-            // });
+            const existingImage = {!! $propertyType->icon_path ? json_encode(Storage::url($propertyType->icon_path)) : 'null' !!};
+
+            const pondOptions = {
+                //
+            };
+
+            if (existingImage) {
+                pondOptions.files = [
+                    {
+                        source: existingImage,
+                        options: {
+                            type: 'local',
+                            file: {},
+                            metadata: {
+                                poster: existingImage
+                            }
+                        }
+                    }
+                ];
+            }
+
+            FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>
 @endpush

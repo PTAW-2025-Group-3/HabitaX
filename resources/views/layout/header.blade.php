@@ -49,9 +49,9 @@
                 {{-- Authenticated Dropdown --}}
                 <div class="relative" id="userDropdown">
                     <button id="dropdownButton" class="flex items-center space-x-2 focus:outline-none">
-                        <img src="https://i.pravatar.cc/40?u={{ auth()->user()->id }}"
+                        <img src="{{ auth()->user()->getProfilePictureUrl() }}")
                              class="w-8 h-8 rounded-full ring-2 ring-gray-200 hover:ring-indigo-500 transition-all duration-300"
-                             alt="User Avatar">
+                             alt="User Picture">
                         <span class="text-gray-secondary font-semibold">{{ auth()->user()->name }}</span>
                     </button>
 
@@ -60,7 +60,7 @@
                         class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 hidden">
                         <div class="px-4 py-2 border-b border-gray-100">
                             <div class="flex items-center space-x-3">
-                                <img src="https://i.pravatar.cc/40?u={{ auth()->user()->id }}"
+                                <img src="{{ auth()->user()->getProfilePictureUrl() }}"
                                      class="w-10 h-10 rounded-full"
                                      alt="User Avatar">
                                 <div>

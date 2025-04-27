@@ -58,7 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
     // File Upload
-    Route::post('uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
+    Route::post('uploads/temp', [FileUploadController::class, 'temp'])->name('uploads.temp');
+    Route::delete('/upload/revert', [FileUploadController::class, 'revertTemp'])->name('uploads.revert');
 });
 
 // Property Routes
@@ -140,7 +141,7 @@ Route::post('/contact-requests', [ContactRequestController::class, 'store'])
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Account Routes

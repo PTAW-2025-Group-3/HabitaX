@@ -50,7 +50,7 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name',
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
+            'icon' => 'nullable|file|nullable|file|mimes:png,svg,webp|max:2048',
             'is_active' => 'boolean',
         ]);
 
@@ -59,7 +59,7 @@ class PropertyTypeController extends Controller
         PropertyType::create([
             'name' => $request->name,
             'description' => $request->description,
-            'icon' => $iconPath,
+            'icon_path' => $iconPath,
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
 
@@ -78,7 +78,7 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name,' . $id,
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
+            'icon' => 'nullable|file|mimes:png,svg,webp|max:2048',
             'is_active' => 'boolean',
         ]);
 

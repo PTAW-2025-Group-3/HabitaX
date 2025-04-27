@@ -7,13 +7,13 @@
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             @foreach ($propertyTypes as $type)
-                <a href="">
+                <a href="{{ route('advertisements.index', ['type' => $type->id]) }}">
                     <div class="home-property-card-style p-4 md:p-6">
                         {{-- Icon --}}
                         <div class="home-icon-style mb-2 md:mb-3">
                             @if ($type->icon_path)
                                 <img src="{{ Storage::url($type->icon_path) }}" alt="{{ $type->name }} Icon"
-                                     class="rounded-full">
+                                     class="object-cover rounded-full w-full h-full">
                             @else
                                 <span class="text-gray-500">Sem ícone</span>
                             @endif

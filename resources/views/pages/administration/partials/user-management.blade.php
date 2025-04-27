@@ -34,6 +34,11 @@
                         ID<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
+                <th class="p-4">
+                    <div class="flex items-center">
+                        Imagem de perfil<span class="sort-icon ml-1"></span>
+                    </div>
+                </th>
                 <th class="p-4 cursor-pointer sortable-column" data-sort="name">
                     <div class="flex items-center">
                         Nome<span class="sort-icon ml-1"></span>
@@ -62,6 +67,10 @@
                     data-created_at="{{ $user->created_at->timestamp }}"
                     data-state="{{ $user->state }}">
                     <td class="p-4">#{{ $user->id }}</td>
+                    <td class="p-4">
+                        <img src="{{ $user->getProfilePictureUrl() }}" alt="Imagem de perfil"
+                             class="w-10 h-10 rounded-full object-cover">
+                    </td>
                     <td class="p-4 font-medium user-name">{{ $user->name }}</td>
                     <td class="p-4 text-gray-600 user-email">{{ $user->email }}</td>
                     <td class="p-4 text-gray-500">{{ $user->created_at->format('d/m/Y - H:i') }}</td>

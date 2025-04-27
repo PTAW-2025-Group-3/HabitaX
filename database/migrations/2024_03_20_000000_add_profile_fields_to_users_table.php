@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('show_email')->default(false);
 
             $table->integer('telephone')->nullable();
-            $table->string('profile_photo_url')->nullable();
+            $table->string('profile_picture_path')->nullable();
             $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
             $table->integer('advertiser_number')->nullable();
             $table->integer('staff_number')->nullable();
@@ -41,7 +41,7 @@ return new class extends Migration
                 'show_email',
 
                 'telephone',
-                'profile_photo_url',
+                'profile_picture_path',
                 'user_type',
                 'advertiser_number',
                 'staff_number',

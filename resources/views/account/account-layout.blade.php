@@ -10,7 +10,7 @@
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="p-6">
                             <div class="flex items-center space-x-4">
-                                <img src="https://i.pravatar.cc/40?u={{ auth()->user()->id }}"
+                                <img src="{{ auth()->user()->getProfilePictureUrl() }}"
                                      alt="Profile"
                                      class="w-12 h-12 rounded-full">
                                 <div>
@@ -76,6 +76,4 @@
             </div>
         </div>
     </div>
-
-    @stack('scripts')
 @endsection

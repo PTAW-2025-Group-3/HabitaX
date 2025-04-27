@@ -91,6 +91,14 @@ const toastEditor = {
                 fetch(dataURL)
                     .then(res => res.blob())
                     .then(blob => {
+                        const editedFile = new File([blob], 'edited-image.jpg', { type: blob.type });
+
+                        const pond = FilePond.find(document.querySelector('input.filepond'));
+                        if (pond) {
+                            pond.removeFiles();
+                            pond.addFile(editedFile);
+                        }
+
                         resolve(blob);
                         this.close();
                     });
@@ -115,18 +123,26 @@ const toastEditor = {
     }
 };
 
+// Initialize FilePond
 document.addEventListener('DOMContentLoaded', function () {
     FilePond.setOptions({
         instantUpload: false,
+        storeAsFile: true,
+        allowReplace: true,
+        maxFileSize: '2MB',
         allowImagePreview: true,
-        imagePreviewHeight: 170,
+        imagePreviewMaxHeight: 500,
+        allowImageExifOrientation: true,
+        allowFileTypeValidation: true,
         allowImageCrop: true,
-        imageCropAspectRatio: '1:1',
         allowImageResize: true,
-        imageResizeTargetWidth: 200,
-        imageResizeTargetHeight: 200,
         allowImageTransform: true,
+        allowImageFilter: true,
         allowImageEdit: true,
+        allowRemove: true,
+        imageCropAspectRatio: '1:1',
+        imageResizeTargetWidth: 300, // можно больше — зависит от вашей карточки
+        imageResizeTargetHeight: 300, // соответственно
         imageEditEditor: {
             open: (file) => {
                 console.log('Opening editor...');
@@ -137,11 +153,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         server: {
-            process: './uploads/process',
+            // process: '/uploads/process', // saves to public/tmp/ folder but no way to retrieve yet
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
             }
-        }
+        },
+        labelIdle: 'Arraste e largue ou <span class="filepond--label-action">Escolha</span>',
     });
 
     const inputs = document.querySelectorAll('input[type="file"].filepond');
