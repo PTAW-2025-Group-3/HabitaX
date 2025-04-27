@@ -10,6 +10,8 @@ function initPagination() {
     function setupPaginationLinks() {
         const paginationLinks = document.querySelectorAll('#pagination-container a');
 
+        if (paginationLinks.length === 0) return;
+
         paginationLinks.forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -33,7 +35,7 @@ function initPagination() {
 
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="p-4 text-center">
+                        <td colspan="7" class="p-4 text-center">
                             <div class="flex justify-center">
                                 <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
                             </div>
@@ -64,7 +66,7 @@ function initPagination() {
                     .catch(error => {
                         tableBody.innerHTML = `
                             <tr>
-                                <td colspan="6" class="p-4 text-center text-red-500">
+                                <td colspan="7" class="p-4 text-center text-red-500">
                                     <i class="bi bi-exclamation-triangle mr-2"></i>
                                     Erro ao carregar utilizadores. Por favor, tente novamente.
                                 </td>
@@ -81,7 +83,7 @@ function initPagination() {
 
         userRows.forEach(row => {
             const state = row.dataset.state;
-            const statusCell = row.querySelector('td:nth-child(5)');
+            const statusCell = row.querySelector('td:nth-child(6)');
 
             if (!state || !statusCell) return;
 

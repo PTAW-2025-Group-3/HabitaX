@@ -73,24 +73,15 @@ class AdministrationController extends Controller
         $users = $query->paginate(5)->appends($request->only(['search', 'sort', 'order']));
 
         if ($request->ajax()) {
-            $badgeMap = [
-                'active' => 'bg-green-100 text-green-700|Ativo',
-                'suspended' => 'bg-yellow-100 text-yellow-600|Suspenso',
-                'banned' => 'bg-red-100 text-red-600|Banido',
-                'archived' => 'bg-gray-100 text-gray-600|Arquivado'
+            $response = [
+                'users' => view('pages.administration.partials.user-rows', ['users' => $users])->render()
             ];
 
-            $usersHtml = $users->count() > 0 ? $users->map(function ($user) use ($badgeMap) {
-                $state = in_array($user->state, array_keys($badgeMap)) ? $user->state : 'active';
-                [$classes, $label] = explode('|', $badgeMap[$state]);
+            if ($users->hasPages()) {
+                $response['pagination'] = $users->links()->toHtml();
+            }
 
-                return view('components.admin.user-row', compact('user', 'state', 'classes', 'label'))->render();
-            })->implode('') : '<tr class="border-t"><td colspan="6" class="p-4 text-center text-gray-500">Nenhum utilizador encontrado</td></tr>';
-
-            return response()->json([
-                'users' => $usersHtml,
-                'pagination' => $users->links()->toHtml()
-            ]);
+            return response()->json($response);
         }
 
         return redirect()->route('admin.index');

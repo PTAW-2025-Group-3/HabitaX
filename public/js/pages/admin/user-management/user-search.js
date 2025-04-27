@@ -26,7 +26,13 @@ function initUserSearch() {
             .then(response => response.json())
             .then(data => {
                 tableBody.innerHTML = data.users;
-                paginationContainer.innerHTML = data.pagination;
+
+                // Only update pagination if it exists in the response
+                if (data.pagination) {
+                    paginationContainer.innerHTML = data.pagination;
+                } else {
+                    paginationContainer.innerHTML = ''; // Clear pagination when not needed
+                }
 
                 updateUserStatusIndicators();
                 initializeAfterUpdate();
@@ -39,7 +45,7 @@ function initUserSearch() {
                 console.error('Erro ao pesquisar utilizadores:', error);
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="p-4 text-center text-red-500">
+                        <td colspan="7" class="p-4 text-center text-red-500">
                             <i class="bi bi-exclamation-triangle mr-2"></i>
                             Erro ao carregar resultados.
                         </td>
@@ -48,7 +54,7 @@ function initUserSearch() {
             });
     });
 
-    // Limpar pesquisa
+    // Limpar pesquisa - same fix needed here
     clearButton.addEventListener('click', function () {
         searchInput.value = '';
         searchInput.focus();
@@ -64,7 +70,13 @@ function initUserSearch() {
             .then(response => response.json())
             .then(data => {
                 tableBody.innerHTML = data.users;
-                paginationContainer.innerHTML = data.pagination;
+
+                // Only update pagination if it exists in the response
+                if (data.pagination) {
+                    paginationContainer.innerHTML = data.pagination;
+                } else {
+                    paginationContainer.innerHTML = ''; // Clear pagination when not needed
+                }
 
                 updateUserStatusIndicators();
                 initializeAfterUpdate();

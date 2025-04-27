@@ -42,15 +42,15 @@ function initSorting() {
         const ajaxUrl = `/admin/users?sort=${currentSort}&order=${currentOrder}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
 
         tableBody.innerHTML = `
-            <tr>
-                <td colspan="6" class="p-4 text-center">
-                    <div class="flex justify-center">
-                        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
-                    </div>
-                    <p class="mt-2 text-gray-600">Carregando utilizadores...</p>
-                </td>
-            </tr>
-        `;
+        <tr>
+            <td colspan="7" class="p-4 text-center">
+                <div class="flex justify-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+                </div>
+                <p class="mt-2 text-gray-600">Carregando utilizadores...</p>
+            </td>
+        </tr>
+    `;
 
         fetch(ajaxUrl, {
             headers: {
@@ -64,9 +64,11 @@ function initSorting() {
                 return response.json();
             })
             .then(data => {
-                if (data.users && data.pagination) {
+                if (data.users) {
                     tableBody.innerHTML = data.users;
-                    if (paginationContainer) {
+
+                    // Only update pagination if it exists and data.pagination exists
+                    if (paginationContainer && data.pagination) {
                         paginationContainer.innerHTML = data.pagination;
                     }
 
@@ -77,7 +79,7 @@ function initSorting() {
 
                     updateSortIcons();
 
-                    // Don't call initializeAfterUpdate as it would create an infinite loop
+                    // Rebind event handlers
                     if (typeof window.setupSuspensionButtons === 'function') window.setupSuspensionButtons();
                     if (typeof window.setupPermissionsButtons === 'function') window.setupPermissionsButtons();
                     if (typeof window.setupPaginationLinks === 'function') window.setupPaginationLinks();
@@ -90,13 +92,13 @@ function initSorting() {
             })
             .catch(error => {
                 tableBody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="p-4 text-center text-red-500">
-                        <i class="bi bi-exclamation-triangle mr-2"></i>
-                        Erro ao carregar utilizadores. Por favor, tente novamente.
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td colspan="7" class="p-4 text-center text-red-500">
+                    <i class="bi bi-exclamation-triangle mr-2"></i>
+                    Erro ao carregar utilizadores. Por favor, tente novamente.
+                </td>
+            </tr>
+        `;
                 console.error('Erro ao buscar usuários:', error);
             });
     }

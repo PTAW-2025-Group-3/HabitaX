@@ -83,7 +83,7 @@ function initModals() {
                     if (data.success) {
                         const userRow = document.querySelector(`.user-row[data-id="${currentUserId}"]`);
                         if (userRow) {
-                            const statusCell = userRow.querySelector('td:nth-child(5)');
+                            const statusCell = userRow.querySelector('td:nth-child(6)');
                             const suspendBtn = userRow.querySelector('.state-user-btn');
 
                             userRow.dataset.userState = data.state;
