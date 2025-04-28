@@ -18,6 +18,7 @@ class AdvertisementController extends Controller
     public function index(AdvertisementFilterRequest $request)
     {
         // Filtros selecionados vindos da query string
+        $transactionType = $request->input('transaction_type');
         $selectedDistrict = $request->input('district');
         $selectedMunicipality = $request->input('municipality');
         $selectedParish = $request->input('parish');
@@ -50,7 +51,8 @@ class AdvertisementController extends Controller
             'selectedDistrict',
             'selectedMunicipality',
             'selectedParish',
-            'selectedType'
+            'selectedType',
+            'transactionType'
         ));
     }
 
