@@ -26,7 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $picturesPath = 'pictures/';
+        $picturesPath = 'profile_pictures/';
         $pictures = Storage::disk('public')->files($picturesPath);
         if (count($pictures) > 20) {
             // Select a random picture from the existing ones

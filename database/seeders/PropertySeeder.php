@@ -15,13 +15,9 @@ class PropertySeeder extends Seeder
     {
         Property::factory()->count(50)->create()->each(function ($property) {
             $property->update([
-                'images' => [
-                    "https://picsum.photos/seed/{$property->id}-1/600/400",
-                    "https://picsum.photos/seed/{$property->id}-2/600/400",
-                    "https://picsum.photos/seed/{$property->id}-3/600/400",
-                    "https://picsum.photos/seed/{$property->id}-4/600/400",
-                    "https://picsum.photos/seed/{$property->id}-5/600/400"
-                ],
+                'images' => collect(range(1, rand(5, 10)))->map(function ($index) use ($property) {
+                    return "https://picsum.photos/seed/{$property->id}-{$index}/600/400";
+                })->toArray(),
             ]);
         });
     }

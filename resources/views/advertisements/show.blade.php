@@ -51,20 +51,21 @@
             </div>
         </div>
 
-        <!-- Galeria com layout 50/50 -->
-        <div class="grid grid-cols-12 gap-2 md:gap-4 relative">
-            <div class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
+        <!-- Galeria -->
+        <div id="lightgallery" class="grid grid-cols-12 gap-2 md:gap-4 relative">
+            <!-- Visible part -->
+            <a href="{{ $property->images[0] }}" class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
                 <img src="{{ $property->images[0] }}"
                      class="w-full h-full object-cover rounded-lg shadow" alt="Imagem Principal">
-            </div>
+            </a>
 
             <div class="col-span-12 md:col-span-6 grid grid-cols-2 grid-rows-2 gap-2 h-[300px] md:h-[500px]">
                 @foreach($property->images as $image)
                     @if(!$loop->first && $loop->index < 5)
-                        <div>
+                        <a href="{{ $image }}">
                             <img src="{{ $image }}"
                                  class="w-full h-full object-cover rounded-lg shadow" alt="Miniatura">
-                        </div>
+                        </a>
                     @endif
                 @endforeach
 
@@ -73,13 +74,27 @@
                 @endfor
             </div>
 
-            @if(count($property->images) > 5)
-                <a href="#todas-fotos"
-                   class="absolute bottom-2 right-2 bg-white bg-opacity-80 backdrop-blur px-3 py-1.5 text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
-                    Mostrar todas as fotos
-                </a>
-            @endif
+            <!-- Hidden links for LightGallery -->
+            <div class="hidden">
+                @foreach($property->images as $image)
+                    @if($loop->index >= 5)
+                        <a href="{{ $image }}">
+                            <img src="{{ $image }}" alt="Miniatura oculta" class="hidden">
+                        </a>
+                    @endif
+                @endforeach
+            </div>
         </div>
+
+        <!-- Botão separado! -->
+        @if(count($property->images) > 5)
+            <div class="mt-4 text-right">
+                <button id="openGalleryButton"
+                        class="inline-block bg-white bg-opacity-80 backdrop-blur px-4 py-2 text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
+                    Mostrar todas as fotos
+                </button>
+            </div>
+        @endif
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div class="col-span-1 md:col-span-2 space-y-4">
@@ -140,6 +155,23 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            const gallery = lightGallery(document.getElementById('lightgallery'), {
+                selector: 'a',
+                thumbnail: true,
+                download: false,
+                zoom: true,
+                fullScreen: true,
+                autoplayControls: false,
+                share: false,
+                loop: true,
+                mode: 'lg-fade',
+                speed: 500,
+            });
+            document.getElementById('openGalleryButton').addEventListener('click', function() {
+                gallery.openGallery(0);
+            });
+
             // Report button handler
             const reportBtn = document.getElementById('reportBtn');
             if (reportBtn) {

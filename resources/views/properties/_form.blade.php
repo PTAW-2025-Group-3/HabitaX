@@ -45,15 +45,6 @@
         {{--   Dynamic attributes will be loaded here   --}}
     </div>
 
-    <div id="images" class="mb-8 border w-full border-gray-200 rounded-xl p-8 bg-white shadow-xl animate-fade-in">
-        <input
-            type="file"
-            class="filepond"
-            name="images"
-            id="images"
-        />
-    </div>
-
     <div class="flex justify-end">
         <button type="submit" class="btn-secondary px-6 py-2 rounded-md">
             {{ $buttonText }}

@@ -25,4 +25,18 @@
                   placeholder="Descreva a propriedade em detalhe..."
                   class="form-input focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all"></textarea>
     </div>
+
+    <!-- Images -->
+    <div class="transition-all duration-300 hover:shadow-md p-4 rounded-xl hover:bg-gray-50 mb-4">
+        <label for="images" class="block text-sm font-semibold text-gray-secondary mb-3 flex items-center">
+            <i class="bi bi-images mr-2 text-secondary"></i>
+            Imagens da Propriedade
+        </label>
+        <input
+            type="file"
+            class="filepond"
+            name="images"
+            id="images"
+        />
+    </div>
 </div>

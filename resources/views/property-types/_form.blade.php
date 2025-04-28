@@ -105,8 +105,8 @@
                         type: 'local',
                         file: {
                             name: existingImage.split('/').pop(),
-                            size: 123456, // fake size
-                            type: 'image/jpeg/png/jpg/webp', // fake type
+                            size: existingImage.length,
+                            type: existingImage.split('.').pop(),
                         },
                         metadata: {
                             poster: existingImage

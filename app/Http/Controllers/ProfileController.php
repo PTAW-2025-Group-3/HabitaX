@@ -26,7 +26,7 @@ class ProfileController extends Controller
         ]);
 
         $imagePath = $request->file('image') ? $request->file('image')
-            ->store('profile_images', 'public') : null;
+            ->store('profile_pictures', 'public') : null;
 
         $user->update([
             'profile_picture_path' => $imagePath,

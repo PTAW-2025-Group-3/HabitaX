@@ -15,7 +15,7 @@
             </a>
         @else
             <div class="flex items-center space-x-2 py-2">
-                <img src="https://i.pravatar.cc/40?u={{ auth()->user()->id }}"
+                <img src="{{ auth()->user()->getProfilePictureURL() }}"
                      class="w-8 h-8 rounded-full ring-2 ring-gray-200"
                      alt="User Avatar">
                 <span class="text-gray-secondary font-semibold">{{ auth()->user()->name }}</span>
