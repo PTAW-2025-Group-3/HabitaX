@@ -33,7 +33,7 @@
                 $equipa = [
                     ['nome' => 'Luis Assis', 'imagem' => 'images/Luiz Assis.jpg', 'cargo' => 'Gestor de Grupo', 'função' => 'Desenvolvedor'],
                     ['nome' => 'Gustavo Gião', 'imagem' => 'images/GustavoGiao.png', 'cargo' => 'Desenvolvedor'],
-                    ['nome' => 'Pedro Sampaio', 'imagem' => 'images/PedroSampaio2.jpg', 'cargo' => 'Desenvolvedor'],
+                    ['nome' => 'Pedro Sampaio', 'imagem' => 'images/SedroPampaio.jpg', 'cargo' => 'Desenvolvedor'],
                     ['nome' => 'Ratmir Mukazhanov', 'imagem' => 'images/Ratmir.jpg', 'cargo' => 'Desenvolvedor'],
                     ['nome' => 'Kousha Rezaei', 'imagem' => 'https://i.pravatar.cc/150?img=3', 'cargo' => 'Desenvolvedor'],
                 ];

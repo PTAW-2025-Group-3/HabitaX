@@ -15,6 +15,8 @@
 
   {{-- Client Testimonials --}}
   @include('pages.home.sections.client-testimonials')
+
   {{-- District Listing --}}
   @include('pages.home.sections.district-listing', ['adsPerDistrict' => $adsPerDistrict])
+
 @endsection

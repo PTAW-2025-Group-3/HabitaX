@@ -44,6 +44,7 @@
 
                         <div class="home-ads-style favorite-card"
                              data-id="{{ $favorite->id }}"
+                             data-advertisement-id="{{ $advertisement->id ?? '' }}"
                              data-price="{{ $price }}"
                              data-date="{{ $favorite->created_at->timestamp }}">
                             <div class="relative">
@@ -127,6 +128,16 @@
                     favoriteCards.forEach(card => favoritesContainer.appendChild(card));
                 });
             }
+
+            // Redirecionar ao clicar no card
+            document.querySelectorAll('.favorite-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const advertisementId = this.dataset.advertisementId;
+                    if (advertisementId) {
+                        window.location.href = `/advertisements/${advertisementId}`;
+                    }
+                });
+            });
 
             // Remover favoritos
             const removeBtns = document.querySelectorAll('.remove-favorite, .favorite-btn');

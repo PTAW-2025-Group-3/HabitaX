@@ -97,24 +97,22 @@
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
             };
             if (existingImage) {
-                FilePond.setOptions({
-                    files: [{
-                        source: existingImage,
-                        options: {
-                            type: 'local',
-                            file: {
-                                name: existingImage.split('/').pop(),
-                                size: 123456, // fake size
-                                type: 'image/jpeg/png/jpg/webp', // fake type
-                            },
-                            metadata: {
-                                poster: existingImage
-                            }
+                pondOptions.files = [{
+                    source: existingImage,
+                    options: {
+                        type: 'local',
+                        file: {
+                            name: existingImage.split('/').pop(),
+                            size: 123456, // fake size
+                            type: 'image/jpeg/png/jpg/webp', // fake type
+                        },
+                        metadata: {
+                            poster: existingImage
                         }
-                    }]
-                });
+                    }
+                }];
             }
-            FilePond.setOptions(pondOptions);
+            FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>
 @endpush

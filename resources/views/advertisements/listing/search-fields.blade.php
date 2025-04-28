@@ -3,9 +3,8 @@
 {{--    Toggle Buttons--}}
     <div class="relative w-full max-w-md mx-auto mb-8">
         <div class="flex bg-gray-300 rounded-2xl relative overflow-hidden">
-                <!-- Slider Azul -->
-            <div
-                id="slider"
+            <!-- Slider Azul -->
+            <div id="slider"
                 class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-all duration-300 z-0"
             ></div>
 
@@ -43,7 +42,7 @@
                     @endforeach
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
-                    <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
@@ -64,7 +63,7 @@
                     @endforeach
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
-                    <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
@@ -86,7 +85,7 @@
                     @endif
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
-                    <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
@@ -107,7 +106,7 @@
                     @endif
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
-                    <i class="bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                 </div>
             </div>
         </div>
@@ -123,117 +122,87 @@
     </div>
 </form>
 
-<script>
-    // Código específico para o chevron (ícone)
-    document.addEventListener('DOMContentLoaded', function () {
-        const selects = document.querySelectorAll('.special-chevron');
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function setupLocationSelects() {
+                const districtSelect = document.getElementById('districtSelect');
+                const municipalitySelect = document.getElementById('municipalitySelect');
+                const parishSelect = document.getElementById('parishSelect');
 
-        selects.forEach(chevron => {
-            const wrapper = chevron.parentElement; // div.dropdown-wrapper
-            const icon = wrapper.querySelector('i');
-            let isOpen = false;
+                districtSelect.addEventListener('change', function () {
+                    const municipalities = JSON.parse(this.options[this.selectedIndex].getAttribute('data-municipalities') || '[]');
+                    municipalitySelect.innerHTML = '<option value="">Concelho</option>';
+                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
+                    municipalities.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id;
+                        opt.text = m.name;
+                        opt.setAttribute('data-parishes', JSON.stringify(m.parishes));
+                        municipalitySelect.appendChild(opt);
+                    });
+                });
 
-            chevron.addEventListener('click', (e) => {
-                e.stopPropagation(); // impedir que propague o click para o document
-                isOpen = !isOpen;
+                municipalitySelect.addEventListener('change', function () {
+                    const parishes = JSON.parse(this.options[this.selectedIndex].getAttribute('data-parishes') || '[]');
+                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
+                    parishes.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.text = p.name;
+                        parishSelect.appendChild(opt);
+                    });
+                });
+            }
 
-                icon.classList.remove('bi-chevron-right', 'bi-dash');
-                icon.classList.add(isOpen ? 'bi-dash' : 'bi-chevron-right');
-            });
+            function setupTransactionButtons() {
+                const btnComprar = document.getElementById("btn-comprar");
+                const btnArrendar = document.getElementById("btn-arrendar");
+                const slider = document.getElementById("slider");
 
-            document.addEventListener('click', (e) => {
-                if (!wrapper.contains(e.target) && isOpen) {
-                    isOpen = false;
-                    icon.classList.remove('bi-dash');
-                    icon.classList.add('bi-chevron-right');
+                let selected = "comprar";
+
+                function activateButton(buttonToActivate, buttonToDeactivate, sliderPosition) {
+                    slider.style.display = "block";
+                    slider.style.left = sliderPosition;
+                    buttonToActivate.classList.add("text-white", "font-semibold");
+                    buttonToActivate.classList.remove("text-gray-800");
+                    buttonToDeactivate.classList.remove("text-white", "font-semibold");
+                    buttonToDeactivate.classList.add("text-gray-800");
                 }
-            });
+
+                function deactivateButton(button) {
+                    slider.style.display = "none";
+                    button.classList.remove("text-white", "font-semibold");
+                    button.classList.add("text-gray-800");
+                }
+
+                activateButton(btnComprar, btnArrendar, "0%");
+
+                btnComprar.addEventListener("click", () => {
+                    if (selected === "comprar") {
+                        selected = null;
+                        deactivateButton(btnComprar);
+                    } else {
+                        selected = "comprar";
+                        activateButton(btnComprar, btnArrendar, "0%");
+                    }
+                });
+
+                btnArrendar.addEventListener("click", () => {
+                    if (selected === "arrendar") {
+                        selected = null;
+                        deactivateButton(btnArrendar);
+                    } else {
+                        selected = "arrendar";
+                        activateButton(btnArrendar, btnComprar, "50%");
+                    }
+                });
+            }
+
+            // Chamar as funções
+            setupLocationSelects();
+            setupTransactionButtons();
         });
-    });
-</script>
-
-{{-- JavaScript para lógica dinâmica --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const districtSelect = document.getElementById('districtSelect');
-        const municipalitySelect = document.getElementById('municipalitySelect');
-        const parishSelect = document.getElementById('parishSelect');
-
-        districtSelect.addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const municipalities = JSON.parse(selectedOption.getAttribute('data-municipalities') || '[]');
-
-            municipalitySelect.innerHTML = '<option value="">Concelho</option>';
-            parishSelect.innerHTML = '<option value="">Freguesia</option>';
-
-            municipalities.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m.id;
-                opt.text = m.name;
-                opt.setAttribute('data-parishes', JSON.stringify(m.parishes));
-                municipalitySelect.appendChild(opt);
-            });
-        });
-
-        municipalitySelect.addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const parishes = JSON.parse(selectedOption.getAttribute('data-parishes') || '[]');
-
-            parishSelect.innerHTML = '<option value="">Freguesia</option>';
-            parishes.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.id;
-                opt.text = p.name;
-                parishSelect.appendChild(opt);
-            });
-        });
-    });
-</script>
-
-{{--Toggle Buttons JavaScript--}}
-<script>
-    const btnComprar = document.getElementById("btn-comprar");
-    const btnArrendar = document.getElementById("btn-arrendar");
-    const slider = document.getElementById("slider");
-
-    let selected = null; // Controla o botão atualmente ativo
-
-    btnComprar.addEventListener("click", () => {
-        if (selected === "comprar") {
-            // Se já estava selecionado, deseleciona
-            selected = null;
-            slider.style.display = "none";
-            btnComprar.classList.remove("text-white", "font-semibold");
-            btnComprar.classList.add("text-gray-800");
-        } else {
-            selected = "comprar";
-            slider.style.display = "block";
-            slider.style.left = "0%";
-            btnComprar.classList.add("text-white", "font-semibold");
-            btnComprar.classList.remove("text-gray-800");
-            btnArrendar.classList.remove("text-white", "font-semibold");
-            btnArrendar.classList.add("text-gray-800");
-        }
-    });
-
-    btnArrendar.addEventListener("click", () => {
-        if (selected === "arrendar") {
-            selected = null;
-            slider.style.display = "none";
-            btnArrendar.classList.remove("text-white", "font-semibold");
-            btnArrendar.classList.add("text-gray-800");
-        } else {
-            selected = "arrendar";
-            slider.style.display = "block";
-            slider.style.left = "50%";
-            btnArrendar.classList.add("text-white", "font-semibold");
-            btnArrendar.classList.remove("text-gray-800");
-            btnComprar.classList.remove("text-white", "font-semibold");
-            btnComprar.classList.add("text-gray-800");
-        }
-    });
-
-    // Inicialmente sem seleção
-    slider.style.display = "none";
-</script>
-
+    </script>
+@endpush

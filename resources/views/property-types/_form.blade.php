@@ -82,30 +82,38 @@
     </div>
 </form>
 
+@push('styles')
+    <style>
+        .filepond--root {
+            height: auto;
+            max-width: 300px;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const existingImage = {!! $propertyType->icon_path ? json_encode(Storage::url($propertyType->icon_path)) : 'null' !!};
-
             const pondOptions = {
                 //
             };
-
             if (existingImage) {
-                pondOptions.files = [
-                    {
-                        source: existingImage,
-                        options: {
-                            type: 'local',
-                            file: {},
-                            metadata: {
-                                poster: existingImage
-                            }
+                pondOptions.files = [{
+                    source: existingImage,
+                    options: {
+                        type: 'local',
+                        file: {
+                            name: existingImage.split('/').pop(),
+                            size: 123456, // fake size
+                            type: 'image/jpeg/png/jpg/webp', // fake type
+                        },
+                        metadata: {
+                            poster: existingImage
                         }
                     }
-                ];
+                }];
             }
-
             FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>

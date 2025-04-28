@@ -43,6 +43,7 @@ class PropertyController extends Controller
     {
         // TODO: Validate and save the announcement here
 
-        return redirect()->route('dashboard')->with('success', 'Announcement created successfully.');
+        return redirect()->route('properties.my')
+            ->with('success', 'Property created successfully!');
     }
 }

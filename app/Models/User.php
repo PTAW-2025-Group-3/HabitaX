@@ -48,7 +48,6 @@ class User extends Authenticatable
         'staff_number' => 'integer',
     ];
 
-    // get image url
     public function getProfilePictureUrl()
     {
         if ($this->profile_picture_path) {

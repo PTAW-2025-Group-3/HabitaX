@@ -140,9 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
         allowImageFilter: true,
         allowImageEdit: true,
         allowRemove: true,
-        imageCropAspectRatio: '1:1',
-        imageResizeTargetWidth: 300, // можно больше — зависит от вашей карточки
-        imageResizeTargetHeight: 300, // соответственно
         imageEditEditor: {
             open: (file) => {
                 console.log('Opening editor...');

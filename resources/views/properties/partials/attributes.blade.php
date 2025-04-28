@@ -292,9 +292,11 @@
         </div>
     @endif
 </div>
-<style>
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        opacity: 0;
-        cursor: pointer;
-    }
-</style>
+@push('styles')
+    <style>
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+@endpush

@@ -18,12 +18,15 @@ class UserSeeder extends Seeder
                 'name' => 'Kousha Rezaei',
                 'email' => 'kosharezae@yahoo.com',
                 'password' => 'passwordKousha',
-                'user_type' => 'admin'
+                'user_type' => 'admin',
+                'state' => 'active',
             ],
             [
-                'name' => 'Sara Moshiri',
-                'email' => 'sara@example.com',
-                'password' => 'password2'
+                'name' => 'Sedro Pampaio',
+                'email' => 'sedro@ua.pt',
+                'password' => 'pampaio',
+                'user_type' => 'moderator',
+                'state' => 'active',
             ],
             [
                 'name' => 'John Doe',
@@ -45,9 +48,11 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             User::factory()
                 ->create([
-                    'email' => $user['email'], // Prevent duplicate seed
+                    'email' => $user['email'],
                     'name' => $user['name'],
                     'password' => Hash::make($user['password']),
+                    'user_type' => $user['user_type'] ?? 'user',
+                    'state' => $user['state'] ?? 'active',
                 ]
             );
         }

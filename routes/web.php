@@ -23,7 +23,7 @@ use App\Http\Controllers\AdvertisementController;
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Dashboard (after login)
+// Dashboard
 Route::get('/dashboard', function () {
     return view('auth.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

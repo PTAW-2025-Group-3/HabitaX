@@ -25,9 +25,9 @@ COPY . /var/www
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Delete vite HMR marker if exists
-RUN rm -f public/hot
+#RUN rm -f public/hot
 
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader #--no-dev
 
 # === Stage 2: Runtime
 FROM php:8.3-fpm-alpine
