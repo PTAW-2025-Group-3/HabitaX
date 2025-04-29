@@ -24,9 +24,13 @@ class PropertyAttributeFactory extends Factory
 
         switch ($type) {
             case AttributeType::TEXT->value:
+                $data['min_length'] = $this->faker->numberBetween(1, 10);
+                $data['max_length'] = $this->faker->numberBetween(11, 50);
+                break;
+
             case AttributeType::LONG_TEXT->value:
-                $data['min_length'] = $this->faker->numberBetween(1, 50);
-                $data['max_length'] = $this->faker->numberBetween(51, 255);
+                $data['min_length'] = $this->faker->numberBetween(10, 50);
+                $data['max_length'] = $data['min_length'] + $this->faker->numberBetween(100, 255);
                 break;
 
             case AttributeType::INT->value:

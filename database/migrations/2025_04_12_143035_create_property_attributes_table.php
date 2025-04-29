@@ -37,7 +37,7 @@ return new class extends Migration
         Schema::create('property_attribute_options', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('property_attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
             $table->string('name');
             $table->integer('order')->nullable();
             $table->string('icon_path')->nullable();
@@ -49,7 +49,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
-            $table->foreignId('property_attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
             $table->boolean('is_required')->default(false);
             $table->boolean('is_active')->default(true);
 

@@ -36,7 +36,7 @@ class PropertyAttributeOptionController extends Controller
             'name' => $request->name,
             'order' => $request->order,
             'icon_path' => $iconPath,
-            'property_attribute_id' => $request->id,
+            'attribute_id' => $request->id,
         ]);
 
         return redirect()->route('attribute-options.index', $request->id)
@@ -76,14 +76,14 @@ class PropertyAttributeOptionController extends Controller
             'icon_path' => $iconPath,
         ]);
 
-        return redirect()->route('attribute-options.index', $option->property_attribute_id)
+        return redirect()->route('attribute-options.index', $option->attribute_id)
             ->with('success', 'Option updated successfully.');
     }
 
     public function destroy($id)
     {
         $option = PropertyAttributeOption::findOrFail($id);
-        $attributeId = $option->property_attribute_id;
+        $attributeId = $option->attribute_id;
         $option->delete();
 
         return redirect()->route('attribute-options.index', $attributeId)

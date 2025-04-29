@@ -43,7 +43,9 @@
 
                     @isset($typeViewMap[$attr->type->value])
                         @include($typeViewMap[$attr->type->value], [
-                            'attr' => $attr, 'parameter' => $parameters->firstWhere('attribute_id', $attr->id)
+                            'attr' => $attr,
+                            'parameter' => $parameterMap[$attr->id] ?? null,
+                            'selectedOptions' => $parameterOptionMap[$attr->id] ?? [],
                         ])
                     @else
                         <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-500">
@@ -54,7 +56,7 @@
                         </div>
                     @endisset
 
-                @if(!$loop->last)
+                    @if(!$loop->last)
                         <div class="border-b border-gray-100 md:hidden mt-6"></div>
                     @endif
                 </div>

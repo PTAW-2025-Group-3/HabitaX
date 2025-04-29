@@ -50,15 +50,6 @@
         const adCards = document.querySelectorAll('[data-status]');
         const noAdsMessage = document.getElementById('no-ads');
 
-        // Rotate chevron when dropdown is active
-        statusSelect.addEventListener('focus', function() {
-            this.nextElementSibling.querySelector('.chevron').classList.add('rotate-90');
-        });
-
-        statusSelect.addEventListener('blur', function() {
-            this.nextElementSibling.querySelector('.chevron').classList.remove('rotate-90');
-        });
-
         // Filter ads based on selection
         statusSelect.addEventListener('change', function() {
             const selectedStatus = this.value;

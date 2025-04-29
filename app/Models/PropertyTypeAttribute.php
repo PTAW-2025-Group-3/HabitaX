@@ -11,7 +11,7 @@ class PropertyTypeAttribute extends Model
 
     protected $fillable = [
         'property_type_id',
-        'property_attribute_id',
+        'attribute_id',
         'is_required',
         'is_active',
     ];
@@ -28,6 +28,6 @@ class PropertyTypeAttribute extends Model
 
     public function property_attribute()
     {
-        return $this->belongsTo(PropertyAttribute::class, 'property_attribute_id');
+        return $this->belongsTo(PropertyAttribute::class, 'attribute_id');
     }
 }

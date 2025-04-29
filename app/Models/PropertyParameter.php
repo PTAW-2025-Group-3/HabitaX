@@ -13,6 +13,8 @@ class PropertyParameter extends Model
         'property_id',
         'attribute_id',
         'value',
+        'text_value',
+        'is_multiple',
     ];
 
     public function property()
@@ -23,5 +25,10 @@ class PropertyParameter extends Model
     public function attribute()
     {
         return $this->belongsTo(PropertyAttribute::class, 'attribute_id');
+    }
+
+    public function options()
+    {
+        return $this->hasMany(PropertyParameterOption::class, 'parameter_id');
     }
 }

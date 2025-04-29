@@ -14,6 +14,9 @@
             <span class="text-red-500 ml-1">*</span>
         @endif
     </div>
+    @php
+        $selectedOptions = old("attributes.{$attr->id}", $selectedOptions ?? []);
+    @endphp
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         @foreach($attr->options as $opt)
             <label class="flex items-center cursor-pointer p-2 rounded-lg hover:bg-gray-100">
@@ -21,7 +24,7 @@
                        type="checkbox"
                        name="attributes[{{ $attr->id }}][]"
                        value="{{ $opt->id }}"
-                       id="attr-{{ $attr->id }}-opt-{{ $loop->index }}">
+                    {{ in_array($opt->id, $selectedOptions) ? 'checked' : '' }}>
                 <span class="ml-2 text-gray-700">{{ $opt->name }}</span>
             </label>
         @endforeach

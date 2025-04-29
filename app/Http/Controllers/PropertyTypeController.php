@@ -108,7 +108,7 @@ class PropertyTypeController extends Controller
     {
         $propertyType = PropertyType::findOrFail($id);
         $allAttributes = PropertyAttribute::all();
-        $propertyTypeAttributes = $propertyType->attributes()->pluck('property_attribute_id')->toArray();
+        $propertyTypeAttributes = $propertyType->attributes()->pluck('attribute_id')->toArray();
 
         return view('property-types.attributes', compact('propertyType', 'allAttributes', 'propertyTypeAttributes'));
     }

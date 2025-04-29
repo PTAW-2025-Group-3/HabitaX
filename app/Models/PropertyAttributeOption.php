@@ -14,7 +14,7 @@ class PropertyAttributeOption extends Model
         'name',
         'order',
         'icon_path',
-        'property_attribute_id',
+        'attribute_id',
     ];
 
     protected $casts = [
@@ -23,6 +23,6 @@ class PropertyAttributeOption extends Model
 
     public function attribute()
     {
-        return $this->belongsTo(PropertyAttribute::class, 'property_attribute_id');
+        return $this->belongsTo(PropertyAttribute::class, 'attribute_id');
     }
 }

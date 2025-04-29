@@ -20,7 +20,7 @@ class PropertyTypeAttributeSeeder extends Seeder
             foreach ($attributes as $attributeId) {
                 PropertyTypeAttribute::create([
                     'property_type_id' => $propertyType->id,
-                    'property_attribute_id' => $attributeId,
+                    'attribute_id' => $attributeId,
                     'is_required' => rand(0, 1) === 1,
                     'is_active' => true,
                 ]);

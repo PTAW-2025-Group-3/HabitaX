@@ -43,6 +43,6 @@ class PropertyAttribute extends Model
 
     public function options()
     {
-        return $this->hasMany(PropertyAttributeOption::class, 'property_attribute_id');
+        return $this->hasMany(PropertyAttributeOption::class, 'attribute_id');
     }
 }

@@ -18,7 +18,12 @@
                 <i class="bi bi-house-check text-xl text-primary mr-3"></i>
                 <h2 class="text-xl font-bold text-primary">Detalhes de Propriedade</h2>
             </div>
-            @include('properties.form.attributes', compact('attributes', 'parameters'))
+            @include('properties.form.attributes', [
+                'attributes' => $attributes,
+                'parameters' => $parameters,
+                'parameterMap' => $parameterMap,
+                'parameterOptionMap' => $parameterOptionMap
+            ])
         </div>
     @endif
 

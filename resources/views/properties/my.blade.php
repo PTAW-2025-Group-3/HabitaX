@@ -51,15 +51,6 @@
         const propertyCards = document.querySelectorAll('[data-status]');
         const noPropertiesMessage = document.getElementById('no-properties');
 
-        // Rotate chevron when dropdown is active
-        statusSelect.addEventListener('focus', function() {
-            this.nextElementSibling.querySelector('.chevron').classList.add('rotate-90');
-        });
-
-        statusSelect.addEventListener('blur', function() {
-            this.nextElementSibling.querySelector('.chevron').classList.remove('rotate-90');
-        });
-
         // Filter properties based on selection
         statusSelect.addEventListener('change', function() {
             const selectedStatus = this.value;

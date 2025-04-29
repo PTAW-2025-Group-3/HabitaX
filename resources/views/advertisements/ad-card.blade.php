@@ -15,7 +15,7 @@
                 {{ $ad->title }} em {{ $ad->property->location }}
             </h3>
             <p class="text-sm text-gray mb-2">
-                {{ \App\Models\Parish::find($ad->property->parish_id)->name }}
+                {{ $ad->property->parish->name }}
             </p>
             <p class="text-lg font-bold text-secondary">
                 {{ number_format($ad->price, 0, ',', '.') }}€

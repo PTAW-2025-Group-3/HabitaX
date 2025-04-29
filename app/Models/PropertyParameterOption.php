@@ -11,17 +11,17 @@ class PropertyParameterOption extends Model
     use HasFactory;
 
     protected $fillable = [
-        'property_parameter_id',
-        'property_attribute_option_id',
+        'parameter_id',
+        'option_id',
     ];
 
-    public function property_parameter()
+    public function parameter()
     {
-        return $this->belongsTo(PropertyParameter::class, 'property_parameter_id');
+        return $this->belongsTo(PropertyParameter::class, 'parameter_id');
     }
 
-    public function property_attribute_option()
+    public function option()
     {
-        return $this->belongsTo(PropertyAttributeOption::class, 'property_attribute_option_id');
+        return $this->belongsTo(PropertyAttributeOption::class, 'option_id');
     }
 }

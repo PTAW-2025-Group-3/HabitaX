@@ -49,7 +49,7 @@ class PropertyParameterSeeder extends Seeder
     {
         PropertyParameter::create([
             'property_id' => $propertyId,
-            'property_attribute_id' => $attributeId,
+            'attribute_id' => $attributeId,
             'value' => (string) $this->generateValueFromId($attributeId),
         ]);
     }

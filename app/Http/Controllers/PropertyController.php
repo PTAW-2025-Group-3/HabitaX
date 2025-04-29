@@ -36,8 +36,6 @@ class PropertyController extends Controller
     public function create(Request $request)
     {
         $propertyTypes = PropertyType::where('is_active', true)
-            ->with('attributes')
-            ->with('attributes.options')
             ->orderBy('name')
             ->get();
 
@@ -53,6 +51,7 @@ class PropertyController extends Controller
             'description' => 'nullable|string|max:1000',
             'property_type_id' => 'required|exists:property_types,id',
             'parish_id' => 'nullable|exists:parishes,id',
+            'images' => 'nullable|array|max:20',
             'images.*' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -67,12 +66,6 @@ class PropertyController extends Controller
         if ($request->hasFile('images')) {
             //
         }
-
-//        if ($request->has('parameters')) {
-//            foreach ($request->parameters as $attributeId => $optionId) {
-//                $property->attributes()->attach($attributeId, ['option_id' => $optionId]);
-//            }
-//        }
 
         return redirect()->route('properties.edit', $property->id)
             ->with('success', 'Property created successfully!');
@@ -91,7 +84,7 @@ class PropertyController extends Controller
             'property_type',
             'property_type.attributes.options',
             'parish',
-            'parameters'
+            'parameters.options'
         );
 
         $attributes = $property->type->attributes()
@@ -101,19 +94,32 @@ class PropertyController extends Controller
 
         $parameters = $property->parameters()->get();
 
-        return view('properties.edit', compact('property', 'attributes', 'parameters'));
+        // Мапа: attribute_id => PropertyParameter
+        $parameterMap = $parameters->keyBy('attribute_id');
+
+        $parameterOptionMap = $parameters->mapWithKeys(fn($p) => [
+            $p->attribute_id => $p->options->pluck('option_id')->toArray()
+        ]);
+
+        return view('properties.edit', compact(
+            'property',
+            'attributes',
+            'parameters',
+            'parameterMap',
+            'parameterOptionMap'
+        ));
     }
 
     public function update(Request $request, $id)
     {
         $property = Property::findOrFail($id);
 
-        if (auth()->id() != $property->created_by) {
+        if (auth()->id() !== $property->created_by) {
             return redirect()->route('properties.index')
                 ->with('error', 'You are not authorized to update this property.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'property_type_id' => 'required|exists:property_types,id',
@@ -121,73 +127,83 @@ class PropertyController extends Controller
             'images.*' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $property->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'property_type_id' => $request->property_type_id,
-            'parish_id' => $request->parish_id,
-            'updated_by' => auth()->id(),
-        ]);
+        $property->update(array_merge($validated, ['updated_by' => auth()->id()]));
 
         if ($request->hasFile('images')) {
-            // implement later with laravel media library
+            // TODO: handle with media library
         }
 
-        //        // Handle the attributes
-        $attributesData = $request->input('attributes', []);
+        $this->updateAttributes($property, $request->input('attributes', []));
+
+        return redirect()->route('properties.edit', $property->id)
+            ->with('success', 'Property updated successfully!');
+    }
+
+    private function updateAttributes(Property $property, array $attributesData): void
+    {
+        $attributes = PropertyAttribute::whereIn('id', array_keys($attributesData))
+            ->get()
+            ->keyBy('id');
 
         foreach ($attributesData as $attributeId => $value) {
-            $attribute = PropertyAttribute::find($attributeId);
+            $attribute = $attributes[$attributeId] ?? null;
 
             if (!$attribute) {
                 continue;
             }
 
             if ($attribute->type === AttributeType::SELECT_MULTIPLE) {
-                // 1. Delete existing options
-                PropertyParameterOption::where('property_id', $property->id)
-                    ->where('attribute_id', $attributeId)
-                    ->delete();
-
-                if (is_array($value)) {
-                    // 2. Save new options
-                    foreach ($value as $optionId) {
-                        PropertyParameterOption::create([
-                            'property_id' => $property->id,
-                            'attribute_id' => $attributeId,
-                            'option_id' => $optionId,
-                        ]);
-                    }
-                }
+                $this->updateSelectMultiple($property, $attribute, $value);
             } else {
-                PropertyParameter::updateOrCreate(
-                    [
-                        'property_id' => $property->id,
-                        'attribute_id' => $attributeId,
-                    ],
-                    [
-                        'value' => is_array($value) ? json_encode($value) : $value,
-                    ]
-                );
+                $this->updateSimpleValue($property, $attribute, $value);
             }
         }
-
-        return redirect()->route('properties.edit', $property->id)
-            ->with('success', 'Property updated successfully!');
     }
 
-    public function destroy(Request $request, $id)
+    private function updateSimpleValue(Property $property, PropertyAttribute $attribute, mixed $value): void
+    {
+        PropertyParameter::updateOrCreate(
+            [
+                'property_id' => $property->id,
+                'attribute_id' => $attribute->id,
+            ],
+            [
+                'value' => is_array($value) ? json_encode($value) : $value,
+            ]
+        );
+    }
+
+    private function updateSelectMultiple(Property $property, PropertyAttribute $attribute, array $optionIds): void
+    {
+        $parameter = PropertyParameter::firstOrCreate([
+            'property_id' => $property->id,
+            'attribute_id' => $attribute->id,
+        ]);
+
+        // Сначала удаляем старые связи
+        PropertyParameterOption::where('parameter_id', $parameter->id)->delete();
+
+        // Затем добавляем новые
+        foreach ($optionIds as $optionId) {
+            PropertyParameterOption::create([
+                'parameter_id' => $parameter->id,
+                'option_id' => $optionId,
+            ]);
+        }
+    }
+
+    public function destroy($id)
     {
         $property = Property::findOrFail($id);
 
-        if(auth()->id() == $property->created_by) {
-            $property->delete();
-        } else {
-            return redirect()->route('properties.index')
+        if(auth()->id() != $property->created_by) {
+            return redirect()->route('properties.my')
                 ->with('error', 'You are not authorized to delete this property.');
         }
 
-        return redirect()->route('properties.index')
+        $property->delete();
+
+        return redirect()->route('properties.my')
             ->with('success', 'Property deleted successfully!');
     }
 }

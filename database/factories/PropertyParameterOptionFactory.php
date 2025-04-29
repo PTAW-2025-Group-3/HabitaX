@@ -19,8 +19,8 @@ class PropertyParameterOptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_parameter_id' => PropertyParameter::factory(),
-            'property_attribute_option_id' => PropertyAttributeOption::factory(),
+            'parameter_id' => PropertyParameter::factory(),
+            'option_id' => PropertyAttributeOption::factory(),
         ];
     }
 }
