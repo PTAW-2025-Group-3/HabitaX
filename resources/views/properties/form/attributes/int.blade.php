@@ -1,5 +1,6 @@
 <div class="relative">
     <input type="number" name="attributes[{{ $attr->id }}]"
+           value="{{ old('attributes.' . $attr->id, $parameter?->value) }}"
            class="form-input-big w-full py-3 pl-4 pr-10"
            placeholder="Insira um valor numérico"
         {{ $attr->is_required ? 'required' : '' }}

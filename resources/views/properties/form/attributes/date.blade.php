@@ -2,6 +2,7 @@
     <input type="date" name="attributes[{{ $attr->id }}]"
            class="form-input-big w-full py-3 pl-4 pr-10 appearance-none"
            style="position: relative; z-index: 10; background: transparent;"
+           value="{{ old('attributes.' . $attr->id, $parameter?->value) }}"
         {{ $attr->is_required ? 'required' : '' }}
         {{ $attr->min_date !== null ? 'min='.$attr->min_date->format('Y-m-d') : '' }}
         {{ $attr->max_date !== null ? 'max='.$attr->max_date->format('Y-m-d') : '' }}>

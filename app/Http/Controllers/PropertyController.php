@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttributeType;
 use App\Models\District;
 use App\Models\Property;
+use App\Models\PropertyAttribute;
+use App\Models\PropertyParameter;
+use App\Models\PropertyParameterOption;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
 
@@ -83,7 +87,14 @@ class PropertyController extends Controller
                 ->with('error', 'You are not authorized to update this property.');
         }
 
-        $attributes = $property->property_type->attributes()
+        $property->load(
+            'property_type',
+            'property_type.attributes.options',
+            'parish',
+            'parameters'
+        );
+
+        $attributes = $property->type->attributes()
             ->with('options')
             ->orderBy('name')
             ->get();
@@ -119,7 +130,46 @@ class PropertyController extends Controller
         ]);
 
         if ($request->hasFile('images')) {
-            //
+            // implement later with laravel media library
+        }
+
+        //        // Handle the attributes
+        $attributesData = $request->input('attributes', []);
+
+        foreach ($attributesData as $attributeId => $value) {
+            $attribute = PropertyAttribute::find($attributeId);
+
+            if (!$attribute) {
+                continue;
+            }
+
+            if ($attribute->type === AttributeType::SELECT_MULTIPLE) {
+                // 1. Delete existing options
+                PropertyParameterOption::where('property_id', $property->id)
+                    ->where('attribute_id', $attributeId)
+                    ->delete();
+
+                if (is_array($value)) {
+                    // 2. Save new options
+                    foreach ($value as $optionId) {
+                        PropertyParameterOption::create([
+                            'property_id' => $property->id,
+                            'attribute_id' => $attributeId,
+                            'option_id' => $optionId,
+                        ]);
+                    }
+                }
+            } else {
+                PropertyParameter::updateOrCreate(
+                    [
+                        'property_id' => $property->id,
+                        'attribute_id' => $attributeId,
+                    ],
+                    [
+                        'value' => is_array($value) ? json_encode($value) : $value,
+                    ]
+                );
+            }
         }
 
         return redirect()->route('properties.edit', $property->id)

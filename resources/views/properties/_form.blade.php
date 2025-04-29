@@ -18,10 +18,7 @@
                 <i class="bi bi-house-check text-xl text-primary mr-3"></i>
                 <h2 class="text-xl font-bold text-primary">Detalhes de Propriedade</h2>
             </div>
-            @php
-
-                @endphp
-            @include('properties.form.attributes', compact('attributes'))
+            @include('properties.form.attributes', compact('attributes', 'parameters'))
         </div>
     @endif
 
@@ -76,7 +73,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // FilePond customization
-            const existingImages = {{ json_encode($property->images ?? null) }};
+            {{--   {{ json_encode($property->images ?? null) }}  --}}
+            const existingImages = null;
             const pondOptions = {
                 maxFiles: 20,
                 maxFileSize: '2MB',

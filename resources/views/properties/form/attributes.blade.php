@@ -42,7 +42,9 @@
                     </label>
 
                     @isset($typeViewMap[$attr->type->value])
-                        @include($typeViewMap[$attr->type->value], ['attr' => $attr])
+                        @include($typeViewMap[$attr->type->value], [
+                            'attr' => $attr, 'parameter' => $parameters->firstWhere('attribute_id', $attr->id)
+                        ])
                     @else
                         <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-500">
                             <div class="flex items-center">
@@ -52,11 +54,21 @@
                         </div>
                     @endisset
 
-                    @if(!$loop->last)
+                @if(!$loop->last)
                         <div class="border-b border-gray-100 md:hidden mt-6"></div>
                     @endif
                 </div>
             @endforeach
+
+            <ul>
+                @foreach($parameters as $parameter)
+                    @if($parameter->attribute_id === null)
+                        <li class="text-red-500">
+                            <strong>Erro:</strong> Parâmetro {{ $parameter->id }} não associado a nenhum atributo.
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
 
         </div>
     @endif

@@ -177,7 +177,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const typeSelect = $('#type');
             const numberFields = $('#number-fields');
             const textFields = $('#text-fields');
