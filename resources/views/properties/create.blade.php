@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Create Announcement')
+@section('title', 'Criar Propriedade')
 
 @section('content')
     <div class="max-w-5xl mx-auto px-4 py-8">

@@ -1,52 +1,72 @@
 <form action="{{ $action }}" method="POST" enctype="multipart/form-data" class="space-y-8">
     @csrf
-    @if($method === 'PUT')
-        @method('PUT')
-    @endif
+    @isset($method)
+        @method($method)
+    @endisset
 
     <div id="details-section">
-        @include('properties.create.details')
+        @include('properties.form.details')
     </div>
 
     <div id="location-section">
-        @include('properties.create.location')
+        @include('properties.form.location')
     </div>
 
-    <div class="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 animate-fade-in">
-        <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
-            <i class="bi bi-building text-2xl text-primary mr-3"></i>
-            <h2 class="text-2xl font-bold text-primary">Tipo de Propriedade</h2>
+    @if($property)
+        <div class="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 animate-fade-in">
+            <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+                <i class="bi bi-house-check text-xl text-primary mr-3"></i>
+                <h2 class="text-xl font-bold text-primary">Detalhes de Propriedade</h2>
+            </div>
+            @php
+
+                @endphp
+            @include('properties.form.attributes', compact('attributes'))
         </div>
+    @endif
 
-        <div class="transition-all duration-300 hover:shadow-md p-4 rounded-xl hover:bg-gray-50">
-            <label for="property_type_id" class="block text-sm font-semibold text-gray-secondary mb-3 flex items-center">
-                <i class="bi bi-house-gear mr-2 text-secondary"></i>
-                Selecione o tipo de propriedade
-            </label>
-
-            <div class="relative dropdown-wrapper w-full sm:w-auto">
-                <select name="property_type_id" id="property_type_id"
-                        class="dropdown-select py-3 pl-4 pr-10 w-full text-base">
-                    <option value="" disabled selected>Escolha o tipo de imóvel</option>
-                    @foreach($propertyTypes as $propertyType)
-                        <option value="{{ $propertyType->id }}" {{ old('property_type_id', $selectedPropertyType ?? '') == $propertyType->id ? 'selected' : '' }}>
-                            {{ $propertyType->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                    <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
-                </div>
+    <!-- Other details -->
+    @if(false)
+        <div class="bg-white shadow-md rounded-lg p-8 mb-8 animate-fade-in">
+            <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+                <i class="bi bi-building text-xl text-primary mr-3"></i>
+                <h2 class="text-xl font-bold text-primary">Outros detalhes</h2>
             </div>
         </div>
+    @endif
+
+    <!-- Images -->
+    <div class="bg-white shadow-md rounded-lg p-8 mb-8 animate-fade-in">
+        <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
+            <i class="bi bi-images text-xl text-primary mr-3"></i>
+            <h2 class="text-xl font-bold text-primary">Imagens da Propriedade</h2>
+        </div>
+        <p class="text-sm text-gray-500 mb-4">Submete aqui imagens da propriedade. Imagens tem que ser... Depois deixamos aqui recomendações gerais para fotos.</p>
+        <input
+            type="file"
+            class="filepond"
+            name="images"
+            id="images"
+        />
+        <p class="text-xs text-gray-400 mb-4">
+            Formatos aceites: JPG, JPEG, PNG |
+            Tamanho máximo: 2MB |
+            Máximo de 20 fotografias
+        </p>
     </div>
 
-    <div id="dynamic-attributes">
-        {{--   Dynamic attributes will be loaded here   --}}
-    </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="flex justify-end">
-        <button type="submit" class="btn-secondary px-6 py-2 rounded-md">
+        <button type="submit" class="btn-primary px-6 py-2 rounded-md">
             {{ $buttonText }}
         </button>
     </div>
@@ -55,39 +75,14 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const typeSelector = document.getElementById('property_type_id');
-            const container = document.getElementById('dynamic-attributes');
-
-            function loadAttributes(typeId) {
-                // Load attributes
-                fetch(`/property-type/${typeId}/attributes/html`)
-                    .then(res => res.text())
-                    .then(html => {
-                        container.innerHTML = html;
-                    })
-                    .catch(() => {
-                        container.innerHTML = '<p class="text-danger">Erro ao carregar atributos</p>';
-                    });
-            }
-
-            typeSelector.addEventListener('change', () => {
-                if (typeSelector.value) {
-                    loadAttributes(typeSelector.value);
-                } else {
-                    container.innerHTML = '';
-                }
-            });
-
-            if (typeSelector.value) {
-                loadAttributes(typeSelector.value);
-            }
-
             // FilePond customization
             const existingImages = {{ json_encode($property->images ?? null) }};
             const pondOptions = {
                 maxFiles: 20,
+                maxFileSize: '2MB',
                 allowMultiple: true,
                 allowReorder: true,
+                immediateUpload: false,
                 storeAsFile: true,
                 imagePreviewHeight: 250,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],

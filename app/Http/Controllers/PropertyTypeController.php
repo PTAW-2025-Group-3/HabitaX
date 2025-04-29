@@ -37,7 +37,7 @@ class PropertyTypeController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('properties.partials.attributes', compact('attributes'));
+        return view('properties.create.partials.attributes', compact('attributes'));
     }
 
     public function create()

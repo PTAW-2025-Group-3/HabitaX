@@ -36,7 +36,7 @@
                         @php
                             $advertisement = optional($favorite->advertisement);
                             $property = optional($advertisement->property);
-                            $image = $property->images[0] ?? asset('images/property-placeholder.jpg');
+                            $image = $property->images[0] ?? asset('images/property-placeholder.png');
                             $title = $advertisement->title ?? 'Imóvel indisponível';
                             $parishName = optional($property->parish)->name ?? 'Localização indisponível';
                             $price = $advertisement->price ?? 0;

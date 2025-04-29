@@ -1,7 +1,7 @@
 <div class="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 animate-fade-in">
     <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
-        <i class="bi bi-geo-alt text-2xl text-primary mr-3"></i>
-        <h2 class="text-2xl font-bold text-primary">Localização</h2>
+        <i class="bi bi-geo-alt text-xl text-primary mr-3"></i>
+        <h2 class="text-xl font-bold text-primary">Localização</h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -73,4 +73,12 @@
             </div>
         </div>
     </div>
+
+    @error('parish')
+    <div class="text-red-500 text-sm mt-1">
+        {{ $message }}
+    </div>
+    @enderror
+
+    {{--  Street address, ZIP code, and maybe autodetect city by ZIP code  --}}
 </div>

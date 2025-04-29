@@ -67,8 +67,11 @@ Route::get('/properties', [PropertyController::class, 'index'])->name('propertie
 Route::middleware('auth')->controller(PropertyController::class)->group(function () {
     Route::get('/properties/my', 'my')->name('properties.my');
     Route::get('/properties/create', 'create')->name('properties.create');
-    Route::post('/properties/create/store', 'store')->name('properties.store');
+    Route::post('/properties', 'store')->name('properties.store');
     Route::get('/properties/{id}', 'show')->name('properties.show');
+    Route::get('/properties/{id}/edit', 'edit')->name('properties.edit');
+    Route::put('/properties/{id}', 'update')->name('properties.update');
+    Route::delete('/properties/{id}', 'destroy')->name('properties.destroy');
 });
 Route::get('/property-type/{id}/attributes', [PropertyTypeController::class, 'getAttributes'])
     ->name('property-type.attributes');

@@ -23,15 +23,16 @@ return new class extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('country');
-            $table->float('total_area');
+            $table->longText('description')->nullable();
+            $table->string('country')->default('Portugal');
+            $table->float('total_area')->nullable();
             $table->json('images')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_verified')->default(false);
 
             // Foreign keys
             $table->foreignId('property_type_id')->constrained('property_types')->onDelete('cascade');
-            $table->foreignId('parish_id')->constrained('parishes')->onDelete('cascade');
+            $table->foreignId('parish_id')->nullable()->constrained('parishes')->onDelete('cascade');
 
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

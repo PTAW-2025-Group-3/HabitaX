@@ -14,6 +14,7 @@ class Property extends Model
      */
     protected $fillable = [
         'title',
+        'description',
         'country',
         'total_area',
         'images',
