@@ -156,23 +156,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            const gallery = lightGallery(document.getElementById('lightgallery'), {
-                selector: 'a',
-                plugins: [lgThumbnail],
-                thumbnail: true,
-                download: false,
-                zoom: true,
-                fullScreen: true,
-                autoplayControls: false,
-                share: false,
-                loop: true,
-                mode: 'lg-fade',
-                speed: 500,
-            });
-            document.getElementById('openGalleryButton').addEventListener('click', function() {
-                gallery.openGallery(0);
-            });
-
             // Report button handler
             const reportBtn = document.getElementById('reportBtn');
             if (reportBtn) {
@@ -296,6 +279,24 @@
                     @endauth
                 });
             }
+
+            const gallery = lightGallery(document.getElementById('lightgallery'), {
+                selector: 'a',
+                plugins: [lgThumbnail],
+                thumbnail: true,
+                download: false,
+                zoom: true,
+                fullScreen: true,
+                autoplayControls: false,
+                share: false,
+                loop: true,
+                mode: 'lg-fade',
+                speed: 500,
+            });
+            document.getElementById('openGalleryButton').addEventListener('click', function() {
+                gallery.openGallery(0);
+            });
+
         });
     </script>
 @endpush

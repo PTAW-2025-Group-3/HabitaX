@@ -36,7 +36,7 @@ class AdvertisementController extends Controller
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
 
         // Resultado final paginado
-        $advertisements = $query->paginate(10);
+        $advertisements = $query->paginate(9);
 
         if ($request->ajax()) {
             return view('advertisements.listing.property-listings', compact('advertisements'))->render();

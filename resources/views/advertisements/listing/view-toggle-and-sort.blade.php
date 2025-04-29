@@ -1,13 +1,13 @@
 <div class="flex justify-between items-center mb-6">
     <!-- Botões de visualização -->
     <div class="flex space-x-2">
-        <button @click="view = 'grid'; $event.preventDefault()"
+        <button @click="updateView('grid'); $event.preventDefault()"
                 :class="view === 'grid' ? 'bg-gray-200' : 'hover:bg-gray-200'"
                 class="h-10 w-10 rounded-md transition-colors">
             <i class="bi bi-grid text-xl"
                :class="view === 'grid' ? 'text-gray-700' : 'text-gray-400'"></i>
         </button>
-        <button @click="view = 'list'; $event.preventDefault()"
+        <button @click="updateView('list'); $event.preventDefault()"
                 :class="view === 'list' ? 'bg-gray-200' : 'hover:bg-gray-200'"
                 class="h-10 w-10 rounded-md transition-colors">
             <i class="bi bi-list text-2xl"
@@ -43,18 +43,203 @@
         window.location.href = url.toString();
     }
 
-    // Inicialização do Alpine.js (se necessário)
+    // Inicialização do Alpine.js
     document.addEventListener('alpine:init', () => {
         Alpine.data('page', () => ({
             view: 'grid',
+            favorites: new Set(), // Para armazenar IDs dos anúncios favoritados
+
             init() {
                 // Restaurar view preference se existir
                 const savedView = localStorage.getItem('adsView');
                 if (savedView) this.view = savedView;
+
+                // Inicializar o estado dos favoritos
+                this.initializeFavorites();
+
+                // Inicializar os event listeners após o Alpine renderizar
+                this.$nextTick(() => {
+                    this.initializeEventListeners();
+                });
             },
+
+            initializeFavorites() {
+                // Coletar todos os favoritos na página
+                document.querySelectorAll('.favorite-btn').forEach(button => {
+                    const adId = button.dataset.adId;
+                    const isFavorite = button.classList.contains('text-red-500');
+
+                    if (isFavorite) {
+                        this.favorites.add(adId);
+                    }
+                });
+            },
+
             updateView(newView) {
                 this.view = newView;
                 localStorage.setItem('adsView', newView);
+
+                this.initializeFavorites();
+                this.$nextTick(() => {
+                    this.syncFavoritesState();
+                    this.initializeEventListeners();
+                });
+            },
+
+            syncFavoritesState() {
+                // Sincronizar o estado visual dos botões com o conjunto de favoritos
+                document.querySelectorAll('.favorite-btn').forEach(button => {
+                    const adId = button.dataset.adId;
+                    const isFavorite = this.favorites.has(adId);
+                    const heartIcon = button.querySelector('i');
+
+                    if (isFavorite) {
+                        button.classList.remove('text-gray-500');
+                        button.classList.add('text-red-500');
+                        if (heartIcon) {
+                            heartIcon.classList.remove('bi-heart');
+                            heartIcon.classList.add('bi-heart-fill');
+                        }
+                    } else {
+                        button.classList.remove('text-red-500');
+                        button.classList.add('text-gray-500');
+                        if (heartIcon) {
+                            heartIcon.classList.remove('bi-heart-fill');
+                            heartIcon.classList.add('bi-heart');
+                        }
+                    }
+                });
+            },
+
+            initializeEventListeners() {
+                this.initializeFavoriteButtons();
+                this.initializePhoneButtons();
+            },
+
+            initializeFavoriteButtons() {
+                document.querySelectorAll('.favorite-btn').forEach(button => {
+                    // Remover event listeners antigos
+                    const newButton = button.cloneNode(true);
+                    button.parentNode.replaceChild(newButton, button);
+
+                    // Adicionar novo event listener
+                    newButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        @auth
+                        const adId = newButton.dataset.adId;
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        const heartIcon = newButton.querySelector('i');
+
+                        if (newButton.dataset.loading === 'true') return;
+                        newButton.dataset.loading = 'true';
+
+                        fetch(`/advertisements/${adId}/favorite`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'same-origin'
+                        })
+                            .then(response => {
+                                if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success && heartIcon) {
+                                    if (data.isFavorite) {
+                                        heartIcon.classList.replace('bi-heart', 'bi-heart-fill');
+                                        newButton.classList.remove('text-gray-500');
+                                        newButton.classList.add('text-red-500');
+                                        this.favorites.add(adId);
+                                    } else {
+                                        heartIcon.classList.replace('bi-heart-fill', 'bi-heart');
+                                        newButton.classList.remove('text-red-500');
+                                        newButton.classList.add('text-gray-500');
+                                        this.favorites.delete(adId);
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro ao atualizar favorito:', error);
+                            })
+                            .finally(() => {
+                                newButton.dataset.loading = 'false';
+                            });
+                        @else
+                            window.location.href = "{{ route('login') }}?redirect={{ url()->current() }}";
+                        @endauth
+                    });
+                });
+            },
+
+            initializePhoneButtons() {
+                document.querySelectorAll('.phone-button').forEach(button => {
+                    // Remover event listeners antigos
+                    const newButton = button.cloneNode(true);
+                    button.parentNode.replaceChild(newButton, button);
+
+                    // Adicionar novo event listener
+                    newButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const advertiserId = this.dataset.advertiserId;
+
+                        if (this.dataset.loading === 'true') return;
+
+                        if (this.textContent.trim() === 'Ver Telefone') {
+                            // Mostrar ícone de loading
+                            this.dataset.originalText = this.innerHTML;
+                            this.dataset.loading = 'true';
+                            this.innerHTML = `<span class="flex items-center gap-2">
+                                <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                A carregar...
+                              </span>`;
+
+                            // Fetch phone number
+                            fetch(`/advertiser/${advertiserId}/phone`, {
+                                method: 'GET',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    const phone = data.telephone || 'Número não disponível';
+                                    this.dataset.loading = 'false';
+                                    this.innerHTML = phone;
+                                    this.classList.add('text-blue-600', 'font-bold');
+                                    this.title = "Clique para copiar";
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching phone number:', error);
+                                    this.dataset.loading = 'false';
+                                    this.innerHTML = 'Erro';
+                                    this.classList.add('text-red-500');
+                                });
+                        } else {
+                            // Copiar para clipboard
+                            navigator.clipboard.writeText(this.textContent.trim()).then(() => {
+                                const originalPhone = this.textContent.trim();
+                                this.textContent = "Copiado!";
+                                this.classList.add('text-green-500');
+
+                                setTimeout(() => {
+                                    this.textContent = originalPhone;
+                                    this.classList.remove('text-green-500');
+                                }, 1500);
+                            });
+                        }
+                    });
+                });
             }
         }));
     });

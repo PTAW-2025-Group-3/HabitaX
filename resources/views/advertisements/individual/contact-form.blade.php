@@ -67,11 +67,11 @@
     </form>
 
     <div class="text-center">
-        <a href="#" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center">
+        <a href="#" id="showPhoneBtn" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center group" data-phone="{{ $ad->creator->telephone ?? '+351 XXX XXX XXX' }}">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            Ver número de telefone
+            <span id="phoneText">Ver número de telefone</span>
         </a>
     </div>
 </div>
@@ -82,6 +82,8 @@
         const submitBtn = document.getElementById('submitBtn');
         const submitBtnText = document.getElementById('submitBtnText');
         const successMessage = document.getElementById('successMessage');
+        const phoneBtn = document.getElementById('showPhoneBtn');
+        const phoneText = document.getElementById('phoneText');
 
         if (form) {
             form.addEventListener('submit', function(e) {
@@ -153,6 +155,64 @@
                         submitBtn.classList.remove('opacity-75');
                         submitBtnText.textContent = 'Enviar Contacto';
                     });
+            });
+        }
+
+        if (phoneBtn) {
+            phoneBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Get the advertiser ID from the ad
+                const advertiserId = {{ $ad->creator->id ?? 0 }};
+
+                if (phoneText.textContent === 'Ver número de telefone') {
+                    // Show loading state
+                    phoneText.textContent = 'A carregar...';
+                    phoneText.classList.add('animate-pulse');
+
+                    // Fetch phone number with a simple GET request
+                    fetch(`/advertiser/${advertiserId}/phone`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const phone = data.telephone || 'Número não disponível';
+
+                            // Remove loading state
+                            phoneText.classList.remove('animate-pulse');
+
+                            // Apply animation to show the number
+                            phoneText.textContent = phone;
+                            phoneText.classList.add('animate-fade-in');
+                            phoneText.classList.add('text-blue-600', 'font-bold');
+
+                            // Add copy functionality
+                            phoneBtn.title = "Clique para copiar";
+                        })
+                        .catch(error => {
+                            console.error('Error fetching phone number:', error);
+                            phoneText.textContent = 'Erro ao obter número';
+                            phoneText.classList.remove('animate-pulse');
+                            phoneText.classList.add('text-red-500');
+                        });
+                } else {
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(phoneText.textContent).then(() => {
+                        const originalText = phoneText.textContent;
+
+                        phoneText.textContent = "Copiado!";
+                        phoneText.classList.add('text-green-500');
+
+                        setTimeout(() => {
+                            phoneText.textContent = originalText;
+                            phoneText.classList.remove('text-green-500');
+                        }, 1500);
+                    });
+                }
             });
         }
     });

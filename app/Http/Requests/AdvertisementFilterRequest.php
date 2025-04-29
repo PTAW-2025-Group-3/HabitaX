@@ -88,12 +88,24 @@ class AdvertisementFilterRequest extends FormRequest
             }
         }
 
+        $sortField = 'advertisements.created_at';
+        $sortDirection = 'desc';
+
         switch ($this->input('sort', 'recent')) {
-            case 'price_asc':  $query->orderBy('price', 'asc'); break;
-            case 'price_desc': $query->orderBy('price', 'desc'); break;
-            default:           $query->orderBy('advertisements.created_at', 'desc'); break;
+            case 'price_asc':
+                $sortField = 'price';
+                $sortDirection = 'asc';
+                break;
+            case 'price_desc':
+                $sortField = 'price';
+                $sortDirection = 'desc';
+                break;
+            default:
+                // Já definido como padrão
+                break;
         }
 
-        return $query;
+        return $query->orderBy($sortField, $sortDirection)
+            ->orderBy('advertisements.id', 'asc');
     }
 }

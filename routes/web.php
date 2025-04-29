@@ -16,6 +16,7 @@ use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\VerificationAdvertiserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ModeratorMiddleware;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdvertisementController;
@@ -40,6 +41,12 @@ Route::get('/about', function () {
 // Advertisement Routes
 Route::get('/advertisements/help', [AdvertisementController::class, 'help'])->name('advertisements.help');
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::get('/advertiser/{id}/phone', function ($id) {
+    $user = User::find($id);
+    return response()->json([
+        'telephone' => $user ? $user->telephone : null
+    ]);
+});
 
 Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
     // create, edit, delete

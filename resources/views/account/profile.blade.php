@@ -9,11 +9,11 @@
 
         <div class="space-y-6 sm:space-y-8">
             <!-- Informações de Perfil -->
-            <div class="bg-gray-50 rounded-lg p-4 sm:p-6 border border-gray-200">
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-4 sm:space-y-6" enctype="multipart/form-data">
+            <div class="bg-gray-50 rounded-lg p-4 sm:p-5 border border-gray-200">
+                <form action="{{ route('profile.update') }}" method="POST" class="space-y-4 sm:space-y-5" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="text-center sm:text-left mb-1">
+                    <div class="text-center sm:text-left">
                         <h3 class="text-xl font-medium text-primary">{{ auth()->user()->name }}</h3>
                         <p class="text-gray">{{ auth()->user()->email }}</p>
                     </div>
@@ -81,6 +81,20 @@
         .filepond--root {
             height: auto;
             max-width: 300px;
+        }
+
+        /* Reduzir o padding do topo na área de perfil */
+        .bg-gray-50.rounded-lg {
+            padding-top: 0 !important;
+        }
+
+        /* Reduzir espaçamento entre os elementos */
+        .space-y-4 > * + * {
+            margin-top: 1rem !important;
+        }
+
+        .space-y-5 > * + * {
+            margin-top: 1.25rem !important;
         }
     </style>
 @endpush
