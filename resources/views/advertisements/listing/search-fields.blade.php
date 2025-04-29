@@ -34,7 +34,7 @@
                 Tipo de Imóvel
             </label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="type" id="property-type" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="property_type" id="property-type"> class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Todos</option>
                     @foreach($propertyTypes as $type)
                         <option value="{{ $type->id }}" {{ $selectedType == $type->id ? 'selected' : '' }}>
