@@ -50,7 +50,7 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name',
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|file|nullable|file|mimes:png,svg,webp|max:2048',
+            'icon' => 'nullable|file|mimes:png,svg,webp|max:2048',
             'is_active' => 'boolean',
         ]);
 

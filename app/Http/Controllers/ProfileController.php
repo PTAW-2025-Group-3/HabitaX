@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'bio' => 'nullable|string|max:1000',

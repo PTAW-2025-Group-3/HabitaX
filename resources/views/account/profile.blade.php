@@ -90,10 +90,11 @@
         document.addEventListener('DOMContentLoaded', function () {
             const existingImage = {!! auth()->user()->profile_picture_path ? json_encode(Storage::url(auth()->user()->profile_picture_path)) : 'null' !!};
             const pondOptions = {
+                instantUpload: false,
+                storeAsFile: true,
+                allowReplace: true,
+                allowImageCrop: true,
                 imageCropAspectRatio: '1:1',
-                imagePreviewMaxHeight: 300,
-                imageResizeTargetWidth: 200,
-                imageResizeTargetHeight: 200,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
             };
             if (existingImage) {

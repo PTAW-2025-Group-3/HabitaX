@@ -88,8 +88,10 @@
                 maxFiles: 20,
                 allowMultiple: true,
                 allowReorder: true,
-                imagePreviewHeight: 200,
+                storeAsFile: true,
+                imagePreviewHeight: 250,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                labelIdle: 'Arraste e solte suas imagens ou <span class="filepond--label-action">Selecione</span>',
             };
             if (existingImages) {
                 pondOptions.files = [

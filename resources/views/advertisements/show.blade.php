@@ -158,6 +158,7 @@
 
             const gallery = lightGallery(document.getElementById('lightgallery'), {
                 selector: 'a',
+                plugins: [lgThumbnail],
                 thumbnail: true,
                 download: false,
                 zoom: true,

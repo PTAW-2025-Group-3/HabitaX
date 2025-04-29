@@ -96,7 +96,13 @@
         document.addEventListener('DOMContentLoaded', function () {
             const existingImage = {!! $propertyType->icon_path ? json_encode(Storage::url($propertyType->icon_path)) : 'null' !!};
             const pondOptions = {
-                //
+                instantUpload: false,
+                storeAsFile: true,
+                allowReplace: true,
+                allowImageCrop: true,
+                imageCropAspectRatio: '1:1',
+                acceptedFileTypes: ['image/png', 'image/svg+xml', 'image/webp'],
+                labelIdle: 'Arraste e solte ou <span class="filepond--label-action">Selecione</span>',
             };
             if (existingImage) {
                 pondOptions.files = [{
