@@ -15,7 +15,7 @@
                     <select id="sortFavorites" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
                         <option disabled selected>Ordenar por</option>
                         <option value="price_asc">Preço: Menor para Maior</option>
-                        <option value="price_desc">Preço: Maior para Menor</option>
+                        <option value="price_desc">Preço: Maior para Maior</option>
                         <option value="date_desc">Data: Mais Recente</option>
                         <option value="date_asc">Data: Mais Antiga</option>
                     </select>
@@ -27,9 +27,13 @@
 
             <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @if($favorites->isEmpty())
-                    <div class="col-span-full text-center py-8">
-                        <i class="bi bi-heart text-gray-300 text-5xl mb-4"></i>
-                        <p class="text-gray-400">Você não tem anúncios favoritos</p>
+                    <div class="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                <i class="bi bi-heart text-gray-300 text-2xl"></i>
+                            </div>
+                            <p class="text-gray-400">Você não tem anúncios favoritos</p>
+                        </div>
                     </div>
                 @else
                     @foreach($favorites as $favorite)
@@ -40,32 +44,51 @@
                             $title = $advertisement->title ?? 'Imóvel indisponível';
                             $parishName = optional($property->parish)->name ?? 'Localização indisponível';
                             $price = $advertisement->price ?? 0;
+                            $creator = optional($advertisement->creator);
+                            $creatorImage = $creator?->profile_picture_path ? Storage::url($creator->profile_picture_path) : null;
                         @endphp
 
-                        <div class="home-ads-style favorite-card"
+                        <div class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group favorite-card"
                              data-id="{{ $favorite->id }}"
                              data-advertisement-id="{{ $advertisement->id ?? '' }}"
                              data-price="{{ $price }}"
                              data-date="{{ $favorite->created_at->timestamp }}">
-                            <div class="relative">
-                                <img
-                                    src="{{ $image }}"
-                                    alt="{{ $title }}"
-                                    class="w-full h-48 object-cover">
-                                <button
-                                    class="absolute top-3 right-3 p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center justify-center favorite-btn"
-                                    data-id="{{ $favorite->id }}"
-                                    style="width: 32px; height: 32px;">
-                                    <i class="bi bi-heart-fill text-red text-sm"></i>
+
+                            <div class="relative group overflow-hidden">
+                                <img src="{{ $image }}" alt="{{ $title }}" class="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300">
+
+                                <button class="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 flex items-center justify-center remove-favorite" data-id="{{ $favorite->id }}">
+                                    <i class="bi bi-heart-fill text-red-500 text-lg"></i>
                                 </button>
                             </div>
-                            <div class="p-5">
-                                <h3 class="text-lg font-semibold text-gray-secondary">{{ $title }}</h3>
-                                <p class="text-sm text-gray mb-2">{{ $parishName }}</p>
-                                <p class="text-lg font-bold text-primary">{{ $price }}€</p>
-                                <div class="mt-4 flex items-center justify-between text-sm">
-                                    <span class="text-gray">Adicionado {{ $favorite->created_at->diffForHumans() }}</span>
-                                    <button class="text-red hover:text-red-700 font-medium transition-colors remove-favorite" data-id="{{ $favorite->id }}">Remover</button>
+
+                            <div class="flex flex-col p-4 flex-grow">
+                                <h3 class="text-lg font-semibold text-gray-800 leading-tight hover:text-primary transition-colors line-clamp-2 mb-1">
+                                    {{ $title }}
+                                </h3>
+                                <div class="flex items-center text-sm text-gray-500 mb-2">
+                                    <i class="bi bi-geo-alt mr-1"></i>
+                                    <span>{{ $parishName }}</span>
+                                </div>
+
+                                <div class="flex items-center justify-between mt-2 mb-3">
+                                    <p class="text-xl font-bold text-blue-800">{{ number_format($price, 0, ',', '.') }} €</p>
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs text-gray-500 mt-auto border-t pt-3">
+                                    <div class="flex items-center gap-2">
+                                        @if($creatorImage)
+                                            <img src="{{ $creatorImage }}" alt="{{ $creator->name }}" class="h-7 w-7 rounded-full object-cover shadow-sm">
+                                        @else
+                                            <div class="h-7 w-7 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 shadow-sm">
+                                                <i class="bi bi-person text-xs"></i>
+                                            </div>
+                                        @endif
+                                        <div class="flex flex-col">
+                                            <span class="font-semibold text-gray-700 text-sm line-clamp-1">{{ $creator->name ?? 'Anunciante' }}</span>
+                                            <span class="text-[11px] text-gray-400">{{ $favorite->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +103,7 @@
         </div>
     </div>
 @endsection
+
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -109,7 +133,6 @@
                 }, 3000);
             }
 
-            // Ordenação
             const sortSelect = document.getElementById('sortFavorites');
             if (sortSelect) {
                 sortSelect.addEventListener('change', function () {
@@ -129,9 +152,9 @@
                 });
             }
 
-            // Redirecionar ao clicar no card
             document.querySelectorAll('.favorite-card').forEach(card => {
-                card.addEventListener('click', function () {
+                card.addEventListener('click', function (e) {
+                    if (e.target.closest('.remove-favorite')) return;
                     const advertisementId = this.dataset.advertisementId;
                     if (advertisementId) {
                         window.location.href = `/advertisements/${advertisementId}`;
@@ -139,11 +162,10 @@
                 });
             });
 
-            // Remover favoritos
-            const removeBtns = document.querySelectorAll('.remove-favorite, .favorite-btn');
-            removeBtns.forEach(btn => {
-                btn.addEventListener('click', function (event) {
-                    event.stopPropagation();
+            document.querySelectorAll('.remove-favorite').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
                     const favoriteId = this.dataset.id;
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -152,9 +174,7 @@
                     if (!favoriteCard || favoriteCard.dataset.deleting === 'true') return;
                     favoriteCard.dataset.deleting = 'true';
 
-                    // Animação + feedback
                     favoriteCard.classList.add('animate-fade-scale-out');
-                    showToast('Anúncio removido dos favoritos');
 
                     fetch(`/favorites/${favoriteId}`, {
                         method: 'DELETE',
@@ -167,15 +187,20 @@
                     })
                         .then(response => {
                             if (response.ok) {
+                                showToast('Anúncio removido dos favoritos');
+
                                 setTimeout(() => {
                                     favoriteCard.remove();
-                                    const remainingFavorites = document.querySelectorAll('.favorite-card');
-                                    if (remainingFavorites.length === 0) {
+                                    if (document.querySelectorAll('.favorite-card').length === 0) {
                                         document.getElementById('favorites-container').innerHTML = `
-                                            <div class="col-span-full text-center py-8">
-                                                <i class="bi bi-heart text-gray-300 text-5xl mb-4"></i>
-                                                <p class="text-gray-400">Você não tem anúncios favoritos</p>
-                                            </div>`;
+                                <div class="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                            <i class="bi bi-heart text-gray-300 text-2xl"></i>
+                                        </div>
+                                        <p class="text-gray-400">Você não tem anúncios favoritos</p>
+                                    </div>
+                                </div>`;
                                     }
                                 }, 300);
                             } else {
@@ -188,9 +213,8 @@
                             favoriteCard.classList.remove('animate-fade-scale-out');
                             favoriteCard.dataset.deleting = 'false';
                         });
-                }, { once: true }); // garante que só executa uma vez por botão
+                });
             });
         });
     </script>
 @endpush
-

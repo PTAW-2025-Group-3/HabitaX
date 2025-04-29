@@ -6,11 +6,22 @@
             </svg>
             Contactar o Anunciante
         </h3>
-        <span class="bg-indigo-100 text-secondary text-xs md:text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
-            {{ $ad->creator->name ?? 'Anunciante' }}
-        </span>
+
+        <div class="flex flex-col items-center gap-1 text-center">
+            @if($ad->creator && $ad->creator->profile_picture_path)
+                <img src="{{ Storage::url($ad->creator->profile_picture_path) }}"
+                     alt="{{ $ad->creator->name }}"
+                     class="w-10 h-10 rounded-full object-cover shadow-sm">
+            @else
+                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 shadow-sm">
+                    <i class="bi bi-person text-lg"></i>
+                </div>
+            @endif
+            <span class="text-xs text-gray-500 truncate max-w-[80px]">{{ $ad->creator->name ?? 'Anunciante' }}</span>
+        </div>
     </div>
 
+    {{-- Success message --}}
     <div id="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center {{ session('success') ? '' : 'hidden' }}">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -18,10 +29,12 @@
         <span>{{ session('success') ?? 'O seu pedido de contacto foi enviado com sucesso!' }}</span>
     </div>
 
+    {{-- Formulário --}}
     <form method="POST" action="{{ route('contact-requests.store') }}" id="contactForm" class="space-y-4 text-sm md:text-base">
         @csrf
         <input type="hidden" name="advertisement_id" value="{{ $ad->id }}">
 
+        {{-- Nome --}}
         <div>
             <label for="name" class="block text-gray-600 text-xs md:text-sm mb-1">O seu nome</label>
             <input type="text" id="name" name="name" class="form-input @error('name') border-red-300 @enderror"
@@ -31,6 +44,7 @@
             @enderror
         </div>
 
+        {{-- Email --}}
         <div>
             <label for="email" class="block text-gray-600 text-xs md:text-sm mb-1">O seu email</label>
             <input type="email" id="email" name="email" class="form-input @error('email') border-red-300 @enderror"
@@ -40,6 +54,7 @@
             @enderror
         </div>
 
+        {{-- Telefone --}}
         <div>
             <label for="telephone" class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
             <input type="tel" id="telephone" name="telephone" class="form-input @error('telephone') border-red-300 @enderror"
@@ -49,6 +64,7 @@
             @enderror
         </div>
 
+        {{-- Mensagem --}}
         <div>
             <label for="message" class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
             <textarea id="message" name="message" class="form-input @error('message') border-red-300 @enderror"
@@ -58,6 +74,7 @@
             @enderror
         </div>
 
+        {{-- Botão enviar --}}
         <button type="submit" id="submitBtn" class="btn-secondary w-full py-3 flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -66,6 +83,7 @@
         </button>
     </form>
 
+    {{-- Mostrar telefone --}}
     <div class="text-center">
         <a href="#" id="showPhoneBtn" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center group" data-phone="{{ $ad->creator->telephone ?? '+351 XXX XXX XXX' }}">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

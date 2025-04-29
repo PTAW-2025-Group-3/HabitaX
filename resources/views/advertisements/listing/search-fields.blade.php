@@ -1,6 +1,21 @@
 <form method="GET" action="{{ route('advertisements.index') }}">
-
-{{--    Toggle Buttons--}}
+    {{-- Preservar filtros laterais --}}
+    @if(request('time_period'))
+        <input type="hidden" name="time_period" value="{{ request('time_period') }}">
+    @endif
+    @if(request('min_price'))
+        <input type="hidden" name="min_price" value="{{ request('min_price') }}">
+    @endif
+    @if(request('max_price'))
+        <input type="hidden" name="max_price" value="{{ request('max_price') }}">
+    @endif
+    @if(request('min_area'))
+        <input type="hidden" name="min_area" value="{{ request('min_area') }}">
+    @endif
+    @if(request('max_area'))
+        <input type="hidden" name="max_area" value="{{ request('max_area') }}">
+    @endif
+    {{--    Toggle Buttons--}}
     <div class="relative w-full max-w-md mx-auto mb-8">
         <div class="flex bg-gray-300 rounded-2xl relative overflow-hidden">
             <!-- Slider Azul -->
@@ -33,7 +48,7 @@
                 Tipo de Imóvel
             </label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="type" id="property-type" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
+                <select name="property_type" id="property-type" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Todos</option>
                     @foreach($propertyTypes as $type)
                         <option value="{{ $type->id }}" {{ $selectedType == $type->id ? 'selected' : '' }}>
