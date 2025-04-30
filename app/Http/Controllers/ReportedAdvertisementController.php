@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Denunciation;
 use App\Presenters\DenunciationPresenter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 
@@ -28,6 +29,91 @@ class ReportedAdvertisementController extends Controller
             'paginator' => $denunciations,
             'presented' => $presented,
         ];
+    }
+
+    public function ajaxDenunciations(Request $request)
+    {
+        try {
+            // Clone da consulta base para preservar os relacionamentos
+            $query = Denunciation::with(['creator', 'advertisement', 'reason']);
+
+            // Aplicar filtro
+            $filter = $request->input('filter', 'all');
+            if ($filter !== 'all') {
+                switch ($filter) {
+                    case 'pending':
+                        $query->where('report_state', 0);
+                        break;
+                    case 'approved':
+                        $query->where('report_state', 1);
+                        break;
+                    case 'rejected':
+                        $query->where('report_state', 2);
+                        break;
+                }
+            }
+
+            // Melhorar a funcionalidade de pesquisa
+            $search = $request->input('search', '');
+            if (!empty($search)) {
+                $query->where(function($q) use ($search) {
+                    // Buscar por título do anúncio
+                    $q->whereHas('advertisement', function($subQuery) use ($search) {
+                        $subQuery->where('title', 'like', "%{$search}%");
+                    })
+                        // Buscar por nome do motivo
+                        ->orWhereHas('reason', function($subQuery) use ($search) {
+                            $subQuery->where('name', 'like', "%{$search}%");
+                        })
+                        // Buscar por nome do denunciante
+                        ->orWhereHas('creator', function($subQuery) use ($search) {
+                            $subQuery->where('name', 'like', "%{$search}%");
+                        })
+                        // Buscar na descrição da denúncia
+                        ->orWhere('desc', 'like', "%{$search}%")
+                        // Buscar por ID
+                        ->orWhere('id', 'like', "%{$search}%");
+                });
+            }
+
+            // Ordenação padrão
+            $query->orderBy('submitted_at', 'desc')
+                ->orderBy('id', 'desc');
+
+            $denunciations = $query->paginate(5);
+
+            // Transformar em formato adequado para resposta JSON
+            $formattedDenunciations = [];
+            foreach ($denunciations as $denunciation) {
+                $presenter = new DenunciationPresenter($denunciation);
+                $formattedDenunciations[] = [
+                    'id' => $presenter->id(),
+                    'title' => $presenter->title(),
+                    'reason' => $presenter->reason(),
+                    'reporter' => $presenter->creator(),
+                    'date' => $presenter->submittedAt(),
+                    'date_timestamp' => strtotime($denunciation->submitted_at),
+                    'state' => strtolower($presenter->state()),
+                    'state_badge' => $presenter->stateBadge(),
+                    'action_button' => $presenter->actionButton(),
+                ];
+            }
+
+            // Gerar HTML da paginação
+            $paginationHtml = $denunciations->links()->toHtml();
+
+            return response()->json([
+                'denunciations' => $formattedDenunciations,
+                'pagination' => $paginationHtml,
+                'total' => $denunciations->total()
+            ]);
+        } catch (\Exception $e) {
+            // Log do erro
+            \Log::error('Erro no Ajax de denúncias: ' . $e->getMessage());
+
+            // Retornar resposta de erro
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function show($id)

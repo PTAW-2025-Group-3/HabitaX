@@ -97,6 +97,7 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
         ->name('reported-advertisement.reject');
     Route::get('/mod/advertisement/{advertisementId}/history', [ReportedAdvertisementController::class, 'history'])
         ->name('reported-advertisement.history');
+    Route::get('/moderation/denunciations/ajax', [App\Http\Controllers\ReportedAdvertisementController::class, 'ajaxDenunciations'])->name('moderation.denunciations.ajax');
 });
 
 // Administration Route

@@ -55,4 +55,15 @@ class DenunciationPresenter
     {
         return '<a href="' . route('reported-advertisement.show', $this->id()) . '" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a>';
     }
+
+    public function state(): string
+    {
+        return match ($this->denunciation->report_state) {
+            0 => 'pending',
+            1 => 'approved',
+            2 => 'rejected',
+            default => 'unknown',
+        };
+    }
+
 }
