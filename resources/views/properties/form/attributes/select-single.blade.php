@@ -4,7 +4,9 @@
         {{ $attr->is_required ? 'required' : '' }}>
         <option value="" disabled selected>Selecione uma opção</option>
         @foreach($attr->options as $opt)
-            <option value="{{ $opt->id }}">{{ $opt->name }}</option>
+            <option value="{{ $opt->id }}" {{ old('attributes.' . $attr->id, $parameter?->select_value) == $opt->id ? 'selected' : '' }}>
+                {{ $opt->name }}
+            </option>
         @endforeach
     </select>
     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">

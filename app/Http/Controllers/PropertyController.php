@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\AttributeType;
 use App\Models\District;
 use App\Models\Property;
-use App\Models\PropertyAttribute;
-use App\Models\PropertyParameter;
-use App\Models\PropertyParameterOption;
 use App\Models\PropertyType;
+use App\Services\PropertyAttributeService;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -94,7 +92,6 @@ class PropertyController extends Controller
 
         $parameters = $property->parameters()->get();
 
-        // Мапа: attribute_id => PropertyParameter
         $parameterMap = $parameters->keyBy('attribute_id');
 
         $parameterOptionMap = $parameters->mapWithKeys(fn($p) => [
@@ -133,63 +130,10 @@ class PropertyController extends Controller
             // TODO: handle with media library
         }
 
-        $this->updateAttributes($property, $request->input('attributes', []));
+        app(PropertyAttributeService::class)->updateAttributes($property, $request->input('attributes', []));
 
         return redirect()->route('properties.edit', $property->id)
             ->with('success', 'Property updated successfully!');
-    }
-
-    private function updateAttributes(Property $property, array $attributesData): void
-    {
-        $attributes = PropertyAttribute::whereIn('id', array_keys($attributesData))
-            ->get()
-            ->keyBy('id');
-
-        foreach ($attributesData as $attributeId => $value) {
-            $attribute = $attributes[$attributeId] ?? null;
-
-            if (!$attribute) {
-                continue;
-            }
-
-            if ($attribute->type === AttributeType::SELECT_MULTIPLE) {
-                $this->updateSelectMultiple($property, $attribute, $value);
-            } else {
-                $this->updateSimpleValue($property, $attribute, $value);
-            }
-        }
-    }
-
-    private function updateSimpleValue(Property $property, PropertyAttribute $attribute, mixed $value): void
-    {
-        PropertyParameter::updateOrCreate(
-            [
-                'property_id' => $property->id,
-                'attribute_id' => $attribute->id,
-            ],
-            [
-                'value' => is_array($value) ? json_encode($value) : $value,
-            ]
-        );
-    }
-
-    private function updateSelectMultiple(Property $property, PropertyAttribute $attribute, array $optionIds): void
-    {
-        $parameter = PropertyParameter::firstOrCreate([
-            'property_id' => $property->id,
-            'attribute_id' => $attribute->id,
-        ]);
-
-        // Сначала удаляем старые связи
-        PropertyParameterOption::where('parameter_id', $parameter->id)->delete();
-
-        // Затем добавляем новые
-        foreach ($optionIds as $optionId) {
-            PropertyParameterOption::create([
-                'parameter_id' => $parameter->id,
-                'option_id' => $optionId,
-            ]);
-        }
     }
 
     public function destroy($id)

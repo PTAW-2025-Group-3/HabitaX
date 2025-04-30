@@ -2,7 +2,7 @@
     <input type="text" name="attributes[{{ $attr->id }}]"
            class="form-input-big w-full py-3 pl-4 pr-10"
            placeholder="Digite aqui"
-           value="{{ old('attributes.' . $attr->id, $parameter?->value) }}"
+           value="{{ old('attributes.' . $attr->id, $parameter?->text_value) }}"
         {{ $attr->is_required ? 'required' : '' }}
         {{ $attr->min_length !== null ? 'minlength='.$attr->min_length : '' }}
         {{ $attr->max_length !== null ? 'maxlength='.$attr->max_length : '' }}>

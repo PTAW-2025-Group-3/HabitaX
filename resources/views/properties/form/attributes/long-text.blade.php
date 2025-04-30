@@ -4,7 +4,7 @@
               placeholder="Digite sua descrição aqui"
         {{ $attr->is_required ? 'required' : '' }}
         {{ $attr->min_length !== null ? 'minlength='.$attr->min_length : '' }}
-        {{ $attr->max_length !== null ? 'maxlength='.$attr->max_length : '' }}>{{ old('attributes.' . $attr->id, $parameter?->value) }}</textarea>
+        {{ $attr->max_length !== null ? 'maxlength='.$attr->max_length : '' }}>{{ old('attributes.' . $attr->id, $parameter?->text_value) }}</textarea>
     <div class="absolute top-3 right-3 pointer-events-none text-gray">
         <i class="bi bi-file-text"></i>
     </div>
