@@ -13,6 +13,7 @@
                     'selectedMunicipality' => $selectedMunicipality,
                     'selectedParish' => $selectedParish,
                     'selectedType' => $selectedType,
+                    'transactionType' => $transactionType
                 ])
             </div>
 

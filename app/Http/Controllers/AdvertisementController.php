@@ -22,6 +22,7 @@ class AdvertisementController extends Controller
         $selectedMunicipality = $request->input('municipality');
         $selectedParish = $request->input('parish');
         $selectedType = $request->input('property_type');
+        $transactionType = $request->input('transaction_type');
 
         // Query base
         $query = Advertisement::where('state', 'active')
@@ -50,7 +51,8 @@ class AdvertisementController extends Controller
             'selectedDistrict',
             'selectedMunicipality',
             'selectedParish',
-            'selectedType'
+            'selectedType',
+            'transactionType'
         ));
     }
 

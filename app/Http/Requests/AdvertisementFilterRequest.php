@@ -14,6 +14,7 @@ class AdvertisementFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'transaction_type' => 'nullable|in:sale,rent',
             'property_type' => 'nullable|exists:property_types,id',
             'location' => 'nullable|string|max:255',
             'time_period' => 'nullable|in:24h,3d,7d,30d',
@@ -24,12 +25,17 @@ class AdvertisementFilterRequest extends FormRequest
             'sort' => 'nullable|in:recent,price_asc,price_desc',
             'district' => 'nullable|exists:districts,id',
             'municipality' => 'nullable|exists:municipalities,id',
-            'parish' => 'nullable|exists:parishes,id',
+            'parish' => 'nullable|exists:parishes,id'
         ];
     }
 
     public function applyFilters($query)
     {
+
+        if ($this->filled('transaction_type') && in_array($this->transaction_type, ['sale', 'rent'])) {
+            $query->where('transaction_type', $this->transaction_type);
+        }
+
         if ($this->filled('location')) {
             $query->where('location', 'LIKE', "%{$this->location}%");
         }

@@ -1,4 +1,4 @@
-<div class="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 animate-fade-in">
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
     <div class="flex items-center mb-6 border-b border-gray-100 pb-4">
         <i class="bi bi-building text-xl text-primary mr-3"></i>
         <h2 class="text-xl font-bold text-primary">Informação Base da Propriedade</h2>
