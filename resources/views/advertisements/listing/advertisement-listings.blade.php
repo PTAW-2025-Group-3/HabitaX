@@ -63,7 +63,8 @@
                                 class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300 h-full flex flex-col overflow-hidden">
                                 <div class="relative group overflow-hidden">
                                     <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}">
-                                        <img src="{{ $ad->property->images[0] }}" alt="{{ $ad['title'] }}"
+                                        <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
+                                             alt="{{ $ad['title'] }}"
                                              class="h-52 w-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </a>
                                     @if(isset($ad['featured']) && $ad['featured'])
@@ -150,7 +151,8 @@
                                 <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
                                    class="block md:w-2/5 w-full flex-shrink-0 relative group overflow-hidden rounded-xl">
                                     <div class="aspect-[4/3] w-full relative">
-                                        <img src="{{ $ad->property->images[0] }}" alt="{{ $ad['title'] }}"
+                                        <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
+                                             alt="{{ $ad['title'] }}"
                                              class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
                                         @if(isset($ad['featured']) && $ad['featured'])
                                             <div

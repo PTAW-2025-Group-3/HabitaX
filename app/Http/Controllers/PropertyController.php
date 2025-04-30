@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AttributeType;
 use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyType;
@@ -49,6 +48,7 @@ class PropertyController extends Controller
             'description' => 'nullable|string|max:1000',
             'property_type_id' => 'required|exists:property_types,id',
             'parish_id' => 'nullable|exists:parishes,id',
+            'cover' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
             'images' => 'nullable|array|max:20',
             'images.*' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -61,8 +61,14 @@ class PropertyController extends Controller
             'created_by' => auth()->id(),
         ]);
 
+        if ($request->hasFile('cover')) {
+            $property->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
+
         if ($request->hasFile('images')) {
-            //
+            foreach ($request->file('images') as $image) {
+                $property->addMedia($image)->toMediaCollection('images');
+            }
         }
 
         return redirect()->route('properties.edit', $property->id)
@@ -126,9 +132,38 @@ class PropertyController extends Controller
 
         $property->update(array_merge($validated, ['updated_by' => auth()->id()]));
 
-        if ($request->hasFile('images')) {
-            // TODO: handle with media library
+        // Удаление старых
+        $deleted = json_decode($request->input('deleted_images', '[]'));
+        if (is_array($deleted)) {
+            foreach ($deleted as $mediaId) {
+                $media = $property->getMedia('images')->firstWhere('id', $mediaId);
+                if ($media) {
+                    $media->delete();
+                }
+            }
         }
+
+        // Порядок (опционально)
+        $imageOrder = json_decode($request->input('image_order', '[]'));
+        if (is_array($imageOrder)) {
+            foreach ($imageOrder as $index => $entry) {
+                if (!empty($entry->id)) {
+                    $media = \Spatie\MediaLibrary\MediaCollections\Models\Media::find($entry->id);
+                    if ($media) {
+                        $media->order_column = $index + 1;
+                        $media->save();
+                    }
+                }
+            }
+        }
+
+        // Добавление новых
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $property->addMedia($image)->toMediaCollection('images');
+            }
+        }
+
 
         app(PropertyAttributeService::class)->updateAttributes($property, $request->input('attributes', []));
 

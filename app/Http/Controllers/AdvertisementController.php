@@ -40,7 +40,7 @@ class AdvertisementController extends Controller
         $advertisements = $query->paginate(9);
 
         if ($request->ajax()) {
-            return view('advertisements.listing.property-listings', compact('advertisements'))->render();
+            return view('advertisements.listing.advertisement-listings', compact('advertisements'))->render();
         }
 
         // Passar também os filtros selecionados para o blade
@@ -64,7 +64,7 @@ class AdvertisementController extends Controller
             ->get();
 
         if ($request->ajax()) {
-            return view('advertisements.listing.property-listings', compact('ads'))->render();
+            return view('advertisements.listing.advertisement-listings', compact('ads'))->render();
         }
 
         return view('advertisements.my', compact('ads'));

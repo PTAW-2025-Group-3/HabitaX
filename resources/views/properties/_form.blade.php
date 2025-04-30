@@ -44,12 +44,14 @@
             <h2 class="text-xl font-bold text-primary">Imagens da Propriedade</h2>
         </div>
         <p class="text-sm text-gray-500 mb-4">Submete aqui imagens da propriedade. Imagens tem que ser... Depois deixamos aqui recomendações gerais para fotos.</p>
-        <input
-            type="file"
-            class="filepond"
-            name="images"
-            id="images"
-        />
+        <div class="filepond-wrapper w-full">
+            <input
+                type="file"
+                class="filepond"
+                name="images"
+                id="images"
+            />
+        </div>
         <p class="text-xs text-gray-400 mb-4">
             Formatos aceites: JPG, JPEG, PNG |
             Tamanho máximo: 2MB |
@@ -74,12 +76,47 @@
     </div>
 </form>
 
+@push('styles')
+    <style>
+        .filepond--wrapper {
+            max-width: 100%;
+        }
+
+        .filepond--file-poster {
+            height: auto !important;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .filepond--root {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .filepond-wrapper {
+                max-width: 500px;
+            }
+        }
+    </style>
+@endpush
+
 @push('scripts')
+    @php
+        $existingImages = $property
+            ? $property->getMedia('images')->map(function ($media) {
+                return [
+                    'source' => $media->getUrl('preview'),
+                    'name' => $media->file_name,
+                    'size' => $media->size,
+                    'type' => $media->mime_type,
+                ];
+            })
+            : collect();
+    @endphp
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // FilePond customization
-            {{--   {{ json_encode($property->images ?? null) }}  --}}
-            const existingImages = null;
+            const existingImages = @json($existingImages);
+
             const pondOptions = {
                 maxFiles: 20,
                 maxFileSize: '2MB',
@@ -87,24 +124,25 @@
                 allowReorder: true,
                 immediateUpload: false,
                 storeAsFile: true,
-                imagePreviewHeight: 250,
+                imagePreviewHeight: 150,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
                 labelIdle: 'Arraste e solte suas imagens ou <span class="filepond--label-action">Selecione</span>',
-            };
-            if (existingImages) {
-                pondOptions.files = [
-                    {
-                        source: existingImages.map(image => image.path),
-                        options: {
-                            type: 'local',
-                            file: {},
-                            metadata: {
-                                poster: existingImages.map(image => image.path)
-                            }
+                files: existingImages.map(image => ({
+                    source: image.source,
+                    options: {
+                        type: 'local',
+                        file: {
+                            name: image.name,
+                            size: image.size,
+                            type: image.type,
+                        },
+                        metadata: {
+                            poster: image.source,
                         }
                     }
-                ];
-            }
+                }))
+            };
+
             FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>

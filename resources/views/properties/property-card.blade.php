@@ -1,7 +1,7 @@
 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" data-status="pending">
     <a href="{{ route('properties.show', $property->id) }}" class="block">
         <div class="relative">
-            <img src="{{ $property->images[0] ?? asset('images/property-placeholder.png') }}"
+            <img src="{{ $property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
                  alt="Property"
                  class="w-full h-48 object-cover">
             <span class="absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">

@@ -10,7 +10,7 @@
                     <div class="group home-ads-style">
                         <!-- Imagem -->
                         <img
-                            src="{{ $ad->property->images[0] ?? 'https://via.placeholder.com/400x300?text=Sem+Imagem' }}"
+                            src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
                             alt="Imagem do imóvel"
                             class="w-full h-48 object-cover"/>
 

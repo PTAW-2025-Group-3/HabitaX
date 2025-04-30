@@ -17,7 +17,7 @@ class FavoriteAdvertisementSeeder extends Seeder
         $advertisements = \App\Models\Advertisement::all();
 
         foreach ($users as $user) {
-            foreach ($advertisements->random(10) as $ad) {
+            foreach ($advertisements->random(2) as $ad) {
                 \App\Models\FavoriteAdvertisement::create([
                     'user_id' => $user->id,
                     'advertisement_id' => $ad->id,

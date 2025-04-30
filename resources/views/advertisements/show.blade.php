@@ -52,34 +52,37 @@
         </div>
 
         <!-- Galeria -->
+        @php
+            $images = $property->getMedia('images');
+        @endphp
         <div id="lightgallery" class="grid grid-cols-12 gap-2 md:gap-4 relative">
             <!-- Visible part -->
-            <a href="{{ $property->images[0] }}" class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
-                <img src="{{ $property->images[0] }}"
+            <a href="{{ $property->getFirstMediaUrl('images') }}" class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
+                <img src="{{ $property->getFirstMediaUrl('images', 'preview') }}"
                      class="w-full h-full object-cover rounded-lg shadow" alt="Imagem Principal">
             </a>
 
             <div class="col-span-12 md:col-span-6 grid grid-cols-2 grid-rows-2 gap-2 h-[300px] md:h-[500px]">
-                @foreach($property->images as $image)
+                @foreach($images as $image)
                     @if(!$loop->first && $loop->index < 5)
-                        <a href="{{ $image }}">
-                            <img src="{{ $image }}"
+                        <a href="{{ $image->getUrl() }}">
+                            <img src="{{ $image->getUrl('preview') }}"
                                  class="w-full h-full object-cover rounded-lg shadow" alt="Miniatura">
                         </a>
                     @endif
                 @endforeach
 
-                @for($i = count($property->images); $i < 5; $i++)
+                @for($i = count($images); $i < 5; $i++)
                     <div class="bg-gray-100 rounded-lg shadow"></div>
                 @endfor
             </div>
 
             <!-- Hidden links for LightGallery -->
             <div class="hidden">
-                @foreach($property->images as $image)
+                @foreach($images as $image)
                     @if($loop->index >= 5)
-                        <a href="{{ $image }}">
-                            <img src="{{ $image }}" alt="Miniatura oculta" class="hidden">
+                        <a href="{{ $image->getUrl() }}">
+                            <img src="{{ $image->getUrl() }}" alt="Miniatura oculta" class="hidden">
                         </a>
                     @endif
                 @endforeach
@@ -87,7 +90,7 @@
         </div>
 
         <!-- Botão separado! -->
-        @if(count($property->images) > 5)
+        @if(count($images) > 5)
             <div class="mt-4 text-right">
                 <button id="openGalleryButton"
                         class="inline-block bg-white bg-opacity-80 backdrop-blur px-4 py-2 text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
@@ -294,7 +297,7 @@
                 speed: 500,
             });
             document.getElementById('openGalleryButton').addEventListener('click', function() {
-                gallery.openGallery(0);
+                gallery.openGallery(5);
             });
 
         });

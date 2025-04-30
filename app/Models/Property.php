@@ -4,20 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Property extends Model
+class Property extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
-    /**
-     * Atributos que podem ser preenchidos em massa.
-     */
     protected $fillable = [
         'title',
         'description',
         'country',
         'total_area',
-        'images',
         'is_active',
         'is_verified',
         'property_type_id',
@@ -26,42 +26,55 @@ class Property extends Model
         'updated_by',
     ];
 
-    /**
-     * Casts automáticos de campos JSON e booleanos.
-     */
     protected $casts = [
-        'images' => 'json',
         'is_active' => 'boolean',
         'is_verified' => 'boolean',
     ];
 
-    /**
-     * Relação: propriedade pertence a um tipo.
-     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')->useDisk('public');
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Crop, 300, 200)
+            ->optimize()
+            ->sharpen(10)
+            ->performOnCollections('images');
+
+        $this->addMediaConversion('preview')
+            ->fit(Fit::Crop, 800, 600)
+            ->optimize()
+            ->sharpen(10)
+            ->performOnCollections('images');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($property) {
+            $property->clearMediaCollection('images');
+        });
+    }
+
     public function type()
     {
         return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
-    /**
-     * Relação: propriedade pertence a uma freguesia.
-     */
     public function parish()
     {
         return $this->belongsTo(Parish::class);
     }
 
-    /**
-     * Relação: criada por um utilizador.
-     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Relação: atualizada por um utilizador.
-     */
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');

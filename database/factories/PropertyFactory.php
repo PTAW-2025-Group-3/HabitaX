@@ -20,10 +20,6 @@ class PropertyFactory extends Factory
             'title' => $this->faker->sentence(3),
             'country' => 'Portugal',
             'total_area' => $this->faker->randomFloat(2, 50, 500),
-            'images' => [
-                $this->faker->imageUrl(800, 600, 'house', true, 'Exterior'),
-                $this->faker->imageUrl(800, 600, 'interior', true, 'Interior')
-            ],
             'is_active' => true,
             'is_verified' => false,
 

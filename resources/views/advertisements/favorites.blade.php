@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('account.account-layout')
 
 @section('title', 'Anúncios Favoritos')
@@ -40,7 +41,7 @@
                         @php
                             $advertisement = optional($favorite->advertisement);
                             $property = optional($advertisement->property);
-                            $image = $property->images[0] ?? asset('images/property-placeholder.png');
+                            $image = $property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png');
                             $title = $advertisement->title ?? 'Imóvel indisponível';
                             $parishName = optional($property->parish)->name ?? 'Localização indisponível';
                             $price = $advertisement->price ?? 0;

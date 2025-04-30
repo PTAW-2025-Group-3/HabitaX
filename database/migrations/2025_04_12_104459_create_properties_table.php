@@ -26,7 +26,6 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->string('country')->default('Portugal');
             $table->float('total_area')->nullable();
-            $table->json('images')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_verified')->default(false);
 

@@ -3,7 +3,7 @@
     {{-- Ad Status --}}
     <a href="{{ route('advertisements.show', $ad->id) }}" class="block">
         <div class="relative">
-            <img src=" {{ $ad->property->images[0] }}"
+            <img src=" {{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
                  alt="Ad"
                  class="w-full h-48 object-cover">
             <span class="absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">

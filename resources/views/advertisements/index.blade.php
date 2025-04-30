@@ -19,7 +19,7 @@
 
             <div class="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 mt-8">
                 @include('advertisements.listing.filters-centered')
-                @include('advertisements.listing.property-listings')
+                @include('advertisements.listing.advertisement-listings')
             </div>
         </div>
     </div>
