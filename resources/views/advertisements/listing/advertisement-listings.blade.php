@@ -64,7 +64,7 @@
                                 <div class="relative group overflow-hidden">
                                     <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}">
                                         <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
-                                             alt="{{ $ad['title'] }}"
+                                             alt="{{ $ad['title'] }}" loading="lazy"
                                              class="h-52 w-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </a>
                                     @if(isset($ad['featured']) && $ad['featured'])
@@ -110,7 +110,7 @@
                                         <div>
                                             @if($ad->creator && $ad->creator->profile_picture_path)
                                                 <img src="{{ Storage::url($ad->creator->profile_picture_path) }}"
-                                                     alt="{{ $ad->creator->name }}"
+                                                     alt="{{ $ad->creator->name }}" loading="lazy"
                                                      class="h-8 w-8 rounded-full object-cover shadow-sm">
                                             @else
                                                 <div
@@ -152,7 +152,8 @@
                                    class="block md:w-2/5 w-full flex-shrink-0 relative group overflow-hidden rounded-xl">
                                     <div class="aspect-[4/3] w-full relative">
                                         <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
-                                             alt="{{ $ad['title'] }}"
+                                             alt="{{ $ad['title'] }}" loading="lazy"
+
                                              class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
                                         @if(isset($ad['featured']) && $ad['featured'])
                                             <div
@@ -203,7 +204,7 @@
                                         <div class="flex items-center gap-2">
                                             @if($ad->creator && $ad->creator->profile_picture_path)
                                                 <img src="{{ Storage::url($ad->creator->profile_picture_path) }}"
-                                                     alt="{{ $ad->creator->name }}"
+                                                     alt="{{ $ad->creator->name }}" loading="lazy"
                                                      class="h-9 w-9 rounded-full object-cover shadow-sm">
                                             @else
                                                 <div

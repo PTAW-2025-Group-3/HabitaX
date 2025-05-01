@@ -65,8 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
     // File Upload
-    Route::post('uploads/temp', [FileUploadController::class, 'temp'])->name('uploads.temp');
-    Route::delete('/upload/revert', [FileUploadController::class, 'revertTemp'])->name('uploads.revert');
+    Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
+    Route::delete('/uploads/revert', [FileUploadController::class, 'revert'])->name('uploads.revert');
 });
 
 // Property Routes

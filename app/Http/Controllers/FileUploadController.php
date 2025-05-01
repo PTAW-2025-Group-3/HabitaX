@@ -7,26 +7,23 @@ use Illuminate\Support\Facades\Storage;
 
 class FileUploadController extends Controller
 {
-    public function temp(Request $request): string
+    public function process(Request $request)
     {
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filename = uniqid(). '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('temp', $filename);
+       if (!$request->hasFile('file')) {
+           return response()->json(['error' => 'No file uploaded'], 400);
+       }
 
-            return response()->json([
-                'id' => $path // FilePond expects some id
-            ]);
-        }
+       $file = $request->file('file');
+       $storedPath = $file->store('tmp/uploads');
 
-        return response()->json(['error' => 'No file uploaded.'], 400);
+       return response()->json($storedPath);
     }
 
-    public function revertTemp(Request $request)
+    public function revert(Request $request)
     {
-        $file = $request->getContent(); // FilePond sends the file name in the request body
-        Storage::delete($file);
-
+        $filename = $request->getContent();
+        Storage::delete('temp/' . $filename);
         return response('', 204);
     }
+
 }

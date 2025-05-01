@@ -30,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+        ini_set('memory_limit', '512M');
     }
 }

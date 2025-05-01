@@ -48,10 +48,12 @@
             <input
                 type="file"
                 class="filepond"
-                name="images"
-                id="images"
+                name="file"
+{{--                id="images"--}}
+                multiple
             />
         </div>
+        <div id="hidden-uploaded-inputs"></div>
         <p class="text-xs text-gray-400 mb-4">
             Formatos aceites: JPG, JPEG, PNG |
             Tamanho máximo: 2MB |
@@ -84,7 +86,7 @@
 
         .filepond--file-poster {
             height: auto !important;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center;
         }
 
@@ -105,10 +107,11 @@
         $existingImages = $property
             ? $property->getMedia('images')->map(function ($media) {
                 return [
-                    'source' => $media->getUrl('preview'),
+                    'source' => $media->file_name,
                     'name' => $media->file_name,
                     'size' => $media->size,
                     'type' => $media->mime_type,
+                    'preview' => $media->getUrl('preview'),
                 ];
             })
             : collect();
@@ -116,31 +119,112 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const existingImages = @json($existingImages);
+            const uploadedInputs = document.getElementById('hidden-uploaded-inputs');
+
+            const createHiddenInput = (filename, preview = null) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'uploaded_images[]';
+                input.value = filename;
+                if (preview) {
+                    input.dataset.preview = preview;
+                }
+                uploadedInputs.appendChild(input);
+            };
+
+            const removeHiddenInputByName = (name) => {
+                const inputs = document.querySelectorAll('input[name="uploaded_images[]"]');
+                for (const input of inputs) {
+                    if (input.value === name) {
+                        input.remove();
+                        console.log('Removed input for name:', name);
+                        return;
+                    }
+                }
+                console.warn('No input found for name:', name);
+            };
 
             const pondOptions = {
                 maxFiles: 20,
                 maxFileSize: '2MB',
                 allowMultiple: true,
                 allowReorder: true,
-                immediateUpload: false,
-                storeAsFile: true,
-                imagePreviewHeight: 150,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
                 labelIdle: 'Arraste e solte suas imagens ou <span class="filepond--label-action">Selecione</span>',
-                files: existingImages.map(image => ({
-                    source: image.source,
-                    options: {
-                        type: 'local',
-                        file: {
-                            name: image.name,
-                            size: image.size,
-                            type: image.type,
-                        },
-                        metadata: {
-                            poster: image.source,
+
+                files: existingImages.map(image => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'uploaded_images[]';
+                    input.value = image.name;
+                    uploadedInputs.appendChild(input);
+
+                    return {
+                        source: image.name,
+                        options: {
+                            type: 'local',
+                            file: {
+                                name: image.name,
+                                size: image.size,
+                                type: image.type,
+                            },
+                            metadata: {
+                                poster: image.preview,
+                            }
                         }
+                    };
+                }),
+                server: {
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    process: {
+                        url: '/uploads/process',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        onload: (response) => {
+                            const filename = response.replace(/^["']+|["']+$/g, '');
+                            createHiddenInput(filename); // Только имя
+                            return filename;
+                        },
+                        onerror: (error) => {
+                            console.error('Upload failed:', error);
+                        },
+                    },
+                    revert: {
+                        url: '/uploads/revert',
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                },
+                onreorderfiles: (files) => {
+                    uploadedInputs.innerHTML = ''; // очистить все inputs
+
+                    files.forEach(file => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'uploaded_images[]';
+                        input.value = file.serverId || file.source || file.file?.name;
+                        uploadedInputs.appendChild(input);
+                    });
+
+                    console.log('Files reordered:', files.map(f => f.serverId || f.source));
+                },
+                onremovefile: (error, file) => {
+                    const name = file?.file?.name;
+                    if (name) {
+                        removeHiddenInputByName(name);
+                    } else {
+                        console.warn('No valid identifier to remove hidden input');
                     }
-                }))
+                },
+                onerror: (error) => {
+                    console.error('Upload failed:', error);
+                },
+
             };
 
             FilePond.create(document.querySelector('input.filepond'), pondOptions);
