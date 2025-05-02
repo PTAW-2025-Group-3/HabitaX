@@ -11,7 +11,7 @@
                 <input
                     type="text"
                     id="suspendedSearchInput"
-                    placeholder="Pesquisar por nome ou motivo"
+                    placeholder="Pesquisar por nome ou email"
                     class="w-full p-3 focus:outline-none focus:shadow-outline border-0"
                 >
                 <button id="clearSuspendedSearch" class="px-4 py-3 text-gray-400 hover:text-gray-600 hidden">
@@ -24,23 +24,31 @@
         </div>
     </div>
 
-    <!-- Filtros de duração -->
+    <!-- Filtros de estados -->
     <div class="flex flex-wrap gap-2 mb-4">
-        <button class="px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-sm font-medium">
+        <button
+            class="filter-btn px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-sm font-medium"
+            data-filter="all">
             Todos
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
-            Menos de 1 mês
+        <button
+            class="filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="suspended">
+            Suspensos
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
-            1-6 meses
+        <button
+            class="filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="banned">
+            Banidos
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
-            Mais de 6 meses
+        <button
+            class="filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="archived">
+            Arquivados
         </button>
     </div>
 
-    <!-- Tabela de utilizadores suspensos -->
+    <!-- Tabela de utilizadores com estados restritivos -->
     <div class="overflow-x-auto rounded-xl shadow bg-white">
         <table class="min-w-full text-sm">
             <thead class="bg-blue-100 text-left">
@@ -50,163 +58,385 @@
                         ID<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
+                <th class="p-4">
+                    <div class="flex items-center">
+                        Imagem de Perfil
+                    </div>
+                </th>
                 <th class="p-4 cursor-pointer sortable-column" data-sort="name">
                     <div class="flex items-center">
                         Nome do Utilizador<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
-                <th class="p-4 cursor-pointer sortable-column" data-sort="reason">
+                <th class="p-4 cursor-pointer sortable-column" data-sort="email">
                     <div class="flex items-center">
-                        Motivo da Suspensão<span class="sort-icon ml-1"></span>
+                        Email<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
-                <th class="p-4 cursor-pointer sortable-column" data-sort="date">
+                <th class="p-4 cursor-pointer sortable-column" data-sort="created_at">
                     <div class="flex items-center">
-                        Data da Suspensão<span class="sort-icon ml-1"></span>
+                        Data de Registo<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
-                <th class="p-4 cursor-pointer sortable-column" data-sort="duration">
+                <th class="p-4 cursor-pointer sortable-column" data-sort="state">
                     <div class="flex items-center">
-                        Duração<span class="sort-icon ml-1"></span>
+                        Estado<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
                 <th class="p-4">Ações</th>
             </tr>
             </thead>
             <tbody id="suspendedTableBody">
-            <tr class="border-t hover:bg-gray-50 transition suspended-row"
-                data-id="5644"
-                data-name="cristiano ronaldo"
-                data-reason="má conduta"
-                data-date="1710598500"
-                data-duration="1 mês">
-                <td class="p-4">#5644</td>
-                <td class="p-4 font-medium">Cristiano Ronaldo</td>
-                <td class="p-4 text-gray-600">Má Conduta</td>
-                <td class="p-4 text-gray-500">12/03/2025 - 14:55</td>
-                <td class="p-4">1 mês</td>
-                <td class="p-4">
-                    <div class="flex gap-2">
-                        <button class="btn-success px-3 py-1 text-xs" onclick="openModal('reativarModal')">Reativar</button>
-                        <button class="btn-warning px-3 py-1 text-xs" onclick="openModal('prolongarModal')">Prolongar</button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition suspended-row"
-                data-id="6112"
-                data-name="maria da silva"
-                data-reason="spam"
-                data-date="1710512100"
-                data-duration="2 meses">
-                <td class="p-4">#6112</td>
-                <td class="p-4 font-medium">Maria da Silva</td>
-                <td class="p-4 text-gray-600">Spam</td>
-                <td class="p-4 text-gray-500">11/03/2025 - 12:33</td>
-                <td class="p-4">2 meses</td>
-                <td class="p-4">
-                    <div class="flex gap-2">
-                        <button class="btn-success px-3 py-1 text-xs" onclick="openModal('reativarModal')">Reativar</button>
-                        <button class="btn-warning px-3 py-1 text-xs" onclick="openModal('prolongarModal')">Prolongar</button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition suspended-row"
-                data-id="6141"
-                data-name="aurélio da silva"
-                data-reason="fraude"
-                data-date="1710338100"
-                data-duration="1 ano">
-                <td class="p-4">#6141</td>
-                <td class="p-4 font-medium">Aurélio da Silva</td>
-                <td class="p-4 text-gray-600">Fraude</td>
-                <td class="p-4 text-gray-500">09/03/2025 - 19:43</td>
-                <td class="p-4">1 ano</td>
-                <td class="p-4">
-                    <div class="flex gap-2">
-                        <button class="btn-success px-3 py-1 text-xs" onclick="openModal('reativarModal')">Reativar</button>
-                        <button class="btn-warning px-3 py-1 text-xs" onclick="openModal('prolongarModal')">Prolongar</button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition suspended-row"
-                data-id="6535"
-                data-name="luís assis"
-                data-reason="fraude"
-                data-date="1710165300"
-                data-duration="2 anos">
-                <td class="p-4">#6535</td>
-                <td class="p-4 font-medium">Luís Assis</td>
-                <td class="p-4 text-gray-600">Fraude</td>
-                <td class="p-4 text-gray-500">07/03/2025 - 15:46</td>
-                <td class="p-4">2 anos</td>
-                <td class="p-4">
-                    <div class="flex gap-2">
-                        <button class="btn-success px-3 py-1 text-xs" onclick="openModal('reativarModal')">Reativar</button>
-                        <button class="btn-warning px-3 py-1 text-xs" onclick="openModal('prolongarModal')">Prolongar</button>
-                    </div>
-                </td>
-            </tr>
+            @forelse($users as $user)
+                <tr class="border-t hover:bg-gray-50 transition suspended-row"
+                    data-id="{{ $user->id }}"
+                    data-name="{{ strtolower($user->name) }}"
+                    data-email="{{ strtolower($user->email) }}"
+                    data-state="{{ $user->state }}">
+                    <td class="p-4">#{{ $user->id }}</td>
+                    <td class="p-4">
+                        <img src="{{ $user->getProfilePictureUrl() }}"
+                             alt="{{ $user->name }}"
+                             class="h-10 w-10 rounded-full object-cover">
+                    </td>
+                    <td class="p-4 font-medium">{{ $user->name }}</td>
+                    <td class="p-4 text-gray-600">{{ $user->email }}</td>
+                    <td class="p-4 text-gray-500">{{ $user->created_at->format('d/m/Y - H:i') }}</td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium
+                            @if($user->state === 'suspended') bg-yellow-100 text-yellow-700
+                            @elseif($user->state === 'banned') bg-red-100 text-red-700
+                            @elseif($user->state === 'archived') bg-gray-100 text-gray-700
+                            @else bg-green-100 text-green-700 @endif">
+                            @php
+                                $states = [
+                                    'active' => 'Ativo',
+                                    'suspended' => 'Suspenso',
+                                    'banned' => 'Banido',
+                                    'archived' => 'Arquivado'
+                                ];
+                            @endphp
+                            {{ $states[$user->state] ?? ucfirst($user->state) }}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex gap-1">
+                            <button
+                                class="btn-secondary px-3 py-1 text-xs"
+                                onclick="openSuspendUserModal(this)"
+                                data-user-id="{{ $user->id }}"
+                                data-user-name="{{ $user->name }}"
+                                data-user-state="{{ $user->state }}">
+                                Gerir Estado
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr class="border-t">
+                    <td colspan="7" class="p-4 text-center text-gray-500">Não há utilizadores restritos para mostrar
+                    </td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
-        <div class="p-4 border-t border-gray-100 flex justify-between items-center">
-            <p class="text-sm text-gray-500">Exibindo <span class="font-medium">4</span> de <span class="font-medium">28</span> resultados</p>
-            <div class="flex items-center space-x-2">
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">Anterior</button>
-                <button class="px-3 py-1 border border-secondary rounded bg-blue-50 text-secondary">1</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">2</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">3</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">Próxima</button>
-            </div>
+        <div class="p-4 pagination-container" id="pagination-container">
+            {{ $users->links() }}
         </div>
     </div>
 </div>
 
+@include('pages.moderation.partials.modals.suspended-user-mod')
+
 <script>
-    // Code for search functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        // Variáveis globais
         const searchInput = document.getElementById('suspendedSearchInput');
         const clearSearch = document.getElementById('clearSuspendedSearch');
         const searchResults = document.getElementById('suspendedSearchResults');
         const resultCount = document.getElementById('suspendedResultCount');
-        const suspendedRows = document.querySelectorAll('.suspended-row');
+        const filterButtons = document.querySelectorAll('.filter-btn');
 
-        // Search implementation
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            let matches = 0;
+        let currentPage = 1;
+        let currentFilter = 'all';
+        let searchTimeout;
 
+        // Busca com AJAX
+        function searchUsers(searchTerm = '') {
+            // Mostrar indicador de carregamento
+            document.getElementById('suspendedTableBody').innerHTML =
+                '<tr><td colspan="7" class="p-4 text-center">Carregando...</td></tr>';
+
+            // Construir URL com parâmetros
+            const url = new URL('/moderation/suspended-users/ajax', window.location.origin);
+            url.searchParams.append('page', currentPage);
+            url.searchParams.append('filter', currentFilter);
+            url.searchParams.append('search', searchTerm);
+
+            // Fazer requisição AJAX
+            fetch(url.toString())
+                .then(response => response.json())
+                .then(data => {
+                    updateUsersTable(data.users);
+                    updatePagination(data.pagination);
+
+                    // Atualizar contador de resultados
+                    if (searchTerm) {
+                        searchResults.classList.remove('hidden');
+                        resultCount.textContent = data.total;
+                    } else {
+                        searchResults.classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                    document.getElementById('suspendedTableBody').innerHTML =
+                        '<tr><td colspan="7" class="p-4 text-center text-red-500">Erro ao carregar dados</td></tr>';
+                });
+        }
+
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.trim();
+
+            // Mostrar ou ocultar botão de limpar
             if (searchTerm.length > 0) {
                 clearSearch.classList.remove('hidden');
-
-                suspendedRows.forEach(row => {
-                    const name = row.getAttribute('data-name').toLowerCase();
-                    const reason = row.getAttribute('data-reason').toLowerCase();
-
-                    if (name.includes(searchTerm) || reason.includes(searchTerm)) {
-                        row.classList.remove('hidden');
-                        matches++;
-                    } else {
-                        row.classList.add('hidden');
-                    }
-                });
-
-                searchResults.classList.remove('hidden');
-                resultCount.textContent = matches;
             } else {
                 clearSearch.classList.add('hidden');
-                searchResults.classList.add('hidden');
+            }
 
-                suspendedRows.forEach(row => {
-                    row.classList.remove('hidden');
-                });
+            // Usar debounce para evitar muitas requisições
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentPage = 1; // Voltar para primeira página ao pesquisar
+                searchUsers(searchTerm);
+            }, 500);
+        });
+
+        clearSearch.addEventListener('click', function () {
+            searchInput.value = '';
+            this.classList.add('hidden');
+            searchResults.classList.add('hidden');
+            currentPage = 1;
+            searchUsers('');
+        });
+
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimeout);
+                currentPage = 1;
+                searchUsers(this.value.trim());
             }
         });
 
-        // Clear search
-        clearSearch.addEventListener('click', function() {
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('input'));
-            this.classList.add('hidden');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Atualizar visual dos botões
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200');
+                    btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+                });
+                this.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+                this.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-200');
+
+                // Aplicar filtro
+                currentFilter = this.getAttribute('data-filter');
+                currentPage = 1;
+                searchUsers(searchInput.value.trim());
+            });
         });
+
+        function updateUsersTable(users) {
+            const tableBody = document.getElementById('suspendedTableBody');
+            tableBody.innerHTML = '';
+
+            if (users.length === 0) {
+                tableBody.innerHTML = '<tr class="border-t"><td colspan="7" class="p-4 text-center text-gray-500">Não há utilizadores para mostrar</td></tr>';
+                return;
+            }
+
+            users.forEach(user => {
+                // Definir classes para o badge de estado
+                let stateBadgeClass = '';
+                if (user.state === 'suspended') {
+                    stateBadgeClass = 'bg-yellow-100 text-yellow-700';
+                } else if (user.state === 'banned') {
+                    stateBadgeClass = 'bg-red-100 text-red-700';
+                } else if (user.state === 'archived') {
+                    stateBadgeClass = 'bg-gray-100 text-gray-700';
+                } else {
+                    stateBadgeClass = 'bg-green-100 text-green-700';
+                }
+
+                // Traduzir estado
+                const states = {
+                    'active': 'Ativo',
+                    'suspended': 'Suspenso',
+                    'banned': 'Banido',
+                    'archived': 'Arquivado'
+                };
+                const stateName = states[user.state] || user.state;
+
+                // Formatar data de criação
+                const createdAt = new Date(user.created_at);
+                const formattedDate = `${createdAt.getDate().toString().padStart(2, '0')}/${(createdAt.getMonth() + 1).toString().padStart(2, '0')}/${createdAt.getFullYear()} - ${createdAt.getHours().toString().padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
+
+                // Criar a linha da tabela
+                const row = document.createElement('tr');
+                row.className = 'border-t hover:bg-gray-50 transition suspended-row';
+                row.setAttribute('data-id', user.id);
+                row.setAttribute('data-name', user.name.toLowerCase());
+                row.setAttribute('data-email', user.email.toLowerCase());
+                row.setAttribute('data-state', user.state);
+
+                row.innerHTML = `
+                <td class="p-4">#${user.id}</td>
+                <td class="p-4">
+                    <img src="${user.profile_picture_url || '/images/default-profile.png'}"
+                        alt="${user.name}"
+                        class="h-10 w-10 rounded-full object-cover">
+                </td>
+                <td class="p-4 font-medium">${user.name}</td>
+                <td class="p-4 text-gray-600">${user.email}</td>
+                <td class="p-4 text-gray-500">${formattedDate}</td>
+                <td class="p-4">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium ${stateBadgeClass}">
+                        ${stateName}
+                    </span>
+                </td>
+                <td class="p-4">
+                    <div class="flex gap-1">
+                        <button
+                            class="btn-secondary px-3 py-1 text-xs"
+                            onclick="openSuspendUserModal(this)"
+                            data-user-id="${user.id}"
+                            data-user-name="${user.name}"
+                            data-user-state="${user.state}">
+                            Gerir Estado
+                        </button>
+                    </div>
+                </td>
+            `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updatePagination(paginationHtml) {
+            const paginationContainer = document.getElementById('pagination-container');
+            paginationContainer.innerHTML = paginationHtml;
+
+            const paginationLinks = paginationContainer.querySelectorAll('a');
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const url = new URL(href, window.location.origin);
+                    currentPage = url.searchParams.get('page') || 1;
+
+                    document.getElementById('suspendedTableBody').innerHTML =
+                        '<tr><td colspan="7" class="p-4 text-center">Carregando...</td></tr>';
+
+                    const searchUrl = new URL('/moderation/suspended-users/ajax', window.location.origin);
+                    searchUrl.searchParams.append('page', currentPage);
+                    searchUrl.searchParams.append('filter', currentFilter);
+                    searchUrl.searchParams.append('search', searchInput.value.trim());
+
+                    fetch(searchUrl.toString())
+                        .then(response => response.json())
+                        .then(data => {
+                            updateUsersTable(data.users);
+                            updatePagination(data.pagination);
+                        })
+                        .catch(error => {
+                            console.error('Erro ao buscar dados:', error);
+                            document.getElementById('suspendedTableBody').innerHTML =
+                                '<tr><td colspan="7" class="p-4 text-center text-red-500">Erro ao carregar dados</td></tr>';
+                        });
+                });
+            });
+        }
+
+        searchUsers();
+    });
+
+    function openSuspendUserModal(element) {
+        const userId = element.getAttribute('data-user-id');
+        const userName = element.getAttribute('data-user-name');
+        const userState = element.getAttribute('data-user-state');
+
+        document.getElementById('suspendUserName').textContent = userName;
+        document.getElementById('stateSelect').value = userState;
+
+        document.getElementById('confirmSuspendBtn').setAttribute('data-user-id', userId);
+
+        const modal = document.getElementById('suspendUserModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('suspendUserModal');
+        const overlay = document.getElementById('suspendUserModalOverlay');
+        const closeBtn = document.getElementById('closeSuspendModal');
+        const cancelBtn = document.getElementById('cancelSuspendBtn');
+        const confirmBtn = document.getElementById('confirmSuspendBtn');
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                modal.classList.add('hidden');
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function () {
+                modal.classList.add('hidden');
+            });
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', function () {
+                modal.classList.add('hidden');
+            });
+        }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function () {
+                const userId = this.getAttribute('data-user-id');
+                const state = document.getElementById('stateSelect').value;
+
+                if (!userId) return;
+
+                this.disabled = true;
+                this.innerHTML = '<i class="bi bi-hourglass-split animate-spin mr-2"></i> Atualizando...';
+
+                fetch(`/moderation/users/${userId}/update-state`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({state})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert('Erro ao atualizar estado do usuário.');
+                            this.disabled = false;
+                            this.innerHTML = 'Atualizar Estado';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao processar a solicitação.');
+                        this.disabled = false;
+                        this.innerHTML = 'Atualizar Estado';
+                    });
+            });
+        }
     });
 </script>

@@ -21,9 +21,6 @@
             @include('pages.moderation.verification-advertiser')
 
             @include('pages.moderation.suspended-users')
-
-            @include('pages.moderation.partials.modals.reactive-modal')
-            @include('pages.moderation.partials.modals.prolong-modal')
         </div>
     </div>
     <script>

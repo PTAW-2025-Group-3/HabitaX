@@ -1,6 +1,6 @@
 <div id="shareModal" hidden class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-0 transition-all duration-300 hidden">
     <div class="modal-content relative w-full max-w-md transform scale-95 opacity-0 transition-all duration-300">
-        <div class="bg-white bg-opacity-95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+        <div class="bg-white bg-opacity-95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-100 animate-fade-in">
             <div class="bg-gradient-to-r from-blue-900 to-indigo-600 p-5 text-white relative">
                 <button id="closeShareModal" class="absolute top-3 right-3 text-white hover:text-gray-200 transition-all">
                     <i class="bi bi-x-lg"></i>
@@ -130,12 +130,12 @@
 
 
                     <div class="flex items-center justify-end space-x-3 pt-2">
-                        <button type="button" id="cancelShare" class="btn-gray px-4 py-2">
+                        <button type="button" id="cancelShare" class="px-4 py-2 btn-gray text-sm">
                             Cancelar
                         </button>
-                        <button type="submit" id="submitShare" class="btn-primary px-4 py-2">
+                        <button type="submit" id="submitShare" class="px-4 py-2 btn-primary text-sm">
                             <i class="bi bi-send-fill mr-1"></i>
-                            Enviar
+                            Partilhar
                         </button>
                     </div>
                 </form>

@@ -154,11 +154,72 @@
         </div>
     </div>
 @endsection
+@include('advertisements.individual.modals.all_photos', ['images' => $images])
 @include('advertisements.individual.modals.denunciation', ['denunciationReasons' => $denunciationReasons, 'adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Modal de fotos - elementos
+            const photosModal = document.getElementById('photos-modal');
+            const closePhotosModal = document.getElementById('closePhotosModal');
+            const photoItems = document.querySelectorAll('.photo-item');
+
+            // Função para abrir o modal de fotos
+            function openPhotosModal() {
+                photosModal.classList.remove('hidden');
+                photosModal.classList.add('modal-visible');
+                document.body.classList.add('modal-open');
+            }
+
+            // Função para fechar o modal de fotos
+            function closePhotosModalFunction() {
+                photosModal.classList.add('hidden');
+                photosModal.classList.remove('modal-visible');
+                document.body.classList.remove('modal-open');
+            }
+
+            // Gatilhos para abrir o modal de fotos - AQUI ESTÁ O PROBLEMA
+            const galleryTriggers = document.querySelectorAll('#gallery a');
+            galleryTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.preventDefault(); // Impede abertura direta da galeria
+                    openPhotosModal(); // Só abre o modal, não a galeria
+                });
+            });
+
+            // Eventos para fechar o modal
+            if (closePhotosModal) {
+                closePhotosModal.addEventListener('click', function() {
+                    closePhotosModalFunction();
+                });
+            }
+
+            // Fechar modal ao clicar fora
+            if (photosModal) {
+                photosModal.addEventListener('click', function(e) {
+                    if (e.target === photosModal) {
+                        closePhotosModalFunction();
+                    }
+                });
+            }
+
+            // Fechar modal com tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && photosModal && !photosModal.classList.contains('hidden')) {
+                    closePhotosModalFunction();
+                }
+            });
+
+            // Abrir galeria somente quando uma foto for clicada no modal
+            photoItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    setTimeout(() => {
+                        gallery.openGallery(index);
+                    }, 100);
+                });
+            });
 
             // Report button handler
             const reportBtn = document.getElementById('reportBtn');
@@ -303,10 +364,25 @@
                 loop: true,
                 mode: 'lg-fade',
                 speed: 500,
+                // Importante: desativar a abertura automática ao clicar nos elementos do seletor
+                licenseKey: 'your-license-key',
+                dynamic: true,
+                dynamicEl: Array.from(document.querySelectorAll('#gallery a')).map(a => {
+                    return {
+                        src: a.getAttribute('href'),
+                        thumb: a.querySelector('img').getAttribute('src')
+                    };
+                })
             });
-            document.getElementById('openGalleryButton').addEventListener('click', function() {
-                gallery.openGallery(5);
-            });
+
+            // "Mais X imagens" button now opens the modal instead
+            const openGalleryButton = document.getElementById('openGalleryButton');
+            if (openGalleryButton) {
+                openGalleryButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openPhotosModal();
+                });
+            }
         });
     </script>
 @endpush

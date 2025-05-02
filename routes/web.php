@@ -98,6 +98,10 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/mod/advertisement/{advertisementId}/history', [ReportedAdvertisementController::class, 'history'])
         ->name('reported-advertisement.history');
     Route::get('/moderation/denunciations/ajax', [App\Http\Controllers\ReportedAdvertisementController::class, 'ajaxDenunciations'])->name('moderation.denunciations.ajax');
+    Route::get('/moderation/suspended-users', [ModerationController::class, 'suspendedUsers'])->name('moderation.suspended-users');
+    Route::post('/moderation/users/{userId}/update-state', [ModerationController::class, 'updateUserState'])->name('moderation.update-user-state');
+    Route::get('/moderation/suspended-users/ajax', [ModerationController::class, 'ajaxSuspendedUsers'])
+        ->name('moderation.suspended-users.ajax');
 });
 
 // Administration Route
