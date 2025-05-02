@@ -54,7 +54,7 @@
         @php
             $images = $property->getMedia('images');
         @endphp
-        <div id="lightgallery" class="grid grid-cols-12 gap-2 md:gap-4 relative">
+        <div id="gallery" class="gallery-container grid grid-cols-12 gap-2 md:gap-4 relative">
             <!-- Visible part -->
             <a href="{{ $property->getFirstMediaUrl('images') }}" class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
                 <img src="{{ $property->getFirstMediaUrl('images', 'preview') }}"
@@ -228,28 +228,6 @@
                 }, 3000);
             }
 
-            // Share button handler
-            const shareBtn = document.getElementById('shareBtn');
-
-            if (shareBtn) {
-                shareBtn.addEventListener('click', function () {
-                    const shareData = {
-                        title: document.title,
-                        text: 'Confira este conteúdo interessante!',
-                        url: window.location.href
-                    };
-
-                    if (navigator.share) {
-                        navigator.share(shareData)
-                            .then(() => console.log('Conteúdo partilhado com sucesso'))
-                            .catch((err) => console.error('Erro ao partilhar:', err));
-                    } else {
-                        alert('O seu navegador não suporta a funcionalidade de partilha.');
-                    }
-                });
-            }
-
-
             // Favorite button handler
             const favoriteBtn = document.getElementById('favoriteBtn');
             if (favoriteBtn) {
@@ -317,13 +295,9 @@
                 });
             }
 
-            const gallery = lightGallery(document.getElementById('lightgallery'), {
+            const gallery = lightGallery(document.getElementById('gallery'), {
                 selector: 'a',
-                plugins: [lgThumbnail],
-                thumbnail: true,
-                download: false,
-                zoom: true,
-                fullScreen: true,
+                plugins: [lgThumbnail, lgZoom],
                 autoplayControls: false,
                 share: false,
                 loop: true,
@@ -333,7 +307,6 @@
             document.getElementById('openGalleryButton').addEventListener('click', function() {
                 gallery.openGallery(5);
             });
-
         });
     </script>
 @endpush

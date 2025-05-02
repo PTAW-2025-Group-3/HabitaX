@@ -20,8 +20,10 @@ import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 
 import lightGallery from 'lightgallery';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-thumbnail.css';
+import 'lightgallery/css/lg-zoom.css';
 
 FilePond.registerPlugin(
     FilePondPluginFileValidateType,
@@ -41,5 +43,6 @@ window.jQuery = $;
 window.FilePond = FilePond;
 window.lightGallery = lightGallery;
 window.lgThumbnail = lgThumbnail;
+window.lgZoom = lgZoom;
 
 console.log('app.js loaded');
