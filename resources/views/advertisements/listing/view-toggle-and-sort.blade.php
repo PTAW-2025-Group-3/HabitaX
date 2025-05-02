@@ -83,6 +83,20 @@
                 this.$nextTick(() => {
                     this.syncFavoritesState();
                     this.initializeEventListeners();
+
+                    // Reinicializar os slideshows após alternar a visualização
+                    if (typeof window.initAdvertisementSlideshows === 'function' && typeof adIds !== 'undefined') {
+                        setTimeout(() => {
+                            window.initAdvertisementSlideshows(adIds);
+
+                            // Prevenção de propagação de eventos
+                            document.querySelectorAll('.swiper-button-next, .swiper-button-prev, .swiper-pagination').forEach(element => {
+                                element.addEventListener('click', e => {
+                                    e.stopPropagation();
+                                });
+                            });
+                        }, 100);
+                    }
                 });
             },
 

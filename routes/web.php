@@ -171,5 +171,7 @@ Route::middleware('auth')->group(function () {
             ->name('contact-requests.update-status');
 });
 
+Route::post('/share/email', [App\Http\Controllers\ShareController::class, 'shareByEmail'])->name('share.email');
+
 // Auth (login, logout, etc.)
 require __DIR__ . '/auth.php';

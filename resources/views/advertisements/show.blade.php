@@ -30,7 +30,6 @@
                 </div>
             </div>
 
-            <!-- Botões de ação - adicionados aqui -->
             <div class="flex flex-wrap justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
                 <button id="shareBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
                     <i class="bi bi-share-fill"></i>
@@ -156,6 +155,7 @@
     </div>
 @endsection
 @include('advertisements.individual.modals.denunciation', ['denunciationReasons' => $denunciationReasons, 'adId' => $ad->id])
+@include('advertisements.individual.modals.share', ['ad' => $ad])
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -168,6 +168,17 @@
                         openReportModal();
                     } else {
                         console.error('openReportModal function not found');
+                    }
+                });
+            }
+
+            const shareBtn = document.getElementById('shareBtn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', function() {
+                    if (typeof openShareModal === 'function') {
+                        openShareModal();
+                    } else {
+                        console.error('openShareModal function not found');
                     }
                 });
             }
