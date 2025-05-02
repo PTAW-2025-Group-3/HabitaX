@@ -149,7 +149,7 @@ class PropertyController extends Controller
         $existingMedia = $property->getMedia('images');
         Log::info('Current media in DB:', $existingMedia->pluck('file_name')->toArray());
 
-        // Удалим файлы, которых больше нет в submitted списке
+        // Delete media not in the new list
         $existingMedia->each(function ($media) use ($existingFilenames) {
             if (!in_array($media->file_name, $existingFilenames)) {
                 Log::info('Deleting media: ' . $media->file_name);
@@ -160,9 +160,9 @@ class PropertyController extends Controller
         });
 
         $existingMediaNames = $property->fresh()->getMedia('images')->pluck('file_name')->toArray();
-        Log::info('🔁 Media after deletion:', $existingMediaNames);
+        Log::info('Media after deletion:', $existingMediaNames);
 
-        // 🔃 Обновление порядка изображений
+        // Update order of existing media
         $orderedFilenames = $existingFilenames;
         $mediaItems = $property->getMedia('images');
 
@@ -177,7 +177,7 @@ class PropertyController extends Controller
             }
         }
 
-        // Добавление новых изображений
+        // Add new files
         foreach ($existingFilenames as $filename) {
             if (in_array($filename, $existingMediaNames)) {
                 Log::info('📎 Skipping already existing media: ' . $filename);
@@ -185,7 +185,7 @@ class PropertyController extends Controller
             }
 
             $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
-            Log::info('📥 Checking tempPath for adding: ' . $tempPath);
+            Log::info('Checking tempPath for adding: ' . $tempPath);
 
             if (file_exists($tempPath)) {
                 try {

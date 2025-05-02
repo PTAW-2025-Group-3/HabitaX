@@ -67,7 +67,7 @@
                     @if(!$loop->first && $loop->index < 5)
                         <a href="{{ $image->getUrl() }}">
                             <img src="{{ $image->getUrl('preview') }}"
-                                 class="w-full h-full object-cover rounded-lg shadow" alt="Miniatura">
+                                 class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
                         </a>
                     @endif
                 @endforeach
@@ -82,22 +82,23 @@
                 @foreach($images as $image)
                     @if($loop->index >= 5)
                         <a href="{{ $image->getUrl() }}">
-                            <img src="{{ $image->getUrl() }}" alt="Miniatura oculta" class="hidden">
+                            <img src="{{ $image->getUrl() }}" loading="lazy" alt="Miniatura oculta" class="hidden">
                         </a>
                     @endif
                 @endforeach
             </div>
-        </div>
 
-        <!-- Botão separado! -->
-        @if(count($images) > 5)
-            <div class="mt-4 text-right">
-                <button id="openGalleryButton"
-                        class="inline-block bg-white bg-opacity-80 backdrop-blur px-4 py-2 text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
-                    Mostrar todas as fotos
-                </button>
-            </div>
-        @endif
+            <!-- Show More Button -->
+            @if(count($images) > 5)
+                <div class="mt-4 text-right">
+                    <button id="openGalleryButton"
+                            class="absolute bottom-2 right-2 bg-white bg-opacity-80 backdrop-blur px-4 py-2 mb-8 opacity-80 hover:opacity-100
+                            text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
+                        Mais {{ count($images) - 5 }} imagens
+                    </button>
+                </div>
+            @endif
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div class="col-span-1 md:col-span-2 space-y-4">
@@ -215,6 +216,28 @@
                     }, 300);
                 }, 3000);
             }
+
+            // Share button handler
+            const shareBtn = document.getElementById('shareBtn');
+
+            if (shareBtn) {
+                shareBtn.addEventListener('click', function () {
+                    const shareData = {
+                        title: document.title,
+                        text: 'Confira este conteúdo interessante!',
+                        url: window.location.href
+                    };
+
+                    if (navigator.share) {
+                        navigator.share(shareData)
+                            .then(() => console.log('Conteúdo partilhado com sucesso'))
+                            .catch((err) => console.error('Erro ao partilhar:', err));
+                    } else {
+                        alert('O seu navegador não suporta a funcionalidade de partilha.');
+                    }
+                });
+            }
+
 
             // Favorite button handler
             const favoriteBtn = document.getElementById('favoriteBtn');

@@ -41,13 +41,13 @@ class Property extends Model implements HasMedia
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 300, 200)
             ->optimize()
-            ->sharpen(10)
+            ->sharpen(5)
             ->performOnCollections('images');
 
         $this->addMediaConversion('preview')
             ->fit(Fit::Crop, 800, 600)
             ->optimize()
-            ->sharpen(10)
+            ->sharpen(5)
             ->performOnCollections('images');
     }
 
