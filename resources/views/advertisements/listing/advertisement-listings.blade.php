@@ -251,10 +251,6 @@
                                                     class="favorite-btn transition-colors h-8 w-8 rounded-full hover:bg-gray-100 {{ $isFavorite ? 'text-red-500' : 'text-gray-500' }}">
                                                     <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                                                 </button>
-                                                <button
-                                                    class="text-gray-500 hover:text-gray-900 transition-colors h-8 w-8 rounded-full hover:bg-gray-100">
-                                                    <i class="bi bi-share"></i>
-                                                </button>
                                             </div>
                                         </div>
                                         <p class="flex items-center text-sm text-gray-500 mt-0.5">
