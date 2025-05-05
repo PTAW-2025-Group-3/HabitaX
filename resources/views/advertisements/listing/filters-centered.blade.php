@@ -154,27 +154,13 @@
                 <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
                     <i class="bi bi-door-open-fill mr-2 text-secondary"></i> Quartos
                 </h3>
-                <div class="grid grid-cols-5 gap-2 filter-group">
-                    <button data-selected
-                            class="py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
-                        All
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        1+
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        2+
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        3+
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        4+
-                    </button>
+                <input type="hidden" name="min_bedrooms" id="min_bedrooms" value="{{ request('min_bedrooms') }}">
+                <div class="grid grid-cols-5 gap-2 filter-group" data-filter-name="min_bedrooms">
+                    <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
+                    <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
+                    <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
+                    <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
+                    <button data-value="4" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '4' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">4+</button>
                 </div>
             </div>
 
@@ -183,23 +169,12 @@
                 <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
                     <i class="bi bi-badge-wc-fill mr-2 text-secondary"></i> Casas de Banho
                 </h3>
-                <div class="grid grid-cols-4 gap-2 filter-group">
-                    <button data-selected
-                            class="py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
-                        All
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        1+
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        2+
-                    </button>
-                    <button
-                        class="py-2 px-3 border border-gray-300 rounded-lg hover:border-secondary hover:bg-indigo-50 transition">
-                        3+
-                    </button>
+                <input type="hidden" name="min_bathrooms" id="min_bathrooms" value="{{ request('min_bathrooms') }}">
+                <div class="grid grid-cols-4 gap-2 filter-group" data-filter-name="min_bathrooms">
+                    <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
+                    <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
+                    <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
+                    <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
                 </div>
             </div>
 
@@ -208,23 +183,12 @@
                 <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
                     <i class="bi bi-building-fill-check mr-2 text-secondary"></i> Estado
                 </h3>
-                <div class="space-y-2 filter-group">
-                    <button data-selected
-                            class="w-full py-2 px-3 border-2 border-secondary rounded-lg font-medium hover:bg-secondary transition">
-                        Qualquer
-                    </button>
-                    <button
-                        class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
-                        Novo/Renovado
-                    </button>
-                    <button
-                        class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
-                        Usado
-                    </button>
-                    <button
-                        class="w-full py-2 px-4 border border-gray-300 rounded-lg text-left hover:border-secondary hover:bg-indigo-50 transition">
-                        Para Renovar
-                    </button>
+                <input type="hidden" name="condition" id="condition" value="{{ request('condition') }}">
+                <div class="space-y-2 filter-group" data-filter-name="condition">
+                    <button data-value="" class="w-full py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Qualquer</button>
+                    <button data-value="new" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'new' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Novo/Renovado</button>
+                    <button data-value="used" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'used' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Usado</button>
+                    <button data-value="to_renovate" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'to_renovate' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Para Renovar</button>
                 </div>
             </div>
 
@@ -326,47 +290,36 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Botões de filtros
+
+        document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.filter-group').forEach(group => {
-            const type = group.dataset.filterType || 'default';
+            const inputName = group.dataset.filterName;
+            const hiddenInput = document.getElementById(inputName);
             const buttons = group.querySelectorAll('button');
 
-            const applyActiveStyle = (button) => {
-                if (type === 'light') {
-                    button.classList.remove('border-gray-300', 'text-gray-700', 'hover:bg-indigo-50');
-                    button.classList.add('bg-indigo-100', 'text-secondary', 'border-secondary');
-                } else {
-                    button.classList.remove('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-indigo-50');
-                    button.classList.add('bg-secondary', 'text-white', 'border-secondary');
-                }
-            };
-
-            const resetButtons = () => {
-                buttons.forEach(b => {
-                    b.classList.remove(
-                        'bg-secondary', 'text-white', 'border-secondary',
-                        'bg-indigo-100', 'text-secondary',
-                        'hover:bg-indigo-50'
-                    );
-                    b.classList.add('border-gray-300', 'text-gray-700', 'bg-white', 'hover:bg-indigo-50');
-                    b.blur();
-                });
-            };
-
             buttons.forEach(button => {
-                button.addEventListener('click', () => {
-                    resetButtons();
-                    applyActiveStyle(button);
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    const value = button.dataset.value;
+
+                    // Atualizar o input escondido
+                    hiddenInput.value = value;
+
+                    // Estilo visual ativo
+                    buttons.forEach(b => {
+                        b.classList.remove('bg-secondary', 'text-white', 'border-secondary');
+                        b.classList.add('border-gray-300');
+                    });
+                    button.classList.add('bg-secondary', 'text-white', 'border-secondary');
+                    button.classList.remove('border-gray-300');
                 });
             });
-
-            const preselected = group.querySelector('button[data-selected]');
-            if (preselected) applyActiveStyle(preselected);
         });
-
     });
 </script>
+
+
 
 
 

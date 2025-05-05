@@ -22,6 +22,10 @@ class AdvertisementFilterRequest extends FormRequest
             'max_price' => 'nullable|numeric|min:0',
             'min_area' => 'nullable|numeric|min:0',
             'max_area' => 'nullable|numeric|min:0',
+            'min_bedrooms' => 'nullable|integer|min:0',
+            'max_bedrooms' => 'nullable|integer|min:0',
+            'min_bathrooms' => 'nullable|integer|min:0',
+            'max_bathrooms' => 'nullable|integer|min:0',
             'sort' => 'nullable|in:recent,price_asc,price_desc',
             'district' => 'nullable|exists:districts,id',
             'municipality' => 'nullable|exists:municipalities,id',
@@ -31,7 +35,6 @@ class AdvertisementFilterRequest extends FormRequest
 
     public function applyFilters($query)
     {
-
         if ($this->filled('transaction_type') && in_array($this->transaction_type, ['sale', 'rent'])) {
             $query->where('transaction_type', $this->transaction_type);
         }
@@ -94,6 +97,37 @@ class AdvertisementFilterRequest extends FormRequest
             }
         }
 
+        // Filtros de Quartos (ID 1)
+        if ($this->filled('min_bedrooms')) {
+            $query->whereHas('property.parameters', function ($q) {
+                $q->where('attribute_id', 1) // ID do atributo de quartos
+                ->where('int_value', '>=', (int)$this->min_bedrooms);
+            });
+        }
+
+        if ($this->filled('max_bedrooms')) {
+            $query->whereHas('property.parameters', function ($q) {
+                $q->where('attribute_id', 1) // ID do atributo de quartos
+                ->where('int_value', '<=', (int)$this->max_bedrooms);
+            });
+        }
+
+        // Filtros de Casas de Banho (ID 2)
+        if ($this->filled('min_bathrooms')) {
+            $query->whereHas('property.parameters', function ($q) {
+                $q->where('attribute_id', 2) // ID do atributo de casas de banho
+                ->where('int_value', '>=', (int)$this->min_bathrooms);
+            });
+        }
+
+        if ($this->filled('max_bathrooms')) {
+            $query->whereHas('property.parameters', function ($q) {
+                $q->where('attribute_id', 2) // ID do atributo de casas de banho
+                ->where('int_value', '<=', (int)$this->max_bathrooms);
+            });
+        }
+
+        // Ordenação
         $sortField = 'advertisements.created_at';
         $sortDirection = 'desc';
 
