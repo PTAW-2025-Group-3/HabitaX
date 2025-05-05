@@ -131,21 +131,31 @@
             </div>
 
             <div class="space-y-6 animate-fade-in">
-                <!-- Mapa com estilo moderno -->
+                <!-- Mapa da freguesia com tooltip no ícone de informação -->
                 <div class="bg-gradient-to-tr from-indigo-50 to-white rounded-2xl shadow-md overflow-hidden">
-                    <div class="h-48 md:h-56">
+                    <div class="h-48 md:h-56 relative">
                         <iframe
-                            src="https://www.google.com/maps/embed?..."
+                            src="https://www.google.com/maps?q={{ urlencode($property->parish->name . ', ' . $property->parish->municipality->name . ', ' . $property->country) }}&output=embed"
                             class="w-full h-full border-0"
                             allowfullscreen=""
                             loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"
                         ></iframe>
+                        <div class="absolute top-2 right-2 group">
+                            <div class="bg-white bg-opacity-80 rounded-full w-8 h-8 flex items-center justify-center shadow cursor-help">
+                                <i class="bi bi-info-circle text-gray-700"></i>
+                            </div>
+                            <div class="absolute right-0 top-full mt-2 hidden group-hover:block bg-white text-gray-700 text-xs md:text-sm px-3 py-2 rounded shadow-lg w-52 z-10">
+                                Apenas a freguesia é exibida por questões de segurança.
+                            </div>
+                        </div>
                     </div>
-                    <button
-                        class="w-full text-blue-600 hover:text-blue-700 bg-white text-sm md:text-base font-semibold py-3 border-t border-indigo-100 transition">
+                    <a
+                        href="https://www.google.com/maps?q={{ urlencode($property->parish->name . ', ' . $property->parish->municipality->name . ', ' . $property->country) }}"
+                        target="_blank"
+                        class="w-full text-blue-600 hover:text-blue-700 bg-white text-sm md:text-base font-semibold py-3 border-t border-indigo-100 transition block text-center">
                         <i class="bi bi-geo-alt-fill mr-1"></i> Ver no mapa
-                    </button>
+                    </a>
                 </div>
 
                 @include('advertisements.individual.contact-form', ['ad' => $ad])

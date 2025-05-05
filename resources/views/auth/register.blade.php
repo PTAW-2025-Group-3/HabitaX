@@ -128,8 +128,8 @@
                         <input id="terms" name="terms" type="checkbox" required
                                class="mt-1 h-4 w-4 text-secondary border-gray-300 rounded">
                         <label for="terms" class="text-xs sm:text-sm text-gray dark:text-gray-300">
-                            Eu aceito <a href="#" class="text-secondary hover:underline">os termos de uso</a> e a
-                            <a href="#" class="text-secondary hover:underline">política de privacidade</a>
+                            Eu aceito <a href="{{ route('terms.conditions') }}" class="text-secondary hover:underline">os termos de uso</a> e a
+                            <a href="{{ route('privacy.policy') }}" class="text-secondary hover:underline">política de privacidade</a>
                         </label>
                     </div>
 

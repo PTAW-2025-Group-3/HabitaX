@@ -15,15 +15,24 @@
         </div>
 
         {{--Quick Links --}}
-        <div>
-            <h3 class="text-white font-semibold mb-4 text-lg">Links: </h3>
-            <ul class="space-y-2 text-sm">
-                <li><a href="/" class="hover:text-indigo-400 transition">Home</a></li>
-                <li><a href="/about" class="hover:text-indigo-400 transition">Sobre Nós</a></li>
-                <li><a href="/contact" class="hover:text-indigo-400 transition">Contacte-nos</a></li>
-                <li><a href="/login" class="hover:text-indigo-400 transition">Iniciar Sessão</a></li>
-                <li><a href="/create" class="hover:text-indigo-400 transition">Publicar Anúncio</a></li>
-            </ul>
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-white font-semibold mb-4 text-lg">Links: </h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/" class="hover:text-indigo-400 transition">Home</a></li>
+                    <li><a href="/about" class="hover:text-indigo-400 transition">Sobre Nós</a></li>
+                    <li><a href="/contact" class="hover:text-indigo-400 transition">Contacte-nos</a></li>
+                    <li><a href="/login" class="hover:text-indigo-400 transition">Iniciar Sessão</a></li>
+                    <li><a href="/create" class="hover:text-indigo-400 transition">Publicar Anúncio</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold mb-4 text-lg">Legal: </h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/politica-de-privacidade" class="hover:text-indigo-400 transition">Política de Privacidade</a></li>
+                    <li><a href="/condicoes-gerais" class="hover:text-indigo-400 transition">Termos e Condições</a></li>
+                </ul>
+            </div>
         </div>
 
         {{--Newsletter --}}

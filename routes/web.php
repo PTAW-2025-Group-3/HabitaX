@@ -177,5 +177,9 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/share/email', [App\Http\Controllers\ShareController::class, 'shareByEmail'])->name('share.email');
 
+Route::view('/politica-de-privacidade', 'pages.legal.privacy-policy')->name('privacy.policy');
+Route::view('/condicoes-gerais', 'pages.legal.terms-and-conditions')->name('terms.conditions');
+
+
 // Auth (login, logout, etc.)
 require __DIR__ . '/auth.php';
