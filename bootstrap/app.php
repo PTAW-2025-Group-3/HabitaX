@@ -12,7 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
+        $middleware->web(append: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+        ]);
+
+        $middleware->alias([
+            'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
+        ]);
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->call(\App\Console\Commands\DeleteTempUploadedFiles::class)->hourly();

@@ -3,6 +3,7 @@ FROM php:8.3-fpm-alpine AS build
 
 RUN apk update && apk upgrade && apk add --no-cache \
     build-base \
+    autoconf \
     libpng-dev \
     libjpeg-turbo-dev \
     oniguruma-dev \
@@ -13,19 +14,20 @@ RUN apk update && apk upgrade && apk add --no-cache \
     git \
     libpq-dev \
     libzip-dev \
-    nodejs \
-    npm
+    $PHPIZE_DEPS
 
 RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip
+
+RUN pecl install redis \
+    && mkdir -p /tmp/extensions \
+    && cp $(php -r "echo ini_get('extension_dir');")/redis.so /tmp/extensions/ \
+    && echo "extension=redis.so" > /tmp/extensions/redis.ini
 
 WORKDIR /var/www
 
 COPY . /var/www
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Delete vite HMR marker if exists
-#RUN rm -f public/hot
 
 RUN composer install --optimize-autoloader #--no-dev
 
@@ -41,9 +43,15 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     libpq-dev \
     oniguruma-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip sockets
 
-COPY .env.production /var/www/.env
+COPY --from=build /tmp/extensions/redis.so /tmp/redis.so
+RUN cp /tmp/redis.so "$(php -r 'echo ini_get("extension_dir");')"
+RUN echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+
+COPY .env.docker /var/www/.env
 COPY --from=build /var/www /var/www
 
 EXPOSE 9000
@@ -52,4 +60,3 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["sh", "/usr/local/bin/docker-entrypoint.sh"]
-

@@ -27,10 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
         User::observe(UserObserver::class);
-        if (app()->environment('production')) {
-            URL::forceScheme('https');
-        }
-        URL::forceScheme('https');
         ini_set('memory_limit', '512M');
     }
 }

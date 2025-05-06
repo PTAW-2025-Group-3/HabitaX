@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,17 +11,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(UserSeeder::class);
 
-        $this->call([
-            DistrictSeeder::class,
-            MunicipalitySeeder::class,
-            ParishSeeder::class,
-        ]);
-
-        $this->call(PropertyTypeSeeder::class);
-        $this->call(PropertyAttributeSeeder::class);
-        $this->call(PropertyTypeAttributeSeeder::class);
+        if (\App\Models\User::class::count() === 0) {
+            $this->call([
+                UserSeeder::class,
+                DistrictSeeder::class,
+                MunicipalitySeeder::class,
+                ParishSeeder::class,
+                PropertyTypeSeeder::class,
+                PropertyAttributeSeeder::class,
+                PropertyTypeAttributeSeeder::class
+            ]);
+        }
         $this->call(PropertySeeder::class);
         $this->call(PropertyVerificationSeeder::class);
         $this->call(PropertyParameterSeeder::class);

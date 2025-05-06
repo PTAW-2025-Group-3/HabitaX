@@ -6,9 +6,9 @@ services:
         container_name: habitax
         restart: unless-stopped
         volumes:
-            - storage_data:/var/www/storage
+            - ./storage:/var/www/storage
+            - ./public:/var/www/public
         depends_on:
-            - postgres
             - redis
         networks:
             - internal
@@ -21,27 +21,12 @@ services:
             - "8080:80"
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
+            - ./storage:/var/www/storage
             - ./public:/var/www/public
-            - storage_data:/var/www/storage
         depends_on:
             - app
         networks:
             - internal
-
-    postgres:
-        image: postgres:alpine
-        container_name: postgres
-        restart: unless-stopped
-        environment:
-            POSTGRES_USER: habitax
-            POSTGRES_PASSWORD: habitax
-            POSTGRES_DB: habitax
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
-        networks:
-            - internal
-        ports:
-            - "5432:5432"
 
     redis:
         image: redis:alpine
@@ -70,9 +55,3 @@ services:
 networks:
     internal:
         driver: bridge
-
-volumes:
-    postgres_data:
-        driver: local
-    storage_data:
-        driver: local
