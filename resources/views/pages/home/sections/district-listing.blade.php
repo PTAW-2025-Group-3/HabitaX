@@ -1,5 +1,5 @@
 {{-- Section: District Listing --}}
-<section class="py-12 md:py-20 px-4">
+<section class="py-12 md:py-20 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
         {{-- District Result Cards --}}
         <h2 class="text-2xl sm:text-xl md:text-3xl font-bold text-gray-secondary mb-8 md:mb-12 w-full text-center">

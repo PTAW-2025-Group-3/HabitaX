@@ -1,5 +1,5 @@
 {{-- Section: Client Testimonials --}}
-<section class="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-white">
+<section class="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-back">
     <div class="max-w-6xl mx-auto text-center">
 
         {{-- Section Title --}}

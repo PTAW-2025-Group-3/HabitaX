@@ -6,6 +6,8 @@ use App\Models\Advertisement;
 use App\Models\Property;
 use App\Models\PropertyType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -34,12 +36,25 @@ class HomeController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
+        $news = Cache::remember('home_news_feed', 3600, function () {
+            try {
+                $response = Http::get('https://rss.app/feeds/v1.1/C11CchUv87TQ40Gi.json');
+                if ($response->successful()) {
+                    return $response->json();
+                }
+                return ['items' => []];
+            } catch (\Exception $e) {
+                return ['items' => []];
+            }
+        });
+
         return view('pages.home.home', [
             'adsPerDistrict' => $adsPerDistrict,
             'propertyTypes' => $propertyTypes,
             'selectedType' => $selectedType,
             'transactionType' => $transactionType,
             'featuredAds' => $featuredAds,
+            'news' => $news,
         ]);
     }
 }
