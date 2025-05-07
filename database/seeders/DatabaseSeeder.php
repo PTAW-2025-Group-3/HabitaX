@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
                 MunicipalitySeeder::class,
                 ParishSeeder::class,
                 PropertyTypeSeeder::class,
+                PropertyAttributeGroupSeeder::class,
                 PropertyAttributeSeeder::class,
                 PropertyTypeAttributeSeeder::class
             ]);

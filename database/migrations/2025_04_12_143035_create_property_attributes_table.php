@@ -12,6 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('property_attribute_groups', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->string('icon_path')->nullable();
+            $table->boolean('is_active')->default(true);
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('cascade');
+
+            $table->timestamps();
+        });
+
         Schema::create('property_attributes', function (Blueprint $table) {
             $table->id();
 
@@ -30,6 +44,8 @@ return new class extends Migration
             $table->integer('max_options')->nullable();
             $table->date('min_date')->nullable();
             $table->date('max_date')->nullable();
+
+            $table->foreignId('group_id')->nullable()->constrained('property_attribute_groups')->cascadeOnDelete();
 
             $table->timestamps();
         });
@@ -62,6 +78,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('property_attribute_groups');
         Schema::dropIfExists('property_attributes');
         Schema::dropIfExists('property_attribute_options');
         Schema::dropIfExists('property_type_attributes');

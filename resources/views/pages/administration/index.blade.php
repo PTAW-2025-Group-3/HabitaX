@@ -23,6 +23,10 @@
                     <i class="bi bi-tags-fill mr-2"></i>
                     Gerir Atributos
                 </a>
+                <a href="{{ route('attribute-groups.index') }}" class="btn-primary px-6 py-3">
+                    <i class="bi bi-tags-fill mr-2"></i>
+                    Gerir Grupos de Atributos
+                </a>
             </div>
         </div>
     </div>
