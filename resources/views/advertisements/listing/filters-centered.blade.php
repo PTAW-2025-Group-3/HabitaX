@@ -131,23 +131,58 @@
             @endif
 
             <!-- Ver no Mapa -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                    <i class="bi bi-geo-alt-fill mr-2 text-secondary"></i>
-                    Ver no Mapa
-                </h3>
-                <div class="w-full h-48 bg-gray-200 rounded-lg overflow-hidden relative">
+            @php
+                $locationParts = [];
+
+                if(request('parish')) {
+                    $parish = \App\Models\Parish::find(request('parish'));
+                    if ($parish) {
+                        $locationParts[] = $parish->name;
+                        if ($parish->municipality) {
+                            $locationParts[] = $parish->municipality->name;
+                            if ($parish->municipality->district) {
+                                $locationParts[] = $parish->municipality->district->name;
+                            }
+                        }
+                    }
+                } elseif(request('municipality')) {
+                    $municipality = \App\Models\Municipality::find(request('municipality'));
+                    if ($municipality) {
+                        $locationParts[] = $municipality->name;
+                        if ($municipality->district) {
+                            $locationParts[] = $municipality->district->name;
+                        }
+                    }
+                } elseif(request('district')) {
+                    $district = \App\Models\District::find(request('district'));
+                    if ($district) {
+                        $locationParts[] = $district->name;
+                    }
+                }
+
+                $mapQuery = count($locationParts) > 0 ? implode(', ', $locationParts) . ', Portugal' : 'Portugal';
+                $mapQueryEncoded = urlencode($mapQuery);
+            @endphp
+
+            <div class="bg-gradient-to-tr from-indigo-50 to-white rounded-2xl shadow-md overflow-hidden">
+                <div class="h-48 md:h-56 relative">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d49369.99053093508!2d-8.661563!3d40.641013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd23b8ac5643d6d5%3A0x4da7817b0ddf00f4!2sAveiro!5e0!3m2!1spt-PT!2spt!4v1711570225305!5m2!1spt-PT!2spt"
-                        class="absolute top-0 left-0 w-full h-full border-0"
+                        src="https://www.google.com/maps?q={{ $mapQueryEncoded }}&output=embed"
+                        class="w-full h-full border-0"
                         allowfullscreen=""
-                        loading="lazy">
-                    </iframe>
-                    <button class="absolute bottom-2 right-2 px-3 py-2 btn-primary">
-                        <i class="bi bi-arrows-fullscreen mr-1"></i> Expandir
-                    </button>
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                 </div>
+
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query={{ $mapQueryEncoded }}"
+                    target="_blank"
+                    class="w-full text-blue-600 hover:text-blue-700 bg-white text-sm md:text-base font-semibold py-3 border-t border-indigo-100 transition block text-center">
+                    <i class="bi bi-geo-alt-fill mr-1"></i> Ver no mapa
+                </a>
             </div>
+
 
             <!-- Quartos -->
             <div class="mb-6">
