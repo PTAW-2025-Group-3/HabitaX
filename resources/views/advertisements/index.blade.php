@@ -3,8 +3,8 @@
 @section('title', 'Advertisements Listing')
 
 @section('content')
-    <div class="bg-back w-full min-h-screen" x-data="{ view: 'grid' }">
-        <div class="max-w-7xl mx-auto px-4 py-6">
+    <div class="bg-back w-full min-h-screen" x-data="{ view: '{{ $viewMode }}' }">
+    <div class="max-w-7xl mx-auto px-4 py-6">
             <div class="w-full p-8 rounded">
                 @include('advertisements.listing.search-fields', [
                     'propertyTypes' => $propertyTypes,

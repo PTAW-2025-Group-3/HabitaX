@@ -36,8 +36,10 @@ class AdvertisementController extends Controller
         $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
 
-        // Resultado final paginado
-        $advertisements = $query->paginate(9);
+        $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
+        $perPage = $viewMode === 'list' ? 9 : 15;
+
+        $advertisements = $query->paginate($perPage);
 
         if ($request->ajax()) {
             return view('advertisements.listing.advertisement-listings', compact('advertisements'))->render();
@@ -52,7 +54,8 @@ class AdvertisementController extends Controller
             'selectedMunicipality',
             'selectedParish',
             'selectedType',
-            'transactionType'
+            'transactionType',
+            'viewMode'
         ));
     }
 

@@ -1,4 +1,4 @@
-<div class="mt-12 animate-fade-in">
+<div class="mt-12">
     <h2 class="text-xl font-bold text-primary mb-4">Gerir Utilizadores</h2>
 
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">

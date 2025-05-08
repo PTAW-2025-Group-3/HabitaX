@@ -1,5 +1,5 @@
 @php use App\Models\District;use App\Models\Municipality;use App\Models\Parish;use App\Models\PropertyType; @endphp
-<div x-data="page" class="w-full md:w-3/4">
+<div x-data="page" x-init="view = '{{ $viewMode }}'" x-cloak class="w-full md:w-3/4">
     <div class="property-listings-container">
         <!-- Header Section -->
         <h1 class="text-xl font-semibold mb-4">
@@ -49,7 +49,7 @@
 
         @include('advertisements.listing.view-toggle-and-sort')
 
-        <template x-if="view === 'grid'">
+        <div x-show="view === 'grid'" x-cloak>
             <div>
                 @if($advertisements->isEmpty())
                     <p>Nenhum anúncio encontrado.</p>
@@ -175,9 +175,9 @@
                     </div>
                 @endif
             </div>
-        </template>
+        </div>
 
-        <template x-if="view === 'list'">
+        <div x-show="view === 'list'" x-cloak>
             <div class="space-y-4">
                 @if($advertisements->isEmpty())
                     <p>Nenhum anúncio encontrado.</p>
@@ -300,7 +300,7 @@
                     @endforeach
                 @endif
             </div>
-        </template>
+        </div>
 
         <div class="mt-6">
             {{ $advertisements->appends(request()->query())->links() }}
@@ -311,6 +311,9 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ asset('css/advertisements/advertisement-slideshows.css') }}" />
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 @endpush
 
 @push('scripts')

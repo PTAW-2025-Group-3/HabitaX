@@ -1,5 +1,5 @@
-<div class="bg-gradient-to-tr bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
-    <div class="flex items-center justify-between border-b border-indigo-100 pb-4">
+<div class="bg-gradient-to-tr from-white to-gray-50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
+<div class="flex items-center justify-between border-b border-indigo-100 pb-4">
         <h3 class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
             <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

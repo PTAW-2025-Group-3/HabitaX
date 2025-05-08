@@ -47,17 +47,25 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('page', () => ({
             view: 'grid',
-            favorites: new Set(), // Para armazenar IDs dos anúncios favoritados
+            favorites: new Set(),
 
             init() {
-                // Restaurar view preference se existir
+                const urlParams = new URLSearchParams(window.location.search);
+                const viewParam = urlParams.get('view');
                 const savedView = localStorage.getItem('adsView');
-                if (savedView) this.view = savedView;
 
-                // Inicializar o estado dos favoritos
+                if (!viewParam && savedView) {
+                    urlParams.set('view', savedView);
+                    urlParams.delete('page');
+                    window.location.search = urlParams.toString();
+                    return;
+                }
+
+                if (viewParam) {
+                    localStorage.setItem('adsView', viewParam);
+                }
+
                 this.initializeFavorites();
-
-                // Inicializar os event listeners após o Alpine renderizar
                 this.$nextTick(() => {
                     this.initializeEventListeners();
                 });
@@ -79,25 +87,11 @@
                 this.view = newView;
                 localStorage.setItem('adsView', newView);
 
-                this.initializeFavorites();
-                this.$nextTick(() => {
-                    this.syncFavoritesState();
-                    this.initializeEventListeners();
-
-                    // Reinicializar os slideshows após alternar a visualização
-                    if (typeof window.initAdvertisementSlideshows === 'function' && typeof adIds !== 'undefined') {
-                        setTimeout(() => {
-                            window.initAdvertisementSlideshows(adIds);
-
-                            // Prevenção de propagação de eventos
-                            document.querySelectorAll('.swiper-button-next, .swiper-button-prev, .swiper-pagination').forEach(element => {
-                                element.addEventListener('click', e => {
-                                    e.stopPropagation();
-                                });
-                            });
-                        }, 100);
-                    }
-                });
+                // Atualizar a URL com o parâmetro ?view=
+                const url = new URL(window.location.href);
+                url.searchParams.set('view', newView); // ← novo
+                url.searchParams.delete('page');       // resetar para primeira página
+                window.location.href = url.toString(); // ← recarrega a página com novo view
             },
 
             syncFavoritesState() {

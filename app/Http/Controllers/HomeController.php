@@ -16,11 +16,23 @@ class HomeController extends Controller
         $featuredAds = Advertisement::with('property')
             ->take(8)
             ->get();
+
         $propertyTypes = PropertyType::where('is_active', true)
-            ->withCount('properties')
+            ->withCount(['properties' => function($query) {
+                $query->whereHas('advertisements', function($q) {
+                    $q->where('state', 'active');
+                });
+            }])
             ->orderBy('id')
             ->get();
 
+        // Contar anúncios ativos para cada tipo de propriedade
+        foreach ($propertyTypes as $type) {
+            $type->active_ads_count = Advertisement::join('properties', 'advertisements.property_id', '=', 'properties.id')
+                ->where('properties.property_type_id', $type->id)
+                ->where('advertisements.state', 'active')
+                ->count();
+        }
 
         $transactionType = request('transaction_type', 'sale');
         $selectedType = request('property_type'); // ex: 2

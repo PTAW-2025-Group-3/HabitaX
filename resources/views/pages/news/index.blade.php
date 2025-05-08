@@ -7,7 +7,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <!-- Cabeçalho da página -->
             <div class="text-center mb-12">
-                <h1 class="text-3xl font-bold mb-3">
+                <h1 class="text-4xl font-bold mb-3">
                     Últimas <span class="text-secondary">Notícias</span>
                 </h1>
                 <p class="text-gray-600 max-w-2xl mx-auto">Acompanhe as novidades e tendências do mercado imobiliário, dicas para compradores e vendedores, e atualizações relevantes sobre o setor habitacional.</p>

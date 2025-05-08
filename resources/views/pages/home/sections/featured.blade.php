@@ -21,8 +21,8 @@
                                 {{ $ad->property->location->district ?? '' }}
                             </p>
 
-                            <p class="text-xl font-bold text-gray-900 mb-1">
-                                {{ number_format($ad->price, 2, '.', '') }}€
+                            <p class="text-xl font-extrabold text-black mt-2">
+                                {{ number_format($ad['price'], 0, ',', '.') }}€
                                 @if($ad->type === 'rental')
                                     <span
                                         class="text-sm font-normal text-gray-600">/ {{ $ad->rental_type ?? 'A Discutir ' }}</span>

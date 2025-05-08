@@ -164,7 +164,7 @@
                 $mapQueryEncoded = urlencode($mapQuery);
             @endphp
 
-            <div class="bg-gradient-to-tr from-indigo-50 to-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-gradient-to-tr from-indigo-50 to-white rounded-2xl shadow-md overflow-hidden mb-8">
                 <div class="h-48 md:h-56 relative">
                     <iframe
                         src="https://www.google.com/maps?q={{ $mapQueryEncoded }}&output=embed"
@@ -182,7 +182,6 @@
                     <i class="bi bi-geo-alt-fill mr-1"></i> Ver no mapa
                 </a>
             </div>
-
 
             <!-- Quartos -->
             <div class="mb-6">

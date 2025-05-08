@@ -7,7 +7,7 @@
     ];
 @endphp
 
-<div class="mt-12 animate-fade-in">
+<div class="mt-12">
     <h2 class="text-xl font-bold text-primary mb-4">Gestão de Parâmetros dos Anúncios</h2>
     <div class="overflow-x-auto rounded-xl shadow bg-white">
         <table class="min-w-full text-sm">

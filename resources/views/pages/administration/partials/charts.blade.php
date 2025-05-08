@@ -1,16 +1,14 @@
-<div class="grid grid-cols-3 gap-6 animate-fade-in">
-    <div class="bg-white p-4 shadow rounded-xl">
-        <h4 class="font-semibold text-primary mb-2">Anúncios</h4>
-        <canvas id="anunciosChart" class="w-full h-48"></canvas>
-    </div>
-    <div class="bg-white p-4 shadow rounded-xl">
-        <h4 class="font-semibold text-primary mb-2">Utilizadores</h4>
-        <canvas id="utilizadoresChart" class="w-full h-48"></canvas>
-    </div>
-    <div class="bg-white p-4 shadow rounded-xl">
-        <h4 class="font-semibold text-primary mb-2">Utilizadores por Tipo</h4>
-        <canvas id="userRolesChart" class="w-full h-48"></canvas>
-    </div>
+<div class="col-span-1 bg-white p-4 shadow rounded-xl">
+    <h4 class="font-semibold text-primary mb-2">Anúncios</h4>
+    <canvas id="anunciosChart" class="w-full h-48"></canvas>
+</div>
+<div class="col-span-1 bg-white p-4 shadow rounded-xl">
+    <h4 class="font-semibold text-primary mb-2">Utilizadores</h4>
+    <canvas id="utilizadoresChart" class="w-full h-48"></canvas>
+</div>
+<div class="col-span-1 bg-white p-4 shadow rounded-xl">
+    <h4 class="font-semibold text-primary mb-2">Utilizadores por Tipo</h4>
+    <canvas id="userRolesChart" class="w-full h-48"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

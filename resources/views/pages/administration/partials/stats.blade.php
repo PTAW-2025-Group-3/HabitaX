@@ -7,7 +7,7 @@
     ];
 @endphp
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 my-8 animate-fade-in">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 my-8">
     @foreach($stats as $stat)
         <div class="bg-white p-5 rounded-xl shadow hover:scale-105 transition-transform duration-300">
             <h3 class="text-sm font-medium text-gray-500">{{ $stat['label'] }}</h3>

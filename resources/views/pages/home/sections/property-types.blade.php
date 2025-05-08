@@ -26,7 +26,7 @@
 
                         {{-- Número de propriedades --}}
                         <p class="text-xs md:text-sm text-gray-500">
-                            {{ $type->properties_count }} propriedades
+                            {{ $type->active_ads_count }} anúncios
                         </p>
                     </div>
                 </a>
