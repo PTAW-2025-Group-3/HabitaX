@@ -24,7 +24,6 @@ return new class extends Migration
             $table->boolean('boolean_value')->nullable();
             $table->foreignId('select_value')->nullable()->constrained('property_attribute_options')->nullOnDelete();
             $table->date('date_value')->nullable();
-            $table->boolean('is_multiple')->default(false);
 
             $table->timestamps();
         });

@@ -2,10 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AttributeType;
+use App\Models\PropertyAttributeOption;
+use App\Models\PropertyParameterOption;
 use Illuminate\Database\Seeder;
 use App\Models\Property;
 use App\Models\PropertyTypeAttribute;
 use App\Models\PropertyParameter;
+use Illuminate\Support\Facades\Log;
 
 class PropertyParameterSeeder extends Seeder
 {
@@ -14,49 +18,113 @@ class PropertyParameterSeeder extends Seeder
         $properties = Property::all();
 
         foreach ($properties as $property) {
-            $attributeTypes = PropertyTypeAttribute::where('property_type_id', $property->type_property)->get();
+            $propertyTypeAttributes = PropertyTypeAttribute::where('property_type_id', $property->property_type_id)->get();
+            $propertyId = $property->id;
 
-            $usedAttributeIds = [];
+            foreach ($propertyTypeAttributes as $attribute) {
+                $attributeId = $attribute->attribute_id;
 
-            // First pass - assign one value per unique attribute
-            foreach ($attributeTypes as $type) {
-                $attr = $type->attribute;
+                switch ($attribute->property_attribute->type) {
+                    case AttributeType::TEXT:
+                    case AttributeType::LONG_TEXT:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'text_value' => fake()->text(
+                                max(5, rand($attribute->min_length ?? 0, $attribute->max_length ?? 255))
+                            )
+                        ]);
+                        break;
 
-                if (in_array($attr->id, $usedAttributeIds)) {
-                    continue;
+                    case AttributeType::INT:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'int_value' => fake()->numberBetween(
+                                $attribute->min_value ?? 0,
+                                $attribute->max_value ?? 1000
+                            )
+                        ]);
+                        break;
+
+                    case AttributeType::FLOAT:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'float_value' => fake()->randomFloat(
+                                2,
+                                $attribute->min_value ?? 0,
+                                $attribute->max_value ?? 1000
+                            )
+                        ]);
+                        break;
+
+                    case AttributeType::BOOLEAN:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'boolean_value' => fake()->boolean()
+                        ]);
+                        break;
+
+                    case AttributeType::SELECT_SINGLE:
+                        $options = PropertyAttributeOption::where('attribute_id', $attributeId)->get();
+                        if (empty($options)) {
+                            Log::warning('No options found for attribute', ['attribute_id' => $attributeId]);
+                        }
+                        if (!empty($options)) {
+                            PropertyParameter::create([
+                                'property_id' => $propertyId,
+                                'attribute_id' => $attributeId,
+                                'select_value' => fake()->randomElement($options)->id
+                            ]);
+                        }
+                        break;
+
+                    case AttributeType::SELECT_MULTIPLE:
+                        $options = PropertyAttributeOption::where('attribute_id', $attributeId)->get();
+                        if (empty($options)) {
+                            Log::warning('No options found for attribute', ['attribute_id' => $attributeId]);
+                        }
+                        if (!empty($options)) {
+                            $selectedOptions = fake()->randomElements($options, rand(
+                                $attribute->min_options ?? 0,
+                                $attribute->max_options ?? count($options))
+                            );
+
+                            $parameter = PropertyParameter::create([
+                                'property_id' => $propertyId,
+                                'attribute_id' => $attributeId,
+                            ]);
+                            foreach ($selectedOptions as $option) {
+                                PropertyParameterOption::create([
+                                    'parameter_id' => $parameter->id,
+                                    'option_id' => $option->id
+                                ]);
+                            }
+                        }
+                        break;
+
+                    case AttributeType::DATE:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'date_value' => fake()->dateTimeBetween(
+                                $attribute->min_date ?? '-30 years',
+                                $attribute->max_date ?? 'now'
+                            )
+                        ]);
+                        break;
+
+                    default:
+                        PropertyParameter::create([
+                            'property_id' => $propertyId,
+                            'attribute_id' => $attributeId,
+                            'value' => fake()->text()
+                        ]);
+                        break;
                 }
-
-                $this->createPropertyValue($property->id, $attr->id);
-                $usedAttributeIds[] = $attr->id;
-            }
-
-            // Second pass - randomly assign more until there are 5
-            while (count($usedAttributeIds) < 5) {
-                $remaining = $attributeTypes->whereNotIn('attribute_id', $usedAttributeIds);
-
-                if ($remaining->isEmpty()) {
-                    break;
-                }
-
-                $randomAttr = $remaining->random()->attribute;
-                $this->createPropertyValue($property->id, $randomAttr->id);
-                $usedAttributeIds[] = $randomAttr->id;
             }
         }
-    }
-
-    private function createPropertyValue(int $propertyId, int $attributeId): void
-    {
-        PropertyParameter::create([
-            'property_id' => $propertyId,
-            'attribute_id' => $attributeId,
-            'value' => (string) $this->generateValueFromId($attributeId),
-        ]);
-    }
-
-    private function generateValueFromId(int $attributeId): string
-    {
-        // Customize based on attribute ID or type if needed
-        return rand(1, 100); // Example stub
     }
 }
