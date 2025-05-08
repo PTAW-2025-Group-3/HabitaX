@@ -157,6 +157,10 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         ->name('attribute-groups.edit');
     Route::put('/admin/attribute-groups/{id}', [PropertyAttributeGroupController::class, 'update'])
         ->name('attribute-groups.update');
+    Route::get('/admin/attribute-groups/{id}/attributes', [PropertyAttributeGroupController::class, 'editAttributes'])
+        ->name('attribute-groups.attributes.edit');
+    Route::post('/admin/attribute-groups/{id}/attributes', [PropertyAttributeGroupController::class, 'updateAttributes'])
+        ->name('attribute-groups.attributes.update');
     Route::delete('/admin/attribute-groups/{id}', [PropertyAttributeGroupController::class, 'destroy'])
         ->name('attribute-groups.destroy');
 

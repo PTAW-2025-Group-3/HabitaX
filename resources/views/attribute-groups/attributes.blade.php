@@ -5,16 +5,16 @@
 @section('content')
     <div class="container mx-auto p-4">
         <div class="mb-6">
-            <a href="{{ route('property-types.index', ['id' => $propertyType->id]) }}" class="btn-primary px-4 py-2">
+            <a href="{{ route('attribute-groups.index', ['id' => $group->id]) }}" class="btn-primary px-4 py-2">
                 <i class="bi bi-arrow-left mr-2"></i>
                 Voltar para Tipo de Propriedade
             </a>
         </div>
 
         <div class="mt-12 animate-fade-in">
-            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de Propriedade: {{ $propertyType->name }}</h2>
+            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de Propriedade: {{ $group->name }}</h2>
 
-            <form id="attribute-form" method="POST" action="{{ route('property-types.attributes.update', $propertyType->id) }}" class="space-y-4">
+            <form id="attribute-form" method="POST" action="{{ route('attribute-groups.attributes.update', $group->id) }}" class="space-y-4">
                 @csrf
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
                     <div class="relative flex-grow md:max-w-xl">
@@ -60,11 +60,6 @@
                                     Assinado
                                 </div>
                             </th>
-                            <th class="p-4 text-center">
-                                <div class="flex items-center justify-center">
-                                    Mostrar em:
-                                </div>
-                            </th>
                         </tr>
                         </thead>
                         <tbody id="attribute-table">
@@ -82,30 +77,8 @@
                                         type="checkbox"
                                         name="attributes[]"
                                         value="{{ $attribute->id }}"
-                                        {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
+                                        {{ $groupAttributes->contains($attribute->id) ? 'checked' : '' }}
                                         class="attribute-checkbox w-5 h-5 cursor-pointer accent-blue-600">
-                                </td>
-                                @if(in_array($attribute->id, $propertyTypeAttributes))
-                                    <td class="p-4">
-                                        <div class="flex">
-                                            <input
-                                                type="checkbox"
-                                                name="show_in_detail[]"
-                                                value="{{ $attribute->id }}"
-                                                {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                                class="w-5 h-5 cursor-pointer accent-blue-600">
-                                            <span class="ml-2">Listagem</span>
-                                        </div>
-                                        <div class="flex mt-2">
-                                            <input
-                                                type="checkbox"
-                                                name="show_in_filters[]"
-                                                value="{{ $attribute->id }}"
-                                                {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                                class="w-5 h-5 cursor-pointer accent-blue-600">
-                                            <span class="ml-2">Filtros</span>
-                                        </div>
-                                @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -125,7 +98,7 @@
 
     {{--  gerir estado da botão de submissão  --}}
     <script>
-        const initialState = @json($propertyTypeAttributes);
+        const initialState = @json($groupAttributes);
         const checkboxes = document.querySelectorAll('.attribute-checkbox');
         const submitButton = document.getElementById('submit-button');
 

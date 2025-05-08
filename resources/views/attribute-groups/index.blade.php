@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Opções de Atributo')
+@section('title', 'Grupos de Atributos')
 
 @section('content')
     <div class="container mx-auto p-4">
@@ -12,7 +12,7 @@
                 </a>
             </div>
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-primary">Opções de Atributo</h2>
+                <h2 class="text-xl font-bold text-primary">Grupos de Atributos</h2>
                 <a href="{{ route('attribute-groups.create') }}" class="btn-primary px-4 py-2 rounded-lg flex items-center">
                     <i class="bi bi-plus-lg mr-2"></i>
                     Adicionar Grupo de Atributos
@@ -55,17 +55,20 @@
                                 </td>
                                 <td class="p-4 font-medium">{{ $group->name }}</td>
                                 <td class="p-4 text-center">{{ \Illuminate\Support\Str::limit($group->description, 50, '...') }}</td>
-                                <td class="p-4 text-right">
-                                    <a href="{{ route('attribute-groups.edit', $group->id) }}" class="text-blue-500 hover:text-blue-700">
-                                        Editar
+                                <td class="p-4 space-x-1 space-y-2 text-right">
+                                    <a href="{{ route('attribute-groups.attributes.edit', ['id' => $group->id]) }}"
+                                       class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
+                                        <i class="bi bi-gear mr-1"></i> Gerir Atributos
                                     </a>
-                                    <form action="{{ route('attribute-groups.destroy', $group->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
-                                            Excluir
-                                        </button>
-                                    </form>
+                                    <a href="{{ route('attribute-groups.edit', $group->id) }}"
+                                       class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
+                                        <i class="bi bi-pencil mr-1"></i> Editar
+                                    </a>
+                                    <button type="button"
+                                            onclick="showDeleteModal('{{ $group->id }}', '{{ $group->name }}')"
+                                            class="btn-warning text-xs px-2 py-1 inline-flex items-center">
+                                        <i class="bi bi-trash mr-1"></i> Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -78,4 +81,8 @@
             @endif
         </div>
     </div>
+    @include('components.delete-confirmation', [
+        'itemType' => 'grupo de atributos',
+        'routeName' => route('attribute-groups.destroy', ['id' => '__ID__']),
+    ])
 @endsection

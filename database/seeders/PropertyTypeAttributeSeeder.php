@@ -21,8 +21,6 @@ class PropertyTypeAttributeSeeder extends Seeder
                 PropertyTypeAttribute::create([
                     'property_type_id' => $propertyType->id,
                     'attribute_id' => $attributeId,
-                    'is_required' => rand(0, 1) === 1,
-                    'is_active' => true,
                 ]);
             }
         }

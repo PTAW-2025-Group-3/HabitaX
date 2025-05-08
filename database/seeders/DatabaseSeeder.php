@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                 PropertyTypeSeeder::class,
                 PropertyAttributeGroupSeeder::class,
                 PropertyAttributeSeeder::class,
+                PropertyAttributeGroupAttributeSeeder::class,
                 PropertyTypeAttributeSeeder::class
             ]);
         }

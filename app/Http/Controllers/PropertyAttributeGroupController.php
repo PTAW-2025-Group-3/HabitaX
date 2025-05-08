@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PropertyAttribute;
 use App\Models\PropertyAttributeGroup;
 use Illuminate\Http\Request;
 
@@ -66,6 +67,34 @@ class PropertyAttributeGroupController extends Controller
         ]);
 
         return redirect()->route('attribute-groups.index')->with('success', 'Attribute group updated successfully.');
+    }
+
+    public function editAttributes(Request $request, $id)
+    {
+        $group = PropertyAttributeGroup::findOrFail($id);
+        $groupAttributes = $group->attributes;
+        $allAttributes = PropertyAttribute::all();
+
+        return view('attribute-groups.attributes', compact('group', 'groupAttributes', 'allAttributes'));
+    }
+
+    public function updateAttributes(Request $request, $id)
+    {
+        $group = PropertyAttributeGroup::findOrFail($id);
+        $attributes = $request->input('attributes', []);
+
+        foreach ($attributes as $attribute) {
+            $group->attributes()->updateOrCreate(
+                ['id' => $attribute['id'] ?? null],
+                [
+                    'name' => $attribute['name'],
+                    'description' => $attribute['description'],
+                    'is_active' => $attribute['is_active'],
+                ]
+            );
+        }
+
+        return redirect()->route('attribute-groups.index')->with('success', 'Attributes updated successfully.');
     }
 
     public function destroy(Request $request, $id)
