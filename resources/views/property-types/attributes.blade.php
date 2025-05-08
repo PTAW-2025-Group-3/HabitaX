@@ -78,34 +78,29 @@
                                     {{ $attribute->description }}
                                 </td>
                                 <td class="p-4 text-center">
-                                    <input
-                                        type="checkbox"
-                                        name="attributes[]"
-                                        value="{{ $attribute->id }}"
-                                        {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                        class="attribute-checkbox w-5 h-5 cursor-pointer accent-blue-600">
+                                    <input type="checkbox" name="attributes[{{ $attribute->id }}][selected]"
+                                           value="1"
+                                           class="attribute-checkbox w-5 h-5 cursor-pointer accent-blue-600"
+                                           id="attr_{{ $attribute->id }}"
+                                        {{ isset($propertyTypeAttributes[$attribute->id]) ? 'checked' : '' }}>
                                 </td>
-                                @if(in_array($attribute->id, $propertyTypeAttributes))
-                                    <td class="p-4">
-                                        <div class="flex">
-                                            <input
-                                                type="checkbox"
-                                                name="show_in_detail[]"
-                                                value="{{ $attribute->id }}"
-                                                {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                                class="w-5 h-5 cursor-pointer accent-blue-600">
-                                            <span class="ml-2">Listagem</span>
-                                        </div>
-                                        <div class="flex mt-2">
-                                            <input
-                                                type="checkbox"
-                                                name="show_in_filters[]"
-                                                value="{{ $attribute->id }}"
-                                                {{ in_array($attribute->id, $propertyTypeAttributes) ? 'checked' : '' }}
-                                                class="w-5 h-5 cursor-pointer accent-blue-600">
-                                            <span class="ml-2">Filtros</span>
-                                        </div>
-                                @endif
+                                <td id="show_options" class="p-4">
+                                    <div class="flex mb-2">
+                                        <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                               name="attributes[{{ $attribute->id }}][show_in_list]"
+                                               value="1"
+                                               id="list_{{ $attribute->id }}"
+                                            {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_list'] ? 'checked' : '' }}>
+                                        <label class="ml-2" for="list_{{ $attribute->id }}">Listagem</label>
+                                    </div>
+                                    <div class="flex">
+                                        <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                               name="attributes[{{ $attribute->id }}][show_in_filter]"
+                                               value="1"
+                                               id="filter_{{ $attribute->id }}"
+                                            {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_filter'] ? 'checked' : '' }}>
+                                        <label class="ml-2" for="filter_{{ $attribute->id }}">Filtro</label>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -122,53 +117,49 @@
             </form>
         </div>
     </div>
+@endsection
 
-    {{--  gerir estado da botão de submissão  --}}
+@push('scripts')
     <script>
-        const initialState = @json($propertyTypeAttributes);
-        const checkboxes = document.querySelectorAll('.attribute-checkbox');
-        const submitButton = document.getElementById('submit-button');
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.attribute-checkbox');
 
-        function getCurrentState() {
-            return Array.from(checkboxes)
-                .filter(cb => cb.checked)
-                .map(cb => parseInt(cb.value));
-        }
+            const filter = document.getElementById('filter');
+            const rows = document.querySelectorAll('#attribute-table tr');
 
-        function arraysEqual(a, b) {
-            return a.length === b.length && a.every(val => b.includes(val));
-        }
+            filter.addEventListener('change', () => {
+                const filterValue = filter.value;
 
-        function updateButtonState() {
-            const currentState = getCurrentState();
-            submitButton.disabled = arraysEqual(currentState, initialState);
-        }
+                rows.forEach(row => {
+                    const checkbox = row.querySelector('.attribute-checkbox');
+                    if (filterValue === 'all') {
+                        row.style.display = '';
+                    } else if (filterValue === 'selected' && checkbox.checked) {
+                        row.style.display = '';
+                    } else if (filterValue === 'not-selected' && !checkbox.checked) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
 
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateButtonState);
-        });
-    </script>
-
-    {{--  filtrar atributos  --}}
-    <script>
-        const filter = document.getElementById('filter');
-        const rows = document.querySelectorAll('#attribute-table tr');
-
-        filter.addEventListener('change', () => {
-            const filterValue = filter.value;
-
-            rows.forEach(row => {
-                const checkbox = row.querySelector('.attribute-checkbox');
-                if (filterValue === 'all') {
-                    row.style.display = '';
-                } else if (filterValue === 'selected' && checkbox.checked) {
-                    row.style.display = '';
-                } else if (filterValue === 'not-selected' && !checkbox.checked) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+            // Show/Hide options based on checkbox state
+            checkboxes.forEach(checkbox => {
+                const showOptions = checkbox.closest('tr').querySelector('#show_options');
+                if (checkbox.checked) {
+                    showOptions.removeAttribute('hidden');
                 }
+
+                // Add event listener for changes
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        showOptions.removeAttribute('hidden');
+                    } else {
+                        showOptions.setAttribute('hidden', true);
+                    }
+                });
             });
         });
     </script>
-@endsection
+@endpush

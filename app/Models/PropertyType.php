@@ -16,9 +16,16 @@ class PropertyType extends Model
         'is_active'
     ];
 
+    public function typeAttributes()
+    {
+        return $this->hasMany(PropertyTypeAttribute::class);
+    }
+
     public function attributes()
     {
-        return $this->belongsToMany(PropertyAttribute::class, 'property_type_attributes', 'property_type_id', 'attribute_id');
+        return $this->belongsToMany(PropertyAttribute::class, 'property_type_attributes', 'property_type_id', 'attribute_id')
+            ->withPivot('show_in_list', 'show_in_filter')
+            ->withTimestamps();
     }
 
     public function properties()

@@ -12,11 +12,12 @@
         </div>
 
         <div class="mt-12 animate-fade-in">
-            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de Propriedade: {{ $group->name }}</h2>
+            <div>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-2 gap-4">
+                    <h2 class="text-xl font-bold text-primary">Gerir Atributos do Tipo de Propriedade: {{ $group->name }}</h2>
+                </div>
 
-            <form id="attribute-form" method="POST" action="{{ route('attribute-groups.attributes.update', $group->id) }}" class="space-y-4">
-                @csrf
-                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-2 gap-4">
                     <div class="relative flex-grow md:max-w-xl">
                         <div class="relative dropdown-wrapper w-full sm:w-auto">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray">
@@ -34,7 +35,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <form id="attribute-form" method="POST" action="{{ route('attribute-groups.attributes.update', $group->id) }}" class="space-y-4">
+                @csrf
                 <!-- Tabela de atributos -->
                 <div class="overflow-x-auto rounded-xl shadow bg-white">
                     <table class="min-w-full text-sm">

@@ -30,21 +30,22 @@
                         <tr>
                             <th class="p-4">
                                 <div class="flex items-center">
-                                    Icone
+                                    Nome
                                 </div>
                             </th>
                             <th class="p-4">
                                 <div class="flex items-center">
-                                    Nome
+                                    Icone
                                 </div>
                             </th>
-                            <th class="p-4 text-center">Descrição</th>
+                            <th class="p-4">Atributos</th>
                             <th class="p-4 text-right">Ações</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($groups as $group)
                             <tr class="border-t hover:bg-gray-50 transition">
+                                <td class="p-4 font-medium">{{ $group->name }}</td>
                                 <td class="p-4 font-medium">
                                     @if ($group->icon_path)
                                         <img src="{{ Storage::url($group->icon_path) }}" alt="{{ $group->name }} Icon"
@@ -53,8 +54,13 @@
                                         <span class="text-gray">Sem ícone</span>
                                     @endif
                                 </td>
-                                <td class="p-4 font-medium">{{ $group->name }}</td>
-                                <td class="p-4 text-center">{{ \Illuminate\Support\Str::limit($group->description, 50, '...') }}</td>
+                                <td class="p-4">
+                                    @foreach ($group->attributes as $attribute)
+                                        <span class="inline-block px-2 py-1 mb-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600 mr-1">
+                                            {{ $attribute->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
                                 <td class="p-4 space-x-1 space-y-2 text-right">
                                     <a href="{{ route('attribute-groups.attributes.edit', ['id' => $group->id]) }}"
                                        class="btn-secondary text-xs px-2 py-1 inline-flex items-center">

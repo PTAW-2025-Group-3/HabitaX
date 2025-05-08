@@ -72,7 +72,7 @@ class PropertyAttributeGroupController extends Controller
     public function editAttributes(Request $request, $id)
     {
         $group = PropertyAttributeGroup::findOrFail($id);
-        $groupAttributes = $group->attributes;
+        $groupAttributes = $group->attributes()->orderBy('name')->get();
         $allAttributes = PropertyAttribute::all();
 
         return view('attribute-groups.attributes', compact('group', 'groupAttributes', 'allAttributes'));
