@@ -26,7 +26,9 @@
                         <tr onclick="window.location='{{ route('contact-us.show', $contact->id) }}'">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">{{ $contact->id }}</td>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider border-r border-gray-300">Nome</th>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">{{ $contact->message }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
+                                {{ \Illuminate\Support\Str::limit($contact->message) }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $contact->is_processed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     {{ $contact->is_processed ? 'Sim' : 'Não' }}

@@ -7,6 +7,7 @@ use App\Observers\UserObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Faker\Factory as FakerFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(\Faker\Generator::class, function () {
-            return \Faker\Factory::create('pt_PT');
+            $faker = FakerFactory::create(config('app.faker_locale'));
+            $faker->addProvider(new PortugueseLoremProvider($faker));
+            return $faker;
         });
     }
 

@@ -22,7 +22,7 @@ class ContactRequestFactory extends Factory
             'name' => $user?->name ?? $this->faker->name(),
             'email' => $user?->email ?? $this->faker->safeEmail(),
             'telephone' => $this->faker->numerify('9########'),
-            'message' => $this->faker->paragraph(3),
+            'message' => $this->faker->paragraph(),
             'state' => $this->faker->randomElement(['unread', 'read', 'archived']),
         ];
     }
