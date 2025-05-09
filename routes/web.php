@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DenunciationController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FileUploadController;
@@ -34,6 +35,7 @@ Route::get('/dashboard', function () {
 Route::get('/contact', function () {
     return view('pages.contact.contact');
 })->name('contact');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
 
 Route::get('/about', function () {
     return view('pages.about.about');
@@ -103,6 +105,10 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::post('/moderation/users/{userId}/update-state', [ModerationController::class, 'updateUserState'])->name('moderation.update-user-state');
     Route::get('/moderation/suspended-users/ajax', [ModerationController::class, 'ajaxSuspendedUsers'])
         ->name('moderation.suspended-users.ajax');
+
+    Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
+    Route::get('/moderation/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
+    Route::put('/moderation/contact-us/{id}/mark-as-read', [ContactUsController::class, 'markAsRead'])->name('contact-us.mark-as-read');
 });
 
 // Administration Route

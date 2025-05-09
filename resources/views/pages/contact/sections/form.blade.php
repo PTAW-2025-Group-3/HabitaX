@@ -33,20 +33,30 @@
 
         {{-- Right Form --}}
         <div class="p-10 bg-gray-50">
-            <form action="#" method="POST" class="space-y-6 relative z-10">
+            <form action="{{ route('contact-us.store') }}" method="POST" class="space-y-6 relative z-10" enctype="multipart/form-data">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="first_name" class="block text-sm font-semibold text-gray">Nome</label>
                         <input type="text" id="first_name" name="first_name"
-                               class="form-input"
+                               class="form-input" required
                                placeholder="João">
+                        @error('first_name')
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     <div>
                         <label for="last_name" class="block text-sm font-semibold text-gray">Apelido</label>
                         <input type="text" id="last_name" name="last_name"
-                               class="form-input"
+                               class="form-input" required
                                placeholder="Silva">
+                        @error('last_name')
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
 
@@ -54,22 +64,38 @@
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray">Email</label>
                         <input type="email" id="email" name="email"
-                               class="form-input"
+                               class="form-input" required
                                placeholder="joao.silva@exemplo.com">
+                        @error('email')
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     <div>
-                        <label for="phone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
-                        <input type="text" id="phone" name="phone"
-                               class="form-input"
+                        <label for="telephone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
+                        <input type="text" id="telephone" name="telephone"
+                               class="form-input" required
                                placeholder="+351 912 345 678">
+                        @error('telephone')
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray">Mensagem</label>
                     <textarea id="message" name="message" rows="4"
-                              class="form-input"
+                              class="form-input" minlength="10"
+                              required
                               placeholder="Escreva a sua mensagem aqui..."></textarea>
+                    @error('message')
+                    <div class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
 
                 <div>
