@@ -116,39 +116,29 @@
                     @foreach($groupedParameters as $groupId => $parameters)
                         <div class="space-y-2">
                             <h3 class="text-md md:text-lg font-semibold">
-                                {{ $groups->get($groupId)->name }}
+                                {{ $groups->get($groupId)?->name ?? 'Categoria desconhecida' }}
                             </h3>
-                            <ul class="list-disc list-inside text-gray-700 text-sm md:text-base">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @php
+                                    $path = 'advertisements.individual.parameters.';
+                                    $attributeIncludes = [
+                                        AttributeType::TEXT->value => $path. 'text',
+                                        AttributeType::LONG_TEXT->value => $path . 'long-text',
+                                        AttributeType::INT->value => $path . 'int',
+                                        AttributeType::FLOAT->value => $path . 'float',
+                                        AttributeType::BOOLEAN->value => $path . 'boolean',
+                                        AttributeType::DATE->value => $path . 'date',
+                                        AttributeType::SELECT_SINGLE->value => $path . 'select-single',
+                                        AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
+                                    ];
+                                @endphp
+
                                 @foreach($parameters as $parameter)
-                                    @switch($parameter->attribute->type)
-                                        {{-- TODO: implement dedicated components for each parameter (advertisements/individual/modals/parameters/*) --}}
-                                        @case(AttributeType::TEXT)
-                                            <li>{{ $parameter->attribute->name }}: {{ $parameter->text_value }}</li>
-                                            @break
-                                        @case(AttributeType::LONG_TEXT)
-                                            <li>{{ $parameter->attribute->name }}: {{ $parameter->text_value }}</li>
-                                            @break
-                                        @case(AttributeType::INT)
-                                            <li>{{ $parameter->attribute->name }}: {{ number_format($parameter->int_value, 0, ',', '.') }}</li>
-                                            @break
-                                        @case(AttributeType::FLOAT)
-                                            <li>{{ $parameter->attribute->name }}: {{ number_format($parameter->float_value, 2, ',', '.') }}</li>
-                                            @break
-                                        @case(AttributeType::BOOLEAN)
-                                            <li>{{ $parameter->attribute->name }}: {{ $parameter->boolean_value ? 'Sim' : 'Não' }}</li>
-                                            @break
-                                        @case(AttributeType::DATE)
-                                            <li>{{ $parameter->attribute->name }}: {{ $parameter->date_value->format('d/m/Y') }}</li>
-                                            @break
-                                        @case(AttributeType::SELECT_SINGLE)
-                                            <li>{{ $parameter->attribute->name }}: {{ $parameter->select_value->name }}</li>
-                                            @break
-                                        @case(AttributeType::SELECT_MULTIPLE)
-                                            <li>{{ $parameter->attribute->name }}: {{ implode(', ', $parameter->options->pluck('name')->toArray()) }}</li>
-                                            @break
-                                    @endswitch
+                                    @if(isset($attributeIncludes[$parameter->attribute->type->value]))
+                                        @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                    @endif
                                 @endforeach
-                            </ul>
+                            </div>
                         </div>
                     @endforeach
                 </section>

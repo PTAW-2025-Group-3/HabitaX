@@ -84,7 +84,7 @@
                                            id="attr_{{ $attribute->id }}"
                                         {{ isset($propertyTypeAttributes[$attribute->id]) ? 'checked' : '' }}>
                                 </td>
-                                <td id="show_options" class="p-4">
+                                <td id="show_options" class="p-4" hidden>
                                     <div class="flex mb-2">
                                         <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
                                                name="attributes[{{ $attribute->id }}][show_in_list]"
