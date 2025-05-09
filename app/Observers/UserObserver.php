@@ -35,7 +35,7 @@ class UserObserver
         $user->properties()->update(['is_active' => false]);
 
         // Archive advertisements
-        $user->advertisements()->update(['state' => 'archived']);
+        $user->advertisements()->update(['is_suspended' => true]);
     }
 
     /**

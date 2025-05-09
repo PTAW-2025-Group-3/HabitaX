@@ -18,7 +18,12 @@ class ModerationController extends Controller
 
         // Summary box data
         $reportedCount = Denunciation::where('report_state', 0)->count();
-        $pendingCount = Advertisement::where('state', 'active')->count();
+
+        // Substituindo state=active para is_published=true e is_suspended=false
+        $pendingCount = Advertisement::where('is_published', true)
+            ->where('is_suspended', false)
+            ->count();
+
         $resolvedCount = Denunciation::whereIn('report_state', [1, 2])->count();
         $suspendedUsersCount = User::where('state', 'suspended')->count();
 

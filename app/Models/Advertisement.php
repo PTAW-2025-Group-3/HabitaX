@@ -15,7 +15,8 @@ class Advertisement extends Model
         'description',
         'transaction_type',
         'price',
-        'state',
+        'is_published',
+        'is_suspended',
         'property_id',
         'created_by',
         'updated_by',
@@ -23,6 +24,8 @@ class Advertisement extends Model
 
     protected $casts = [
         'price' => 'float',
+        'is_published' => 'boolean',
+        'is_suspended' => 'boolean',
     ];
 
     public function property()
@@ -39,8 +42,25 @@ class Advertisement extends Model
     {
         return $this->hasMany(ContactRequest::class, 'advertisement_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Métodos de conveniência para verificar o estado
+    public function isActive()
+    {
+        return $this->is_published && !$this->is_suspended;
+    }
+
+    public function isPending()
+    {
+        return !$this->is_published && !$this->is_suspended;
+    }
+
+    public function isArchived()
+    {
+        return $this->is_suspended;
     }
 }

@@ -19,7 +19,7 @@ class DenunciationFactory extends Factory
         $advertisement = Advertisement::inRandomOrder()->first();
         $reason = DenunciationReason::inRandomOrder()->first();
 
-        $state = $this->faker->randomElement([0, 1, 2]); // 0 = pendente, 1 = aprovado, 2 = rejeitado
+        $state = 0;
 
         return [
             'advertisement_id' => $advertisement?->id,

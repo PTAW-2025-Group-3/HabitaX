@@ -21,7 +21,8 @@ class AdvertisementFactory extends Factory
             'description' => $this->faker->paragraph(3),
             'transaction_type' => $this->faker->randomElement(['sale', 'rent']),
             'price' => $this->faker->randomFloat(2, 10000, 750000),
-            'state' => $this->faker->randomElement(['pending', 'active', 'archived']),
+            'is_published' => $this->faker->boolean(80), // 80% chance de estar publicado
+            'is_suspended' => $this->faker->boolean(10), // 10% chance de estar suspenso
             'property_id' => Property::inRandomOrder()->first()?->id,
             'created_by' => $user?->id,
             'updated_by' => $user?->id,

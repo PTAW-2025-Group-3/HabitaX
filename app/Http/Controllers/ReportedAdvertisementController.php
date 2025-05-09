@@ -13,8 +13,14 @@ class ReportedAdvertisementController extends Controller
     public function index()
     {
         $denunciations = Denunciation::with(['creator', 'advertisement', 'reason'])
+            ->whereHas('advertisement', function($query) {
+                $query->where('is_suspended', false)
+                    ->whereHas('creator', function($q) {
+                        $q->where('state', 'active');
+                    });
+            })
             ->orderBy('submitted_at', 'desc')
-            ->orderBy('id', 'desc') // Add a secondary sort by primary key
+            ->orderBy('id', 'desc')
             ->paginate(5);
 
         // Transform each denunciation into a Presenter
@@ -34,23 +40,41 @@ class ReportedAdvertisementController extends Controller
     public function ajaxDenunciations(Request $request)
     {
         try {
-            // Clone da consulta base para preservar os relacionamentos
             $query = Denunciation::with(['creator', 'advertisement', 'reason']);
 
             // Aplicar filtro
             $filter = $request->input('filter', 'all');
-            if ($filter !== 'all') {
-                switch ($filter) {
-                    case 'pending':
-                        $query->where('report_state', 0);
-                        break;
-                    case 'approved':
-                        $query->where('report_state', 1);
-                        break;
-                    case 'rejected':
-                        $query->where('report_state', 2);
-                        break;
-                }
+            if ($filter === 'pending') {
+                // Para denúncias pendentes, filtramos anúncios não suspensos e usuários ativos
+                $query->where('report_state', 0)
+                    ->whereHas('advertisement', function($subQuery) {
+                        $subQuery->where('is_suspended', false)
+                            ->whereHas('creator', function($q) {
+                                $q->where('state', 'active');
+                            });
+                    });
+            } elseif ($filter === 'approved') {
+                $query->where('report_state', 1);
+            } elseif ($filter === 'rejected') {
+                $query->where('report_state', 2);
+            } else {
+                // Para o filtro "Todos", aplicamos uma lógica composta:
+                // 1. Incluir todas as denúncias já processadas (aprovadas/rejeitadas)
+                // 2. Incluir apenas denúncias pendentes de anúncios não suspensos
+                $query->where(function($q) {
+                    // Denúncias já processadas (aprovadas ou rejeitadas)
+                    $q->whereIn('report_state', [1, 2])
+                        // OU denúncias pendentes de anúncios não suspensos
+                        ->orWhere(function($subQ) {
+                            $subQ->where('report_state', 0)
+                                ->whereHas('advertisement', function($adQ) {
+                                    $adQ->where('is_suspended', false)
+                                        ->whereHas('creator', function($userQ) {
+                                            $userQ->where('state', 'active');
+                                        });
+                                });
+                        });
+                });
             }
 
             // Melhorar a funcionalidade de pesquisa
@@ -132,14 +156,31 @@ class ReportedAdvertisementController extends Controller
             return back()->with('error', 'Esta denúncia já foi processada.');
         }
 
-        $denunciation->update([
-            'report_state' => 1, // Approved
-            'validated_by' => auth()->id(),
-            'validated_at' => now()
-        ]);
+        // Inicia uma transação para garantir a integridade dos dados
+        \DB::beginTransaction();
 
-        return redirect()->route('moderation')
-            ->with('success', 'Denúncia aprovada com sucesso.');
+        try {
+            // Atualiza o estado da denúncia
+            $denunciation->update([
+                'report_state' => 1, // Aprovado
+                'validated_by' => auth()->id(),
+                'validated_at' => now()
+            ]);
+
+            // Suspende o anúncio denunciado
+            $advertisement = $denunciation->advertisement;
+            if ($advertisement) {
+                $advertisement->is_suspended = true;
+                $advertisement->save();
+            }
+
+            \DB::commit();
+            return redirect()->route('moderation')
+                ->with('success', 'Denúncia aprovada com sucesso. O anúncio foi suspenso.');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()->with('error', 'Erro ao processar a denúncia: ' . $e->getMessage());
+        }
     }
 
     public function reject($id)

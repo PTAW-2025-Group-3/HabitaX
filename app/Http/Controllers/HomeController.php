@@ -14,13 +14,16 @@ class HomeController extends Controller
     public function index()
     {
         $featuredAds = Advertisement::with('property')
+            ->where('is_published', true)
+            ->where('is_suspended', false)
             ->take(8)
             ->get();
 
         $propertyTypes = PropertyType::where('is_active', true)
             ->withCount(['properties' => function($query) {
                 $query->whereHas('advertisements', function($q) {
-                    $q->where('state', 'active');
+                    $q->where('is_published', true)
+                        ->where('is_suspended', false);
                 });
             }])
             ->orderBy('id')
@@ -30,7 +33,8 @@ class HomeController extends Controller
         foreach ($propertyTypes as $type) {
             $type->active_ads_count = Advertisement::join('properties', 'advertisements.property_id', '=', 'properties.id')
                 ->where('properties.property_type_id', $type->id)
-                ->where('advertisements.state', 'active')
+                ->where('advertisements.is_published', true)
+                ->where('advertisements.is_suspended', false)
                 ->count();
         }
 
@@ -42,7 +46,8 @@ class HomeController extends Controller
             ->join('parishes', 'properties.parish_id', '=', 'parishes.id')
             ->join('municipalities', 'parishes.municipality_id', '=', 'municipalities.id')
             ->join('districts', 'municipalities.district_id', '=', 'districts.id')
-            ->where('advertisements.state', 'active')
+            ->where('advertisements.is_published', true)
+            ->where('advertisements.is_suspended', false)
             ->select('districts.id as district_id', 'districts.name as district_name', DB::raw('count(*) as total'))
             ->groupBy('districts.id', 'districts.name')
             ->orderBy('total', 'desc')

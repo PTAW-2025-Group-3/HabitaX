@@ -28,8 +28,8 @@ class AdvertisementSeeder extends Seeder
                 'description' => fake()->paragraph(3),
                 'transaction_type' => fake()->randomElement(['sale', 'rent']),
                 'price' => fake()->randomFloat(2, 10000, 750000),
-//                'state' => fake()->randomElement(['pending', 'active', 'archived']),
-                'state' => fake()->randomElement(['active']),
+                'is_published' => true,
+                'is_suspended' => false,
                 'property_id' => $property->id,
                 'created_by' => $property->created_by,
             ]);

@@ -3,7 +3,7 @@
 @section('title', 'Administration')
 
 @section('content')
-    <div class="bg-back min-h-screen py-10 animate-fade-in">
+    <div class="bg-back min-h-screen py-10">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
 
             @include('pages.administration.partials.header')

@@ -24,8 +24,12 @@ class AdvertisementController extends Controller
         $selectedType = $request->input('property_type');
         $transactionType = $request->input('transaction_type');
 
-        // Query base
-        $query = Advertisement::where('state', 'active')
+        // Query base - usando os novos campos
+        $query = Advertisement::where('is_published', true)
+            ->where('is_suspended', false)
+            ->whereHas('creator', function($q) {
+                $q->where('state', 'active');
+            })
             ->with('property')
             ->select('advertisements.*');
 
@@ -77,6 +81,12 @@ class AdvertisementController extends Controller
     {
         $user = auth()->user();
         $favorites = FavoriteAdvertisement::where('user_id', $user->id)
+            ->whereHas('advertisement', function($query) {
+                $query->where('is_suspended', false)
+                    ->whereHas('creator', function($q) {
+                        $q->where('state', 'active');
+                    });
+            })
             ->with('advertisement.property.parish.municipality')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -84,14 +94,33 @@ class AdvertisementController extends Controller
         return view('advertisements.favorites', compact('favorites'));
     }
 
-
     public function show($id)
     {
         $ad = Advertisement::find($id);
+
+        if (!$ad) {
+            return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');
+        }
+
+        // Verifica se o anúncio está suspenso - bloqueando acesso para todos
+        if ($ad->is_suspended) {
+            return redirect()->route('advertisements.index')
+                ->with('error', 'Este anúncio não está mais disponível.');
+        }
+
+        // Verifica se o criador do anúncio está suspenso/banido/arquivado
+        if (in_array($ad->creator->state, ['suspended', 'banned', 'archived'])) {
+            // Apenas admins e moderadores podem acessar anúncios de usuários suspensos
+            if (!auth()->check() || (!auth()->user()->isAdmin() && !auth()->user()->isModerator())) {
+                return redirect()->route('advertisements.index')
+                    ->with('error', 'Este anúncio não está mais disponível.');
+            }
+        }
+
         $property = Property::find($ad->property_id);
 
-        if (!$ad || !$property) {
-            return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');
+        if (!$property) {
+            return redirect()->route('advertisements.index')->with('error', 'Propriedade não encontrada.');
         }
 
         $attributes = $property->property_type->attributes()
@@ -126,7 +155,7 @@ class AdvertisementController extends Controller
             'groups' => $groups,
             'parameters' => $parameters,
             'groupedParameters' => $groupedParameters,
-            'priceHistory' => $priceHistory,
+            'priceHistory' => $priceHistory
         ]);
     }
 
