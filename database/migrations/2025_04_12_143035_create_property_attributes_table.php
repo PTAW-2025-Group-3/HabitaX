@@ -12,6 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('property_attribute_groups', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->string('icon_path')->nullable();
+            $table->boolean('is_active')->default(true);
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('cascade');
+
+            $table->timestamps();
+        });
+
         Schema::create('property_attributes', function (Blueprint $table) {
             $table->id();
 
@@ -34,6 +48,27 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('property_attribute_group_attributes', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('group_id')->constrained('property_attribute_groups')->cascadeOnDelete();
+            $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->integer('order')->nullable();
+
+            $table->timestamps();
+        });
+
+        Schema::create('property_type_attributes', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
+            $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
+            $table->boolean('show_in_list')->default(false);
+            $table->boolean('show_in_filter')->default(false);
+
+            $table->timestamps();
+        });
+
         Schema::create('property_attribute_options', function (Blueprint $table) {
             $table->id();
 
@@ -44,17 +79,6 @@ return new class extends Migration
 
             $table->timestamps();
         });
-
-        Schema::create('property_type_attributes', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
-            $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
-            $table->boolean('is_required')->default(false);
-            $table->boolean('is_active')->default(true);
-
-            $table->timestamps();
-        });
     }
 
     /**
@@ -62,8 +86,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_attributes');
         Schema::dropIfExists('property_attribute_options');
         Schema::dropIfExists('property_type_attributes');
+        Schema::dropIfExists('property_attribute_group_attributes');
+        Schema::dropIfExists('property_attributes');
+        Schema::dropIfExists('property_attribute_groups');
     }
 };

@@ -9,6 +9,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
+use App\Http\Controllers\PropertyAttributeGroupController;
 use App\Http\Controllers\PropertyAttributeOptionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTypeController;
@@ -145,6 +146,23 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         ->name('property-types.attributes.edit');
     Route::post('/admin/property-types/{id}/attributes', [PropertyTypeController::class, 'updateAttributes'])
         ->name('property-types.attributes.update');
+
+    Route::get('/admin/attribute-groups', [PropertyAttributeGroupController::class, 'index'])
+        ->name('attribute-groups.index');
+    Route::get('/admin/attribute-groups/create', [PropertyAttributeGroupController::class, 'create'])
+        ->name('attribute-groups.create');
+    Route::post('/admin/attribute-groups', [PropertyAttributeGroupController::class, 'store'])
+        ->name('attribute-groups.store');
+    Route::get('/admin/attribute-groups/{id}/edit', [PropertyAttributeGroupController::class, 'edit'])
+        ->name('attribute-groups.edit');
+    Route::put('/admin/attribute-groups/{id}', [PropertyAttributeGroupController::class, 'update'])
+        ->name('attribute-groups.update');
+    Route::get('/admin/attribute-groups/{id}/attributes', [PropertyAttributeGroupController::class, 'editAttributes'])
+        ->name('attribute-groups.attributes.edit');
+    Route::post('/admin/attribute-groups/{id}/attributes', [PropertyAttributeGroupController::class, 'updateAttributes'])
+        ->name('attribute-groups.attributes.update');
+    Route::delete('/admin/attribute-groups/{id}', [PropertyAttributeGroupController::class, 'destroy'])
+        ->name('attribute-groups.destroy');
 
     // Distritos, Municípios e Freguesias
 });

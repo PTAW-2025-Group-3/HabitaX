@@ -1,3 +1,4 @@
+@php use App\Enums\AttributeType; @endphp
 @extends('layout.app')
 
 @section('title', 'Advertisement Details')
@@ -31,7 +32,8 @@
             </div>
 
             <div class="flex flex-wrap justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
-                <button id="shareBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
+                <button id="shareBtn"
+                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
                     <i class="bi bi-share-fill"></i>
                     <span class="text-sm font-medium">Partilhar</span>
                 </button>
@@ -40,10 +42,12 @@
                         data-ad-id="{{ $ad->id }}"
                         class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
                     <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
-                    <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
+                    <span
+                        class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
                 </button>
 
-                <button id="reportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
+                <button id="reportBtn"
+                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
                     <i class="bi bi-flag"></i>
                     <span class="text-sm font-medium">Reportar</span>
                 </button>
@@ -56,7 +60,8 @@
         @endphp
         <div id="gallery" class="gallery-container grid grid-cols-12 gap-2 md:gap-4 relative">
             <!-- Visible part -->
-            <a href="{{ $property->getFirstMediaUrl('images') }}" class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
+            <a href="{{ $property->getFirstMediaUrl('images') }}"
+               class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
                 <img src="{{ $property->getFirstMediaUrl('images', 'preview') }}"
                      class="w-full h-full object-cover rounded-lg shadow" alt="Imagem Principal">
             </a>
@@ -106,26 +111,37 @@
                     <p class="text-gray-700 text-sm md:text-base">{{ $ad->description }}</p>
                 </section>
 
-                <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-gray-50 p-3 md:p-4 rounded shadow">
-                        <h3 class="font-semibold">Equipamentos</h3>
-                        <ul class="list-disc list-inside text-sm md:text-base">
-                            {{--                            @foreach($ad->equipments as $eq)--}}
-                            {{--                                <li>{{ $eq }}</li>--}}
-                            {{--                            @endforeach--}}
-                        </ul>
-                    </div>
+                <section class="space-y-2">
+                    <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
+                    @foreach($groupedParameters as $groupId => $parameters)
+                        <div class="space-y-2">
+                            <h3 class="text-md md:text-lg font-semibold">
+                                {{ $groups->get($groupId)?->name ?? 'Categoria desconhecida' }}
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @php
+                                    $path = 'advertisements.individual.parameters.';
+                                    $attributeIncludes = [
+                                        AttributeType::TEXT->value => $path. 'text',
+                                        AttributeType::LONG_TEXT->value => $path . 'long-text',
+                                        AttributeType::INT->value => $path . 'int',
+                                        AttributeType::FLOAT->value => $path . 'float',
+                                        AttributeType::BOOLEAN->value => $path . 'boolean',
+                                        AttributeType::DATE->value => $path . 'date',
+                                        AttributeType::SELECT_SINGLE->value => $path . 'select-single',
+                                        AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
+                                    ];
+                                @endphp
 
-                    <div class="bg-gray-50 p-3 md:p-4 rounded shadow">
-                        <h3 class="font-semibold">Características Específicas</h3>
-                        <ul class="list-disc list-inside text-sm md:text-base">
-                            @foreach($attributes as $attribute)
-                                <li>{{ $attribute['name'] }}: {{ $attribute['value'] }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                                @foreach($parameters as $parameter)
+                                    @if(isset($attributeIncludes[$parameter->attribute->type->value]))
+                                        @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
                 </section>
-
                 @include('advertisements.individual.price-history', ['ad' => $ad])
                 @include('advertisements.individual.loan-simulator', ['ad' => $ad])
             </div>
@@ -142,10 +158,12 @@
                             referrerpolicy="no-referrer-when-downgrade"
                         ></iframe>
                         <div class="absolute top-2 right-2 group">
-                            <div class="bg-white bg-opacity-80 rounded-full w-8 h-8 flex items-center justify-center shadow cursor-help">
+                            <div
+                                class="bg-white bg-opacity-80 rounded-full w-8 h-8 flex items-center justify-center shadow cursor-help">
                                 <i class="bi bi-info-circle text-gray-700"></i>
                             </div>
-                            <div class="absolute right-0 top-full mt-2 hidden group-hover:block bg-white text-gray-700 text-xs md:text-sm px-3 py-2 rounded shadow-lg w-52 z-10">
+                            <div
+                                class="absolute right-0 top-full mt-2 hidden group-hover:block bg-white text-gray-700 text-xs md:text-sm px-3 py-2 rounded shadow-lg w-52 z-10">
                                 Apenas a freguesia é exibida por questões de segurança.
                             </div>
                         </div>
@@ -165,11 +183,11 @@
     </div>
 @endsection
 @include('advertisements.individual.modals.all_photos', ['images' => $images])
-@include('advertisements.individual.modals.denunciation', ['denunciationReasons' => $denunciationReasons, 'adId' => $ad->id])
+@include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Modal de fotos - elementos
             const photosModal = document.getElementById('photos-modal');
             const closePhotosModal = document.getElementById('closePhotosModal');
@@ -192,7 +210,7 @@
             // Gatilhos para abrir o modal de fotos - AQUI ESTÁ O PROBLEMA
             const galleryTriggers = document.querySelectorAll('#gallery a');
             galleryTriggers.forEach(trigger => {
-                trigger.addEventListener('click', function(e) {
+                trigger.addEventListener('click', function (e) {
                     e.preventDefault(); // Impede abertura direta da galeria
                     openPhotosModal(); // Só abre o modal, não a galeria
                 });
@@ -200,14 +218,14 @@
 
             // Eventos para fechar o modal
             if (closePhotosModal) {
-                closePhotosModal.addEventListener('click', function() {
+                closePhotosModal.addEventListener('click', function () {
                     closePhotosModalFunction();
                 });
             }
 
             // Fechar modal ao clicar fora
             if (photosModal) {
-                photosModal.addEventListener('click', function(e) {
+                photosModal.addEventListener('click', function (e) {
                     if (e.target === photosModal) {
                         closePhotosModalFunction();
                     }
@@ -215,7 +233,7 @@
             }
 
             // Fechar modal com tecla ESC
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape' && photosModal && !photosModal.classList.contains('hidden')) {
                     closePhotosModalFunction();
                 }
@@ -223,7 +241,7 @@
 
             // Abrir galeria somente quando uma foto for clicada no modal
             photoItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     const index = parseInt(this.dataset.index);
                     setTimeout(() => {
                         gallery.openGallery(index);
@@ -234,7 +252,7 @@
             // Report button handler
             const reportBtn = document.getElementById('reportBtn');
             if (reportBtn) {
-                reportBtn.addEventListener('click', function() {
+                reportBtn.addEventListener('click', function () {
                     if (typeof openReportModal === 'function') {
                         openReportModal();
                     } else {
@@ -245,7 +263,7 @@
 
             const shareBtn = document.getElementById('shareBtn');
             if (shareBtn) {
-                shareBtn.addEventListener('click', function() {
+                shareBtn.addEventListener('click', function () {
                     if (typeof openShareModal === 'function') {
                         openShareModal();
                     } else {
@@ -270,7 +288,7 @@
                 toast.className = `py-2 px-4 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in max-w-xs text-sm font-medium`;
 
                 // Set color based on type
-                switch(type) {
+                switch (type) {
                     case 'success':
                         toast.classList.add('bg-green-50', 'text-green-800', 'border-l-4', 'border-green-500');
                         toast.innerHTML = `<i class="bi bi-check-circle-fill text-green-500"></i> ${message}`;
@@ -302,7 +320,7 @@
             // Favorite button handler
             const favoriteBtn = document.getElementById('favoriteBtn');
             if (favoriteBtn) {
-                favoriteBtn.addEventListener('click', function() {
+                favoriteBtn.addEventListener('click', function () {
                     @auth
                     const adId = this.dataset.adId;
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -388,7 +406,7 @@
             // "Mais X imagens" button now opens the modal instead
             const openGalleryButton = document.getElementById('openGalleryButton');
             if (openGalleryButton) {
-                openGalleryButton.addEventListener('click', function(e) {
+                openGalleryButton.addEventListener('click', function (e) {
                     e.preventDefault();
                     openPhotosModal();
                 });

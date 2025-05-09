@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
+use App\Models\PropertyTypeAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -106,22 +107,47 @@ class PropertyTypeController extends Controller
 
     public function editAttributes(Request $request, $id)
     {
-        $propertyType = PropertyType::findOrFail($id);
+        $propertyType = PropertyType::with('typeAttributes')->findOrFail($id);
         $allAttributes = PropertyAttribute::all();
-        $propertyTypeAttributes = $propertyType->attributes()->pluck('attribute_id')->toArray();
+        $propertyTypeAttributes = $propertyType->typeAttributes
+            ->keyBy('attribute_id')
+            ->map(fn($pta) => [
+                'show_in_list' => $pta->show_in_list,
+                'show_in_filter' => $pta->show_in_filter
+            ])
+            ->toArray();
 
-        return view('property-types.attributes', compact('propertyType', 'allAttributes', 'propertyTypeAttributes'));
+        return view('property-types.attributes', compact(
+            'propertyType', 'allAttributes', 'propertyTypeAttributes'
+        ));
     }
 
     public function updateAttributes(Request $request, $id)
     {
         $propertyType = PropertyType::findOrFail($id);
-        $attributes = $request->input('attributes', []);
 
-        // Sync the attributes with the property type
-        $propertyType->attributes()->sync($attributes);
+        if ($request->has('attributes')) {
+            $this->syncAttributes($propertyType, $request->input('attributes'));
+        }
 
-        return redirect()->route('property-types.index')->with('success', 'Property type attributes updated successfully.');
+        return redirect()->route('property-types.index')
+            ->with('success', 'Attributes updated successfully.');
+    }
+
+    protected function syncAttributes(PropertyType $propertyType, array $attributesData)
+    {
+        $syncData = [];
+
+        foreach ($attributesData as $attrId => $settings) {
+            if (!isset($settings['selected'])) continue;
+
+            $syncData[$attrId] = [
+                'show_in_list' => isset($settings['show_in_list']),
+                'show_in_filter' => isset($settings['show_in_filter']),
+            ];
+        }
+
+        $propertyType->attributes()->sync($syncData);
     }
 
     public function destroy($id)

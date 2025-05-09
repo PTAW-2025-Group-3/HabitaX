@@ -86,7 +86,7 @@
                                             </span>
                                     @endif
                                 </td>
-                                <td class="p-4 space-x-1 text-right">
+                                <td class="p-4 space-x-1 space-y-2 text-right">
                                     <a href="{{ route('property-types.attributes.edit', ['id' => $propertyType->id]) }}"
                                        class="btn-secondary text-xs px-2 py-1 inline-flex items-center">
                                         <i class="bi bi-gear mr-1"></i> Gerir Atributos
@@ -113,7 +113,7 @@
         </div>
     </div>
     @include('components.delete-confirmation', [
-    'itemType' => 'tipo de propriedade',
-    'routeName' => route('property-types.destroy', ['id' => '__ID__'])
-])
+        'itemType' => 'tipo de propriedade',
+        'routeName' => route('property-types.destroy', ['id' => '__ID__'])
+    ])
 @endsection

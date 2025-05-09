@@ -15,14 +15,14 @@ class PropertyTypeAttributeSeeder extends Seeder
         $propertyAttributes = PropertyAttribute::all();
 
         foreach ($propertyTypes as $propertyType) {
-            $attributes = $propertyAttributes->random(rand(3, 6))->pluck('id');
+            $min = max(1, floor($propertyAttributes->count() * 0.3));
+            $max = max($min, $propertyAttributes->count());
+            $attributes = $propertyAttributes->random(rand($min, $max))->pluck('id');
 
             foreach ($attributes as $attributeId) {
                 PropertyTypeAttribute::create([
                     'property_type_id' => $propertyType->id,
                     'attribute_id' => $attributeId,
-                    'is_required' => rand(0, 1) === 1,
-                    'is_active' => true,
                 ]);
             }
         }

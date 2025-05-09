@@ -20,7 +20,6 @@ class PropertyParameter extends Model
         'boolean_value',
         'select_value',
         'date_value',
-        'is_multiple',
     ];
 
     protected $casts = [
@@ -28,7 +27,6 @@ class PropertyParameter extends Model
         'float_value' => 'float',
         'boolean_value' => 'boolean',
         'date_value' => 'date',
-        'is_multiple' => 'boolean',
     ];
 
     public function setValue(mixed $rawValue, string $type): void
@@ -68,7 +66,6 @@ class PropertyParameter extends Model
                 break;
 
             case AttributeType::SELECT_MULTIPLE->value:
-                $this->is_multiple = true;
                 break;
 
             case AttributeType::DATE->value:

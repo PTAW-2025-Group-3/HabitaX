@@ -12,13 +12,13 @@ class PropertyTypeAttribute extends Model
     protected $fillable = [
         'property_type_id',
         'attribute_id',
-        'is_required',
-        'is_active',
+        'show_in_list',
+        'show_in_filter',
     ];
 
     protected $casts = [
-        'is_required' => 'boolean',
-        'is_active' => 'boolean',
+        'show_in_list' => 'boolean',
+        'show_in_filter' => 'boolean',
     ];
 
     public function property_type()
