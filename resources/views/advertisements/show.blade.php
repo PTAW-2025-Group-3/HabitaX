@@ -69,10 +69,24 @@
             <div class="col-span-12 md:col-span-6 grid grid-cols-2 grid-rows-2 gap-2 h-[300px] md:h-[500px]">
                 @foreach($images as $image)
                     @if(!$loop->first && $loop->index < 5)
-                        <a href="{{ $image->getUrl() }}">
-                            <img src="{{ $image->getUrl('preview') }}"
-                                 class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
-                        </a>
+                        @if($loop->index == 4 && count($images) > 5)
+                            <!-- Última imagem visível com overlay e "+X" -->
+                            <div class="relative">
+                                <a href="{{ $image->getUrl() }}" class="block w-full h-full">
+                                    <img src="{{ $image->getUrl('preview') }}"
+                                         class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
+                                    <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center rounded-lg hover:bg-opacity-70 transition-all">
+                                        <span class="text-3xl md:text-4xl font-bold text-white">+{{ count($images) - 5 }}</span>
+                                        <span class="text-xs md:text-sm text-white mt-1">Ver todas as fotos</span>
+                                    </div>
+                                </a>
+                            </div>
+                        @else
+                            <a href="{{ $image->getUrl() }}">
+                                <img src="{{ $image->getUrl('preview') }}"
+                                     class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
+                            </a>
+                        @endif
                     @endif
                 @endforeach
 
@@ -91,17 +105,6 @@
                     @endif
                 @endforeach
             </div>
-
-            <!-- Show More Button -->
-            @if(count($images) > 5)
-                <div class="mt-4 text-right">
-                    <button id="openGalleryButton"
-                            class="absolute bottom-2 right-2 bg-white bg-opacity-80 backdrop-blur px-4 py-2 mb-8 opacity-80 hover:opacity-100
-                            text-sm rounded shadow text-gray-700 font-semibold hover:bg-opacity-100 transition">
-                        Mais {{ count($images) - 5 }} imagens
-                    </button>
-                </div>
-            @endif
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
@@ -118,7 +121,8 @@
                             <h3 class="text-md md:text-lg font-semibold">
                                 {{ $groups->get($groupId)?->name ?? 'Categoria desconhecida' }}
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                                 @php
                                     $path = 'advertisements.individual.parameters.';
                                     $attributeIncludes = [
@@ -131,11 +135,28 @@
                                         AttributeType::SELECT_SINGLE->value => $path . 'select-single',
                                         AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
                                     ];
+
+                                    // Separa os LONG_TEXT dos restantes
+                                    [$longTexts, $others] = collect($parameters)->partition(
+                                        fn($p) => $p->attribute->type->value === \App\Enums\AttributeType::LONG_TEXT->value
+                                    );
                                 @endphp
 
-                                @foreach($parameters as $parameter)
+                                {{-- Renderiza primeiro os long texts, forçando uma linha inteira --}}
+                                @foreach($longTexts as $parameter)
                                     @if(isset($attributeIncludes[$parameter->attribute->type->value]))
-                                        @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                        <div class="w-full col-span-full">
+                                            @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                        </div>
+                                    @endif
+                                @endforeach
+
+                                {{-- Depois os restantes normalmente --}}
+                                @foreach($others as $parameter)
+                                    @if(isset($attributeIncludes[$parameter->attribute->type->value]))
+                                        <div>
+                                            @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                        </div>
                                     @endif
                                 @endforeach
                             </div>
@@ -207,12 +228,22 @@
                 document.body.classList.remove('modal-open');
             }
 
-            // Gatilhos para abrir o modal de fotos - AQUI ESTÁ O PROBLEMA
+            // Modificar os eventos de clique nas imagens da galeria
             const galleryTriggers = document.querySelectorAll('#gallery a');
-            galleryTriggers.forEach(trigger => {
+            galleryTriggers.forEach((trigger, index) => {
+                // Verificar se esta é a imagem com o overlay "+X"
+                const hasOverlay = trigger.querySelector('.absolute.inset-0') !== null;
+
                 trigger.addEventListener('click', function (e) {
-                    e.preventDefault(); // Impede abertura direta da galeria
-                    openPhotosModal(); // Só abre o modal, não a galeria
+                    e.preventDefault();
+
+                    if (hasOverlay) {
+                        // Se for a imagem com "+X", abre o modal com todas as fotos
+                        openPhotosModal();
+                    } else {
+                        // Para as outras imagens, abre diretamente o lightGallery no slide correspondente
+                        gallery.openGallery(index);
+                    }
                 });
             });
 
@@ -392,7 +423,6 @@
                 loop: true,
                 mode: 'lg-fade',
                 speed: 500,
-                // Importante: desativar a abertura automática ao clicar nos elementos do seletor
                 licenseKey: 'your-license-key',
                 dynamic: true,
                 dynamicEl: Array.from(document.querySelectorAll('#gallery a')).map(a => {
