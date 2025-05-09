@@ -91,18 +91,26 @@ class AdvertisementController extends Controller
             return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');
         }
 
+        $attributes = $property->property_type->attributes()
+            ->with('groups')
+            ->get();
+
+        $groups = $attributes->pluck('groups')->flatten()->keyBy('id');
+
         $parameters = PropertyParameter::where('property_id', $property->id)
             ->with('attribute')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'name' => $item->attribute->name,
-                    'value' => $item->value,
-                ];
-            })
-            ->toArray();
+            ->get();
 
-        $denunciationReasons = DenunciationReason::where('is_active', true)->get();
+        // group parameters by PropertyAttributeGroup depending on if attribute makes part of a group
+        $groupedParameters = [];
+        foreach ($parameters as $parameter) {
+            $groupId = $parameter->attribute->groups->first()->id ?? null;
+            if ($groupId) {
+                $groupedParameters[$groupId][] = $parameter;
+            } else {
+                $groupedParameters['no_group'][] = $parameter;
+            }
+        }
 
         $priceHistory = PriceHistory::where('advertisement_id', $ad->id)
             ->orderBy('register_date', 'asc')
@@ -111,9 +119,11 @@ class AdvertisementController extends Controller
         return view('advertisements.show', [
             'ad' => $ad,
             'property' => $property,
-            'attributes' => $parameters,
+            'attributes' => $attributes,
+            'groups' => $groups,
+            'parameters' => $parameters,
+            'groupedParameters' => $groupedParameters,
             'priceHistory' => $priceHistory,
-            'denunciationReasons' => $denunciationReasons,
         ]);
     }
 

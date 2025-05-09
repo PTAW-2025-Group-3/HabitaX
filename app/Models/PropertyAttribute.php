@@ -45,4 +45,11 @@ class PropertyAttribute extends Model
     {
         return $this->hasMany(PropertyAttributeOption::class, 'attribute_id');
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(PropertyAttributeGroup::class, 'property_attribute_group_attributes', 'attribute_id', 'group_id')
+            ->withPivot('order')
+            ->orderBy('order');
+    }
 }

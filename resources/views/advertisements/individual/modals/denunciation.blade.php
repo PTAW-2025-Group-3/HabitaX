@@ -27,7 +27,7 @@
                     <div class="relative dropdown-wrapper w-full sm:w-auto">
                         <select id="reportReason" name="reason" class="py-2 pl-4 pr-10 w-full h-10 dropdown-select" required>
                             <option value="" disabled selected>Selecione um motivo</option>
-                            @foreach($denunciationReasons as $reason)
+                            @foreach(\App\Models\DenunciationReason::where('is_active', true)->get() as $reason)
                                 <option value="{{ $reason->id }}">{{ $reason->name }}</option>
                             @endforeach
                         </select>
