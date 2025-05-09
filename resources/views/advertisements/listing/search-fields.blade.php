@@ -15,30 +15,35 @@
     @if(request('max_area'))
         <input type="hidden" name="max_area" value="{{ request('max_area') }}">
     @endif
+
+    <input type="hidden" name="transaction_type" id="transactionTypeInput" value="{{ request('transaction_type', 'sale') }}">
     {{--    Toggle Buttons--}}
     <div class="relative w-full max-w-md mx-auto mb-8">
         <div class="flex bg-gray-300 rounded-2xl relative overflow-hidden">
             <!-- Slider Azul -->
             <div id="slider"
-                class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-all duration-300 z-0"
+                 class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-transform duration-300 ease-in-out z-0 transform"
+                 style="transform: translateX({{ request('transaction_type') == 'rent' ? '100%' : '0%' }})"
             ></div>
 
             <!-- Botões -->
-            <div
-               id="btn-comprar"
-               class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+            <button
+                id="btn-comprar"
+                type="button"
+                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
             >
                 Comprar
-            </div>
-            <div
-               id="btn-arrendar"
-               class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+            </button>
+            <button
+                id="btn-arrendar"
+                type="button"
+                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
             >
                 Arrendar
-            </div>
+            </button>
         </div>
     </div>
-{{--    Separador --}}
+    {{--    Separador --}}
     <div class="w-full h-px bg-gray-400 mb-6"></div>
 
     <div class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
@@ -140,84 +145,79 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            function setupLocationSelects() {
-                const districtSelect = document.getElementById('districtSelect');
-                const municipalitySelect = document.getElementById('municipalitySelect');
-                const parishSelect = document.getElementById('parishSelect');
-
-                districtSelect.addEventListener('change', function () {
-                    const municipalities = JSON.parse(this.options[this.selectedIndex].getAttribute('data-municipalities') || '[]');
-                    municipalitySelect.innerHTML = '<option value="">Concelho</option>';
-                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
-                    municipalities.forEach(m => {
-                        const opt = document.createElement('option');
-                        opt.value = m.id;
-                        opt.text = m.name;
-                        opt.setAttribute('data-parishes', JSON.stringify(m.parishes));
-                        municipalitySelect.appendChild(opt);
-                    });
-                });
-
-                municipalitySelect.addEventListener('change', function () {
-                    const parishes = JSON.parse(this.options[this.selectedIndex].getAttribute('data-parishes') || '[]');
-                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
-                    parishes.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p.id;
-                        opt.text = p.name;
-                        parishSelect.appendChild(opt);
-                    });
-                });
-            }
-
             function setupTransactionButtons() {
                 const btnComprar = document.getElementById("btn-comprar");
                 const btnArrendar = document.getElementById("btn-arrendar");
+                const transactionInput = document.getElementById("transactionTypeInput");
                 const slider = document.getElementById("slider");
 
-                let selected = "comprar";
-
-                function activateButton(buttonToActivate, buttonToDeactivate, sliderPosition) {
+                function activateButton(buttonToActivate, buttonToDeactivate, transformValue, typeValue) {
                     slider.style.display = "block";
-                    slider.style.left = sliderPosition;
+                    slider.style.transform = `translateX(${transformValue})`;
+                    transactionInput.value = typeValue;
+
                     buttonToActivate.classList.add("text-white", "font-semibold");
                     buttonToActivate.classList.remove("text-gray-800");
                     buttonToDeactivate.classList.remove("text-white", "font-semibold");
                     buttonToDeactivate.classList.add("text-gray-800");
                 }
 
-                function deactivateButton(button) {
-                    slider.style.display = "none";
-                    button.classList.remove("text-white", "font-semibold");
-                    button.classList.add("text-gray-800");
+                // Estado inicial com base no valor do input hidden
+                const selected = transactionInput.value || "sale";
+                if (selected === "rent") {
+                    activateButton(btnArrendar, btnComprar, "100%", "rent");
+                } else {
+                    activateButton(btnComprar, btnArrendar, "0%", "sale");
                 }
 
-                activateButton(btnComprar, btnArrendar, "0%");
-
+                // Nos cliques
                 btnComprar.addEventListener("click", () => {
-                    if (selected === "comprar") {
-                        selected = null;
-                        deactivateButton(btnComprar);
-                    } else {
-                        selected = "comprar";
-                        activateButton(btnComprar, btnArrendar, "0%");
-                    }
+                    activateButton(btnComprar, btnArrendar, "0%", "sale");
                 });
 
                 btnArrendar.addEventListener("click", () => {
-                    if (selected === "arrendar") {
-                        selected = null;
-                        deactivateButton(btnArrendar);
-                    } else {
-                        selected = "arrendar";
-                        activateButton(btnArrendar, btnComprar, "50%");
-                    }
+                    activateButton(btnArrendar, btnComprar, "100%", "rent");
                 });
             }
 
-            // Chamar as funções
-            setupLocationSelects();
+            function setupLocationSelects() {
+                const districtSelect = document.getElementById('districtSelect');
+                const municipalitySelect = document.getElementById('municipalitySelect');
+                const parishSelect = document.getElementById('parishSelect');
+
+                districtSelect.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const municipalities = JSON.parse(selectedOption.dataset.municipalities || '[]');
+
+                    municipalitySelect.innerHTML = '<option value="">Concelho</option>';
+                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
+
+                    municipalities.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id;
+                        opt.textContent = m.name;
+                        opt.dataset.parishes = JSON.stringify(m.parishes);
+                        municipalitySelect.appendChild(opt);
+                    });
+                });
+
+                municipalitySelect.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const parishes = JSON.parse(selectedOption.dataset.parishes || '[]');
+
+                    parishSelect.innerHTML = '<option value="">Freguesia</option>';
+
+                    parishes.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        parishSelect.appendChild(opt);
+                    });
+                });
+            }
+
             setupTransactionButtons();
+            setupLocationSelects();
         });
     </script>
 @endpush
