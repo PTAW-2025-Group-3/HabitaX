@@ -89,16 +89,16 @@ Route::get('/property-type/{id}/attributes/html', [PropertyTypeController::class
 
 // Moderation Route
 Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
-    Route::get('/mod', [ModerationController::class, 'index'])->name('moderation');
-    Route::get('/mod/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
+    Route::get('/moderation', [ModerationController::class, 'index'])->name('moderation');
+    Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
         ->name('reported-advertisement.show');
-    Route::get('/mod/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
+    Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
         ->name('verification-advertiser.show');
-    Route::post('/mod/reported-advertisement/{id}/approve', [ReportedAdvertisementController::class, 'approve'])
+    Route::post('/moderation/reported-advertisement/{id}/approve', [ReportedAdvertisementController::class, 'approve'])
         ->name('reported-advertisement.approve');
-    Route::post('/mod/reported-advertisement/{id}/reject', [ReportedAdvertisementController::class, 'reject'])
+    Route::post('/moderation/reported-advertisement/{id}/reject', [ReportedAdvertisementController::class, 'reject'])
         ->name('reported-advertisement.reject');
-    Route::get('/mod/advertisement/{advertisementId}/history', [ReportedAdvertisementController::class, 'history'])
+    Route::get('/moderation/advertisement/{advertisementId}/history', [ReportedAdvertisementController::class, 'history'])
         ->name('reported-advertisement.history');
     Route::get('/moderation/denunciations/ajax', [App\Http\Controllers\ReportedAdvertisementController::class, 'ajaxDenunciations'])->name('moderation.denunciations.ajax');
     Route::get('/moderation/suspended-users', [ModerationController::class, 'suspendedUsers'])->name('moderation.suspended-users');

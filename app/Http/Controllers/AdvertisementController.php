@@ -41,7 +41,7 @@ class AdvertisementController extends Controller
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
 
         $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
-        $perPage = $viewMode === 'list' ? 9 : 15;
+        $perPage = $viewMode === 'list' ? 10 : 15;
 
         $advertisements = $query->paginate($perPage);
 

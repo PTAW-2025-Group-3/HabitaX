@@ -1,3 +1,4 @@
+@php use App\Enums\AttributeType; @endphp
 <div class="w-full md:w-1/4">
     <form method="GET" action="{{ route('advertisements.index') }}" id="filters-form">
         <!-- Preservar os filtros de localização e tipo de propriedade -->
@@ -18,7 +19,7 @@
             <h2 class="font-bold text-2xl mb-6 text-primary text-center">Filtros</h2>
 
             @if(request('property_type') || request('district') || request('municipality') || request('parish') ||
-    request('time_period') || request('min_price') || request('max_price') || request('min_area') || request('max_area'))
+                request('time_period') || request('min_price') || request('max_price') || request('min_area') || request('max_area'))
                 <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
                     <h4 class="font-medium text-sm text-blue-800 mb-2">Filtros ativos:</h4>
                     <div class="flex flex-wrap gap-2">
@@ -183,52 +184,6 @@
                 </a>
             </div>
 
-            <!-- Quartos -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                    <i class="bi bi-door-open-fill mr-2 text-secondary"></i> Quartos
-                </h3>
-                <input type="hidden" name="min_bedrooms" id="min_bedrooms" value="{{ request('min_bedrooms') }}">
-                <div class="grid grid-cols-5 gap-2 filter-group" data-filter-name="min_bedrooms">
-                    <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
-                    <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
-                    <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
-                    <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
-                    <button data-value="4" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '4' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">4+</button>
-                </div>
-            </div>
-
-            <!-- Casas de Banho -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                    <i class="bi bi-badge-wc-fill mr-2 text-secondary"></i> Casas de Banho
-                </h3>
-                <input type="hidden" name="min_bathrooms" id="min_bathrooms" value="{{ request('min_bathrooms') }}">
-                <div class="grid grid-cols-4 gap-2 filter-group" data-filter-name="min_bathrooms">
-                    <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
-                    <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
-                    <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
-                    <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
-                </div>
-            </div>
-
-            <!-- Estado -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                    <i class="bi bi-building-fill-check mr-2 text-secondary"></i> Estado
-                </h3>
-                <input type="hidden" name="condition" id="condition" value="{{ request('condition') }}">
-                <div class="space-y-2 filter-group" data-filter-name="condition">
-                    <button data-value="" class="w-full py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Qualquer</button>
-                    <button data-value="new" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'new' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Novo/Renovado</button>
-                    <button data-value="used" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'used' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Usado</button>
-                    <button data-value="to_renovate" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'to_renovate' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Para Renovar</button>
-                </div>
-            </div>
-
-            <!-- Divider -->
-            <div class="w-full h-px bg-gray-200 my-6"></div>
-
             <!-- Publicação -->
             <div class="mb-6">
                 <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
@@ -289,22 +244,98 @@
             <!-- Divider -->
             <div class="w-full h-px bg-gray-200 my-6"></div>
 
-            <!-- Comodidades -->
-            <div class="mb-4">
-                <h3 class="font-semibold text-gray-secondary mb-4 flex items-center">
-                    <i class="bi bi-sliders2-vertical mr-2 text-secondary"></i> Comodidades
-                </h3>
-                <div class="grid grid-cols-1 gap-3">
-                    @foreach (['Ar Condicionado', 'Garagem', 'Jardim', 'Piscina', 'Painéis Solares', 'Mobilidade Reduzida'] as $amenity)
-                        <div
-                            class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-secondary hover:bg-indigo-50 transition">
-                            <div class="w-5 mr-3 flex items-center justify-center">
-                                <input type="checkbox" id="{{ Str::slug($amenity) }}"
-                                       class="h-5 w-5 text-secondary rounded border-gray-300 focus:ring-secondary">
-                            </div>
-                            <label for="{{ Str::slug($amenity) }}" class="text-sm font-medium">{{ $amenity }}</label>
+            <!-- Dynamic filters -->
+            @if(isset($type))
+                <div>
+                    Filtros dinâmicos
+                </div>
+                @php
+                    $path = 'advertisements.listing.attributes.';
+                    $attributeIncludes = [
+                        AttributeType::INT->value => $path . 'number',
+                        AttributeType::FLOAT->value => $path . 'number',
+                        AttributeType::BOOLEAN->value => $path . 'boolean',
+                        AttributeType::DATE->value => $path . 'date',
+                        AttributeType::SELECT_SINGLE->value => $path . 'select-single',
+                        AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
+                    ];
+                @endphp
+                @foreach($type->filterAttributes as $attribute)
+                    @if(isset($attributeIncludes[$attribute->type->value]))
+                        <div class="mb-4">
+                            @include($attributeIncludes[$attribute->type->value], [
+                                'attribute' => $attribute
+                            ])
                         </div>
-                    @endforeach
+                    @endif
+                @endforeach
+            @endif
+
+            <!-- obsolete -->
+            <div hidden>
+                <!-- Quartos -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                        <i class="bi bi-door-open-fill mr-2 text-secondary"></i> Quartos
+                    </h3>
+                    <input type="hidden" name="min_bedrooms" id="min_bedrooms" value="{{ request('min_bedrooms') }}">
+                    <div class="grid grid-cols-5 gap-2 filter-group" data-filter-name="min_bedrooms">
+                        <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
+                        <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
+                        <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
+                        <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
+                        <button data-value="4" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bedrooms') == '4' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">4+</button>
+                    </div>
+                </div>
+
+                <!-- Casas de Banho -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                        <i class="bi bi-badge-wc-fill mr-2 text-secondary"></i> Casas de Banho
+                    </h3>
+                    <input type="hidden" name="min_bathrooms" id="min_bathrooms" value="{{ request('min_bathrooms') }}">
+                    <div class="grid grid-cols-4 gap-2 filter-group" data-filter-name="min_bathrooms">
+                        <button data-value="" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">All</button>
+                        <button data-value="1" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '1' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">1+</button>
+                        <button data-value="2" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '2' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">2+</button>
+                        <button data-value="3" class="py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('min_bathrooms') == '3' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">3+</button>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
+                        <i class="bi bi-building-fill-check mr-2 text-secondary"></i> Estado
+                    </h3>
+                    <input type="hidden" name="condition" id="condition" value="{{ request('condition') }}">
+                    <div class="space-y-2 filter-group" data-filter-name="condition">
+                        <button data-value="" class="w-full py-2 px-3 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == null ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Qualquer</button>
+                        <button data-value="new" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'new' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Novo/Renovado</button>
+                        <button data-value="used" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'used' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Usado</button>
+                        <button data-value="to_renovate" class="w-full py-2 px-4 border rounded-lg font-medium hover:bg-secondary transition {{ request('condition') == 'to_renovate' ? 'bg-secondary text-white border-secondary' : 'border-gray-300' }}">Para Renovar</button>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="w-full h-px bg-gray-200 my-6"></div>
+
+                <!-- Comodidades -->
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-secondary mb-4 flex items-center">
+                        <i class="bi bi-sliders2-vertical mr-2 text-secondary"></i> Comodidades
+                    </h3>
+                    <div class="grid grid-cols-1 gap-3">
+                        @foreach (['Ar Condicionado', 'Garagem', 'Jardim', 'Piscina', 'Painéis Solares', 'Mobilidade Reduzida'] as $amenity)
+                            <div
+                                class="flex items-center bg-gray-50 p-3 rounded-lg border border-gray-200 hover:border-secondary hover:bg-indigo-50 transition">
+                                <div class="w-5 mr-3 flex items-center justify-center">
+                                    <input type="checkbox" id="{{ Str::slug($amenity) }}"
+                                           class="h-5 w-5 text-secondary rounded border-gray-300 focus:ring-secondary">
+                                </div>
+                                <label for="{{ Str::slug($amenity) }}" class="text-sm font-medium">{{ $amenity }}</label>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
@@ -324,8 +355,7 @@
 </div>
 
 <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.filter-group').forEach(group => {
             const inputName = group.dataset.filterName;
             const hiddenInput = document.getElementById(inputName);

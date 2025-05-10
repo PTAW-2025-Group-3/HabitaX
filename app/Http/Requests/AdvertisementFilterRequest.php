@@ -20,12 +20,6 @@ class AdvertisementFilterRequest extends FormRequest
             'time_period' => 'nullable|in:24h,3d,7d,30d',
             'min_price' => 'nullable|numeric|min:0',
             'max_price' => 'nullable|numeric|min:0',
-            'min_area' => 'nullable|numeric|min:0',
-            'max_area' => 'nullable|numeric|min:0',
-            'min_bedrooms' => 'nullable|integer|min:0',
-            'max_bedrooms' => 'nullable|integer|min:0',
-            'min_bathrooms' => 'nullable|integer|min:0',
-            'max_bathrooms' => 'nullable|integer|min:0',
             'sort' => 'nullable|in:recent,price_asc,price_desc',
             'district' => 'nullable|exists:districts,id',
             'municipality' => 'nullable|exists:municipalities,id',
@@ -51,22 +45,52 @@ class AdvertisementFilterRequest extends FormRequest
             $query->where('price', '<=', $this->max_price);
         }
 
-        if ($this->filled('min_area')) {
-            $query->whereHas('property', function ($q) {
-                $q->where('total_area', '>=', (float)$this->min_area);
-            });
-        }
-
-        if ($this->filled('max_area')) {
-            $query->whereHas('property', function ($q) {
-                $q->where('total_area', '<=', (float)$this->max_area);
-            });
-        }
-
         if ($this->filled('property_type')) {
             $query->whereHas('property', function ($q) {
                 $q->where('property_type_id', $this->property_type);
             });
+        }
+
+        // Dynamic attribute filters
+        if ($this->filled('attributes')) {
+            foreach ($this->attributes as $attributeId => $values) {
+                $query->whereHas('property.attributes', function ($q) use ($attributeId, $values) {
+                    $q->where('attribute_id', $attributeId);
+
+                    // Handle range filters for numeric values
+                    if (isset($values['min_value'])) {
+                        $q->where('value', '>=', $values['min_value']);
+                    }
+
+                    if (isset($values['max_value'])) {
+                        $q->where('value', '<=', $values['max_value']);
+                    }
+
+                    // Handle date range filters
+                    if (isset($values['start_date'])) {
+                        $q->whereDate('value', '>=', $values['start_date']);
+                    }
+
+                    if (isset($values['end_date'])) {
+                        $q->whereDate('value', '<=', $values['end_date']);
+                    }
+
+                    // Handle boolean filters
+                    if (isset($values['value']) && is_bool($values['value'])) {
+                        $q->where('value', $values['value'] ? '1' : '0');
+                    }
+
+                    // Handle multi-select filters (checkboxes)
+                    if (isset($values['value']) && is_array($values['value'])) {
+                        $q->whereIn('value', $values['value']);
+                    }
+
+                    // Handle single-select filters
+                    if (isset($values['value']) && !is_array($values['value'])) {
+                        $q->where('value', $values['value']);
+                    }
+                });
+            }
         }
 
         if ($this->filled('district')) {
@@ -95,36 +119,6 @@ class AdvertisementFilterRequest extends FormRequest
                 case '7d':  $query->where('advertisements.created_at', '>=', $now->subDays(7)); break;
                 case '30d': $query->where('advertisements.created_at', '>=', $now->subDays(30)); break;
             }
-        }
-
-        // Filtros de Quartos (ID 1)
-        if ($this->filled('min_bedrooms')) {
-            $query->whereHas('property.parameters', function ($q) {
-                $q->where('attribute_id', 1) // ID do atributo de quartos
-                ->where('int_value', '>=', (int)$this->min_bedrooms);
-            });
-        }
-
-        if ($this->filled('max_bedrooms')) {
-            $query->whereHas('property.parameters', function ($q) {
-                $q->where('attribute_id', 1) // ID do atributo de quartos
-                ->where('int_value', '<=', (int)$this->max_bedrooms);
-            });
-        }
-
-        // Filtros de Casas de Banho (ID 2)
-        if ($this->filled('min_bathrooms')) {
-            $query->whereHas('property.parameters', function ($q) {
-                $q->where('attribute_id', 2) // ID do atributo de casas de banho
-                ->where('int_value', '>=', (int)$this->min_bathrooms);
-            });
-        }
-
-        if ($this->filled('max_bathrooms')) {
-            $query->whereHas('property.parameters', function ($q) {
-                $q->where('attribute_id', 2) // ID do atributo de casas de banho
-                ->where('int_value', '<=', (int)$this->max_bathrooms);
-            });
         }
 
         // Ordenação

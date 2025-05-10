@@ -21,6 +21,18 @@ class PropertyType extends Model
         return $this->hasMany(PropertyTypeAttribute::class);
     }
 
+    public function filterAttributes()
+    {
+        return $this->attributes()
+            ->wherePivot('show_in_filter', true);
+    }
+
+    public function listAttributes()
+    {
+        return $this->attributes()
+            ->wherePivot('show_in_list', true);
+    }
+
     public function attributes()
     {
         return $this->belongsToMany(PropertyAttribute::class, 'property_type_attributes', 'property_type_id', 'attribute_id')

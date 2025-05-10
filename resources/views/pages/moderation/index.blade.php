@@ -21,6 +21,12 @@
             @include('pages.moderation.verification-advertiser')
 
             @include('pages.moderation.suspended-users')
+
+            <div>
+                <a href="{{ route('contact-us.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Pedidos de contacto
+                </a>
+            </div>
         </div>
     </div>
     <script>

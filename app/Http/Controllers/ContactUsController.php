@@ -9,7 +9,7 @@ class ContactUsController extends Controller
 {
     public function index()
     {
-        $contacts = ContactUs::orderBy('created_at', 'desc')
+        $contacts = ContactUs::orderBy('updated_at', 'desc')
             ->with('processed_by')
             ->paginate(10);
         return view('contact-us.index', compact('contacts'));
