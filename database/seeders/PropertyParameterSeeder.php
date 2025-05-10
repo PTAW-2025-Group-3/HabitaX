@@ -24,7 +24,7 @@ class PropertyParameterSeeder extends Seeder
             foreach ($propertyTypeAttributes as $attribute) {
                 $attributeId = $attribute->attribute_id;
 
-                switch ($attribute->property_attribute->type) {
+                switch ($attribute->attribute->type) {
                     case AttributeType::TEXT:
                     case AttributeType::LONG_TEXT:
                         PropertyParameter::create([

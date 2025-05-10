@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GlobalVariable;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use App\Models\PropertyTypeAttribute;
@@ -107,6 +108,8 @@ class PropertyTypeController extends Controller
 
     public function editAttributes(Request $request, $id)
     {
+        $maxFilter = GlobalVariable::where('code', 'max_attributes_filter')->value('value');
+        $maxList = GlobalVariable::where('code', 'max_attributes_list')->value('value');
         $propertyType = PropertyType::with('typeAttributes')->findOrFail($id);
         $allAttributes = PropertyAttribute::orderBy('type')->get();
         $propertyTypeAttributes = $propertyType->typeAttributes
@@ -118,7 +121,7 @@ class PropertyTypeController extends Controller
             ->toArray();
 
         return view('property-types.attributes', compact(
-            'propertyType', 'allAttributes', 'propertyTypeAttributes'
+            'maxFilter', 'maxList', 'propertyType', 'allAttributes', 'propertyTypeAttributes'
         ));
     }
 

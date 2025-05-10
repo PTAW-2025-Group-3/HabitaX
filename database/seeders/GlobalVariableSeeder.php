@@ -21,7 +21,7 @@ class GlobalVariableSeeder extends Seeder
             ],
             [
                 'name' => 'Maximo de atributos em listagem',
-                'code' => 'max_attributes_listing',
+                'code' => 'max_attributes_list',
                 'value' => 5,
                 'description' => 'Numero maximo de atributos permitidos em listagem de anúncios.',
             ],

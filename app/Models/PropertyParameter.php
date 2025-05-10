@@ -78,6 +78,21 @@ class PropertyParameter extends Model
         }
     }
 
+    public function getValue($type): mixed
+    {
+        return match ($type) {
+            AttributeType::TEXT,
+            AttributeType::LONG_TEXT => $this->text_value,
+            AttributeType::INT => $this->int_value,
+            AttributeType::FLOAT => $this->float_value,
+            AttributeType::BOOLEAN => $this->boolean_value,
+            AttributeType::SELECT_SINGLE => PropertyAttributeOption::find($this->select_value)->name ?? null,
+            AttributeType::SELECT_MULTIPLE => null,
+            AttributeType::DATE => $this->date_value?->format('d-m-Y'),
+            default => $this
+        };
+    }
+
     public function property()
     {
         return $this->belongsTo(Property::class, 'property_id');

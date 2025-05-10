@@ -204,12 +204,13 @@
                 </div>
             </div>
 
-            <!-- Divider -->
-            <div class="w-full h-px bg-gray-200 my-6"></div>
-
             <!-- Dynamic filters -->
             @if(isset($type))
-                <div class="mb-6">
+                <!-- Divider -->
+                <div class="w-full h-px bg-gray-200 my-6"></div>
+
+                <!-- Filtros por tipo -->
+                <div class="mb-6 text-gray-secondary font-semibold">
                     Filtros específicos
                 </div>
                 @php

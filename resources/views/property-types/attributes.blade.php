@@ -88,7 +88,8 @@
                                            id="attr_{{ $attribute->id }}"
                                         {{ isset($propertyTypeAttributes[$attribute->id]) ? 'checked' : '' }}>
                                 </td>
-                                @if($attribute->is_required && ($attribute->type !== AttributeType::TEXT || $attribute->type !== AttributeType::LONG_TEXT))
+                                @if($attribute->is_required &&
+                                ($attribute->type !== AttributeType::TEXT && $attribute->type !== AttributeType::LONG_TEXT && $attribute->type !== AttributeType::SELECT_MULTIPLE))
                                     <td class="show_options p-4" hidden>
                                         <div class="flex mb-2">
                                             <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
@@ -133,10 +134,14 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const checkboxes = document.querySelectorAll('.attribute-checkbox');
+            const maxFilters = {{ $maxFilter }};
+            const maxList = {{ $maxList }};
 
+            const checkboxes = document.querySelectorAll('.attribute-checkbox');
             const filter = document.getElementById('filter');
             const rows = document.querySelectorAll('#attribute-table tr');
+            const filterCheckboxes = document.querySelectorAll('input[name$="[show_in_filter]"]');
+            const listCheckboxes = document.querySelectorAll('input[name$="[show_in_list]"]');
 
             filter.addEventListener('change', () => {
                 const filterValue = filter.value;
@@ -173,6 +178,23 @@
                     });
                 });
             });
+
+            // Enforce limits on the number of selected checkboxes
+            function enforceLimit(checkboxes, max, type) {
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+
+                        if (selectedCount > max) {
+                            checkbox.checked = false;
+                            alert(`You can only select up to ${max} attributes for ${type}.`);
+                        }
+                    });
+                });
+            }
+
+            enforceLimit(filterCheckboxes, maxFilters, 'filters');
+            enforceLimit(listCheckboxes, maxList, 'list');
         });
     </script>
 @endpush

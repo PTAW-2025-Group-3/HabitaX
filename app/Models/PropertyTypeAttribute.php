@@ -26,7 +26,7 @@ class PropertyTypeAttribute extends Model
         return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
-    public function property_attribute()
+    public function attribute()
     {
         return $this->belongsTo(PropertyAttribute::class, 'attribute_id');
     }
