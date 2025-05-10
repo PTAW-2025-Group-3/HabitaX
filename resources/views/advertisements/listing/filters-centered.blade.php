@@ -19,7 +19,7 @@
             <h2 class="font-bold text-2xl mb-6 text-primary text-center">Filtros</h2>
 
             @if(request('property_type') || request('district') || request('municipality') || request('parish') ||
-                request('time_period') || request('min_price') || request('max_price') || request('min_area') || request('max_area'))
+                request('time_period') || request('min_price') || request('max_price'))
                 <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
                     <h4 class="font-medium text-sm text-blue-800 mb-2">Filtros ativos:</h4>
                     <div class="flex flex-wrap gap-2">
@@ -94,38 +94,20 @@
 
                         @if(request('min_price') || request('max_price'))
                             <span class="inline-flex items-center px-2 py-1 bg-white rounded-full text-xs font-medium text-blue-700 border border-blue-200">
-                    <span>
-                        Preço:
-                        @if(request('min_price') && request('max_price'))
-                            {{ number_format(request('min_price'), 0, ',', '.') }}€ - {{ number_format(request('max_price'), 0, ',', '.') }}€
-                        @elseif(request('min_price'))
-                            > {{ number_format(request('min_price'), 0, ',', '.') }}€
-                        @else
-                            < {{ number_format(request('max_price'), 0, ',', '.') }}€
-                        @endif
-                    </span>
-                    <a href="{{ route('advertisements.index', request()->except(['min_price', 'max_price'])) }}" class="ml-1 text-gray-500 hover:text-red-500">
-                        <i class="bi bi-x-circle"></i>
-                    </a>
-                </span>
-                        @endif
-
-                        @if(request('min_area') || request('max_area'))
-                            <span class="inline-flex items-center px-2 py-1 bg-white rounded-full text-xs font-medium text-blue-700 border border-blue-200">
-                    <span>
-                        Área:
-                        @if(request('min_area') && request('max_area'))
-                            {{ request('min_area') }}m² - {{ request('max_area') }}m²
-                        @elseif(request('min_area'))
-                            > {{ request('min_area') }}m²
-                        @else
-                            < {{ request('max_area') }}m²
-                        @endif
-                    </span>
-                    <a href="{{ route('advertisements.index', request()->except(['min_area', 'max_area'])) }}" class="ml-1 text-gray-500 hover:text-red-500">
-                        <i class="bi bi-x-circle"></i>
-                    </a>
-                </span>
+                                <span>
+                                    Preço:
+                                    @if(request('min_price') && request('max_price'))
+                                        {{ number_format(request('min_price'), 0, ',', '.') }}€ - {{ number_format(request('max_price'), 0, ',', '.') }}€
+                                    @elseif(request('min_price'))
+                                        > {{ number_format(request('min_price'), 0, ',', '.') }}€
+                                    @else
+                                        < {{ number_format(request('max_price'), 0, ',', '.') }}€
+                                    @endif
+                                </span>
+                                <a href="{{ route('advertisements.index', request()->except(['min_price', 'max_price'])) }}" class="ml-1 text-gray-500 hover:text-red-500">
+                                    <i class="bi bi-x-circle"></i>
+                                </a>
+                            </span>
                         @endif
                     </div>
                 </div>
@@ -210,32 +192,13 @@
                 </h3>
                 <div class="grid grid-cols-2 gap-3">
                     <div class="relative">
-                        <input type="number" name="min_price" placeholder="Mínimo (€)"
+                        <input type="number" name="min_price" placeholder="Mínimo"
                                value="{{ request('min_price') }}"
                                class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                     </div>
                     <div class="relative">
-                        <input type="number" name="max_price" placeholder="Máximo (€)"
+                        <input type="number" name="max_price" placeholder="Máximo"
                                value="{{ request('max_price') }}"
-                               class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tamanho -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
-                    <i class="bi bi-arrows-expand mr-2 text-secondary"></i> Tamanho
-                </h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="relative">
-                        <input type="number" name="min_area" placeholder="Mínimo (m²)"
-                               value="{{ request('min_area') }}"
-                               class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="relative">
-                        <input type="number" name="max_area" placeholder="Máximo (m²)"
-                               value="{{ request('max_area') }}"
                                class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg">
                     </div>
                 </div>
@@ -252,8 +215,8 @@
                 @php
                     $path = 'advertisements.listing.attributes.';
                     $attributeIncludes = [
-                        AttributeType::INT->value => $path . 'number',
-                        AttributeType::FLOAT->value => $path . 'number',
+                        AttributeType::INT->value => $path . 'int',
+                        AttributeType::FLOAT->value => $path . 'float',
                         AttributeType::BOOLEAN->value => $path . 'boolean',
                         AttributeType::DATE->value => $path . 'date',
                         AttributeType::SELECT_SINGLE->value => $path . 'select-single',
@@ -262,7 +225,7 @@
                 @endphp
                 @foreach($type->filterAttributes as $attribute)
                     @if(isset($attributeIncludes[$attribute->type->value]))
-                        <div class="mb-4">
+                        <div class="mb-6">
                             @include($attributeIncludes[$attribute->type->value], [
                                 'attribute' => $attribute
                             ])
@@ -272,7 +235,7 @@
             @endif
 
             <!-- obsolete -->
-            <div hidden>
+            <div style="display: none">
                 <!-- Quartos -->
                 <div class="mb-6">
                     <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
@@ -344,7 +307,7 @@
                 <button type="submit" class="w-full py-3 btn-secondary">
                     <i class="bi bi-funnel-fill mr-2"></i> Aplicar Filtros
                 </button>
-                @if(request()->hasAny(['time_period', 'min_price', 'max_price', 'min_area', 'max_area']))
+                @if(request()->hasAny(['time_period', 'min_price', 'max_price', 'attributes']))
                     <a href="{{ route('advertisements.index') }}" class="mt-2 block text-center text-sm text-secondary hover:underline">
                         Limpar filtros
                     </a>

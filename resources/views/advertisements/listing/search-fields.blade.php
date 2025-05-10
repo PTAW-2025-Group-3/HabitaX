@@ -9,12 +9,6 @@
     @if(request('max_price'))
         <input type="hidden" name="max_price" value="{{ request('max_price') }}">
     @endif
-    @if(request('min_area'))
-        <input type="hidden" name="min_area" value="{{ request('min_area') }}">
-    @endif
-    @if(request('max_area'))
-        <input type="hidden" name="max_area" value="{{ request('max_area') }}">
-    @endif
 
     <input type="hidden" name="transaction_type" id="transactionTypeInput" value="{{ request('transaction_type', 'sale') }}">
     {{--    Toggle Buttons--}}

@@ -23,7 +23,8 @@ class AdvertisementFilterRequest extends FormRequest
             'sort' => 'nullable|in:recent,price_asc,price_desc',
             'district' => 'nullable|exists:districts,id',
             'municipality' => 'nullable|exists:municipalities,id',
-            'parish' => 'nullable|exists:parishes,id'
+            'parish' => 'nullable|exists:parishes,id',
+            'attributes' => 'nullable|array',
         ];
     }
 
@@ -52,42 +53,46 @@ class AdvertisementFilterRequest extends FormRequest
         }
 
         // Dynamic attribute filters
-        if ($this->filled('attributes')) {
-            foreach ($this->attributes as $attributeId => $values) {
-                $query->whereHas('property.attributes', function ($q) use ($attributeId, $values) {
+        if ($this->has('attributes') && is_array($this->input('attributes'))) {
+            foreach ($this->input('attributes') as $attributeId => $data) {
+                $query->whereHas('property.parameters', function ($q) use ($attributeId, $data) {
                     $q->where('attribute_id', $attributeId);
 
-                    // Handle range filters for numeric values
-                    if (isset($values['min_value'])) {
-                        $q->where('value', '>=', $values['min_value']);
+                    if (isset($data['min_int'])) {
+                        $q->where('int_value', '>=', $data['min_int']);
+                    }
+                    if (isset($data['max_int'])) {
+                        $q->where('int_value', '<=', $data['max_int']);
                     }
 
-                    if (isset($values['max_value'])) {
-                        $q->where('value', '<=', $values['max_value']);
+                    if (isset($data['min_float'])) {
+                        $q->where('float_value', '>=', $data['min_float']);
+                    }
+                    if (isset($data['max_float'])) {
+                        $q->where('float_value', '<=', $data['max_float']);
                     }
 
-                    // Handle date range filters
-                    if (isset($values['start_date'])) {
-                        $q->whereDate('value', '>=', $values['start_date']);
+                    if (isset($data['boolean'])) {
+                        $q->where('boolean_value', $data['boolean']);
                     }
 
-                    if (isset($values['end_date'])) {
-                        $q->whereDate('value', '<=', $values['end_date']);
+                    if (isset($data['start_date'])) {
+                        $q->whereDate('date_value', '>=', $data['start_date']);
+                    }
+                    if (isset($data['end_date'])) {
+                        $q->whereDate('date_value', '<=', $data['end_date']);
                     }
 
-                    // Handle boolean filters
-                    if (isset($values['value']) && is_bool($values['value'])) {
-                        $q->where('value', $values['value'] ? '1' : '0');
+                    if (isset($data['select_single'])) {
+                        $q->where('select_value', $data['select_single']);
                     }
 
-                    // Handle multi-select filters (checkboxes)
-                    if (isset($values['value']) && is_array($values['value'])) {
-                        $q->whereIn('value', $values['value']);
-                    }
+                    if (isset($data['select_multiple']) && is_array($data['select_multiple']) && count($data['select_multiple']) > 0) {
+                        $selectedOptionIds = $data['select_multiple'];
 
-                    // Handle single-select filters
-                    if (isset($values['value']) && !is_array($values['value'])) {
-                        $q->where('value', $values['value']);
+                        $q->whereHas('options', function ($subQ) use ($selectedOptionIds) {
+                            $subQ->whereIn('option_id', $selectedOptionIds);
+                        }, '=', count($selectedOptionIds));
                     }
                 });
             }

@@ -7,10 +7,10 @@
             <div class="flex items-center">
                 <input type="checkbox"
                        id="option_{{ $option->id }}"
-                       name="attributes[{{ $attribute->id }}][value][]"
+                       name="attributes[{{ $attribute->id }}][select_multiple][]"
                        class="h-5 w-5 text-secondary rounded border-gray-300 focus:ring-secondary"
                        value="{{ $option->id }}"
-                       {{ in_array($option->id, (array) request()->input('attributes.' . $attribute->id . '.value', [])) ? 'checked' : '' }}>
+                       {{ in_array($option->id, (array) request()->input('attributes.' . $attribute->id . '.select_multiple', [])) ? 'checked' : '' }}>
                 <label for="option_{{ $option->id }}" class="ml-2 text-sm font-medium">{{ $option->name }}</label>
             </div>
         @endforeach

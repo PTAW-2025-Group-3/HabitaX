@@ -12,6 +12,7 @@ use App\Models\PropertyParameter;
 use App\Models\PropertyType;
 use App\Models\District;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdvertisementController extends Controller
 {
@@ -30,8 +31,11 @@ class AdvertisementController extends Controller
             ->whereHas('creator', function($q) {
                 $q->where('state', 'active');
             })
-            ->with('property')
+            ->with('property.parameters.attribute')
+            ->with('property.parameters.options')
             ->select('advertisements.*');
+
+        Log::debug('Request attributes:', $request->input('attributes', []));
 
         // Aplicar filtros (assumindo que o AdvertisementFilterRequest já os aplica corretamente)
         $query = $request->applyFilters($query);

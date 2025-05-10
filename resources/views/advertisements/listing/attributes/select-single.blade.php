@@ -4,12 +4,12 @@
     </h3>
     <select
         id="select_single_{{ $attribute->id }}"
-        name="attributes[{{ $attribute->id }}][value]"
+        name="attributes[{{ $attribute->id }}][select_single]"
         class="w-full border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary">
-        <option value="" disabled selected>Select an option</option>
+        <option value="" selected>Selecione opção</option>
         @foreach($attribute->options as $option)
             <option value="{{ $option->id }}"
-                {{ request()->input('attributes.' . $attribute->id . '.value') == $option->id ? 'selected' : '' }}>
+                {{ request()->input('attributes.' . $attribute->id . '.select_single') == $option->id ? 'selected' : '' }}>
                 {{ $option->name }}
             </option>
         @endforeach
