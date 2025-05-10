@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DenunciationController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\GlobalVariableController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\PropertyAttributeController;
@@ -169,6 +170,9 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         ->name('attribute-groups.attributes.update');
     Route::delete('/admin/attribute-groups/{id}', [PropertyAttributeGroupController::class, 'destroy'])
         ->name('attribute-groups.destroy');
+
+    Route::get('/admin/global-variables', [GlobalVariableController::class, 'index'])->name('global-variables.index');
+    Route::put('/admin/global-variables/{id}', [GlobalVariableController::class, 'updateValue'])->name('global-variables.update-value');
 
     // Distritos, Municípios e Freguesias
 });

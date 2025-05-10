@@ -1,3 +1,4 @@
+@php use App\Enums\AttributeType; @endphp
 @extends('layout.app')
 
 @section('title', 'Atributos do Tipo de Propriedade')
@@ -12,9 +13,11 @@
         </div>
 
         <div class="mt-12 animate-fade-in">
-            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de Propriedade: {{ $propertyType->name }}</h2>
+            <h2 class="text-xl font-bold text-primary mb-4">Gerir Atributos do Tipo de
+                Propriedade: {{ $propertyType->name }}</h2>
 
-            <form id="attribute-form" method="POST" action="{{ route('property-types.attributes.update', $propertyType->id) }}" class="space-y-4">
+            <form id="attribute-form" method="POST"
+                  action="{{ route('property-types.attributes.update', $propertyType->id) }}" class="space-y-4">
                 @csrf
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
                     <div class="relative flex-grow md:max-w-xl">
@@ -28,7 +31,8 @@
                                 <option value="selected">Atributos Selecionados</option>
                                 <option value="not-selected">Atributos Não Selecionados</option>
                             </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                                 <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                             </div>
                         </div>
@@ -75,7 +79,7 @@
                                     {{ $attribute->type }}
                                 </td>
                                 <td class="p-4">
-                                    {{ $attribute->description }}
+                                    {{ \Illuminate\Support\Str::limit($attribute->description, 50, '...') }}
                                 </td>
                                 <td class="p-4 text-center">
                                     <input type="checkbox" name="attributes[{{ $attribute->id }}][selected]"
@@ -84,24 +88,30 @@
                                            id="attr_{{ $attribute->id }}"
                                         {{ isset($propertyTypeAttributes[$attribute->id]) ? 'checked' : '' }}>
                                 </td>
-                                <td id="show_options" class="p-4" hidden>
-                                    <div class="flex mb-2">
-                                        <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
-                                               name="attributes[{{ $attribute->id }}][show_in_list]"
-                                               value="1"
-                                               id="list_{{ $attribute->id }}"
-                                            {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_list'] ? 'checked' : '' }}>
-                                        <label class="ml-2" for="list_{{ $attribute->id }}">Listagem</label>
-                                    </div>
-                                    <div class="flex">
-                                        <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
-                                               name="attributes[{{ $attribute->id }}][show_in_filter]"
-                                               value="1"
-                                               id="filter_{{ $attribute->id }}"
-                                            {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_filter'] ? 'checked' : '' }}>
-                                        <label class="ml-2" for="filter_{{ $attribute->id }}">Filtro</label>
-                                    </div>
-                                </td>
+                                @if($attribute->is_required && ($attribute->type !== AttributeType::TEXT || $attribute->type !== AttributeType::LONG_TEXT))
+                                    <td class="show_options p-4" hidden>
+                                        <div class="flex mb-2">
+                                            <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                                   name="attributes[{{ $attribute->id }}][show_in_list]"
+                                                   value="1"
+                                                   id="list_{{ $attribute->id }}"
+                                                {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_list'] ? 'checked' : '' }}>
+                                            <label class="ml-2" for="list_{{ $attribute->id }}">Listagem</label>
+                                        </div>
+                                        <div class="flex">
+                                            <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                                   name="attributes[{{ $attribute->id }}][show_in_filter]"
+                                                   value="1"
+                                                   id="filter_{{ $attribute->id }}"
+                                                {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_filter'] ? 'checked' : '' }}>
+                                            <label class="ml-2" for="filter_{{ $attribute->id }}">Filtro</label>
+                                        </div>
+                                    </td>
+                                @else
+                                    <td class="p-4 text-gray-400">
+                                        Não aplicável
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
@@ -109,7 +119,8 @@
                 </div>
 
                 <div class="flex justify-end mt-6">
-                    <button type="submit" id="submit-button" class="btn-primary px-6 py-3 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button type="submit" id="submit-button"
+                            class="btn-primary px-6 py-3 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="bi bi-save mr-2"></i>
                         Guardar Alterações
                     </button>
@@ -146,18 +157,20 @@
 
             // Show/Hide options based on checkbox state
             checkboxes.forEach(checkbox => {
-                const showOptions = checkbox.closest('tr').querySelector('#show_options');
-                if (checkbox.checked) {
-                    showOptions.removeAttribute('hidden');
-                }
-
-                // Add event listener for changes
-                checkbox.addEventListener('change', function () {
-                    if (this.checked) {
-                        showOptions.removeAttribute('hidden');
-                    } else {
-                        showOptions.setAttribute('hidden', true);
+                const showOptions = checkbox.closest('tr').querySelectorAll('.show_options');
+                showOptions.forEach(option => {
+                    if (checkbox.checked) {
+                        option.removeAttribute('hidden');
                     }
+
+                    // Add event listener for changes
+                    checkbox.addEventListener('change', function () {
+                        if (this.checked) {
+                            option.removeAttribute('hidden');
+                        } else {
+                            option.setAttribute('hidden', true);
+                        }
+                    });
                 });
             });
         });

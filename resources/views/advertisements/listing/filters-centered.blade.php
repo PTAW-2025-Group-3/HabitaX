@@ -209,8 +209,8 @@
 
             <!-- Dynamic filters -->
             @if(isset($type))
-                <div>
-                    Filtros dinâmicos
+                <div class="mb-6">
+                    Filtros específicos
                 </div>
                 @php
                     $path = 'advertisements.listing.attributes.';

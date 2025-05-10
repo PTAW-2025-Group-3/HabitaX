@@ -108,7 +108,7 @@ class PropertyTypeController extends Controller
     public function editAttributes(Request $request, $id)
     {
         $propertyType = PropertyType::with('typeAttributes')->findOrFail($id);
-        $allAttributes = PropertyAttribute::all();
+        $allAttributes = PropertyAttribute::orderBy('type')->get();
         $propertyTypeAttributes = $propertyType->typeAttributes
             ->keyBy('attribute_id')
             ->map(fn($pta) => [

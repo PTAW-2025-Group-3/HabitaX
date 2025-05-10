@@ -16,7 +16,7 @@ class PropertyTypeAttributeSeeder extends Seeder
 
         foreach ($propertyTypes as $propertyType) {
             $min = max(1, floor($propertyAttributes->count() * 0.3));
-            $max = max($min, $propertyAttributes->count());
+            $max = max($min, $propertyAttributes->count() * 0.6);
             $attributes = $propertyAttributes->random(rand($min, $max))->pluck('id');
 
             foreach ($attributes as $attributeId) {
