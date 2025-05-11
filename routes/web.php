@@ -107,6 +107,15 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/moderation/suspended-users/ajax', [ModerationController::class, 'ajaxSuspendedUsers'])
         ->name('moderation.suspended-users.ajax');
 
+    Route::get('/moderation/verification-advertisers', [VerificationAdvertiserController::class, 'index'])
+        ->name('verification-advertiser.index');
+    Route::get('/moderation/verification-advertisers/ajax', [VerificationAdvertiserController::class, 'ajaxVerifications'])
+        ->name('verification-advertiser.ajax');
+    Route::get('/moderation/verification-advertisers/{id}', [VerificationAdvertiserController::class, 'show'])
+        ->name('verification-advertiser.show');
+    Route::post('/moderation/verification-advertisers/{id}/update-state', [VerificationAdvertiserController::class, 'updateState'])
+        ->name('verification-advertiser.update-state');
+
     Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/moderation/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
     Route::put('/moderation/contact-us/{id}/mark-as-read', [ContactUsController::class, 'markAsRead'])->name('contact-us.mark-as-read');

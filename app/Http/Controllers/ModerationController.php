@@ -29,6 +29,11 @@ class ModerationController extends Controller
 
         $users = User::orderBy('updated_at', 'desc')->paginate(5);
 
+        // Adicionando dados de verificações de anunciantes
+        $verifications = \App\Models\AdvertiserVerification::with('submitter')
+            ->orderBy('submitted_at', 'desc')
+            ->paginate(5);
+
         // Preparar últimos 6 meses
         $suspendedUsersData = [];
         $reportedAdsData = [];
@@ -100,6 +105,7 @@ class ModerationController extends Controller
             'reasonsData' => $reasonsData,
             'totalDenunciations' => $totalDenunciations,
             'users' => $users,
+            'verifications' => $verifications, // Adicionando esta linha para resolver o problema
         ]);
     }
 

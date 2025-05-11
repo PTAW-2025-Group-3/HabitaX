@@ -1,4 +1,15 @@
 <div class="mt-12 animate-fade-in">
+    @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded shadow-sm flash-message">
+            <p>{{ session('success') }}</p>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm flash-message">
+            <p>{{ session('error') }}</p>
+        </div>
+    @endif
     <h2 class="text-xl font-bold text-primary mb-4">Verificação de Anunciantes</h2>
 
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
@@ -26,16 +37,24 @@
 
     <!-- Filtros de estado -->
     <div class="flex flex-wrap gap-2 mb-4">
-        <button class="px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-sm font-medium">
+        <button
+            class="verification-filter-btn px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-sm font-medium"
+            data-filter="all">
             Todos
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
+        <button
+            class="verification-filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="pending">
             Por Aprovar
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
+        <button
+            class="verification-filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="approved">
             Aprovados
         </button>
-        <button class="px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
+        <button
+            class="verification-filter-btn px-4 py-2 bg-white text-gray-600 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+            data-filter="rejected">
             Rejeitados
         </button>
     </div>
@@ -65,129 +84,291 @@
                         Data de Pedido<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
-                <th class="p-4">Documentos</th>
+                <th class="p-4">Tipo de Documentação</th>
                 <th class="p-4">Status</th>
                 <th class="p-4">Ações</th>
             </tr>
             </thead>
             <tbody id="verificationTableBody">
-            <tr class="border-t hover:bg-gray-50 transition verification-row"
-                data-id="5644"
-                data-name="joão silva"
-                data-contact="+351 912 345 678"
-                data-date="1710682500"
-                data-state="pending">
-                <td class="p-4">#5644</td>
-                <td class="p-4 font-medium">João Silva</td>
-                <td class="p-4 text-gray-600">+351 912 345 678</td>
-                <td class="p-4 text-gray-500">15/03/2025 - 14:55</td>
-                <td class="p-4">Sim</td>
-                <td class="p-4"><span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">Por Aprovar</span></td>
-                <td class="p-4"><a href="{{ route('verification-advertiser.show', 5644) }}" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a></td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition verification-row"
-                data-id="6112"
-                data-name="maria santos"
-                data-contact="+351 963 123 456"
-                data-date="1710760380"
-                data-state="pending">
-                <td class="p-4">#6112</td>
-                <td class="p-4 font-medium">Maria Santos</td>
-                <td class="p-4 text-gray-600">+351 963 123 456</td>
-                <td class="p-4 text-gray-500">16/03/2025 - 12:33</td>
-                <td class="p-4">Sim</td>
-                <td class="p-4"><span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">Por Aprovar</span></td>
-                <td class="p-4"><a href="#" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a></td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition verification-row"
-                data-id="6141"
-                data-name="ricardo lopes"
-                data-contact="+351 917 654 321"
-                data-date="1710786180"
-                data-state="approved">
-                <td class="p-4">#6141</td>
-                <td class="p-4 font-medium">Ricardo Lopes</td>
-                <td class="p-4 text-gray-600">+351 917 654 321</td>
-                <td class="p-4 text-gray-500">17/03/2025 - 09:43</td>
-                <td class="p-4">Sim</td>
-                <td class="p-4"><span class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">Aprovado</span></td>
-                <td class="p-4"><a href="#" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a></td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50 transition verification-row"
-                data-id="6535"
-                data-name="sofia almeida"
-                data-contact="+351 918 222 333"
-                data-date="1710859560"
-                data-state="rejected">
-                <td class="p-4">#6535</td>
-                <td class="p-4 font-medium">Sofia Almeida</td>
-                <td class="p-4 text-gray-600">+351 918 222 333</td>
-                <td class="p-4 text-gray-500">18/03/2025 - 15:46</td>
-                <td class="p-4">Sim</td>
-                <td class="p-4"><span class="px-2 py-1 rounded-full bg-red-100 text-red-800 text-xs font-medium">Rejeitado</span></td>
-                <td class="p-4"><a href="#" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a></td>
-            </tr>
+            @if(isset($verifications))
+                @forelse($verifications as $verification)
+                    <tr class="border-t hover:bg-gray-50 transition verification-row"
+                        data-id="{{ $verification->id }}"
+                        data-name="{{ strtolower($verification->submitter->name ?? '') }}"
+                        data-contact="{{ $verification->submitter->telephone ?? '' }}"
+                        data-date="{{ $verification->submitted_at ? $verification->submitted_at->timestamp : '' }}"
+                        data-state="{{ $verification->verification_advertiser_state === 0 ? 'pending' : ($verification->verification_advertiser_state === 1 ? 'approved' : 'rejected') }}">
+                        <td class="p-4">#{{ $verification->id }}</td>
+                        <td class="p-4 font-medium">{{ $verification->submitter->name ?? 'N/A' }}</td>
+                        <td class="p-4 text-gray-600">{{ $verification->submitter->telephone ?? 'N/A' }}</td>
+                        <td class="p-4 text-gray-500">
+                            {{ $verification->submitted_at ? $verification->submitted_at->format('d/m/Y - H:i') : 'N/A' }}
+                        </td>
+                        <td class="p-4">{{ $verification->identifier_type ?? 'N/A' }}</td>
+                        <td class="p-4">
+                            @php
+                                $stateClass = '';
+                                $stateText = '';
+                                if($verification->verification_advertiser_state === 0) {
+                                    $stateClass = 'bg-yellow-100 text-yellow-800';
+                                    $stateText = 'Por Aprovar';
+                                } elseif($verification->verification_advertiser_state === 1) {
+                                    $stateClass = 'bg-green-100 text-green-800';
+                                    $stateText = 'Aprovado';
+                                } else {
+                                    $stateClass = 'bg-red-100 text-red-800';
+                                    $stateText = 'Rejeitado';
+                                }
+                            @endphp
+                            <span class="px-2 py-1 rounded-full text-xs font-medium {{ $stateClass }}">
+                    {{ $stateText }}
+                </span>
+                        </td>
+                        <td class="p-4">
+                            <a href="{{ route('verification-advertiser.show', $verification->id) }}" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr class="border-t">
+                        <td colspan="7" class="p-4 text-center text-gray-500">Não há verificações para mostrar</td>
+                    </tr>
+                @endforelse
+            @else
+                <tr class="border-t">
+                    <td colspan="7" class="p-4 text-center text-gray-500">Carregando dados de verificações...</td>
+                </tr>
+            @endif
             </tbody>
         </table>
-        <div class="p-4 border-t border-gray-100 flex justify-between items-center">
-            <p class="text-sm text-gray-500">Exibindo <span class="font-medium">4</span> de <span class="font-medium">28</span> resultados</p>
-            <div class="flex items-center space-x-2">
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">Anterior</button>
-                <button class="px-3 py-1 border border-secondary rounded bg-blue-50 text-secondary">1</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">2</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">3</button>
-                <button class="px-3 py-1 border border-gray-200 rounded bg-white text-gray-secondary hover:bg-gray-50">Próxima</button>
-            </div>
+        <div class="p-4 pagination-container" id="verification-pagination-container">
+            @if(isset($verifications))
+                {{ $verifications->links() }}
+            @endif
         </div>
     </div>
 </div>
 
 <script>
-    // Code for search functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        // Variáveis globais - Adicionando prefixos específicos para verificações
         const searchInput = document.getElementById('verificationSearchInput');
         const clearSearch = document.getElementById('clearVerificationSearch');
         const searchResults = document.getElementById('verificationSearchResults');
         const resultCount = document.getElementById('verificationResultCount');
-        const verificationRows = document.querySelectorAll('.verification-row');
+        const filterButtons = document.querySelectorAll('.verification-filter-btn');
 
-        // Search implementation
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            let matches = 0;
+        let currentPage = 1;
+        let currentFilter = 'all';
+        let searchTimeout;
 
-            if (searchTerm.length > 0) {
-                clearSearch.classList.remove('hidden');
+        // Busca com AJAX
+        function searchVerifications(searchTerm = '') {
 
-                verificationRows.forEach(row => {
-                    const name = row.getAttribute('data-name').toLowerCase();
-                    const contact = row.getAttribute('data-contact').toLowerCase();
+            // Mostrar indicador de carregamento
+            document.getElementById('verificationTableBody').innerHTML =
+                '<tr><td colspan="7" class="p-4 text-center">Carregando...</td></tr>';
 
-                    if (name.includes(searchTerm) || contact.includes(searchTerm)) {
-                        row.classList.remove('hidden');
-                        matches++;
-                    } else {
-                        row.classList.add('hidden');
-                    }
-                });
+            // Limpar paginação enquanto carrega
+            document.getElementById('verification-pagination-container').innerHTML = '';
 
-                searchResults.classList.remove('hidden');
-                resultCount.textContent = matches;
-            } else {
-                clearSearch.classList.add('hidden');
-                searchResults.classList.add('hidden');
+            // Construir URL com parâmetros
+            const url = new URL('/moderation/verification-advertisers/ajax', window.location.origin);
+            url.searchParams.append('page', currentPage);
+            url.searchParams.append('filter', currentFilter);
 
-                verificationRows.forEach(row => {
-                    row.classList.remove('hidden');
-                });
+            // Só adicionar param de busca se houver texto
+            if (searchTerm) {
+                url.searchParams.append('search', searchTerm);
             }
-        });
 
-        // Clear search
-        clearSearch.addEventListener('click', function() {
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('input'));
-            this.classList.add('hidden');
-        });
+            // Fazer requisição AJAX
+            fetch(url.toString())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta do servidor: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateVerificationsTable(data.verifications);
+                    updateVerificationPagination(data.pagination);
+
+                    // Atualizar contador de resultados
+                    if (searchTerm) {
+                        searchResults.classList.remove('hidden');
+                        resultCount.textContent = data.total || 0;
+                    } else {
+                        searchResults.classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                    document.getElementById('verificationTableBody').innerHTML =
+                        '<tr><td colspan="7" class="p-4 text-center text-red-500">Erro ao carregar dados: ' + error.message + '</td></tr>';
+                });
+        }
+
+        // Só adicione eventos se os elementos existirem na página
+        if (searchInput && clearSearch) {
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.trim();
+
+                // Mostrar ou ocultar botão de limpar
+                if (searchTerm.length > 0) {
+                    clearSearch.classList.remove('hidden');
+                } else {
+                    clearSearch.classList.add('hidden');
+                }
+
+                // Usar debounce para evitar muitas requisições
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentPage = 1; // Voltar para primeira página ao pesquisar
+                    searchVerifications(searchTerm);
+                }, 500);
+            });
+
+            clearSearch.addEventListener('click', function () {
+                searchInput.value = '';
+                this.classList.add('hidden');
+                searchResults.classList.add('hidden');
+                currentPage = 1;
+                searchVerifications('');
+            });
+
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(searchTimeout);
+                    currentPage = 1;
+                    searchVerifications(this.value.trim());
+                }
+            });
+        }
+
+        // Só adicione eventos de filtro se os botões existirem
+        if (filterButtons && filterButtons.length > 0) {
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Atualizar visual dos botões
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200');
+                        btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+                    });
+                    this.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+                    this.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-200');
+
+                    // Aplicar filtro
+                    currentFilter = this.getAttribute('data-filter');
+                    currentPage = 1;
+                    searchVerifications(searchInput.value.trim());
+                });
+            });
+        }
+
+        function updateVerificationsTable(verifications) {
+            const tableBody = document.getElementById('verificationTableBody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+
+            if (!verifications || verifications.length === 0) {
+                tableBody.innerHTML = '<tr class="border-t"><td colspan="7" class="p-4 text-center text-gray-500">Não há verificações para mostrar</td></tr>';
+                return;
+            }
+
+            verifications.forEach(verification => {
+                // Definir classes para o badge de estado
+                let stateBadgeClass = '';
+                let stateText = '';
+
+                if (verification.verification_advertiser_state === 0) {
+                    stateBadgeClass = 'bg-yellow-100 text-yellow-800';
+                    stateText = 'Por Aprovar';
+                } else if (verification.verification_advertiser_state === 1) {
+                    stateBadgeClass = 'bg-green-100 text-green-800';
+                    stateText = 'Aprovado';
+                } else {
+                    stateBadgeClass = 'bg-red-100 text-red-800';
+                    stateText = 'Rejeitado';
+                }
+
+                // Formatar data de submissão
+                let formattedDate = 'N/A';
+                if (verification.submitted_at) {
+                    const submittedAt = new Date(verification.submitted_at);
+                    formattedDate = `${submittedAt.getDate().toString().padStart(2, '0')}/${(submittedAt.getMonth() + 1).toString().padStart(2, '0')}/${submittedAt.getFullYear()} - ${submittedAt.getHours().toString().padStart(2, '0')}:${submittedAt.getMinutes().toString().padStart(2, '0')}`;
+                }
+
+                // Criar a linha da tabela
+                const row = document.createElement('tr');
+                row.className = 'border-t hover:bg-gray-50 transition verification-row';
+                row.setAttribute('data-id', verification.id);
+
+                // Verificação segura para acessar propriedades do submitter
+                const submitterName = verification.submitter && verification.submitter.name ? verification.submitter.name : 'N/A';
+                const submitterTel = verification.submitter && verification.submitter.telephone ? verification.submitter.telephone : 'N/A';
+
+                row.setAttribute('data-name', submitterName.toLowerCase());
+                row.setAttribute('data-contact', submitterTel);
+                row.setAttribute('data-date', verification.submitted_at ? new Date(verification.submitted_at).getTime() : '');
+                row.setAttribute('data-state', verification.verification_advertiser_state === 0 ? 'pending' : (verification.verification_advertiser_state === 1 ? 'approved' : 'rejected'));
+
+                row.innerHTML = `
+                    <td class="p-4">#${verification.id}</td>
+                    <td class="p-4 font-medium">${submitterName}</td>
+                    <td class="p-4 text-gray-600">${submitterTel}</td>
+                    <td class="p-4 text-gray-500">${formattedDate}</td>
+                    <td class="p-4">${verification.identifier_type || 'N/A'}</td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${stateBadgeClass}">
+                            ${stateText}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <a href="/moderation/verification-advertisers/${verification.id}" class="btn-secondary px-3 py-1 text-xs">Ver Detalhes</a>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateVerificationPagination(paginationHtml) {
+            const paginationContainer = document.getElementById('verification-pagination-container');
+            if (!paginationContainer) return;
+
+            paginationContainer.innerHTML = paginationHtml;
+
+            // Adicionar event listeners aos links da paginação
+            const paginationLinks = paginationContainer.querySelectorAll('a');
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const url = new URL(href, window.location.origin);
+                    currentPage = url.searchParams.get('page') || 1;
+
+                    searchVerifications(searchInput.value.trim());
+                });
+            });
+        }
+
+        // Iniciar a busca quando a página carrega se estamos na página correta
+        if (document.getElementById('verificationTableBody')) {
+            searchVerifications();
+        }
+
+        // Auto-esconder mensagens flash após alguns segundos
+        const flashMessages = document.querySelectorAll('.flash-message');
+        if (flashMessages.length > 0) {
+            setTimeout(() => {
+                flashMessages.forEach(msg => {
+                    msg.style.transition = 'opacity 0.5s ease';
+                    msg.style.opacity = '0';
+                    setTimeout(() => msg.remove(), 500);
+                });
+            }, 5000);
+        }
     });
 </script>

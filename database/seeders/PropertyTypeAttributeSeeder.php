@@ -58,12 +58,12 @@ class PropertyTypeAttributeSeeder extends Seeder
                     break; // Stop if both limits are reached
                 }
 
-                if ($filterCount < $maxFilter->value && $propertyTypeAttribute->attribute->type != AttributeType::SELECT_MULTIPLE) {
+                if ($filterCount < $maxFilter->value) {
                     $propertyTypeAttribute->show_in_filter = true;
                     $filterCount++;
                 }
 
-                if ($listCount < $maxList->value) {
+                if ($listCount < $maxList->value && $propertyTypeAttribute->attribute->type != AttributeType::SELECT_MULTIPLE) {
                     $propertyTypeAttribute->show_in_list = true;
                     $listCount++;
                 }
