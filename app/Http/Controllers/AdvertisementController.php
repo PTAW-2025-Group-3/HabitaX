@@ -124,7 +124,7 @@ class AdvertisementController extends Controller
 
         // Verifica se o criador do anúncio está suspenso/banido/arquivado
         if (in_array($ad->creator->state, ['suspended', 'banned', 'archived'])) {
-            // Apenas admins e moderadores podem acessar anúncios de usuários suspensos
+            // Apenas admins e moderadores podem acessar anúncios de utilizadores suspensos
             if (!auth()->check() || (!auth()->user()->isAdmin() && !auth()->user()->isModerator())) {
                 return redirect()->route('advertisements.index')
                     ->with('error', 'Este anúncio não está mais disponível.');

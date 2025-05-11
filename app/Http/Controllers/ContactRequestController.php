@@ -39,7 +39,7 @@ class ContactRequestController extends Controller
                 ->get();
 
             // Pedidos enviados pelo utilizador
-            $messages = ContactRequest::with(['advertisement.user'])
+            $messages = ContactRequest::with(['advertisement.creator'])
                 ->where('created_by', auth()->id())
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
