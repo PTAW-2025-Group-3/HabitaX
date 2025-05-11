@@ -1,4 +1,4 @@
-<section class="py-16 px-4 bg-gray-100">
+<section class="py-16 px-4 mb-16 bg-back">
     <div class="max-w-7xl mx-auto">
         <h2 class="text-3xl font-bold text-center mb-10">
             As Nossas <span class="text-secondary">Melhores Ofertas</span>

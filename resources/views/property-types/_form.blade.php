@@ -49,6 +49,22 @@
         @enderror
     </div>
 
+    {{--  show on home  --}}
+    <div class="flex flex-col">
+        <div class="flex items-center mb-4">
+            <input type="hidden" name="show_on_homepage" value="0">
+            <input type="checkbox" name="show_on_homepage" id="show_on_homepage" value="1"
+                   {{ old('show_on_homepage', $propertyType->show_on_homepage ?? false) ? 'checked' : '' }}
+                   class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+            <label for="show_on_homepage" class="ml-2 block text-sm font-semibold text-primary">Mostrar na página inicial</label>
+        </div>
+        @error('show_on_homepage')
+        <div class="text-red-500 text-sm mt-1">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+
     {{--  icon  --}}
     <div class="flex flex-col">
         <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
@@ -62,6 +78,7 @@
             />
         </div>
     </div>
+
     {{-- Validation Errors --}}
     @if ($errors->any())
         <div class="relative mb-4 p-3 bg-red-50 text-xs sm:text-sm text-red-600 rounded-lg z-10">

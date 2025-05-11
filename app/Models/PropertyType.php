@@ -13,7 +13,13 @@ class PropertyType extends Model
         'name',
         'description',
         'icon_path',
-        'is_active'
+        'is_active',
+        'show_on_homepage',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'show_on_homepage' => 'boolean',
     ];
 
     public function typeAttributes()

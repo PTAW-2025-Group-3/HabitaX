@@ -89,23 +89,27 @@
                                         {{ isset($propertyTypeAttributes[$attribute->id]) ? 'checked' : '' }}>
                                 </td>
                                 @if($attribute->is_required &&
-                                ($attribute->type !== AttributeType::TEXT && $attribute->type !== AttributeType::LONG_TEXT && $attribute->type !== AttributeType::SELECT_MULTIPLE))
-                                    <td class="show_options p-4" hidden>
-                                        <div class="flex mb-2">
-                                            <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
-                                                   name="attributes[{{ $attribute->id }}][show_in_list]"
-                                                   value="1"
-                                                   id="list_{{ $attribute->id }}"
-                                                {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_list'] ? 'checked' : '' }}>
-                                            <label class="ml-2" for="list_{{ $attribute->id }}">Listagem</label>
-                                        </div>
-                                        <div class="flex">
-                                            <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
-                                                   name="attributes[{{ $attribute->id }}][show_in_filter]"
-                                                   value="1"
-                                                   id="filter_{{ $attribute->id }}"
-                                                {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_filter'] ? 'checked' : '' }}>
-                                            <label class="ml-2" for="filter_{{ $attribute->id }}">Filtro</label>
+                                ($attribute->type !== AttributeType::TEXT && $attribute->type !== AttributeType::LONG_TEXT))
+                                    <td>
+                                        <div class="show_options p-4" hidden>
+                                            <div class="flex mb-2">
+                                                @if($attribute->type !== AttributeType::SELECT_MULTIPLE)
+                                                    <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                                           name="attributes[{{ $attribute->id }}][show_in_list]"
+                                                           value="1"
+                                                           id="list_{{ $attribute->id }}"
+                                                        {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_list'] ? 'checked' : '' }}>
+                                                    <label class="ml-2" for="list_{{ $attribute->id }}">Listagem</label>
+                                                @endif
+                                            </div>
+                                            <div class="flex">
+                                                <input type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-600"
+                                                       name="attributes[{{ $attribute->id }}][show_in_filter]"
+                                                       value="1"
+                                                       id="filter_{{ $attribute->id }}"
+                                                    {{ isset($propertyTypeAttributes[$attribute->id]) && $propertyTypeAttributes[$attribute->id]['show_in_filter'] ? 'checked' : '' }}>
+                                                <label class="ml-2" for="filter_{{ $attribute->id }}">Filtro</label>
+                                            </div>
                                         </div>
                                     </td>
                                 @else

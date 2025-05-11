@@ -20,13 +20,8 @@ class HomeController extends Controller
             ->get();
 
         $propertyTypes = PropertyType::where('is_active', true)
-            ->withCount(['properties' => function($query) {
-                $query->whereHas('advertisements', function($q) {
-                    $q->where('is_published', true)
-                        ->where('is_suspended', false);
-                });
-            }])
-            ->orderBy('id')
+            ->where('show_on_homepage', true)
+            ->orderBy('name')
             ->get();
 
         // Contar anúncios ativos para cada tipo de propriedade

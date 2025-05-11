@@ -50,6 +50,11 @@
                                     Ativo
                                 </div>
                             </th>
+                            <th class="p-4 text-center">
+                                <div class="flex items-center justify-center">
+                                    Mostrar na página inicial
+                                </div>
+                            </th>
                             <th class="p-4 text-right">Ações</th>
                         </tr>
                         </thead>
@@ -75,6 +80,19 @@
                                 </td>
                                 <td class="p-4 text-center">
                                     @if ($propertyType->is_active)
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-700">
+                                                Sim
+                                            </span>
+                                    @else
+                                        <span
+                                            class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600">
+                                                Não
+                                            </span>
+                                    @endif
+                                </td>
+                                <td class="p-4 text-center">
+                                    @if ($propertyType->show_on_homepage)
                                         <span
                                             class="inline-block px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-700">
                                                 Sim

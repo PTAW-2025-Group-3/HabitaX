@@ -304,7 +304,12 @@
                                             @foreach($parameters as $parameter)
                                                 @if($parameter->attribute)
                                                     <span class="text-sm font-medium">
-                                                        {{ $parameter->attribute->name }}: {{ $parameter->getValue($parameter->attribute->type) }}
+                                                        {{ $parameter->attribute->name }}:
+                                                        @if($parameter->attribute->type->value === 'boolean')
+                                                            {{ $parameter->getValue($parameter->attribute->type) ? 'Sim' : 'Não' }}
+                                                        @else
+                                                            {{ $parameter->getValue($parameter->attribute->type) }}
+                                                        @endif
                                                         {{ $parameter->attribute->unit }}
                                                     </span>
                                                     @if(!$loop->last)

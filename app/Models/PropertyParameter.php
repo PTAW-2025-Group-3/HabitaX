@@ -81,7 +81,7 @@ class PropertyParameter extends Model
     public function getValue($type): mixed
     {
         return match ($type) {
-            AttributeType::TEXT,
+            AttributeType::TEXT => $this->text_value,
             AttributeType::LONG_TEXT => $this->text_value,
             AttributeType::INT => $this->int_value,
             AttributeType::FLOAT => $this->float_value,

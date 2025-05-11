@@ -16,7 +16,7 @@ class GlobalVariableSeeder extends Seeder
             [
                 'name' => 'Maximo de atributos em filtros',
                 'code' => 'max_attributes_filter',
-                'value' => 5,
+                'value' => 10,
                 'description' => 'Numero maximo de atributos permitidos nos filtros por tipo da propriedade.',
             ],
             [

@@ -14,7 +14,7 @@ class PropertyAttributeSeeder extends Seeder
         foreach (AttributeType::cases() as $typeCase) {
             $type = $typeCase->value;
 
-            $count = fake()->numberBetween(5, 10);
+            $count = fake()->numberBetween(10, 20);
 
             for ($i = 0; $i < $count; $i++) {
                 $data = [

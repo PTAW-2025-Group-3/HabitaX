@@ -1,9 +1,9 @@
-<section class="pt-1 md:pt-1 pb-16 md:pb-24 px-4 md:px-6 bg-back">
+<section class="py-16 px-4 md:pb-24 md:pt-1 md:px-6 bg-back">
     <div class="max-w-7xl mx-auto text-center">
 
         {{-- Title --}}
-        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary mb-8 md:mb-12">
-            Propriedades
+        <h2 class="text-3xl font-bold text-center mb-10">
+            Tipos de <span class="text-secondary">Propriedades</span>
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             @foreach ($propertyTypes as $type)

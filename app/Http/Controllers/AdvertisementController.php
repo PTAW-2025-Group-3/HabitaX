@@ -32,7 +32,6 @@ class AdvertisementController extends Controller
                 $q->where('state', 'active');
             })
             ->with('property.parameters.attribute')
-            ->with('property.parameters.options')
             ->select('advertisements.*');
 
         Log::debug('Request attributes:', $request->input('attributes', []));
@@ -45,7 +44,7 @@ class AdvertisementController extends Controller
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
 
         $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
-        $perPage = $viewMode === 'list' ? 10 : 15;
+        $perPage = $viewMode === 'list' ? 10 : 21;
 
         $advertisements = $query->paginate($perPage);
 
