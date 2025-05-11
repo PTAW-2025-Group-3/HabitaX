@@ -21,8 +21,9 @@ class PropertyController extends Controller
         $properties = auth()->user()->properties()
             ->with('property_type')
             ->with('parish')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('updated_at', 'desc')
+            ->paginate(9);
+
         return view('properties.my', compact('properties'));
     }
 

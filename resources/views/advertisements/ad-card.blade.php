@@ -2,7 +2,7 @@
      data-status="{{ $ad->status }}">
     <a href="{{ route('advertisements.show', $ad->id) }}" class="block">
         <div class="relative">
-            <img src="{{ $ad->property?->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
+            <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
                  alt="Ad"
                  class="w-full h-48 object-cover">
             <span class="absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
@@ -11,10 +11,10 @@
         </div>
         <div class="p-4">
             <h3 class="text-lg font-semibold text-primary">
-                {{ $ad->title }} em {{ $ad->property->location ?? '—' }}
+                {{ $ad->title }}
             </h3>
             <p class="text-sm text-gray mb-2">
-                {{ $ad->property && $ad->property->parish ? $ad->property->parish->name : '—' }}
+                {{ $ad->property && $ad->property->parish ? $ad->property->parish->name : '' }}
             </p>
             <p class="text-lg font-bold text-secondary">
                 {{ number_format($ad->price, 0, ',', '.') }}€

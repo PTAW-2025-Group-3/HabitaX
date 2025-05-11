@@ -1,7 +1,7 @@
 @extends('account.account-layout')
 
 @section('account-content')
-<div class="bg-white rounded-xl shadow-lg p-6 animate-fade-in">
+<div class="bg-white rounded-xl p-6 animate-fade-in">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-primary">Minhas Propriedades</h1>
         <a href="{{ route('properties.create') }}" class="btn-primary py-2 px-4 flex items-center gap-2">
@@ -41,6 +41,10 @@
         <h3 class="text-lg font-medium text-gray-800">Nenhuma propriedade encontrada</h3>
         <p class="text-gray-600 mt-2">Não foram encontradas propriedades com o status selecionado.</p>
     </div>
+</div>
+
+<div class="mt-6">
+    {{ $properties->links() }}
 </div>
 
 @push('scripts')

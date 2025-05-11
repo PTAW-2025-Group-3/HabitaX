@@ -68,10 +68,21 @@ class AdvertisementController extends Controller
 
     public function my(Request $request)
     {
-        $ads = auth()->user()->advertisements()
-            ->with('property')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $state = $request->input('state_filter', 'all');
+
+        $query = auth()->user()->advertisements()->with('property');
+
+        if ($state === 'published') {
+            $query->where('is_published', true)
+                ->where('is_suspended', false);
+        } elseif ($state === 'pending') {
+            $query->where('is_published', false)
+                ->where('is_suspended', false);
+        } elseif ($state === 'suspended') {
+            $query->where('is_suspended', true);
+        }
+
+        $ads = $query->orderBy('created_at', 'desc')->paginate(9);
 
         if ($request->ajax()) {
             return view('advertisements.listing.advertisement-listings', compact('ads'))->render();
@@ -166,7 +177,7 @@ class AdvertisementController extends Controller
     {
         return view('advertisements.help');
     }
-    
+
     public function create()
     {
         $user = auth()->user();
@@ -202,25 +213,25 @@ class AdvertisementController extends Controller
     public function destroy($id)
     {
         $advertisement = Advertisement::with('creator')->findOrFail($id);
-    
+
         if (auth()->id() !== $advertisement->creator->id) {
             abort(403, 'Unauthorized');
         }
-    
+
         $advertisement->delete();
-    
+
         return redirect()->route('advertisements.my')->with('success', 'Anúncio deletado com sucesso!');
     }
     public function edit($id)
     {
         $advertisement = Advertisement::with('creator')->findOrFail($id);
-    
+
         if (auth()->id() !== $advertisement->creator->id) {
             abort(403, 'Unauthorized');
         }
-    
+
         $properties = auth()->user()->properties;
-    
+
         return view('advertisements.edit', compact('advertisement', 'properties'));
     }
     public function update(Request $request, $id)
