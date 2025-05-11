@@ -117,6 +117,7 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
         ->name('verification-advertiser.update-state');
 
     Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
+    Route::get('/moderation/contact-us/data', [ContactUsController::class, 'ajaxIndex'])->name('contact-us.ajax');
     Route::get('/moderation/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
     Route::put('/moderation/contact-us/{id}/mark-as-read', [ContactUsController::class, 'markAsRead'])->name('contact-us.mark-as-read');
 });

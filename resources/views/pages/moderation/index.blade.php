@@ -22,10 +22,15 @@
 
             @include('pages.moderation.suspended-users')
 
-            <div>
-                <a href="{{ route('contact-us.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Pedidos de contacto
-                </a>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-secondary mb-4">
+                    <i class="bi bi-tools mr-2"></i>Ações Complementares
+                </h2>
+                <div>
+                    <a href="{{ route('contact-us.index') }}" class="btn-primary px-4 py-2 rounded">
+                        Pedidos de Contacto
+                    </a>
+                </div>
             </div>
         </div>
     </div>
