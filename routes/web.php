@@ -64,6 +64,7 @@ Route::middleware('auth')->controller(AdvertisementController::class)->group(fun
     Route::get('/advertisements/{id}/edit', 'edit')->name('advertisements.edit');
     Route::put('/advertisements/{id}', 'update')->name('advertisements.update');
     Route::delete('/advertisements/{id}', 'destroy')->name('advertisements.destroy');
+
 });
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
@@ -213,10 +214,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Account Routes
-    Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
-    Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password');
-    Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
-    Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
+    // Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
+    // Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password');
+    // Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
+    // Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
     Route::get('/advertiser-verification', function () {
         return view('account.advertiser-verification');
@@ -233,6 +234,15 @@ Route::post('/share/email', [App\Http\Controllers\ShareController::class, 'share
 Route::view('/politica-de-privacidade', 'pages.legal.privacy-policy')->name('privacy.policy');
 Route::view('/condicoes-gerais', 'pages.legal.terms-and-conditions')->name('terms.conditions');
 Route::get('/noticias', [\App\Http\Controllers\NewsController::class, 'index']);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/settings', [AccountController::class, 'settings'])->name('settings');
+    Route::put('/settings/privacy', [AccountController::class, 'updatePrivacy'])->name('account.updatePrivacy');
+    Route::put('/settings/password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
+    Route::delete('/settings', [AccountController::class, 'deleteAccount'])->name('account.delete');
+});
+
 
 // Auth (login, logout, etc.)
 require __DIR__ . '/auth.php';
