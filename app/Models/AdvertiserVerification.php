@@ -50,23 +50,25 @@ class AdvertiserVerification extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('documents')
+        $this->addMediaCollection('identification_documents')
+            ->useDisk('public');
+        $this->addMediaCollection('identity_verifications')
             ->useDisk('public');
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')
-            ->fit(Fit::Crop, 300, 200)
+        $this->addMediaConversion('preview')
+            ->fit(Fit::Crop, 800, 600)
             ->optimize()
             ->sharpen(5)
-            ->performOnCollections('documents');
+            ->performOnCollections('identification_documents');
 
         $this->addMediaConversion('preview')
             ->fit(Fit::Crop, 800, 600)
             ->optimize()
             ->sharpen(5)
-            ->performOnCollections('documents');
+            ->performOnCollections('identity_verifications');
     }
 
     public static function boot()
@@ -74,20 +76,25 @@ class AdvertiserVerification extends Model implements HasMedia
         parent::boot();
 
         static::deleting(function ($verification) {
-            $verification->clearMediaCollection('documents');
+            $verification->clearMediaCollection('identification_documents');
+            $verification->clearMediaCollection('identity_verifications');
         });
     }
 
     protected static function booted()
     {
-        static::created(function ($verification) {
+        static::updated(function ($verification) {
             if (
                 $verification->verification_advertiser_state === 1 &&
                 $verification->submitter &&
                 !$verification->submitter->advertiser_number
             ) {
+                do {
+                    $randomNumber = rand(10000, 99999);
+                } while (User::where('advertiser_number', $randomNumber)->exists());
+
                 $verification->submitter->update([
-                    'advertiser_number' => rand(10000, 99999),
+                    'advertiser_number' => $randomNumber,
                 ]);
             }
         });

@@ -37,7 +37,7 @@ class AdministrationController extends Controller
             User::where('user_type', 'admin')->count()
         ];
 
-        return view('pages.administration.index', [
+        return view('administration.index', [
             'activeUsers' => User::where('state', 'active')->count(),
             'totalUsers' => User::count(),
             'publishedAds' => Property::count(),

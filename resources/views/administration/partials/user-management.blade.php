@@ -59,7 +59,7 @@
             </tr>
             </thead>
             <tbody id="userTableBody">
-            @include('pages.administration.partials.user-rows', ['users' => $users])
+            @include('administration.partials.user-rows', ['users' => $users])
             </tbody>
         </table>
         <div class="p-4" id="pagination-container">
@@ -68,11 +68,11 @@
     </div>
 </div>
 
-@include('pages.administration.partials.modals.suspend-user')
-@include('pages.administration.partials.modals.permissions-user')
+@include('administration.partials.modals.suspend-user')
+@include('administration.partials.modals.permissions-user')
 
-<script src="{{ asset('js/pages/admin/user-management/user-search.js') }}"></script>
-<script src="{{ asset('js/pages/admin/user-management/sorting.js') }}"></script>
-<script src="{{ asset('js/pages/admin/user-management/modals.js') }}"></script>
-<script src="{{ asset('js/pages/admin/user-management/pagination.js') }}"></script>
-<script src="{{ asset('js/pages/admin/user-management/user-management.js') }}"></script>
+<script src="{{ asset('js/admin/user-management/user-search.js') }}"></script>
+<script src="{{ asset('js/admin/user-management/sorting.js') }}"></script>
+<script src="{{ asset('js/admin/user-management/modals.js') }}"></script>
+<script src="{{ asset('js/admin/user-management/pagination.js') }}"></script>
+<script src="{{ asset('js/admin/user-management/user-management.js') }}"></script>

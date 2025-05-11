@@ -32,7 +32,7 @@
             @php
                 $path = 'images/team/';
                 $equipa = [
-                    ['nome' => 'Luis Assis', 'imagem' => 'Luiz Assis.jpg', 'cargo' => 'Gestor de Grupo', 'função' => 'Desenvolvedor'],
+                    ['nome' => 'Luis Assis', 'imagem' => 'Luiz Assis.jpg', 'cargo' => 'Gestor de Grupo',
                     ['nome' => 'Gustavo Gião', 'imagem' => 'GustavoGiao.png', 'cargo' => 'Desenvolvedor'],
                     ['nome' => 'Pedro Sampaio', 'imagem' => 'SedroPampaio.jpg', 'cargo' => 'Desenvolvedor'],
                     ['nome' => 'Ratmir Mukazhanov', 'imagem' => 'Ratmir.jpg', 'cargo' => 'Desenvolvedor'],
@@ -46,7 +46,6 @@
                         'nome' => $membro['nome'],
                         'imagem' => $path . $membro['imagem'],
                         'cargo' => $membro['cargo'],
-                        'funcao' => $membro['função'] ?? null
                     ])
                 @endforeach
             </div>

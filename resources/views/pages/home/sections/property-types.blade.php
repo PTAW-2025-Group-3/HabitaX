@@ -3,7 +3,7 @@
 
         {{-- Title --}}
         <h2 class="text-3xl font-bold text-center mb-10">
-            Tipos de <span class="text-secondary">Propriedades</span>
+            Propriedades <span class="text-secondary">Mais Procuradas</span>
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             @foreach ($propertyTypes as $type)

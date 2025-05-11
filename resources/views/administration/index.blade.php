@@ -6,15 +6,15 @@
     <div class="bg-back min-h-screen py-10">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
 
-            @include('pages.administration.partials.header')
+            @include('administration.partials.header')
 
-            @include('pages.administration.partials.stats')
+            @include('administration.partials.stats')
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @include('pages.administration.partials.charts')
+                @include('administration.partials.charts')
             </div>
 
-            @include('pages.administration.partials.user-management')
+            @include('administration.partials.user-management')
 
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-semibold text-gray-secondary mb-4">Configurações de Propriedades</h2>
@@ -37,6 +37,11 @@
             <a href="{{ route('global-variables.index') }}" class="btn-primary px-6 py-3">
                 <i class="bi bi-gear mr-2"></i>
                 Gerir Variáveis Globais
+            </a>
+
+            <a href="{{ route('document-types.index') }}" class="btn-primary px-6 py-3">
+                <i class="bi bi-file-ear mr-2"></i>
+                Gerir Tipos de Documento
             </a>
         </div>
     </div>

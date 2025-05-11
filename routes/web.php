@@ -5,6 +5,7 @@ use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DenunciationController;
+use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\GlobalVariableController;
@@ -182,6 +183,13 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
     Route::get('/admin/global-variables', [GlobalVariableController::class, 'index'])->name('global-variables.index');
     Route::put('/admin/global-variables/{id}', [GlobalVariableController::class, 'updateValue'])->name('global-variables.update-value');
+
+    Route::get('/admin/document-types', [DocumentTypeController::class, 'index'])->name('document-types.index');
+    Route::get('/admin/document-types/create', [DocumentTypeController::class, 'create'])->name('document-types.create');
+    Route::post('/admin/document-types', [DocumentTypeController::class, 'store'])->name('document-types.store');
+    Route::get('/admin/document-types/{id}/edit', [DocumentTypeController::class, 'edit'])->name('document-types.edit');
+    Route::put('/admin/document-types/{id}', [DocumentTypeController::class, 'update'])->name('document-types.update');
+    Route::delete('/admin/document-types/{id}', [DocumentTypeController::class, 'destroy'])->name('document-types.destroy');
 
     // Distritos, Municípios e Freguesias
 });

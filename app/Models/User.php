@@ -20,6 +20,8 @@ class User extends Authenticatable
         'email',
         'password',
         'bio',
+        'document_type_id',
+        'document_number',
         'email_notifications',
         'message_notifications',
         'public_profile',
@@ -79,5 +81,10 @@ class User extends Authenticatable
     public function isModerator()
     {
         return $this->user_type === 'moderator' || $this->user_type === 'admin';
+    }
+
+    public function document_type()
+    {
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
 }
