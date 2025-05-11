@@ -57,6 +57,13 @@ Route::middleware('auth')->controller(AdvertisementController::class)->group(fun
     // create, edit, delete
     Route::get('/advertisements/my', 'my')->name('advertisements.my');
     Route::get('/advertisements/favorites', 'favorites')->name('advertisements.favorites');
+
+    Route::get('/advertisements/create', 'create')->name('advertisements.create');
+    Route::post('/advertisements', 'store')->name('advertisements.store');
+
+    Route::get('/advertisements/{id}/edit', 'edit')->name('advertisements.edit');
+    Route::put('/advertisements/{id}', 'update')->name('advertisements.update');
+    Route::delete('/advertisements/{id}', 'destroy')->name('advertisements.destroy');
 });
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
@@ -118,6 +125,7 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
         ->name('verification-advertiser.update-state');
 
     Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
+    Route::get('/moderation/contact-us/data', [ContactUsController::class, 'ajaxIndex'])->name('contact-us.ajax');
     Route::get('/moderation/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
     Route::put('/moderation/contact-us/{id}/mark-as-read', [ContactUsController::class, 'markAsRead'])->name('contact-us.mark-as-read');
 });

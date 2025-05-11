@@ -15,11 +15,11 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="bi bi-envelope-fill text-xl"></i>
-                        <span>habitax@project.pt</span>
+                        <span>habitaxsupport@gmail.com</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="bi bi-geo-alt-fill text-xl"></i>
-                        <span>Rua Exemplo, 123, Lisboa, Portugal</span>
+                        <span>Rua Comandante Pinho e Freitas, nº 28, 3750 – 127 Águeda, Portugal</span>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                         <label for="telephone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
                         <input type="text" id="telephone" name="telephone"
                                class="form-input" required
-                               placeholder="+351 912 345 678">
+                               placeholder="+351912 345 678">
                         @error('telephone')
                         <div class="text-red-500 text-sm mt-1">
                             {{ $message }}
@@ -106,6 +106,113 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.querySelector('form[action="{{ route('contact-us.store') }}"]');
+        const telephoneInput = document.getElementById('telephone');
+
+        // Validação do número de telefone
+        function validatePhone(phone) {
+            // Aceita números com ou sem código de país (+XXX)
+            const phoneRegex = /^(\+[0-9]{1,3})?[0-9]{9,15}$/;
+            return phoneRegex.test(phone.replace(/\s+/g, ''));
+        }
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validar telefone antes de enviar
+            const phoneValue = telephoneInput.value.trim();
+            if (!validatePhone(phoneValue)) {
+                // Remover mensagens de erro anteriores
+                const existingPhoneError = document.getElementById('telephone-error');
+                if (existingPhoneError) {
+                    existingPhoneError.remove();
+                }
+
+                // Criar e mostrar mensagem de erro
+                const errorDiv = document.createElement('div');
+                errorDiv.id = 'telephone-error';
+                errorDiv.className = 'text-red-500 text-sm mt-1';
+                errorDiv.textContent = 'Por favor, insira um número de telefone válido (apenas dígitos, pode incluir o prefixo +).';
+                telephoneInput.parentNode.appendChild(errorDiv);
+                telephoneInput.focus();
+                return;
+            }
+
+            // Criar FormData do formulário
+            const formData = new FormData(contactForm);
+
+            // Desabilitar botão durante o envio
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="bi bi-hourglass-split mr-2"></i>A enviar...';
+
+            // Remover mensagens de erro ou sucesso anteriores
+            const existingAlert = document.getElementById('contact-form-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            fetch('{{ route('contact-us.store') }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Restaurar botão
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+
+                    // Criar elemento de alerta
+                    const alertDiv = document.createElement('div');
+                    alertDiv.id = 'contact-form-alert';
+                    alertDiv.className = data.success
+                        ? 'mt-4 p-4 bg-green-100 text-green-800 rounded'
+                        : 'mt-4 p-4 bg-red-100 text-red-800 rounded';
+                    alertDiv.textContent = data.message || 'Ocorreu um erro inesperado.';
+
+                    // Inserir alerta após o formulário
+                    contactForm.after(alertDiv);
+
+                    // Limpar formulário se for sucesso
+                    if (data.success) {
+                        contactForm.reset();
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+
+                    // Restaurar botão
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+
+                    // Mostrar mensagem de erro
+                    const alertDiv = document.createElement('div');
+                    alertDiv.id = 'contact-form-alert';
+                    alertDiv.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded';
+                    alertDiv.textContent = 'Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente ou contacte-nos diretamente.';
+
+                    contactForm.after(alertDiv);
+                });
+        });
+
+        // Adicionar validação em tempo real ao campo de telefone
+        telephoneInput.addEventListener('input', function() {
+            const errorDiv = document.getElementById('telephone-error');
+            if (errorDiv) {
+                if (validatePhone(this.value.trim())) {
+                    errorDiv.remove();
+                    this.classList.remove('border-red-500');
+                }
+            }
+        });
+    });
+</script>

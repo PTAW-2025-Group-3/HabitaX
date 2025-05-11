@@ -166,4 +166,83 @@ class AdvertisementController extends Controller
     {
         return view('advertisements.help');
     }
+    
+    public function create()
+    {
+        $user = auth()->user();
+
+        $properties = $user->properties()->orderBy('created_at', 'desc')->get();
+
+        return view('advertisements.create', [
+            'properties' => $properties,
+            'advertisement' => null,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'transaction_type' => 'required|in:sale,rent',
+            'property_id' => 'required|exists:properties,id',
+        ]);
+
+        $advertisement = new Advertisement($validated);
+        $advertisement->reference = fake()->unique()->numberBetween(100000, 999999);
+        $advertisement->is_published = true;
+        $advertisement->is_suspended = false;
+        $advertisement->created_by = auth()->id();
+        $advertisement->save();
+
+        return redirect()->route('advertisements.my')
+            ->with('success', 'Anúncio criado com sucesso!');
+    }
+    public function destroy($id)
+    {
+        $advertisement = Advertisement::with('creator')->findOrFail($id);
+    
+        if (auth()->id() !== $advertisement->creator->id) {
+            abort(403, 'Unauthorized');
+        }
+    
+        $advertisement->delete();
+    
+        return redirect()->route('advertisements.my')->with('success', 'Anúncio deletado com sucesso!');
+    }
+    public function edit($id)
+    {
+        $advertisement = Advertisement::with('creator')->findOrFail($id);
+    
+        if (auth()->id() !== $advertisement->creator->id) {
+            abort(403, 'Unauthorized');
+        }
+    
+        $properties = auth()->user()->properties;
+    
+        return view('advertisements.edit', compact('advertisement', 'properties'));
+    }
+    public function update(Request $request, $id)
+    {
+        $advertisement = Advertisement::findOrFail($id);
+
+        // فقط کسی که آگهی رو ساخته باشه می‌تونه ادیت کنه
+        if (auth()->id() !== $advertisement->created_by) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'transaction_type' => 'required|in:sale,rent',
+            'property_id' => 'required|exists:properties,id',
+        ]);
+
+        $advertisement->update($validated);
+
+        return redirect()->route('advertisements.my')->with('success', 'Anúncio atualizado com sucesso!');
+    }
+
 }

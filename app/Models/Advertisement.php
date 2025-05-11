@@ -33,6 +33,7 @@ class Advertisement extends Model
         return $this->belongsTo(Property::class, 'property_id');
     }
 
+    // ✅ Only keep this one — used across your controllers and views
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -43,12 +44,7 @@ class Advertisement extends Model
         return $this->hasMany(ContactRequest::class, 'advertisement_id');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    // Métodos de conveniência para verificar o estado
+    // ✅ Convenience methods
     public function isActive()
     {
         return $this->is_published && !$this->is_suspended;

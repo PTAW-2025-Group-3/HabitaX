@@ -13,18 +13,19 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // آگهی‌های ویژه (منتشر شده و فعال)
         $featuredAds = Advertisement::with('property')
             ->where('is_published', true)
             ->where('is_suspended', false)
             ->take(8)
             ->get();
 
+        // نوع املاک فعال (فقط شرط show_on_homepage حذف شده چون در DB نیست)
         $propertyTypes = PropertyType::where('is_active', true)
-            ->where('show_on_homepage', true)
             ->orderBy('name')
             ->get();
 
-        // Contar anúncios ativos para cada tipo de propriedade
+        // تعداد آگهی‌های فعال به ازای هر نوع ملک
         foreach ($propertyTypes as $type) {
             $type->active_ads_count = Advertisement::join('properties', 'advertisements.property_id', '=', 'properties.id')
                 ->where('properties.property_type_id', $type->id)
@@ -33,9 +34,11 @@ class HomeController extends Controller
                 ->count();
         }
 
+        // دریافت پارامترهای ورودی
         $transactionType = request('transaction_type', 'sale');
-        $selectedType = request('property_type'); // ex: 2
+        $selectedType = request('property_type');
 
+        // آگهی‌ها به تفکیک استان
         $adsPerDistrict = DB::table('advertisements')
             ->join('properties', 'advertisements.property_id', '=', 'properties.id')
             ->join('parishes', 'properties.parish_id', '=', 'parishes.id')
@@ -48,6 +51,7 @@ class HomeController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
+        // بارگذاری اخبار (RSS) با کش
         $news = Cache::remember('home_news_feed', 3600, function () {
             try {
                 $response = Http::get('https://rss.app/feeds/v1.1/C11CchUv87TQ40Gi.json');
@@ -60,6 +64,7 @@ class HomeController extends Controller
             }
         });
 
+        // ارسال داده‌ها به ویو
         return view('pages.home.home', [
             'adsPerDistrict' => $adsPerDistrict,
             'propertyTypes' => $propertyTypes,

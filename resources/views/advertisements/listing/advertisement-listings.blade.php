@@ -129,7 +129,7 @@
 
                                         <p class="flex items-center text-sm text-gray-500 mt-1">
                                             <i class="bi bi-geo-alt-fill text-secondary mr-1"></i>
-                                            {{ $ad->property->parish->name }}
+                                            {{ $ad->property && $ad->property->parish ? $ad->property->parish->name : '—' }}
                                         </p>
 
                                         <p class="text-xl font-extrabold text-blue-800 mt-2">
@@ -284,7 +284,7 @@
                                         </div>
                                         <p class="flex items-center text-sm text-gray-500 mt-0.5">
                                             <i class="bi bi-geo-alt-fill text-secondary mr-1"></i>
-                                            {{ $ad->property->parish->name }}
+                                            {{ $ad->property && $ad->property->parish ? $ad->property->parish->name : '—' }}
                                         </p>
                                         <p class="text-2xl font-extrabold text-blue-800 mt-2">{{ number_format($ad['price'], 0, ',', '.') }}
                                             €</p>
