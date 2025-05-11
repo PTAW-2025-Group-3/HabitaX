@@ -56,6 +56,13 @@ Route::middleware('auth')->controller(AdvertisementController::class)->group(fun
     // create, edit, delete
     Route::get('/advertisements/my', 'my')->name('advertisements.my');
     Route::get('/advertisements/favorites', 'favorites')->name('advertisements.favorites');
+
+    Route::get('/advertisements/create', 'create')->name('advertisements.create');
+    Route::post('/advertisements', 'store')->name('advertisements.store');
+
+    Route::get('/advertisements/{id}/edit', 'edit')->name('advertisements.edit');
+    Route::put('/advertisements/{id}', 'update')->name('advertisements.update');
+    Route::delete('/advertisements/{id}', 'destroy')->name('advertisements.destroy');
 });
 Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
