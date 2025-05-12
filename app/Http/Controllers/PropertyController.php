@@ -52,7 +52,7 @@ class PropertyController extends Controller
             'property_type_id' => 'required|exists:property_types,id',
             'parish_id' => 'nullable|exists:parishes,id',
             'uploaded_images' => 'nullable|array',
-            'uploaded_images.*' => 'image|max:2048',
+            'uploaded_images.*' => 'image|max:5120',
         ]);
 
         $property = Property::create([

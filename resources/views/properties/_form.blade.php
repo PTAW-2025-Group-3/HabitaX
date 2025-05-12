@@ -56,7 +56,7 @@
         <div id="hidden-uploaded-inputs"></div>
         <p class="text-xs text-gray-400 mb-4">
             Formatos aceites: JPG, JPEG, PNG |
-            Tamanho máximo: 2MB |
+            Tamanho máximo: 5MB |
             Máximo de 20 fotografias
         </p>
     </div>
@@ -146,7 +146,7 @@
 
             const pondOptions = {
                 maxFiles: 20,
-                maxFileSize: '2MB',
+                maxFileSize: '5MB',
                 allowMultiple: true,
                 allowReorder: true,
                 acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
@@ -185,7 +185,7 @@
                         },
                         onload: (response) => {
                             const filename = response.replace(/^["']+|["']+$/g, '');
-                            createHiddenInput(filename); // Только имя
+                            createHiddenInput(filename);
                             return filename;
                         },
                         onerror: (error) => {
@@ -201,7 +201,7 @@
                     },
                 },
                 onreorderfiles: (files) => {
-                    uploadedInputs.innerHTML = ''; // очистить все inputs
+                    uploadedInputs.innerHTML = '';
 
                     files.forEach(file => {
                         const input = document.createElement('input');

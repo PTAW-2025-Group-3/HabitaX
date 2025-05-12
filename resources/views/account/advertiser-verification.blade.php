@@ -10,13 +10,12 @@
             Por favor, carregue os documentos solicitados abaixo.
         </p>
 
-        <form action="/account/verification" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form action="{{ route('advertiser-verification.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
             <!-- Documento de Identificação -->
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <h2 class="text-xl font-semibold text-primary mb-3">1. Documento de Identificação</h2>
-                <p class="text-gray mb-4">Carregue uma foto clara do seu documento de identificação (frente e verso, se aplicável).</p>
 
                 <div class="mb-4">
                     <label for="document_type_id" class="block text-gray-secondary font-medium mb-2">Tipo de Documento</label>
@@ -41,64 +40,44 @@
                 <div class="mb-4">
                     <label for="document_number" class="block text-gray-secondary font-medium mb-2">Número do Documento</label>
                     <input type="text" name="document_number" id="document_number"
-                           value="{{ auth()->user()->document_number ?? '' }}"
-                           class="form-input w-full mt-2"
+                           class="form-input w-full mt-2" required
                            placeholder="Número do documento">
                     @error('document_number')
                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-4">
-                    <!-- Upload do Documento - Frente -->
-                    <div class="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors cursor-pointer" id="id_front_container">
-                        <input type="file" name="id_front" id="id_front" class="hidden" accept="image/*">
-                        <div class="id-preview-container hidden mb-3">
-                            <img id="id_front_preview" class="max-h-48 mx-auto rounded-lg" src="#" alt="Preview">
-                        </div>
-                        <div class="upload-prompt">
-                            <i class="bi bi-upload text-secondary  text-3xl mb-2"></i>
-                            <p class="font-medium text-gray-secondary">Frente do documento</p>
-                            <p class="text-sm text-gray mt-1">Clique para escolher ou arraste o arquivo aqui</p>
-                        </div>
+                <!-- Upload do Documentos -->
+                <div class="mb-4">
+                    <label for="documents" class="block text-gray-secondary font-medium mb-2">Carregar Documentos</label>
+                    <div class="filepond-wrapper">
+                        <input type="file"
+                               name="file"
+                               class="filepond"
+                                 id="documents-upload"
+                               multiple
+                        >
+                        <div id="hidden-uploaded-documents"></div>
                     </div>
-
-                    <!-- Upload do Documento - Verso (se aplicável) -->
-                    <div class="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors cursor-pointer" id="id_back_container">
-                        <input type="file" name="id_back" id="id_back" class="hidden" accept="image/*">
-                        <div class="id-preview-container hidden mb-3">
-                            <img id="id_back_preview" class="max-h-48 mx-auto rounded-lg" src="#" alt="Preview">
-                        </div>
-                        <div class="upload-prompt">
-                            <i class="bi bi-upload text-secondary text-3xl mb-2"></i>
-                            <p class="font-medium text-gray-secondary">Verso do documento</p>
-                            <p class="text-sm text-gray mt-1">Clique para escolher ou arraste o arquivo aqui</p>
-                        </div>
-                    </div>
+                    @error('documents')
+                        <p class="text-red text-sm mt-2">{{ $message }}</p>
+                    @enderror
                 </div>
-                @error('id_front')
-                    <p class="text-red text-sm mt-2">{{ $message }}</p>
-                @enderror
-                @error('id_back')
-                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                @enderror
             </div>
 
             <!-- Selfie com Documento -->
             <div class="bg-gray-50 rounded-lg p-6 border border-gray">
-                <h2 class="text-xl font-semibold text-primary mb-3">2. Selfie com Documento</h2>
+                <h2 class="text-xl font-semibold text-primary mb-3">2. Verificação da Identidade</h2>
                 <p class="text-gray mb-4">Tire uma selfie segurando seu documento de identificação visível ao lado do rosto.</p>
 
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors cursor-pointer" id="selfie_container">
-                    <input type="file" name="selfie" id="selfie" class="hidden" accept="image/*">
-                    <div class="selfie-preview-container hidden mb-3">
-                        <img id="selfie_preview" class="max-h-64 mx-auto rounded-lg" src="#" alt="Preview">
-                    </div>
-                    <div class="upload-prompt">
-                        <i class="bi bi-camera text-secondary text-3xl mb-2"></i>
-                        <p class="font-medium text-gray-secondary">Selfie com documento</p>
-                        <p class="text-sm text-gray mt-1">Clique para escolher ou arraste o arquivo aqui</p>
-                    </div>
+                <div class="filepond-wrapper">
+                    <input type="file"
+                           name="file"
+                           class="filepond"
+                           id="selfie-upload"
+                           multiple
+                    >
+                    <div id="hidden-uploaded-selfies"></div>
                 </div>
                 @error('selfie')
                     <p class="text-red text-sm mt-2">{{ $message }}</p>
@@ -124,75 +103,90 @@
             </div>
         </form>
     </div>
+@endsection
 
-    @push('scripts')
+@push('scripts')
     <script>
-        // Função para configurar os uploads
-        function setupFileUpload(inputId, previewId, containerId) {
-            const input = document.getElementById(inputId);
-            const container = document.getElementById(containerId);
-            const preview = document.getElementById(previewId);
-            const previewContainer = preview.parentElement;
+        document.addEventListener('DOMContentLoaded', function () {
 
-            // Evento de clique no container
-            container.addEventListener('click', () => {
-                input.click();
-            });
+            const uploadedDocuments = document.getElementById('hidden-uploaded-documents');
+            const uploadedSelfies = document.getElementById('hidden-uploaded-selfies');
 
-            // Evento de alteração de arquivo
-            input.addEventListener('change', (e) => {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
+            function createHiddenInput(target, name, value) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                target.appendChild(input);
+            }
 
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        previewContainer.classList.remove('hidden');
-                        container.querySelector('.upload-prompt').classList.add('hidden');
+            function removeHiddenInputByName(target, name) {
+                const inputs = target.querySelectorAll(`input[name="${target.id === 'hidden-uploaded-documents' ? 'uploaded_documents[]' : 'uploaded_selfies[]'}"]`);
+                for (const input of inputs) {
+                    if (input.value === name) {
+                        input.remove();
+                        console.log(`Removed input for ${name}`);
+                        return;
                     }
-
-                    reader.readAsDataURL(input.files[0]);
                 }
-            });
+                console.warn('No input found for:', name);
+            }
 
-            // Configuração para drag and drop
-            ['dragover', 'dragenter'].forEach(eventName => {
-                container.addEventListener(eventName, (e) => {
-                    e.preventDefault();
-                    container.classList.add('border-indigo-500', 'bg-indigo-50');
-                }, false);
-            });
+            function initPond(inputSelector, targetWrapper, fieldName) {
+                FilePond.create(document.querySelector(inputSelector), {
+                    maxFiles: 20,
+                    maxFileSize: '5MB',
+                    allowMultiple: true,
+                    allowReorder: true,
+                    acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg'],
+                    labelIdle: 'Arraste e solte suas imagens ou <span class="filepond--label-action">Selecione</span>',
+                    server: {
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        process: {
+                            url: '/uploads/process',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            onload: (response) => {
+                                const filename = response.replace(/^["']+|["']+$/g, '');
+                                createHiddenInput(targetWrapper, fieldName, filename);
+                                return filename;
+                            },
+                            onerror: (error) => {
+                                console.error('Upload failed:', error);
+                            }
+                        },
+                        revert: {
+                            url: '/uploads/revert',
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        }
+                    },
+                    onreorderfiles: (files) => {
+                        targetWrapper.innerHTML = '';
 
-            ['dragleave', 'dragend', 'drop'].forEach(eventName => {
-                container.addEventListener(eventName, (e) => {
-                    e.preventDefault();
-                    container.classList.remove('border-indigo-500', 'bg-indigo-50');
-                }, false);
-            });
-
-            container.addEventListener('drop', (e) => {
-                e.preventDefault();
-                input.files = e.dataTransfer.files;
-
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        previewContainer.classList.remove('hidden');
-                        container.querySelector('.upload-prompt').classList.add('hidden');
+                        files.forEach(file => {
+                            createHiddenInput(targetWrapper, fieldName, file.serverId || file.source || file.file?.name);
+                        });
+                    },
+                    onremovefile: (error, file) => {
+                        const name = file?.file?.name;
+                        if (name) {
+                            removeHiddenInputByName(targetWrapper, name);
+                        }
+                    },
+                    onerror: (error) => {
+                        console.error('Upload error:', error);
                     }
+                });
+            }
 
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }, false);
-        }
-
-        // Inicializar os uploads quando a página carregar
-        document.addEventListener('DOMContentLoaded', () => {
-            setupFileUpload('id_front', 'id_front_preview', 'id_front_container');
-            setupFileUpload('id_back', 'id_back_preview', 'id_back_container');
-            setupFileUpload('selfie', 'selfie_preview', 'selfie_container');
+            initPond('#documents-upload', uploadedDocuments, 'uploaded_documents[]');
+            initPond('#selfie-upload', uploadedSelfies, 'uploaded_selfies[]');
         });
     </script>
-    @endpush
-@endsection
+@endpush

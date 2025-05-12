@@ -176,7 +176,90 @@
                             </div>
                             <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-4">
                                 @foreach($documents as $index => $document)
-                                    <div class="photo-item cursor-pointer" data-index="{{ $index }}">
+                                    <div class="document-photo-item cursor-pointer" data-index="{{ $index }}">
+                                        <div class="relative h-48 overflow-hidden rounded border">
+                                            <img src="{{ $document->getUrl('preview') }}"
+                                                 alt="{{ $docNames[$index] ?? 'Documento' }}"
+                                                 class="w-full h-full object-cover hover:scale-105 transition-transform">
+                                        </div>
+                                        <div class="mt-2 text-sm text-gray-600">
+                                            {{ $docNames[$index] ?? ('Documento ' . ($index + 1)) }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="bg-white rounded-b-lg shadow-md p-6 text-center">
+                        <div class="flex flex-col items-center justify-center p-8 text-gray-500">
+                            <i class="bi bi-file-earmark-x text-4xl mb-2"></i>
+                            <p>Nenhum documento foi enviado pelo anunciante.</p>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <div class="mb-6">
+                <div class="border-b border-gray-200 bg-white rounded-t-lg shadow-md p-4">
+                    <h4 class="text-lg font-semibold flex items-center">
+                        <i class="bi bi-card-image me-2 text-gray-500"></i>
+                        Verificação de Identidade
+                    </h4>
+                </div>
+
+                @if($verification->hasMedia('identity_verifications'))
+                    @php
+                        $verifications = $verification->getMedia('identity_verifications');
+
+                        // Definir nomes para os documentos
+                        $docNames = [
+                            'Documento de Identificação Frontal',
+                            'Documento de Identificação Dorsal',
+                            'Selfie Com Documento'
+                        ];
+                    @endphp
+
+                    <div id="verifications-gallery" class="gallery-container bg-white rounded-b-lg shadow-md p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            @foreach($verifications as $index => $document)
+                                <div class="border rounded-lg p-4">
+                                    <h5 class="font-medium text-gray-700 mb-3">
+                                        {{ $docNames[$index] ?? 'Documento Adicional' }}
+                                    </h5>
+                                    <a href="{{ $document->getUrl() }}" data-index="{{ $index }}" class="block">
+                                        <img src="{{ $document->getUrl('preview') }}"
+                                             alt="{{ $docNames[$index] ?? 'Documento' }}"
+                                             class="w-full h-48 object-cover rounded shadow-sm hover:opacity-90 transition-opacity cursor-pointer">
+                                    </a>
+                                </div>
+                            @endforeach
+
+                            @for($i = count($verifications); $i < 3; $i++)
+                                <div class="border rounded-lg p-4">
+                                    <h5 class="font-medium text-gray-700 mb-3">
+                                        {{ $docNames[$i] }}
+                                    </h5>
+                                    <div class="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                                        <span class="text-gray-400"><i class="bi bi-file-earmark-x text-3xl"></i></span>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
+                    </div>
+
+                    <!-- Modal para todas as fotos -->
+                    <div id="verifications-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden overflow-auto bg-black bg-opacity-75 p-4">
+                        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                            <div class="p-4 border-b flex justify-between items-center">
+                                <h3 class="text-lg font-semibold">Todos os documentos</h3>
+                                <button id="closeDocumentsModal" class="p-2 hover:bg-gray-100 rounded-full">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+                                @foreach($documents as $index => $document)
+                                    <div class="verification-photo-item cursor-pointer" data-index="{{ $index }}">
                                         <div class="relative h-48 overflow-hidden rounded border">
                                             <img src="{{ $document->getUrl('preview') }}"
                                                  alt="{{ $docNames[$index] ?? 'Documento' }}"
@@ -268,7 +351,7 @@
             @endif
         </div>
     </div>
-    @if($verification->hasMedia('documents') || $verification->verification_advertiser_state === 0)
+    @if($verification->hasMedia('documents') || $verification->hasMedia('identity_verifications') || $verification->verification_advertiser_state === 0)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
 
@@ -290,7 +373,7 @@
 
                 const documentsModal = document.getElementById('documents-modal');
                 const closeDocumentsModal = document.getElementById('closeDocumentsModal');
-                const photoItems = document.querySelectorAll('.photo-item');
+                const documentPhotoItems = document.querySelectorAll('.document-photo-item');
 
                 // Funções abrir/fechar modal
                 function openDocumentsModal() {
@@ -332,10 +415,80 @@
                 });
 
                 // Abrir galeria ao clicar em fotos dentro do modal
-                photoItems.forEach(item => {
+                documentPhotoItems.forEach(item => {
                     item.addEventListener('click', function () {
                         const index = parseInt(this.dataset.index);
                         closeDocumentsModalFunction();
+                        setTimeout(() => {
+                            window.documentsGallery.openGallery(index);
+                        }, 100);
+                    });
+                });
+                @endif
+
+                @if($verification->hasMedia('identity_verifications'))
+                const triggersV = Array.from(document.querySelectorAll('#verifications-gallery a'));
+
+                window.documentsGallery = lightGallery(document.getElementById('verifications-gallery'), {
+                    dynamic: true,
+                    plugins: [lgThumbnail, lgZoom],
+                    download: true,
+                    zoom: true,
+                    speed: 500,
+                    dynamicEl: triggersV.map(a => ({
+                        src: a.getAttribute('href'),
+                        thumb: a.querySelector('img').getAttribute('src')
+                    }))
+                });
+
+                const verificationsModal = document.getElementById('verifications-modal');
+                const closeVerificationsModal = document.getElementById('closeVerificationsModal');
+                const verificationPhotoItems = document.querySelectorAll('.verification-photo-item');
+
+                // Funções abrir/fechar modal
+                function openVerificationModal() {
+                    verificationsModal.classList.remove('hidden');
+                    document.body.classList.add('modal-open');
+                }
+
+                function closeVerificationModalFunction() {
+                    verificationsModal.classList.add('hidden');
+                    document.body.classList.remove('modal-open');
+                }
+
+                // Clique nas miniaturas da galeria
+                triggersV.forEach((trigger, index) => {
+                    trigger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.documentsGallery.openGallery(index);
+                    });
+                });
+
+
+                // Fechar modal por botão, clique fora ou tecla ESC
+                if (closeVerificationsModal) {
+                    closeVerificationsModal.addEventListener('click', closeVerificationModalFunction);
+                }
+
+                if (verificationsModal) {
+                    verificationsModal.addEventListener('click', function (e) {
+                        if (e.target === verificationsModal) {
+                            closeVerificationModalFunction();
+                        }
+                    });
+                }
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && !verificationsModal.classList.contains('hidden')) {
+                        closeVerificationModalFunction();
+                    }
+                });
+
+                // Abrir galeria ao clicar em fotos dentro do modal
+                verificationPhotoItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        const index = parseInt(this.dataset.index);
+                        closeVerificationModalFunction();
                         setTimeout(() => {
                             window.documentsGallery.openGallery(index);
                         }, 100);

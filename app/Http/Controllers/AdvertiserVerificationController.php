@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdvertiserVerification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdvertiserVerificationController extends Controller
 {
@@ -105,24 +106,54 @@ class AdvertiserVerificationController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Verificação de anunciante: início do processo de validação');
         $request->validate([
             'document_type_id' => 'required|exists:document_types,id',
             'document_number' => 'required|string|max:255',
-            'identification_documents' => 'required|file|mimes:jpeg,png,jpg|max:2048',
-            'identity_verifications' => 'required|file|mimes:jpeg,png,jpg|max:2048',
+            'uploaded_documents' => 'nullable|array',
+            'uploaded_documents.*' => 'string',
+            'uploaded_selfies' => 'nullable|array',
+            'uploaded_selfies.*' => 'string',
         ]);
 
+        Log::info('Verificação de anunciante: validação passada');
+
+        $user = auth()->user();
+        $user->update([
+            'document_type_id' => $request->input('document_type_id'),
+            'document_number' => $request->input('document_number'),
+        ]);
+        Log::info('Verificação de anunciante: utilizador atualizado');
+
         $verification = AdvertiserVerification::create([
-            'document_type_id' => $request->document_type_id,
-            'document_number' => $request->document_number,
             'submitted_by' => auth()->id(),
             'submitted_at' => now(),
         ]);
+        Log::info('Verificação de anunciante criada: ' . $verification->id);
 
-        $verification->addMedia($request->file('identification_documents'))
-            ->toMediaCollection('identification_documents');
-        $verification->addMedia($request->file('identity_verifications'))
-            ->toMediaCollection('identity_verifications');
+        $documents = $request->input('uploaded_documents', []);
+        foreach ($documents as $document) {
+            $document = trim(basename($document));
+            $tempPath = storage_path('app/public/tmp/uploads/' . $document);
+            if (file_exists($tempPath)) {
+                $verification->addMedia($tempPath)
+                    ->preservingOriginal()
+                    ->toMediaCollection('documents');
+                unlink($tempPath);
+            }
+        }
+
+        $selfies = $request->input('uploaded_selfies', []);
+        foreach ($selfies as $selfie) {
+            $selfie = trim(basename($selfie));
+            $tempPath = storage_path('app/public/tmp/uploads/' . $selfie);
+            if (file_exists($tempPath)) {
+                $verification->addMedia($tempPath)
+                    ->preservingOriginal()
+                    ->toMediaCollection('identity_verifications');
+                unlink($tempPath);
+            }
+        }
 
         return redirect()->route('advertiser-verification.create')
             ->with('success', 'Verificação de anunciante submetida com sucesso!');

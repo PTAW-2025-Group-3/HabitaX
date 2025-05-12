@@ -219,7 +219,7 @@ Route::middleware('auth')->group(function () {
     // Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     // Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
-    Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verification');
+    Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verification.create');
     Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verification.store');
 
     Route::get('/contact-requests', [ContactRequestController::class, 'index'])

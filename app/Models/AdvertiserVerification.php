@@ -50,7 +50,7 @@ class AdvertiserVerification extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('identification_documents')
+        $this->addMediaCollection('documents')
             ->useDisk('public');
         $this->addMediaCollection('identity_verifications')
             ->useDisk('public');
@@ -62,7 +62,7 @@ class AdvertiserVerification extends Model implements HasMedia
             ->fit(Fit::Crop, 800, 600)
             ->optimize()
             ->sharpen(5)
-            ->performOnCollections('identification_documents');
+            ->performOnCollections('documents');
 
         $this->addMediaConversion('preview')
             ->fit(Fit::Crop, 800, 600)
@@ -76,7 +76,7 @@ class AdvertiserVerification extends Model implements HasMedia
         parent::boot();
 
         static::deleting(function ($verification) {
-            $verification->clearMediaCollection('identification_documents');
+            $verification->clearMediaCollection('documents');
             $verification->clearMediaCollection('identity_verifications');
         });
     }
