@@ -87,14 +87,10 @@ class AdvertiserVerification extends Model implements HasMedia
             if (
                 $verification->verification_advertiser_state === 1 &&
                 $verification->submitter &&
-                !$verification->submitter->advertiser_number
+                !$verification->submitter->is_advertiser
             ) {
-                do {
-                    $randomNumber = rand(10000, 99999);
-                } while (User::where('advertiser_number', $randomNumber)->exists());
-
                 $verification->submitter->update([
-                    'advertiser_number' => $randomNumber,
+                    'is_advertiser' => true,
                 ]);
             }
         });

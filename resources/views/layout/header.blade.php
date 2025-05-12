@@ -92,7 +92,7 @@
                             Pedidos de Contacto
                         </a>
                         {{--   estas opções serão visiveis apos verificação de anunciante   --}}
-                        @if(auth()->user()->advertiser_number)
+                        @if(auth()->user()->is_advertiser)
                             <a href="{{ route('properties.my') }}"
                                class="flex items-center px-4 py-2 text-sm text-gray-secondary hover:bg-gray-100">
                                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,7 +152,7 @@
                 </div>
             @endguest
             {{-- Criar anuncio Button --}}
-            <a href="{{ auth()->check() ? route('properties.create') : route('advertisements.help') }}"
+            <a href="{{ auth()->check() && auth()->user()->is_advertiser ? route('advertisements.my') : route('advertisements.help') }}"
                class="relative px-6 py-2 btn-primary">
                 <span class="z-10">Publicar Anúncio</span>
             </a>

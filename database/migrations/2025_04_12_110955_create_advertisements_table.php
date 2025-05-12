@@ -19,7 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->enum('transaction_type', ['sale', 'rent']);
             $table->float('price');
-            $table->enum('state', ['pending', 'active', 'archived'])->default('pending');
+            $table->boolean('is_published')->default(false);
+            $table->boolean('is_suspended')->default(false);
 
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');

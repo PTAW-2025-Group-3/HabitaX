@@ -19,8 +19,9 @@ return new class extends Migration
             $table->timestamp('submission_date')->nullable();
             $table->timestamp('validation_date')->nullable();
 
-            $table->string('document_url')->nullable();
-            $table->string('photo_url')->nullable();
+            $table->string('identifier_type')->nullable()->comment('Tipo de documento (CC, Passaporte, Carta de Condução)');
+
+            $table->text('validator_comments')->nullable();
 
             $table->foreignId('validated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');

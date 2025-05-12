@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdvertiserVerification;
 use Illuminate\Http\Request;
 
-class VerificationAdvertiserController extends Controller
+class AdvertiserVerificationController extends Controller
 {
     /**
      * Exibe a lista de verificações de anunciantes
@@ -97,6 +97,37 @@ class VerificationAdvertiserController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $documentTypes = \App\Models\DocumentType::all();
+        return view('account.advertiser-verification', compact('documentTypes'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'document_type_id' => 'required|exists:document_types,id',
+            'document_number' => 'required|string|max:255',
+            'identification_documents' => 'required|file|mimes:jpeg,png,jpg|max:2048',
+            'identity_verifications' => 'required|file|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $verification = AdvertiserVerification::create([
+            'document_type_id' => $request->document_type_id,
+            'document_number' => $request->document_number,
+            'submitted_by' => auth()->id(),
+            'submitted_at' => now(),
+        ]);
+
+        $verification->addMedia($request->file('identification_documents'))
+            ->toMediaCollection('identification_documents');
+        $verification->addMedia($request->file('identity_verifications'))
+            ->toMediaCollection('identity_verifications');
+
+        return redirect()->route('advertiser-verification.create')
+            ->with('success', 'Verificação de anunciante submetida com sucesso!');
+    }
+
     public function updateState(Request $request, $id)
     {
         try {
@@ -113,9 +144,9 @@ class VerificationAdvertiserController extends Controller
             $verification->save();
 
             // Aqui gera-se o caralho do número do anunciante caso o estado seja 1
-            if ($validated['state'] == 1 && $verification->submitter && !$verification->submitter->advertiser_number) {
+            if ($validated['state'] == 1 && $verification->submitter && !$verification->submitter->is_advertiser) {
                 $verification->submitter->update([
-                    'advertiser_number' => rand(10000, 99999)
+                    'is_advertiser' => true
                 ]);
             }
 

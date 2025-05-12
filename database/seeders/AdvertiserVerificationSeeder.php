@@ -68,9 +68,9 @@ class AdvertiserVerificationSeeder extends Seeder
         AdvertiserVerification::where('verification_advertiser_state', 1)
             ->get()
             ->each(function ($verification) {
-                if ($verification->submitter && !$verification->submitter->advertiser_number) {
+                if ($verification->submitter && !$verification->submitter->is_advertiser) {
                     $verification->submitter->update([
-                        'advertiser_number' => rand(10000, 99999)
+                        'is_advertiser' => true,
                     ]);
                 }
             });

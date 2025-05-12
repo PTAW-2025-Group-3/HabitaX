@@ -29,7 +29,7 @@ class User extends Authenticatable
         'telephone',
         'profile_picture_path',
         'user_type',
-        'advertiser_number',
+        'is_advertiser',
         'staff_number',
         'state',
     ];
@@ -46,7 +46,7 @@ class User extends Authenticatable
         'public_profile' => 'boolean',
         'show_email' => 'boolean',
         'telephone' => 'integer',
-        'advertiser_number' => 'integer',
+        'is_advertiser' => 'boolean',
         'staff_number' => 'integer',
     ];
 

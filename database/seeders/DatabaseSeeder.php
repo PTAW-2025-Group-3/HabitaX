@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         if (\App\Models\GlobalVariable::class::count() === 0) {
             $this->call([
+                DocumentTypeSeeder::class,
                 GlobalVariableSeeder::class,
                 UserSeeder::class,
                 DistrictSeeder::class,

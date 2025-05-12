@@ -19,21 +19,32 @@
                 <p class="text-gray mb-4">Carregue uma foto clara do seu documento de identificação (frente e verso, se aplicável).</p>
 
                 <div class="mb-4">
-                    <label for="id_type" class="block text-gray-secondary font-medium mb-2">Tipo de Documento</label>
+                    <label for="document_type_id" class="block text-gray-secondary font-medium mb-2">Tipo de Documento</label>
                     <div class="relative dropdown-wrapper">
-                        <select id="id_type" name="id_type" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
+                        <select id="document_type_id" name="document_type_id" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
                             <option value="" disabled selected>Selecione o tipo de documento</option>
-                            <option value="cc">Cartão de Cidadão (CC)</option>
-                            <option value="passport">Passaporte</option>
-                            <option value="driver">Carta de Condução</option>
-                            <option value="other">Outro</option>
+                            @foreach($documentTypes as $documentType)
+                                <option value="{{ $documentType->id }}">
+                                    {{ $documentType->name }}
+                                </option>
+                            @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                             <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                         </div>
                     </div>
+                    @error('document_type_id')
+                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    @error('id_type')
+                <div class="mb-4">
+                    <label for="document_number" class="block text-gray-secondary font-medium mb-2">Número do Documento</label>
+                    <input type="text" name="document_number" id="document_number"
+                           value="{{ auth()->user()->document_number ?? '' }}"
+                           class="form-input w-full mt-2"
+                           placeholder="Número do documento">
+                    @error('document_number')
                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

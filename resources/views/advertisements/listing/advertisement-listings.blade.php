@@ -77,7 +77,7 @@
             if (!viewParam && savedView) {
                 url.searchParams.set('view', savedView);
                 url.searchParams.delete('page');
-                window.location.replace(url.toString()); // 🔁 Перенаправление ДО загрузки DOM
+                window.location.replace(url.toString());
             }
         })();
     </script>

@@ -17,7 +17,7 @@ use App\Http\Controllers\PropertyAttributeOptionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\ReportedAdvertisementController;
-use App\Http\Controllers\VerificationAdvertiserController;
+use App\Http\Controllers\AdvertiserVerificationController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ModeratorMiddleware;
 use App\Models\User;
@@ -102,7 +102,7 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/moderation', [ModerationController::class, 'index'])->name('moderation');
     Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
         ->name('reported-advertisement.show');
-    Route::get('/moderation/verification-advertiser/{id}', [VerificationAdvertiserController::class, 'show'])
+    Route::get('/moderation/verification-advertiser/{id}', [AdvertiserVerificationController::class, 'show'])
         ->name('verification-advertiser.show');
     Route::post('/moderation/reported-advertisement/{id}/approve', [ReportedAdvertisementController::class, 'approve'])
         ->name('reported-advertisement.approve');
@@ -116,13 +116,13 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/moderation/suspended-users/ajax', [ModerationController::class, 'ajaxSuspendedUsers'])
         ->name('moderation.suspended-users.ajax');
 
-    Route::get('/moderation/verification-advertisers', [VerificationAdvertiserController::class, 'index'])
+    Route::get('/moderation/verification-advertisers', [AdvertiserVerificationController::class, 'index'])
         ->name('verification-advertiser.index');
-    Route::get('/moderation/verification-advertisers/ajax', [VerificationAdvertiserController::class, 'ajaxVerifications'])
+    Route::get('/moderation/verification-advertisers/ajax', [AdvertiserVerificationController::class, 'ajaxVerifications'])
         ->name('verification-advertiser.ajax');
-    Route::get('/moderation/verification-advertisers/{id}', [VerificationAdvertiserController::class, 'show'])
+    Route::get('/moderation/verification-advertisers/{id}', [AdvertiserVerificationController::class, 'show'])
         ->name('verification-advertiser.show');
-    Route::post('/moderation/verification-advertisers/{id}/update-state', [VerificationAdvertiserController::class, 'updateState'])
+    Route::post('/moderation/verification-advertisers/{id}/update-state', [AdvertiserVerificationController::class, 'updateState'])
         ->name('verification-advertiser.update-state');
 
     Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
@@ -219,9 +219,8 @@ Route::middleware('auth')->group(function () {
     // Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     // Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
-    Route::get('/advertiser-verification', function () {
-        return view('account.advertiser-verification');
-    })->name('advertiser-verification');
+    Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verification');
+    Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verification.store');
 
     Route::get('/contact-requests', [ContactRequestController::class, 'index'])
             ->name('contact-requests.index');

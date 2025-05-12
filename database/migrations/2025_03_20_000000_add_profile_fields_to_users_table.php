@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('telephone')->nullable();
             $table->string('profile_picture_path')->nullable();
             $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
-            $table->integer('advertiser_number')->nullable();
+            $table->boolean('is_advertiser')->default(false);
             $table->integer('staff_number')->nullable();
             $table->enum('state', ['active', 'suspended', 'banned', 'archived'])->default('active');
 
@@ -41,7 +41,7 @@ return new class extends Migration
                 'telephone',
                 'profile_picture_path',
                 'user_type',
-                'advertiser_number',
+                'is_advertiser',
                 'staff_number',
                 'state',
                 'email_notifications',

@@ -53,7 +53,6 @@ class UserFactory extends Factory
             'telephone' => fake()->numerify('91#######'),
             'profile_picture_path' => $fileName,
             'user_type' => fake()->randomElement(['user', 'moderator', 'admin']),
-            'advertiser_number' => null,
             'staff_number' => null,
             'bio' => fake()->paragraph(),
             'email_notifications' => true,

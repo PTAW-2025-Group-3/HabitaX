@@ -56,10 +56,6 @@
                     </div>
 
                     <div>
-                        Document
-                    </div>
-
-                    <div>
                         <label for="bio" class="block text-gray-secondary font-medium mb-2">Biografia</label>
                         <textarea name="bio" id="bio" rows="4"
                                   class="form-input w-full"
