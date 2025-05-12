@@ -231,7 +231,5 @@ document.addEventListener('DOMContentLoaded', function () {
     setupPaginationLinks();
 
     // Carregar dados iniciais apenas se ainda não foram carregados
-    if (document.querySelectorAll('#contactsTableBody tr').length <= 1) {
-        loadContacts();
-    }
+    loadContacts();
 });

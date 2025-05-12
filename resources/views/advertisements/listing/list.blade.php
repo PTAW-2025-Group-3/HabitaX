@@ -86,8 +86,7 @@
                             </p>
                             <p class="text-2xl font-extrabold text-blue-800 mt-2">{{ number_format($ad['price'], 0, ',', '.') }}
                                 €</p>
-                            <div class="flex items-center mt-1 flex-wrap">
-                                <i class="bi bi-house-door-fill text-secondary mr-1"></i>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
                                 @php
                                     $attributeIdsToShow = $ad->property->type
                                         ->attributes()
@@ -99,22 +98,20 @@
                                         ->with('attribute') // eager-load the attribute
                                         ->get();
                                 @endphp
-                                @foreach($parameters as $parameter)
-                                    @if($parameter->attribute)
-                                        <span class="text-sm font-medium">
-                                                        {{ $parameter->attribute->name }}:
-                                                        @if($parameter->attribute->type->value === 'boolean')
-                                                {{ $parameter->getValue($parameter->attribute->type) ? 'Sim' : 'Não' }}
-                                            @else
-                                                {{ $parameter->getValue($parameter->attribute->type) }}
-                                            @endif
-                                            {{ $parameter->attribute->unit }}
-                                                    </span>
-                                        @if(!$loop->last)
-                                            <span class="mx-1">|</span>
+                                <div class="flex flex-wrap items-center gap-2 mt-1">
+                                    <i class="bi bi-house-door-fill text-secondary mr-1"></i>
+                                    @foreach($parameters as $parameter)
+                                        @if($parameter->attribute)
+                                            <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-lg">
+                                                {{ $parameter->attribute->name }}:
+                                                {{ $parameter->attribute->type->value === 'boolean'
+                                                    ? ($parameter->getValue($parameter->attribute->type) ? 'Sim' : 'Não')
+                                                    : $parameter->getValue($parameter->attribute->type) }}
+                                                {{ $parameter->attribute->unit }}
+                                            </span>
                                         @endif
-                                    @endif
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                             <p class="text-gray-700 line-clamp-2 leading-relaxed">{{ $ad['description'] }}</p>
                         </div>

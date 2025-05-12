@@ -58,7 +58,7 @@
         <div>
             <label for="telephone" class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
             <input type="tel" id="telephone" name="telephone" class="form-input @error('telephone') border-red-300 @enderror"
-                   placeholder="+351..." value="{{ old('telephone') }}" required>
+                   placeholder="+351..." value="{{ auth()->user()?->telephone ?? old('telephone') }}" required>
             @error('telephone')
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
