@@ -1,16 +1,42 @@
-<section class="max-w-5xl mx-auto mt-20 mb-24 px-4">
+<section class="max-w-5xl mx-auto mb-24 px-4">
     <h2 class="text-center text-5xl font-bold text-black tracking-tight">FAQ’s</h2>
-    <p class="text-center text-gray mt-4 mb-10">As Perguntas Mais Frequentemente Feitas</p>
+    <p class="text-center text-gray mt-4 mb-10">As Perguntas Mais Frequentes</p>
 
     <div class="bg-gray-50 rounded-2xl shadow-xl divide-y divide-gray-200">
 
         @php
             $faqs = [
-              ['question' => 'Como faço para criar um anúncio?', 'answer' => 'Preencha o formulário com os detalhes necessários e clique no botão "Publicar Anúncio". A sua propriedade vai ser listada de imediato!.'],
-              ['question' => 'Como faço para editar ou eliminar um anúncio?', 'answer' => 'Vá até a sua dashboard, selecione o anúncio que deseja editar ou eliminar, e utilize o respetivo botão.'],
-              ['question' => 'Como posso agendar uma visita?', 'answer' => 'Utilize o formulário de contacto ou o número de telefone fornecido no anúncio para coordenar a visita diretamente com o dono da propriedade.'],
-              ['question' => 'Como reporto um problema com uma propriedade?', 'answer' => 'Contacte a nossa equipa de suporte utilizando o formulário acima ou envie-nos um email diretamente no endereço suporte@habitax.pt.']
-            ];
+  ['question' => 'É necessário criar uma conta para publicar um anúncio?',
+   'answer' => 'Sim, para garantir a segurança e permitir a gestão dos seus anúncios, é necessário criar uma conta antes de publicar.'],
+
+  ['question' => 'Como posso recuperar a minha password?',
+   'answer' => 'Clique em "Esqueci-me da Password" na página de login e siga as instruções para redefinir a sua password.'],
+
+  ['question' => 'Como faço para criar um anúncio?',
+   'answer' => 'Primeiro, conclua a verificação de anunciante. Em seguida, vá à secção "Minhas Propriedades" para adicionar uma ou mais propriedades. Por fim, aceda à secção "Meus Anúncios", preencha o formulário com os detalhes necessários e clique em "Publicar Anúncio". A sua propriedade será listada de imediato.'],
+
+  ['question' => 'Existe algum custo para publicar um anúncio?',
+   'answer' => 'A publicação de anúncios básicos é gratuita. No entanto, pode optar por serviços pagos para destacar o seu anúncio e obter mais visibilidade.'],
+
+  ['question' => 'Como posso entrar em contacto com o proprietário de um anúncio?',
+   'answer' => 'Utilize o formulário de contacto disponível na página do anúncio ou ligue para o número de telefone fornecido.'],
+
+  ['question' => 'Como posso alterar a minha password?',
+   'answer' => 'Vá até às definições da sua conta e clique na opção "Alterar Password".'],
+
+  ['question' => 'Como faço para editar ou eliminar um anúncio?',
+   'answer' => 'Aceda à sua dashboard, selecione o anúncio que pretende editar ou eliminar e utilize o respetivo botão.'],
+
+  ['question' => 'Como reporto um problema com uma propriedade?',
+   'answer' => 'Contacte a nossa equipa de suporte utilizando o formulário acima ou envie-nos um email diretamente para suporte@habitax.pt.'],
+
+  ['question' => 'Como posso fazer o meu número aparecer nos meus anúncios?',
+   'answer' => 'Aceda às definições da sua conta e ative a opção para mostrar o número de telefone nos anúncios.'],
+
+  ['question' => 'Posso incluir mais de uma imagem no meu anúncio?',
+   'answer' => 'Sim, pode adicionar várias imagens durante o processo de criação ou edição do anúncio. Isso ajuda a aumentar o interesse dos potenciais compradores.']
+];
+
         @endphp
 
         @foreach ($faqs as $index => $faq)

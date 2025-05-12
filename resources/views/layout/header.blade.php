@@ -33,10 +33,6 @@
                 Sobre Nós
                 <span class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-secondary group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="{{ route('contact') }}" class="relative group text-gray-secondary font-medium text-lg transition-all duration-300">
-                Contactos
-                <span class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-secondary group-hover:w-full transition-all duration-300"></span>
-            </a>
         </div>
 
         {{-- CTA / Auth (Desktop) --}}
