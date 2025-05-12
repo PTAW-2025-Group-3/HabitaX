@@ -84,7 +84,6 @@
                         Data de Pedido<span class="sort-icon ml-1"></span>
                     </div>
                 </th>
-                <th class="p-4">Tipo de Documentação</th>
                 <th class="p-4">Status</th>
                 <th class="p-4">Ações</th>
             </tr>
@@ -104,7 +103,6 @@
                         <td class="p-4 text-gray-500">
                             {{ $verification->submitted_at ? $verification->submitted_at->format('d/m/Y - H:i') : 'N/A' }}
                         </td>
-                        <td class="p-4">{{ $verification->identifier_type ?? 'N/A' }}</td>
                         <td class="p-4">
                             @php
                                 $stateClass = '';
@@ -319,7 +317,6 @@
                     <td class="p-4 font-medium">${submitterName}</td>
                     <td class="p-4 text-gray-600">${submitterTel}</td>
                     <td class="p-4 text-gray-500">${formattedDate}</td>
-                    <td class="p-4">${verification.identifier_type || 'N/A'}</td>
                     <td class="p-4">
                         <span class="px-2 py-1 rounded-full text-xs font-medium ${stateBadgeClass}">
                             ${stateText}

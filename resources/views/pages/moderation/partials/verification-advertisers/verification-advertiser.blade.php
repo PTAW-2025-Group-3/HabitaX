@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Verification Advertiser')
+@section('title', 'Verificação de Anunciante')
 
 @section('content')
     <div class="container mx-auto py-8 px-4">
@@ -104,12 +104,32 @@
                         </div>
 
                         <div>
+                            <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Nº Contribuinte</label>
+                            <div class="flex">
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-card-text text-gray"></i>
+                                </span>
+                                <input type="text" value="{{ $verification->submitter->nif ?? 'N/A' }}" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
+                            </div>
+                        </div>
+
+                        <div>
                             <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Tipo de Documento</label>
                             <div class="flex">
                                 <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
                                     <i class="bi bi-card-text text-gray"></i>
                                 </span>
-                                <input type="text" value="{{ $verification->identifier_type ?? 'N/A' }}" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
+                                <input type="text" value="{{ $verification->submitter->document_type->name ?? 'N/A' }}" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray uppercase tracking-wide mb-1">Nº de Documento</label>
+                            <div class="flex">
+                                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 flex items-center">
+                                    <i class="bi bi-card-text text-gray"></i>
+                                </span>
+                                <input type="text" value="{{ $verification->submitter->document_number ?? 'N/A' }}" readonly class="bg-gray-100 border border-gray-300 rounded-r-md px-3 py-2 w-full focus:outline-none text-gray-700" />
                             </div>
                         </div>
                     </div>

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('public_profile')->default(true);
             $table->boolean('show_email')->default(false);
 
+            $table->integer('nif')->nullable();
             $table->string('document_number')->nullable();
             $table->foreignId('document_type_id')->nullable()->constrained('document_types')->nullOnDelete();
         });
@@ -48,6 +49,7 @@ return new class extends Migration
                 'message_notifications',
                 'public_profile',
                 'show_email',
+                'nif',
                 'document_number',
                 'document_type_id',
             ]);

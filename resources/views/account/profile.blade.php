@@ -2,6 +2,22 @@
 
 @section('account-content')
     <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 animate-fade-in">
+        <div class="fixed top-0 left-0 w-full z-50">
+            <div class="container mx-auto p-4">
+                <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
+                    @if (session('success'))
+                        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                            {{ session('success') }}
+                        </div>
+                    @elseif(session('error'))
+                        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <h1 class="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6">Meu Perfil</h1>
         <p class="text-gray mb-4 sm:mb-6">
             Mantenha seus dados atualizados para melhorar sua experiência na plataforma.

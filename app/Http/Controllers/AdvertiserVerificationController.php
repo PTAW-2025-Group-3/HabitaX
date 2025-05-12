@@ -100,6 +100,14 @@ class AdvertiserVerificationController extends Controller
 
     public function create()
     {
+        // Verifica se o utilizador tem verificação pendente
+        $hasPending = AdvertiserVerification::where('submitted_by', auth()->id())
+            ->where('verification_advertiser_state', 0)
+            ->exists();
+        if ($hasPending) {
+            return redirect()->route('profile.edit')->with('error', 'Já existe uma verificação pendente para o seu perfil.');
+        }
+
         $documentTypes = \App\Models\DocumentType::all();
         return view('account.advertiser-verification', compact('documentTypes'));
     }
@@ -110,6 +118,7 @@ class AdvertiserVerificationController extends Controller
         $request->validate([
             'document_type_id' => 'required|exists:document_types,id',
             'document_number' => 'required|string|max:255',
+            'nif' => 'required|integer|digits:9',
             'uploaded_documents' => 'nullable|array',
             'uploaded_documents.*' => 'string',
             'uploaded_selfies' => 'nullable|array',
@@ -122,6 +131,7 @@ class AdvertiserVerificationController extends Controller
         $user->update([
             'document_type_id' => $request->input('document_type_id'),
             'document_number' => $request->input('document_number'),
+            'nif' => $request->input('nif'),
         ]);
         Log::info('Verificação de anunciante: utilizador atualizado');
 

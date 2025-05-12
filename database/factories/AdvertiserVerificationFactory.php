@@ -35,8 +35,6 @@ class AdvertiserVerificationFactory extends Factory
             'submission_date' => now()->subDays(rand(2, 15)),
             'validation_date' => $isValidated ? now()->subDays(rand(0, 1)) : null,
 
-            'identifier_type' => $this->faker->randomElement(['CC', 'Passaporte', 'Carta de Condução']),
-
             'submitted_by' => $submitter?->id,
             'validated_by' => $isValidated ? $validator?->id : null,
 

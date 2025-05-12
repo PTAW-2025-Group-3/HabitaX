@@ -47,6 +47,16 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label for="nif" class="block text-gray-secondary font-medium mb-2">Numero do Contribuinte</label>
+                    <input type="number" name="nif" id="nif"
+                           class="form-input w-full mt-2" required
+                           placeholder="Número do documento">
+                    @error('nif')
+                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Upload do Documentos -->
                 <div class="mb-4">
                     <label for="documents" class="block text-gray-secondary font-medium mb-2">Carregar Documentos</label>

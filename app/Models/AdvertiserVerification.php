@@ -17,7 +17,6 @@ class AdvertiserVerification extends Model implements HasMedia
         'verification_advertiser_state',
         'submissionDate',
         'validationDate',
-        'identifier_type',
         'validated_by',
         'submitted_by',
         'submitted_at',
