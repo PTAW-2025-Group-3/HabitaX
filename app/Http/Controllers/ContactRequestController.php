@@ -11,7 +11,7 @@ class ContactRequestController extends Controller
     public function index(Request $request)
     {
         // Check if user has any advertisements (is an advertiser)
-        $isAdvertiser = Advertisement::where('created_by', auth()->id())->exists();
+        $isAdvertiser = auth()->user()->is_advertiser;
 
         // Default to 'sent' for non-advertisers, otherwise use the request parameter
         $requestType = $isAdvertiser ? $request->get('type', 'received') : 'sent';
@@ -58,6 +58,26 @@ class ContactRequestController extends Controller
             'message' => 'required|string|min:10',
         ]);
 
+        // Verificar se o usuário logado é o dono do anúncio
+        if (auth()->check()) {
+            $advertisement = Advertisement::find($validated['advertisement_id']);
+
+            if ($advertisement->created_by == auth()->id()) {
+                $errorMessage = 'Não é possível contactar o seu próprio anúncio.';
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $errorMessage,
+                        'errors' => ['advertisement_id' => [$errorMessage]]
+                    ], 403);
+                }
+
+                return redirect()->back()->withErrors(['advertisement_id' => $errorMessage]);
+            }
+        }
+
+        // Continua com a criação do pedido de contacto
         $contactRequest = ContactRequest::create([
             'advertisement_id' => $validated['advertisement_id'],
             'created_by' => auth()->check() ? auth()->id() : null,

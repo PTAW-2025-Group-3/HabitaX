@@ -6,7 +6,7 @@
 @section('content')
     <div class="max-w-screen-xl mx-auto p-2 md:p-4 space-y-6 animate-fade-in">
 
-        <!-- Header do anúncio  -->
+        <!-- Header do anúncio -->
         <div class="bg-gradient-to-r bg-white rounded-2xl shadow-md p-5 md:p-7 space-y-4 mt-6 md:mt-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <div class="space-y-1">
@@ -24,6 +24,9 @@
                         <span class="inline-flex items-center gap-1">
                     <i class="bi bi-arrow-left-right text-secondary"></i> {{ $ad->transaction_type }}
                 </span>
+                        <span class="inline-flex items-center gap-1">
+                    <i class="bi bi-building text-secondary"></i> {{ $property->type->name ?? 'Tipo não especificado' }}
+                </span>
                     </div>
                 </div>
                 <div class="text-3xl md:text-4xl font-bold text-secondary">
@@ -38,19 +41,36 @@
                     <span class="text-sm font-medium">Partilhar</span>
                 </button>
 
-                <button id="favoriteBtn"
-                        data-ad-id="{{ $ad->id }}"
-                        class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
-                    <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
-                    <span
-                        class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
-                </button>
+                @if(auth()->check() && auth()->id() == $ad->created_by)
+                    <!-- Botão de favoritos desativado para o dono do anúncio -->
+                    <button disabled
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+                        <i class="bi bi-heart"></i>
+                        <span class="text-sm font-medium">Favoritos</span>
+                    </button>
 
-                <button id="reportBtn"
-                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
-                    <i class="bi bi-flag"></i>
-                    <span class="text-sm font-medium">Reportar</span>
-                </button>
+                    <!-- Botão de reportar desativado para o dono do anúncio -->
+                    <button disabled
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
+                        <i class="bi bi-flag"></i>
+                        <span class="text-sm font-medium">Reportar</span>
+                    </button>
+                @else
+                    <!-- Botão de favoritos normal para outros usuários -->
+                    <button id="favoriteBtn"
+                            data-ad-id="{{ $ad->id }}"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
+                        <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                        <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
+                    </button>
+
+                    <!-- Botão de reportar normal para outros usuários -->
+                    <button id="reportBtn"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
+                        <i class="bi bi-flag"></i>
+                        <span class="text-sm font-medium">Reportar</span>
+                    </button>
+                @endif
             </div>
         </div>
 
@@ -116,52 +136,52 @@
 
                 <section class="space-y-2">
                     <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
-                    @foreach($groupedParameters as $groupId => $parameters)
-                        <div class="space-y-2">
-                            <h3 class="text-md md:text-lg font-semibold">
-                                {{ $groups->get($groupId)?->name ?? 'Categoria desconhecida' }}
-                            </h3>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                                @php
-                                    $path = 'advertisements.individual.parameters.';
-                                    $attributeIncludes = [
-                                        AttributeType::TEXT->value => $path. 'text',
-                                        AttributeType::LONG_TEXT->value => $path . 'long-text',
-                                        AttributeType::INT->value => $path . 'int',
-                                        AttributeType::FLOAT->value => $path . 'float',
-                                        AttributeType::BOOLEAN->value => $path . 'boolean',
-                                        AttributeType::DATE->value => $path . 'date',
-                                        AttributeType::SELECT_SINGLE->value => $path . 'select-single',
-                                        AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
-                                    ];
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                        <!-- Mostrar apenas 4-5 características mais importantes -->
+                        @php
+                            $displayedCount = 0;
+                            $maxDisplayed = 4;
+                            $path = 'advertisements.individual.parameters.';
+                            $attributeIncludes = [
+                                AttributeType::TEXT->value => $path. 'text',
+                                AttributeType::LONG_TEXT->value => $path . 'long-text',
+                                AttributeType::INT->value => $path . 'int',
+                                AttributeType::FLOAT->value => $path . 'float',
+                                AttributeType::BOOLEAN->value => $path . 'boolean',
+                                AttributeType::DATE->value => $path . 'date',
+                                AttributeType::SELECT_SINGLE->value => $path . 'select-single',
+                                AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
+                            ];
 
-                                    // Separa os LONG_TEXT dos restantes
-                                    [$longTexts, $others] = collect($parameters)->partition(
-                                        fn($p) => $p->attribute->type->value === \App\Enums\AttributeType::LONG_TEXT->value
-                                    );
-                                @endphp
+                            // Obter todos os parâmetros disponíveis
+                            $allParameters = collect([]);
+                            $groupedParameters = $groupedParameters ?? collect([]);
+                            foreach($groupedParameters as $groupId => $parameters) {
+                                $allParameters = $allParameters->merge($parameters);
+                            }
 
-                                {{-- Renderiza primeiro os long texts, forçando uma linha inteira --}}
-                                @foreach($longTexts as $parameter)
-                                    @if(isset($attributeIncludes[$parameter->attribute->type->value]))
-                                        <div class="w-full col-span-full">
-                                            @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
-                                        </div>
-                                    @endif
-                                @endforeach
+                            $priorityParameters = $allParameters->take($maxDisplayed);
+                        @endphp
 
-                                {{-- Depois os restantes normalmente --}}
-                                @foreach($others as $parameter)
-                                    @if(isset($attributeIncludes[$parameter->attribute->type->value]))
-                                        <div>
-                                            @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
+                        @foreach($priorityParameters as $parameter)
+                            @if(isset($attributeIncludes[$parameter->attribute->type->value]) && $displayedCount < $maxDisplayed)
+                                <div>
+                                    @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                </div>
+                                @php $displayedCount++; @endphp
+                            @endif
+                        @endforeach
+                    </div>
+
+                    <!-- Botão "Ver mais características" -->
+                    <div class="my-4 flex justify-start">
+                        <button id="showAllFeaturesBtn"
+                                class="btn-secondary gap-2 px-4 py-2.5">
+                            <i class="bi bi-grid-3x3-gap-fill"></i>
+                            <span class="text-sm font-medium">Mostrar todas as {{ $allParameters->count() }} características</span>
+                        </button>
+                    </div>
                 </section>
                 @include('advertisements.individual.price-history', ['ad' => $ad])
                 @include('advertisements.individual.loan-simulator', ['ad' => $ad])
@@ -206,6 +226,7 @@
 @include('advertisements.individual.modals.all_photos', ['images' => $images])
 @include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
+@include('advertisements.individual.modals.features', ['groupedParameters' => $groupedParameters, 'groups' => $groups])
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {

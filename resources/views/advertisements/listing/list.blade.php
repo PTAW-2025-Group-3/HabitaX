@@ -70,14 +70,16 @@
                                 </a>
                                 <div class="flex space-x-1">
                                     @php
+                                        $isOwner = auth()->check() && auth()->id() == $ad->created_by;
                                         $isFavorite = auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id);
                                     @endphp
-
-                                    <button
-                                        data-ad-id="{{ $ad->id }}"
-                                        class="favorite-btn transition-colors h-8 w-8 rounded-full hover:bg-gray-100 {{ $isFavorite ? 'text-red-500' : 'text-gray-500' }}">
-                                        <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
-                                    </button>
+                                    @if(!$isOwner)
+                                        <button
+                                            data-ad-id="{{ $ad->id }}"
+                                            class="favorite-btn transition-colors h-8 w-8 rounded-full hover:bg-gray-100 {{ $isFavorite ? 'text-red-500' : 'text-gray-500' }}">
+                                            <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                             <p class="flex items-center text-sm text-gray-500 mt-0.5">

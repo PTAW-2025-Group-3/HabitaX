@@ -74,7 +74,7 @@ class AdministrationController extends Controller
 
         if ($request->ajax()) {
             $response = [
-                'users' => view('pages.administration.partials.user-rows', ['users' => $users])->render()
+                'users' => view('administration.partials.user-rows', ['users' => $users])->render()
             ];
 
             if ($users->hasPages()) {

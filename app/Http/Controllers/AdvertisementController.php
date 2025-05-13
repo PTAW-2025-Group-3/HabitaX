@@ -31,6 +31,9 @@ class AdvertisementController extends Controller
             ->whereHas('creator', function($q) {
                 $q->where('state', 'active');
             })
+            ->whereHas('property.property_type', function($q) {
+                $q->where('is_active', true);
+            })
             ->with('property.parameters.attribute')
             ->select('advertisements.*');
 
@@ -99,6 +102,9 @@ class AdvertisementController extends Controller
                 $query->where('is_suspended', false)
                     ->whereHas('creator', function($q) {
                         $q->where('state', 'active');
+                    })
+                    ->whereHas('property.property_type', function($q) {
+                        $q->where('is_active', true);
                     });
             })
             ->with('advertisement.property.parish.municipality')

@@ -1,5 +1,5 @@
 <div class="bg-gradient-to-tr from-white to-gray-50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
-<div class="flex items-center justify-between border-b border-indigo-100 pb-4">
+    <div class="flex items-center justify-between border-b border-indigo-100 pb-4">
         <h3 class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
             <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -21,77 +21,87 @@
         </div>
     </div>
 
-    {{-- Success message --}}
-    <div id="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center {{ session('success') ? '' : 'hidden' }}">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>{{ session('success') ?? 'O seu pedido de contacto foi enviado com sucesso!' }}</span>
-    </div>
-
-    {{-- Formulário --}}
-    <form method="POST" action="{{ route('contact-requests.store') }}" id="contactForm" class="space-y-4 text-sm md:text-base">
-        @csrf
-        <input type="hidden" name="advertisement_id" value="{{ $ad->id }}">
-
-        {{-- Nome --}}
-        <div>
-            <label for="name" class="block text-gray-600 text-xs md:text-sm mb-1">O seu nome</label>
-            <input type="text" id="name" name="name" class="form-input @error('name') border-red-300 @enderror"
-                   placeholder="O seu nome" value="{{ auth()->user()?->name ?? old('name') }}" required>
-            @error('name')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Email --}}
-        <div>
-            <label for="email" class="block text-gray-600 text-xs md:text-sm mb-1">O seu email</label>
-            <input type="email" id="email" name="email" class="form-input @error('email') border-red-300 @enderror"
-                   placeholder="exemplo@email.com" value="{{ auth()->user()?->email ?? old('email') }}" required>
-            @error('email')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Telefone --}}
-        <div>
-            <label for="telephone" class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
-            <input type="tel" id="telephone" name="telephone" class="form-input @error('telephone') border-red-300 @enderror"
-                   placeholder="+351..." value="{{ auth()->user()?->telephone ?? old('telephone') }}" required>
-            @error('telephone')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Mensagem --}}
-        <div>
-            <label for="message" class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
-            <textarea id="message" name="message" class="form-input @error('message') border-red-300 @enderror"
-                      rows="4" placeholder="Estou interessado neste imóvel..." required>{{ old('message') }}</textarea>
-            @error('message')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Botão enviar --}}
-        <button type="submit" id="submitBtn" class="btn-secondary w-full py-3 flex items-center justify-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+    {{-- Verificação de dono do anúncio --}}
+    @if(auth()->check() && auth()->id() == $ad->created_by)
+        <div class="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <span id="submitBtnText">Enviar Contacto</span>
-        </button>
-    </form>
-
-    {{-- Mostrar telefone --}}
-    <div class="text-center">
-        <a href="#" id="showPhoneBtn" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center group" data-phone="{{ $ad->creator->telephone ?? '+351 XXX XXX XXX' }}">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            <span>Não é possível contactar o seu próprio anúncio.</span>
+        </div>
+    @else
+        {{-- Success message --}}
+        <div id="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center {{ session('success') ? '' : 'hidden' }}">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span id="phoneText">Ver número de telefone</span>
-        </a>
-    </div>
+            <span>{{ session('success') ?? 'O seu pedido de contacto foi enviado com sucesso!' }}</span>
+        </div>
+
+        {{-- Formulário --}}
+        <form method="POST" action="{{ route('contact-requests.store') }}" id="contactForm" class="space-y-4 text-sm md:text-base">
+            @csrf
+            <input type="hidden" name="advertisement_id" value="{{ $ad->id }}">
+
+            {{-- Nome --}}
+            <div>
+                <label for="name" class="block text-gray-600 text-xs md:text-sm mb-1">O seu nome</label>
+                <input type="text" id="name" name="name" class="form-input @error('name') border-red-300 @enderror"
+                       placeholder="O seu nome" value="{{ auth()->user()?->name ?? old('name') }}" required>
+                @error('name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Email --}}
+            <div>
+                <label for="email" class="block text-gray-600 text-xs md:text-sm mb-1">O seu email</label>
+                <input type="email" id="email" name="email" class="form-input @error('email') border-red-300 @enderror"
+                       placeholder="exemplo@email.com" value="{{ auth()->user()?->email ?? old('email') }}" required>
+                @error('email')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Telefone --}}
+            <div>
+                <label for="telephone" class="block text-gray-600 text-xs md:text-sm mb-1">O seu telefone</label>
+                <input type="tel" id="telephone" name="telephone" class="form-input @error('telephone') border-red-300 @enderror"
+                       placeholder="+351..." value="{{ auth()->user()?->telephone ?? old('telephone') }}" required>
+                @error('telephone')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Mensagem --}}
+            <div>
+                <label for="message" class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
+                <textarea id="message" name="message" class="form-input @error('message') border-red-300 @enderror"
+                          rows="4" placeholder="Estou interessado neste imóvel..." required>{{ old('message') }}</textarea>
+                @error('message')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Botão enviar --}}
+            <button type="submit" id="submitBtn" class="btn-secondary w-full py-3 flex items-center justify-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                <span id="submitBtnText">Enviar Contacto</span>
+            </button>
+        </form>
+
+        {{-- Mostrar telefone --}}
+        <div class="text-center">
+            <a href="#" id="showPhoneBtn" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center group" data-phone="{{ $ad->creator->telephone ?? '+351 XXX XXX XXX' }}">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span id="phoneText">Ver número de telefone</span>
+            </a>
+        </div>
+    @endif
 </div>
 
 <script>

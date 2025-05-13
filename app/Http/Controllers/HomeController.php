@@ -37,27 +37,21 @@ class HomeController extends Controller
 
         $adsPerDistrict = DB::table('advertisements')
             ->join('properties', 'advertisements.property_id', '=', 'properties.id')
+            ->join('property_types', 'properties.property_type_id', '=', 'property_types.id')
             ->join('parishes', 'properties.parish_id', '=', 'parishes.id')
             ->join('municipalities', 'parishes.municipality_id', '=', 'municipalities.id')
             ->join('districts', 'municipalities.district_id', '=', 'districts.id')
             ->where('advertisements.is_published', true)
             ->where('advertisements.is_suspended', false)
+            ->where('property_types.is_active', true)
             ->select('districts.id as district_id', 'districts.name as district_name', DB::raw('count(*) as total'))
             ->groupBy('districts.id', 'districts.name')
             ->orderBy('total', 'desc')
             ->get();
 
-        $news = Cache::remember('home_news_feed', 3600, function () {
-            try {
-                $response = Http::get('https://rss.app/feeds/v1.1/C11CchUv87TQ40Gi.json');
-                if ($response->successful()) {
-                    return $response->json();
-                }
-                return ['items' => []];
-            } catch (Exception $e) {
-                return ['items' => []];
-            }
-        });
+        $newsController = new NewsController();
+        $newsView = $newsController->index();
+        $news = $newsView->getData()['noticias'] ?? ['items' => []];
 
         return view('pages.home.home', [
             'adsPerDistrict' => $adsPerDistrict,

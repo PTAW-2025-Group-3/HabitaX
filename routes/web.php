@@ -102,8 +102,6 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/moderation', [ModerationController::class, 'index'])->name('moderation');
     Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
         ->name('reported-advertisement.show');
-    Route::get('/moderation/verification-advertiser/{id}', [AdvertiserVerificationController::class, 'show'])
-        ->name('verification-advertiser.show');
     Route::post('/moderation/reported-advertisement/{id}/approve', [ReportedAdvertisementController::class, 'approve'])
         ->name('reported-advertisement.approve');
     Route::post('/moderation/reported-advertisement/{id}/reject', [ReportedAdvertisementController::class, 'reject'])
