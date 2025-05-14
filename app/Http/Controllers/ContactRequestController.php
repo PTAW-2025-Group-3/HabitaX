@@ -56,6 +56,7 @@ class ContactRequestController extends Controller
             'email' => 'required|email',
             'telephone' => 'required|string|min:9',
             'message' => 'required|string|min:10',
+            'privacy_policy' => 'required|accepted',
         ]);
 
         // Verificar se o usuário logado é o dono do anúncio

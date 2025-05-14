@@ -17,7 +17,9 @@
             @include('administration.partials.user-management')
 
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-semibold text-gray-secondary mb-4">Configurações de Propriedades</h2>
+                <h2 class="text-xl font-semibold text-gray-secondary mb-4">
+                    <i class="bi bi-house-fill mr-2"></i> Configurações de Propriedades
+                </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <a href="{{ route('property-types.index') }}" class="btn-primary px-6 py-3">
                         <i class="bi bi-building mr-2"></i>
@@ -33,16 +35,21 @@
                     </a>
                 </div>
             </div>
-
-            <a href="{{ route('global-variables.index') }}" class="btn-primary px-6 py-3">
-                <i class="bi bi-gear mr-2"></i>
-                Gerir Variáveis Globais
-            </a>
-
-            <a href="{{ route('document-types.index') }}" class="btn-primary px-6 py-3">
-                <i class="bi bi-file-ear mr-2"></i>
-                Gerir Tipos de Documento
-            </a>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-secondary mb-4">
+                    <i class="bi bi-gear-fill mr-2"></i> Configurações Complementares
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="{{ route('global-variables.index') }}" class="btn-primary px-6 py-3">
+                        <i class="bi bi-gear-fill mr-2"></i>
+                        Gerir Variáveis Globais
+                    </a>
+                    <a href="{{ route('document-types.index') }}" class="btn-primary px-6 py-3">
+                        <i class="bi bi-file-earmark-text mr-2"></i>
+                        Gerir Tipos de Documento
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

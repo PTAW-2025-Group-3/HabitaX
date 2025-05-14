@@ -83,6 +83,21 @@
                 @enderror
             </div>
 
+            {{-- Política de Privacidade --}}
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="privacy_policy" name="privacy_policy" type="checkbox" class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary" required>
+                </div>
+                <div class="ml-3 text-xs md:text-sm text-gray-600">
+                    <label for="privacy_policy">
+                        Ao submeter este formulário, aceito a <a href="{{ route('privacy.policy') }}" target="_blank" class="text-primary hover:underline font-medium">Política de Privacidade</a> e concordo com o processamento dos meus dados.
+                    </label>
+                    @error('privacy_policy')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             {{-- Botão enviar --}}
             <button type="submit" id="submitBtn" class="btn-secondary w-full py-3 flex items-center justify-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

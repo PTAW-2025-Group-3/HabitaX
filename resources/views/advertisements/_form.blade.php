@@ -44,8 +44,9 @@
                         <span class="text-gray-500">€</span>
                     </div>
                     <input type="number" id="price" name="price"
-                           value="{{ old('price', $advertisement->price ?? '') }}"
+                           value="{{ old('price', isset($advertisement->price) ? number_format($advertisement->price, 2, '.', '') : '') }}"
                            placeholder="0.00"
+                           step="0.01"
                            class="w-full pl-8 px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary transition-colors"
                            required>
                 </div>
@@ -85,6 +86,22 @@
                 <p class="text-amber-600 text-xs mt-1">Você não tem imóveis cadastrados. <a href="{{ route('properties.create') }}" class="text-primary underline">Cadastre um imóvel primeiro</a>.</p>
             @endif
             @error('property_id')
+            <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- Estado de publicação --}}
+        <div class="mb-6">
+            <div class="flex items-center">
+                <input type="checkbox" id="is_published" name="is_published" value="1"
+                       class="h-5 w-5 text-primary rounded border-gray-300 focus:ring-primary"
+                    {{ old('is_published', $advertisement->is_published ?? true) ? 'checked' : '' }}>
+                <label for="is_published" class="ml-2 block text-sm font-medium text-gray-700">
+                    Publicar anúncio imediatamente
+                </label>
+            </div>
+            <p class="text-gray-500 text-xs mt-1">Se desativado, o anúncio será salvo como "não publicado" e não aparecerá nas pesquisas.</p>
+            @error('is_published')
             <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
             @enderror
         </div>

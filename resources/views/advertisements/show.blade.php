@@ -1,11 +1,61 @@
 @php use App\Enums\AttributeType; @endphp
 @extends('layout.app')
 
-@section('title', 'Advertisement Details')
+@section('title', $ad->title)
+@section('before-content')
+    @if(isset($showUnpublishedAlert) && $showUnpublishedAlert)
+        <div class="max-w-screen-xl mx-auto p-2 md:p-4 mb-4">
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg shadow-sm animate-fade-in">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-exclamation-triangle text-amber-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-amber-700">
+                            <strong>Atenção:</strong> Este anúncio não está publicado. Apenas você pode vê-lo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
+    @if(auth()->check() && auth()->id() == $ad->created_by)
+        <div class="max-w-screen-xl mx-auto p-2 md:p-4 mb-4">
+            <div class="bg-white rounded-lg shadow-sm flex justify-between items-center">
+                <div class="px-4 py-2 font-medium text-gray-700">
+                    Modo de visualização:
+                </div>
+                <div class="flex border border-gray-200 rounded-lg overflow-hidden">
+                    <button id="ownerViewBtn" class="px-4 py-2 text-sm font-medium transition-colors view-mode-btn active-view">
+                        <i class="bi bi-person-fill"></i> Minha Visualização
+                    </button>
+                    <button id="clientViewBtn" class="px-4 py-2 text-sm font-medium transition-colors view-mode-btn">
+                        <i class="bi bi-people-fill"></i> Visualização do Cliente
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+@endsection
 @section('content')
     <div class="max-w-screen-xl mx-auto p-2 md:p-4 space-y-6 animate-fade-in">
-
+        @if(isset($showUnpublishedAlert) && $showUnpublishedAlert)
+            <div class="max-w-screen-xl mx-auto p-2 md:p-4 mb-4">
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg shadow-sm animate-fade-in">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-exclamation-triangle text-amber-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-amber-700">
+                                <strong>Atenção:</strong> Este anúncio não está publicado. Apenas você pode vê-lo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <!-- Header do anúncio -->
         <div class="bg-gradient-to-r bg-white rounded-2xl shadow-md p-5 md:p-7 space-y-4 mt-6 md:mt-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
@@ -35,21 +85,23 @@
             </div>
 
             <div class="flex flex-wrap justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
-                <button id="shareBtn"
-                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
-                    <i class="bi bi-share-fill"></i>
-                    <span class="text-sm font-medium">Partilhar</span>
-                </button>
+                @if($ad->is_published)
+                    <button id="shareBtn"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
+                        <i class="bi bi-share-fill"></i>
+                        <span class="text-sm font-medium">Partilhar</span>
+                    </button>
+                @endif
 
                 @if(auth()->check() && auth()->id() == $ad->created_by)
-                    <!-- Botão de editar anúncio para o dono do anúncio -->
-                    <a href="{{ route('advertisements.my') }}"
+                    <!-- Botão de editar anúncio para o anunciante -->
+                    <a href="{{ route('advertisements.edit', $ad->id) }}"
                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition-colors">
                         <i class="bi bi-pencil-square"></i>
                         <span class="text-sm font-medium">Editar Anúncio</span>
                     </a>
                 @else
-                    <!-- Botão de favoritos normal para outros usuários -->
+                    <!-- Botão de favoritos normal para outros utilizadores -->
                     <button id="favoriteBtn"
                             data-ad-id="{{ $ad->id }}"
                             class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
@@ -57,7 +109,7 @@
                         <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
                     </button>
 
-                    <!-- Botão de reportar normal para outros usuários -->
+                    <!-- Botão de reportar normal para outros utilizadores -->
                     <button id="reportBtn"
                             class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
                         <i class="bi bi-flag"></i>
@@ -216,6 +268,23 @@
         </div>
     </div>
 @endsection
+@push('styles')
+    <style>
+        .view-mode-btn {
+            @apply bg-gray-100 text-gray-600 hover:bg-gray-200;
+        }
+        .active-view {
+            @apply bg-primary text-white hover:bg-primary-dark;
+        }
+        .owner-view-element {
+            /* Visível por padrão para o dono */
+            @apply block;
+        }
+        .client-view-hidden {
+            /* Elementos que devem ser escondidos na visão de cliente */
+        }
+    </style>
+@endpush
 @include('advertisements.individual.modals.all_photos', ['images' => $images])
 @include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
@@ -227,6 +296,8 @@
             const photosModal = document.getElementById('photos-modal');
             const closePhotosModal = document.getElementById('closePhotosModal');
             const photoItems = document.querySelectorAll('.photo-item');
+            const ownerViewBtn = document.getElementById('ownerViewBtn');
+            const clientViewBtn = document.getElementById('clientViewBtn');
 
             // Função para abrir o modal de fotos
             function openPhotosModal() {

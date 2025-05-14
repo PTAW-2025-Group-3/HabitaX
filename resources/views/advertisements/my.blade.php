@@ -38,7 +38,6 @@
                     <option value="all" {{ request('state_filter') === 'all' ? 'selected' : '' }}>Todos</option>
                     <option value="published" {{ request('state_filter') === 'published' ? 'selected' : '' }}>Publicados</option>
                     <option value="pending" {{ request('state_filter') === 'pending' ? 'selected' : '' }}>Não Publicados</option>
-                    <option value="suspended" {{ request('state_filter') === 'suspended' ? 'selected' : '' }}>Suspendidos</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>

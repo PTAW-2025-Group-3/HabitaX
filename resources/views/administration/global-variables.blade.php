@@ -10,48 +10,69 @@
                 Voltar para Dashboard
             </a>
         </div>
-        <div class="mt-12 animate-fade-in">
-            <h2 class="text-xl font-bold text-primary mb-4">Lista de Variáveis Globais</h2>
+        <div class="mt-12">
+            <h2 class="text-xl font-bold text-primary mb-4">
+                <i class="bi bi-gear-fill mr-2"></i> Lista de Variáveis Globais
+            </h2>
 
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded flash-message">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <!-- Tabela de variáveis globais -->
+            <div class="overflow-x-auto rounded-xl shadow bg-white">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-blue-100 text-left">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">ID</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Nome</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Valor</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Editado em</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Editado por</th>
+                        <th class="p-4 cursor-pointer sortable-column" data-sort="id">
+                            <div class="flex items-center">
+                                ID<span class="sort-icon ml-1"></span>
+                            </div>
+                        </th>
+                        <th class="p-4 cursor-pointer sortable-column" data-sort="name">
+                            <div class="flex items-center">
+                                Nome<span class="sort-icon ml-1"></span>
+                            </div>
+                        </th>
+                        <th class="p-4">
+                            <div class="flex items-center">
+                                Valor
+                            </div>
+                        </th>
+                        <th class="p-4 cursor-pointer sortable-column" data-sort="updated_at">
+                            <div class="flex items-center">
+                                Editado em<span class="sort-icon ml-1"></span>
+                            </div>
+                        </th>
+                        <th class="p-4">Editado por</th>
                     </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($globalVariables as $globalVariable)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $globalVariable->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $globalVariable->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <input
-                                type="text"
-                                value="{{ $globalVariable->value }}"
-                                class="editable-value border border-gray-300 rounded px-2 py-1"
-                                data-id="{{ $globalVariable->id }}"
-                            />
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $globalVariable->updated_at }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $globalVariable->updated_by ? $globalVariable->updated_by->name : 'Desconhecido' }}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            <div class="mt-4">
-                {{ $globalVariables->links() }}
+                    </thead>
+                    <tbody>
+                    @foreach ($globalVariables as $globalVariable)
+                        <tr class="border-t hover:bg-gray-50 transition">
+                            <td class="p-4 text-gray-900">{{ $globalVariable->id }}</td>
+                            <td class="p-4 font-medium">{{ $globalVariable->name }}</td>
+                            <td class="p-4">
+                                <input
+                                    type="text"
+                                    value="{{ $globalVariable->value }}"
+                                    class="editable-value border border-gray-300 rounded px-2 py-1 w-full"
+                                    data-id="{{ $globalVariable->id }}"
+                                />
+                            </td>
+                            <td class="p-4 text-gray-500">{{ $globalVariable->updated_at->format('d/m/Y H:i') }}</td>
+                            <td class="p-4 text-gray-600">
+                                {{ $globalVariable->updated_by ? $globalVariable->updated_by->name : 'Desconhecido' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <div class="p-4" id="pagination-container">
+                    {{ $globalVariables->links() }}
+                </div>
             </div>
         </div>
     </div>

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Advertisement;
 use App\Models\User;
+use App\Observers\AdvertisementObserver;
 use App\Observers\UserObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
         User::observe(UserObserver::class);
+        Advertisement::observe(AdvertisementObserver::class);
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }

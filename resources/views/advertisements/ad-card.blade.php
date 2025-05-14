@@ -5,8 +5,9 @@
             <img src="{{ $ad->property->getFirstMediaUrl('images', 'thumb') ?? asset('images/property-placeholder.png') }}"
                  alt="Ad"
                  class="w-full h-48 object-cover">
-            <span class="absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                Ativo
+            <span class="absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full
+                {{ $ad->is_published ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
+                {{ $ad->is_published ? 'Publicado' : 'Não Publicado' }}
             </span>
         </div>
         <div class="p-4">

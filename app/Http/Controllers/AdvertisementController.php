@@ -85,7 +85,7 @@ class AdvertisementController extends Controller
             $query->where('is_suspended', true);
         }
 
-        $ads = $query->orderBy('created_at', 'desc')->paginate(9);
+        $ads = $query->orderBy('updated_at', 'desc')->paginate(9);
 
         if ($request->ajax()) {
             return view('advertisements.listing.advertisement-listings', compact('ads'))->render();
@@ -122,10 +122,24 @@ class AdvertisementController extends Controller
             return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');
         }
 
-        // Verifica se o anúncio está suspenso - bloqueando acesso para todos
+        // Verifica se o anúncio está publicado
+        if (!$ad->is_published) {
+            // Se não estiver publicado, apenas o criador, admin ou moderador pode ver
+            if (!auth()->check() ||
+                (auth()->id() !== $ad->created_by &&
+                    !auth()->user()->isAdmin() &&
+                    !auth()->user()->isModerator())) {
+                return redirect()->route('advertisements.index')
+                    ->with('error', 'Este anúncio não está disponível para visualização.');
+            }
+        }
+
+        // Verifica se o anúncio está suspenso - bloqueando acesso para todos exceto admin/moderador
         if ($ad->is_suspended) {
-            return redirect()->route('advertisements.index')
-                ->with('error', 'Este anúncio não está mais disponível.');
+            if (!auth()->check() || (!auth()->user()->isAdmin() && !auth()->user()->isModerator())) {
+                return redirect()->route('advertisements.index')
+                    ->with('error', 'Este anúncio não está mais disponível.');
+            }
         }
 
         // Verifica se o criador do anúncio está suspenso/banido/arquivado
@@ -168,6 +182,9 @@ class AdvertisementController extends Controller
             ->orderBy('register_date', 'asc')
             ->get();
 
+        // Adiciona flag para mostrar alerta quando estiver vendo um anúncio não publicado
+        $showUnpublishedAlert = !$ad->is_published;
+
         return view('advertisements.show', [
             'ad' => $ad,
             'property' => $property,
@@ -175,7 +192,8 @@ class AdvertisementController extends Controller
             'groups' => $groups,
             'parameters' => $parameters,
             'groupedParameters' => $groupedParameters,
-            'priceHistory' => $priceHistory
+            'priceHistory' => $priceHistory,
+            'showUnpublishedAlert' => $showUnpublishedAlert
         ]);
     }
 
@@ -204,11 +222,12 @@ class AdvertisementController extends Controller
             'price' => 'required|numeric',
             'transaction_type' => 'required|in:sale,rent',
             'property_id' => 'required|exists:properties,id',
+            'is_published' => 'nullable|boolean',
         ]);
 
         $advertisement = new Advertisement($validated);
         $advertisement->reference = fake()->unique()->numberBetween(100000, 999999);
-        $advertisement->is_published = true;
+        $advertisement->is_published = $request->has('is_published');
         $advertisement->is_suspended = false;
         $advertisement->created_by = auth()->id();
         $advertisement->save();
@@ -216,18 +235,31 @@ class AdvertisementController extends Controller
         return redirect()->route('advertisements.my')
             ->with('success', 'Anúncio criado com sucesso!');
     }
-    public function destroy($id)
-    {
-        $advertisement = Advertisement::with('creator')->findOrFail($id);
 
-        if (auth()->id() !== $advertisement->creator->id) {
+    public function update(Request $request, $id)
+    {
+        $advertisement = Advertisement::findOrFail($id);
+
+        if (auth()->id() !== $advertisement->created_by) {
             abort(403, 'Unauthorized');
         }
 
-        $advertisement->delete();
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'transaction_type' => 'required|in:sale,rent',
+            'property_id' => 'required|exists:properties,id',
+            'is_published' => 'nullable|boolean',
+        ]);
 
-        return redirect()->route('advertisements.my')->with('success', 'Anúncio deletado com sucesso!');
+        $validated['is_published'] = $request->has('is_published');
+        $advertisement->update($validated);
+
+        return redirect()->route('advertisements.my')
+            ->with('success', 'Anúncio atualizado com sucesso!');
     }
+
     public function edit($id)
     {
         $advertisement = Advertisement::with('creator')->findOrFail($id);
@@ -240,27 +272,18 @@ class AdvertisementController extends Controller
 
         return view('advertisements.edit', compact('advertisement', 'properties'));
     }
-    public function update(Request $request, $id)
-    {
-        $advertisement = Advertisement::findOrFail($id);
 
-        // فقط کسی که آگهی رو ساخته باشه می‌تونه ادیت کنه
-        if (auth()->id() !== $advertisement->created_by) {
+    public function destroy($id)
+    {
+        $advertisement = Advertisement::with('creator')->findOrFail($id);
+
+        if (auth()->id() !== $advertisement->creator->id) {
             abort(403, 'Unauthorized');
         }
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'transaction_type' => 'required|in:sale,rent',
-            'property_id' => 'required|exists:properties,id',
-        ]);
+        $advertisement->delete();
 
-        $advertisement->update($validated);
-
-        return redirect()->route('advertisements.my')
-            ->with('success', 'Anúncio atualizado com sucesso!');
+        return redirect()->route('advertisements.my')->with('success', 'Anúncio deletado com sucesso!');
     }
 
 }
