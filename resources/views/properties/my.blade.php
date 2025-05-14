@@ -1,6 +1,20 @@
 @extends('account.account-layout')
 
 @section('account-content')
+    @if(session('success'))
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-lg shadow-sm animate-fade-in">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="bi bi-check-circle text-green-500"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">
+                        {{ session('success') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
 <div class="bg-white rounded-xl p-6 animate-fade-in">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-primary">Minhas Propriedades</h1>

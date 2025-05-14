@@ -70,8 +70,10 @@
             </ul>
         </div>
     @endif
-
-    <div class="flex justify-end">
+    <div class="flex justify-end space-x-3">
+        <a href="{{ route('properties.my') }}" class="btn-warning px-5 py-2.5 rounded-md">
+            Cancelar
+        </a>
         <button type="submit" class="btn-primary px-6 py-2 rounded-md">
             {{ $buttonText }}
         </button>

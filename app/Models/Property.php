@@ -42,6 +42,11 @@ class Property extends Model implements HasMedia
             ->fit(Fit::Crop, 300, 200)
             ->optimize()
             ->sharpen(5)
+            ->watermark(public_path('images/logos/habitaxLogo.png'))
+            ->watermarkOpacity(70)
+            ->watermarkPosition('bottom-right')
+            ->watermarkPadding(10, 10)
+            ->watermarkWidth(80) // tamanho em pixels
             ->performOnCollections('images');
 
         $this->addMediaConversion('preview')

@@ -22,7 +22,7 @@
                     <i class="bi bi-geo-alt text-secondary"></i> {{ $property->parish->name }}, {{ $property->parish->municipality->name }}
                 </span>
                         <span class="inline-flex items-center gap-1">
-                    <i class="bi bi-arrow-left-right text-secondary"></i> {{ $ad->transaction_type }}
+                    <i class="bi bi-arrow-left-right text-secondary"></i> {{ $ad->transaction_type === 'sale' ? 'Compra' : 'Aluguer' }}
                 </span>
                         <span class="inline-flex items-center gap-1">
                     <i class="bi bi-building text-secondary"></i> {{ $property->type->name ?? 'Tipo não especificado' }}
@@ -42,19 +42,12 @@
                 </button>
 
                 @if(auth()->check() && auth()->id() == $ad->created_by)
-                    <!-- Botão de favoritos desativado para o dono do anúncio -->
-                    <button disabled
-                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
-                        <i class="bi bi-heart"></i>
-                        <span class="text-sm font-medium">Favoritos</span>
-                    </button>
-
-                    <!-- Botão de reportar desativado para o dono do anúncio -->
-                    <button disabled
-                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed">
-                        <i class="bi bi-flag"></i>
-                        <span class="text-sm font-medium">Reportar</span>
-                    </button>
+                    <!-- Botão de editar anúncio para o dono do anúncio -->
+                    <a href="{{ route('advertisements.my') }}"
+                       class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition-colors">
+                        <i class="bi bi-pencil-square"></i>
+                        <span class="text-sm font-medium">Editar Anúncio</span>
+                    </a>
                 @else
                     <!-- Botão de favoritos normal para outros usuários -->
                     <button id="favoriteBtn"

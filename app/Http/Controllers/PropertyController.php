@@ -67,7 +67,9 @@ class PropertyController extends Controller
         foreach ($files as $filename) {
             $filename = trim(basename($filename));
             $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
+
             if (file_exists($tempPath)) {
+                $this->addWatermark($tempPath);
                 $property->addMedia($tempPath)
                     ->preservingOriginal()
                     ->toMediaCollection('images');
@@ -75,8 +77,65 @@ class PropertyController extends Controller
             }
         }
 
-        return redirect()->route('properties.edit', $property->id)
-            ->with('success', 'Property created successfully!');
+        return redirect()->route('properties.my', $property->id)
+            ->with('success', 'A propriedade foi criada com sucesso!');
+    }
+
+    private function addWatermark($imagePath)
+    {
+        $logoPath = public_path('images/logos/habitaxLogo.png');
+        if (!file_exists($logoPath)) {
+            return;
+        }
+
+        $imageInfo = getimagesize($imagePath);
+        $mimeType = $imageInfo['mime'];
+
+        switch ($mimeType) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($imagePath);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($imagePath);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
+                break;
+            default:
+                return;
+        }
+
+        $logo = imagecreatefrompng($logoPath);
+        $imageWidth = imagesx($image);
+        $imageHeight = imagesy($image);
+        $logoWidth = imagesx($logo);
+        $logoHeight = imagesy($logo);
+        $newLogoWidth = $imageWidth * 0.15;
+        $newLogoHeight = $logoHeight * ($newLogoWidth / $logoWidth);
+        $resizedLogo = imagecreatetruecolor($newLogoWidth, $newLogoHeight);
+
+        imagealphablending($resizedLogo, false);
+        imagesavealpha($resizedLogo, true);
+
+        imagecopyresampled($resizedLogo, $logo, 0, 0, 0, 0, $newLogoWidth, $newLogoHeight, $logoWidth, $logoHeight);
+
+        $margin = 10;
+        $posX = $imageWidth - $newLogoWidth - $margin;
+        $posY = $imageHeight - $newLogoHeight - $margin;
+
+        imagecopy($image, $resizedLogo, $posX, $posY, 0, 0, $newLogoWidth, $newLogoHeight);
+
+        switch ($mimeType) {
+            case 'image/jpeg':
+                imagejpeg($image, $imagePath, 90);
+                break;
+            case 'image/png':
+                imagepng($image, $imagePath, 9);
+                break;
+        }
+
+        imagedestroy($image);
+        imagedestroy($logo);
+        imagedestroy($resizedLogo);
     }
 
     public function edit(Request $request, $id)
@@ -190,6 +249,9 @@ class PropertyController extends Controller
 
             if (file_exists($tempPath)) {
                 try {
+                    // Adicionar marca d'água antes de salvar
+                    $this->addWatermark($tempPath);
+
                     $property->addMedia($tempPath)
                         ->preservingOriginal()
                         ->toMediaCollection('images');
@@ -208,8 +270,8 @@ class PropertyController extends Controller
             $request->input('attributes', [])
         );
 
-        return redirect()->route('properties.edit', $property->id)
-            ->with('success', 'Property updated successfully!');
+        return redirect()->route('properties.my', $property->id)
+            ->with('success', 'A propriedade foi atualizada com sucesso!');
     }
 
     public function destroy($id)

@@ -6,7 +6,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             @foreach ($featuredAds as $ad)
-                <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block">
+                <a href="{{ route('advertisements.show', ['id' => $ad->id]) }}" class="block">
                     <div class="group home-ads-style">
                         <!-- Imagem -->
                         <img
@@ -17,20 +17,21 @@
                         <!-- Informações -->
                         <div class="p-4">
                             <p class="text-gray-700 font-medium mb-1">
-                                {{ $ad->property->location->city ?? 'Portugal' }},
-                                {{ $ad->property->location->district ?? '' }}
+                                {{ $ad->property->country ?? 'Portugal' }}
+                                @if(isset($ad->property->parish) && isset($ad->property->parish->municipality) && isset($ad->property->parish->municipality->district))
+                                    - {{ $ad->property->parish->municipality->district->name }}
+                                @endif
                             </p>
 
                             <p class="text-xl font-extrabold text-black mt-2">
-                                {{ number_format($ad['price'], 0, ',', '.') }}€
+                                {{ number_format($ad->price, 0, ',', '.') }}€
                                 @if($ad->type === 'rental')
-                                    <span
-                                        class="text-sm font-normal text-gray-600">/ {{ $ad->rental_type ?? 'A Discutir ' }}</span>
+                                    <span class="text-sm font-normal text-gray-600">/ {{ $ad->rental_type ?? 'A Discutir' }}</span>
                                 @endif
                             </p>
 
                             <p class="text-sm text-gray-500">
-                                {{ $ad->type === 'sale' ? 'For Sale' : 'Rental' }}
+                                {{ $ad->transaction_type === 'sale' ? 'Venda' : 'Aluguer' }}
                             </p>
                         </div>
                     </div>

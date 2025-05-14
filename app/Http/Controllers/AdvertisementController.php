@@ -259,7 +259,8 @@ class AdvertisementController extends Controller
 
         $advertisement->update($validated);
 
-        return redirect()->route('advertisements.my')->with('success', 'Anúncio atualizado com sucesso!');
+        return redirect()->route('advertisements.my')
+            ->with('success', 'Anúncio atualizado com sucesso!');
     }
 
 }
