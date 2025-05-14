@@ -10,7 +10,7 @@
             Por favor, carregue os documentos solicitados abaixo.
         </p>
 
-        <form action="{{ route('advertiser-verification.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form action="{{ route('advertiser-verifications.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
             <!-- Documento de Identificação -->

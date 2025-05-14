@@ -12,7 +12,7 @@ class ContactUsController extends Controller
         $contacts = ContactUs::orderBy('created_at', 'desc')
             ->with('processed_by')
             ->paginate(10);
-        return view('contact-us.index', compact('contacts'));
+        return view('moderation.contact-us.index', compact('contacts'));
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class ContactUsController extends Controller
     public function show($id)
     {
         $contact = ContactUs::findOrFail($id);
-        return view('contact-us.show', compact('contact'));
+        return view('moderation.contact-us.show', compact('contact'));
     }
 
     public function markAsRead($id)

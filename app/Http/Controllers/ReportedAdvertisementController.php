@@ -145,7 +145,7 @@ class ReportedAdvertisementController extends Controller
         $denunciation = Denunciation::with(['creator', 'advertisement', 'reason', 'validator'])
             ->findOrFail($id);
 
-        return view('pages.moderation.partials.reported-advertisements.reported-advertisement', compact('denunciation'));
+        return view('moderation.partials.reported-advertisements.reported-advertisement', compact('denunciation'));
     }
 
     public function approve($id)
@@ -238,6 +238,6 @@ class ReportedAdvertisementController extends Controller
             'advertisementId' => $advertisementId
         ];
 
-        return view('pages.moderation.partials.reported-advertisements.history', $data);
+        return view('moderation.partials.reported-advertisements.history', $data);
     }
 }

@@ -146,7 +146,7 @@
     </div>
 </div>
 
-@include('pages.moderation.partials.modals.suspended-user-mod')
+@include('moderation.partials.modals.suspended-user-mod')
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

@@ -16,7 +16,7 @@
                         <li>
                             <div class="flex items-center">
                                 <i class="bi bi-chevron-right text-gray-400 mx-2"></i>
-                                <a href="{{ route('moderation') }}" class="text-gray-500 hover:text-primary">
+                                <a href="{{ route('advertiser-verifications.index') }}" class="text-gray-500 hover:text-primary">
                                     Verificações
                                 </a>
                             </div>
@@ -411,7 +411,7 @@
                         // Continuação do seu código original para enviar a requisição...
                         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                        fetch('/moderation/verification-advertisers/{{ $verification->id }}/update-state', {
+                        fetch('/moderation/advertiser-verifications/{{ $verification->id }}/update-state', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -441,7 +441,7 @@
                                     });
                                 } else {
                                     // Se a resposta não for JSON, redirecionar para a página principal de moderação
-                                    window.location.href = "{{ route('moderation') }}";
+                                    window.location.href = "{{ route('advertiser-verifications.index') }}";
                                 }
                             })
                             .catch(error => {

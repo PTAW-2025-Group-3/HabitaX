@@ -114,14 +114,14 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
     Route::get('/moderation/suspended-users/ajax', [ModerationController::class, 'ajaxSuspendedUsers'])
         ->name('moderation.suspended-users.ajax');
 
-    Route::get('/moderation/verification-advertisers', [AdvertiserVerificationController::class, 'index'])
-        ->name('verification-advertiser.index');
-    Route::get('/moderation/verification-advertisers/ajax', [AdvertiserVerificationController::class, 'ajaxVerifications'])
-        ->name('verification-advertiser.ajax');
-    Route::get('/moderation/verification-advertisers/{id}', [AdvertiserVerificationController::class, 'show'])
-        ->name('verification-advertiser.show');
-    Route::post('/moderation/verification-advertisers/{id}/update-state', [AdvertiserVerificationController::class, 'updateState'])
-        ->name('verification-advertiser.update-state');
+    Route::get('/moderation/advertiser-verifications', [AdvertiserVerificationController::class, 'index'])
+        ->name('advertiser-verifications.index');
+    Route::get('/moderation/advertiser-verifications/ajax', [AdvertiserVerificationController::class, 'ajaxVerifications'])
+        ->name('advertiser-verifications.ajax');
+    Route::get('/moderation/advertiser-verifications/{id}', [AdvertiserVerificationController::class, 'show'])
+        ->name('advertiser-verifications.show');
+    Route::post('/moderation/advertiser-verifications/{id}/update-state', [AdvertiserVerificationController::class, 'updateState'])
+        ->name('advertiser-verifications.update-state');
 
     Route::get('/moderation/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/moderation/contact-us/data', [ContactUsController::class, 'ajaxIndex'])->name('contact-us.ajax');
@@ -217,8 +217,8 @@ Route::middleware('auth')->group(function () {
     // Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     // Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
 
-    Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verification.create');
-    Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verification.store');
+    Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verifications.create');
+    Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verifications.store');
 
     Route::get('/contact-requests', [ContactRequestController::class, 'index'])
             ->name('contact-requests.index');

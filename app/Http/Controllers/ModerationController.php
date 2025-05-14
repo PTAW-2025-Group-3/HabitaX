@@ -91,7 +91,7 @@ class ModerationController extends Controller
             }
         }
 
-        return view('pages.moderation.index', [
+        return view('moderation.index', [
             'denunciationData' => $denunciationData,
             'presented' => $denunciationData['presented'] ?? [],
             'denunciations' => $denunciationData['paginator'] ?? null,
@@ -115,7 +115,7 @@ class ModerationController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate(10);
 
-        return view('pages.moderation.suspended-users', [
+        return view('moderation.suspended-users', [
             'users' => $users
         ]);
     }
@@ -141,7 +141,7 @@ class ModerationController extends Controller
     {
         $query = User::query();
 
-        // Filtrar apenas usuários com estados específicos
+        // Filtrar apenas utilizadores com estados específicos
         $query->whereIn('state', ['active', 'suspended', 'banned', 'archived']);
 
         // Filtrar por estado específico se solicitado
@@ -161,7 +161,7 @@ class ModerationController extends Controller
         // Paginação
         $users = $query->orderBy('updated_at', 'desc')->paginate(5);
 
-        // Mapear usuários para incluir URL da imagem de perfil
+        // Mapear utilizadores para incluir URL da imagem de perfil
         $usersData = $users->map(function($user) {
             return [
                 'id' => $user->id,

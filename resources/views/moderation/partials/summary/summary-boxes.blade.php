@@ -5,6 +5,6 @@
         ['label' => 'Anúncios Resolvidos', 'value' => $resolvedCount ?? 0, 'icon' => 'check-circle', 'color' => 'green'],
         ['label' => 'Utilizadores Suspensos', 'value' => $suspendedUsersCount ?? 0, 'icon' => 'person-x', 'color' => 'blue']
     ] as $item)
-        @include('pages.moderation.partials.summary.summary-box', ['item' => $item])
+        @include('moderation.partials.summary.summary-box', ['item' => $item])
     @endforeach
 </div>

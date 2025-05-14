@@ -34,7 +34,7 @@
                                     Favoritos
                                 </a>
                                 @if(!auth()->user()->is_advertiser)
-                                    <a href="{{ route('advertiser-verification.create') }}"
+                                    <a href="{{ route('advertiser-verifications.create') }}"
                                        class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('advertiser-verification.create') ? 'bg-gray-50' : '' }}">
                                         <i class="bi bi-shield-check me-3 text-gray-400 group-hover:text-gray"></i>
                                         Verificação de Anunciante

@@ -1,16 +1,12 @@
 import './bootstrap.js';
-import './filepond.min.js';
+import './echo.js';
 import $ from 'jquery';
 
 import * as FilePond from 'filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import FilePondPluginImageFilter from 'filepond-plugin-image-filter';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 
@@ -29,11 +25,7 @@ FilePond.registerPlugin(
     FilePondPluginFileValidateType,
     FilePondPluginFileValidateSize,
     FilePondPluginImageExifOrientation,
-    FilePondPluginImageTransform,
-    FilePondPluginImageCrop,
-    FilePondPluginImageFilter,
     FilePondPluginImagePreview,
-    FilePondPluginImageResize,
     FilePondPluginFilePoster,
     FilePondPluginFileEncode
 );

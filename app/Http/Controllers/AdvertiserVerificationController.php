@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdvertiserVerificationRequested;
 use App\Models\AdvertiserVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,9 +16,9 @@ class AdvertiserVerificationController extends Controller
     {
         $verifications = AdvertiserVerification::with('submitter')
             ->orderBy('submitted_at', 'desc')
-            ->paginate(5);
+            ->paginate(10);
 
-        return view('pages.moderation.verification-advertiser', [
+        return view('moderation.advertiser-verifications.index', [
             'verifications' => $verifications
         ]);
     }
@@ -52,7 +53,7 @@ class AdvertiserVerificationController extends Controller
         }
 
         // Paginação
-        $verifications = $query->orderBy('submitted_at', 'desc')->paginate(5);
+        $verifications = $query->orderBy('submitted_at', 'desc')->paginate(10);
 
         // Mapear verificações com dados necessários
         $verificationsData = $verifications->map(function($verification) {
@@ -93,7 +94,7 @@ class AdvertiserVerificationController extends Controller
     {
         $verification = AdvertiserVerification::with(['submitter', 'validator'])->findOrFail($id);
 
-        return view('pages.moderation.partials.verification-advertisers.verification-advertiser', [
+        return view('moderation.advertiser-verifications.show', [
             'verification' => $verification
         ]);
     }
@@ -165,7 +166,9 @@ class AdvertiserVerificationController extends Controller
             }
         }
 
-        return redirect()->route('advertiser-verification.create')
+        event(new AdvertiserVerificationRequested($verification));
+
+        return redirect()->route('profile.edit')
             ->with('success', 'Verificação de anunciante submetida com sucesso!');
     }
 
@@ -196,7 +199,7 @@ class AdvertiserVerificationController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Estado da verificação atualizado com sucesso.',
-                    'redirect' => route('moderation')
+                    'redirect' => route('advertiser-verifications.index')
                 ]);
             }
 
@@ -207,10 +210,10 @@ class AdvertiserVerificationController extends Controller
 
             // Redirecionar com mensagem flash... ainda tenho de ver isto melhor to/do
             return redirect()
-                ->route('moderation')
+                ->route('advertiser-verifications.index')
                 ->with('success', $message);
         } catch (\Exception $e) {
-            \Log::error('Erro ao atualizar verificação: ' . $e->getMessage());
+            Log::error('Erro ao atualizar verificação: ' . $e->getMessage());
 
             if ($request->ajax()) {
                 return response()->json([
