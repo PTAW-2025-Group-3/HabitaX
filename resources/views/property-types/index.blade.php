@@ -63,8 +63,8 @@
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $propertyType->name }}</td>
                                 <td class="p-4">
-                                    @if ($propertyType->icon_path)
-                                        <img src="{{ Storage::url($propertyType->icon_path) }}" alt="{{ $propertyType->name }} Icon"
+                                    @if ($propertyType->hasMedia('icon'))
+                                        <img src="{{ $propertyType->getFirstMediaUrl('icon', 'thumb') }}" alt="{{ $propertyType->name }} Icon"
                                              class="w-8 h-8 rounded-full">
                                     @else
                                         <span class="text-gray-500">Sem ícone</span>

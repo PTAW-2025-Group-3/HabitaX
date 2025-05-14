@@ -7,6 +7,7 @@ use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
 use App\Models\PropertyTypeAttribute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PropertyTypeController extends Controller
@@ -52,18 +53,20 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name',
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|file|mimes:png,svg,webp|max:2048',
             'is_active' => 'boolean',
+            'show_on_homepage' => 'boolean',
+            'uploaded_icon' => 'nullable|string',
         ]);
 
-        $iconPath = $request->file('icon') ? $request->file('icon')->store('icons', 'public') : null;
-
-        PropertyType::create([
+        $propertyType = PropertyType::create([
             'name' => $request->name,
             'description' => $request->description,
-            'icon_path' => $iconPath,
-            'is_active' => $request->has('is_active') ? 1 : 0,
+            'is_active' => $request->is_active,
+            'show_on_homepage' => $request->show_on_homepage,
         ]);
+
+        $this->attachMedia($request, $propertyType);
+
 
         return redirect()->route('property-types.index')->with('success', 'Property type created successfully.');
     }
@@ -80,28 +83,23 @@ class PropertyTypeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:property_types,name,' . $id,
             'description' => 'nullable|string|max:1000',
-            'icon' => 'nullable|file|mimes:png,svg,webp|max:2048',
             'is_active' => 'boolean',
+            'show_on_homepage' => 'boolean',
+            'uploaded_icon' => 'nullable|string',
         ]);
 
         $propertyType = PropertyType::findOrFail($id);
 
-        if ($request->hasFile('icon')) {
-            if ($propertyType->icon && Storage::disk('public')->exists($propertyType->icon)) {
-                Storage::disk('public')->delete($propertyType->icon);
-            }
-
-            $iconPath = $request->file('icon')->store('icons', 'public');
-        } else {
-            $iconPath = $propertyType->icon;
-        }
-
         $propertyType->update([
             'name' => $request->name,
             'description' => $request->description,
-            'icon_path' => $iconPath,
-            'is_active' => $request->has('is_active') ? 1 : 0,
+            'is_active' => $request->is_active,
+            'show_on_homepage' => $request->show_on_homepage,
+            'uploaded_icon' => $request->uploaded_icon,
         ]);
+
+        $this->attachMedia($request, $propertyType);
+
 
         return redirect()->route('property-types.index')->with('success', 'Property type updated successfully.');
     }
@@ -159,5 +157,30 @@ class PropertyTypeController extends Controller
         $propertyType->delete();
 
         return redirect()->route('property-types.index')->with('success', 'Property type deleted successfully.');
+    }
+
+    /**
+     * @param Request $request
+     * @param $type
+     * @return void
+     */
+    public function attachMedia(Request $request, $type): void
+    {
+        if ($request->has('uploaded_icon')) {
+            $filename = trim(basename($request->uploaded_icon), "\"'");
+
+            if ($filename == '') {
+                $type->clearMediaCollection('icon');
+            } else {
+                $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
+                if (file_exists($tempPath)) {
+                    $type->clearMediaCollection('icon');
+                    $type->addMedia($tempPath)
+                        ->preservingOriginal()
+                        ->toMediaCollection('icon');
+                    unlink($tempPath);
+                }
+            }
+        }
     }
 }

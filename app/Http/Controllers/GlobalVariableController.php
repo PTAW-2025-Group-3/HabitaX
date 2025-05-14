@@ -12,7 +12,7 @@ class GlobalVariableController extends Controller
     {
         $globalVariables = GlobalVariable::orderBy('updated_at', 'desc')->paginate(10);
 
-        return view('admin.global-variables', compact('globalVariables'));
+        return view('administration.global-variables', compact('globalVariables'));
     }
 
     public function updateValue(Request $request, $id)

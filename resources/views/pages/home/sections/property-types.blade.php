@@ -11,8 +11,8 @@
                     <div class="home-property-card-style p-4 md:p-6">
                         {{-- Icon --}}
                         <div class="home-icon-style mb-2 md:mb-3">
-                            @if ($type->icon_path)
-                                <img src="{{ Storage::url($type->icon_path) }}" alt="{{ $type->name }} Icon"
+                            @if ($type->hasMedia('icon'))
+                                <img src="{{ $type->getFirstMediaUrl('icon', 'thumb') }}" alt="{{ $type->name }} Icon"
                                      class="object-cover rounded-full w-full h-full">
                             @else
                                 <span class="text-gray-500">Sem ícone</span>

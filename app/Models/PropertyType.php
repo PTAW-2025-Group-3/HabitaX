@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class PropertyType extends Model
+class PropertyType extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
     /** @use HasFactory<\Database\Factories\PropertyTypeFactory> */
     protected $fillable = [
         'name',
         'description',
-        'icon_path',
         'is_active',
         'show_on_homepage',
     ];
@@ -21,6 +23,23 @@ class PropertyType extends Model
         'is_active' => 'boolean',
         'show_on_homepage' => 'boolean',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('icon')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        if ($media && $media->mime_type === 'image/svg+xml') {
+            return;
+        }
+        $this->addMediaConversion('thumb')
+            ->width(100)
+            ->height(100)
+            ->performOnCollections('icon');
+    }
 
     public function typeAttributes()
     {

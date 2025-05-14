@@ -67,15 +67,16 @@
 
     {{--  icon  --}}
     <div class="flex flex-col">
-        <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
+        <label for="file" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
         <div class="mt-1 w-1/2">
             <input
                 type="file"
                 class="filepond"
-                name="icon"
+                name="file"
                 id="icon"
                 accept="image/png, image/svg+xml, image/webp"
             />
+            <div id="hidden-icon-input"></div>
         </div>
     </div>
 
@@ -109,34 +110,110 @@
 @endpush
 
 @push('scripts')
+    @php
+        $existingImage = $propertyType?->getMedia('icon')->first();
+
+        if ($existingImage) {
+            $existingImage = [
+                'source' => $existingImage->file_name,
+                'name' => $existingImage->file_name,
+                'size' => $existingImage->size,
+                'type' => $existingImage->mime_type,
+                'preview' => $existingImage->getUrl(),
+            ];
+        }
+    @endphp
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const hiddenContainer = document.getElementById('hidden-icon-input');
+            let currentInput = null;
+
+            const createHiddenInput = (filename) => {
+                if (!currentInput) {
+                    currentInput = document.createElement('input');
+                    currentInput.type = 'hidden';
+                    currentInput.name = 'uploaded_icon';
+                    hiddenContainer.appendChild(currentInput);
+                }
+
+                currentInput.value = filename;
+            };
+
+            const removeHiddenInput = () => {
+                if (!currentInput) {
+                    currentInput = document.createElement('input');
+                    currentInput.type = 'hidden';
+                    currentInput.name = 'uploaded_icon';
+                    hiddenContainer.appendChild(currentInput);
+                }
+
+                currentInput.value = '';
+            };
+
             const pondOptions = {
-                instantUpload: false,
-                storeAsFile: true,
-                allowReplace: true,
                 allowImageCrop: true,
+                maxFileSize: '1MB',
                 imageCropAspectRatio: '1:1',
                 acceptedFileTypes: ['image/png', 'image/svg+xml', 'image/webp'],
+                allowReplace: true,
+                maxFiles: 1,
                 labelIdle: 'Arraste e solte ou <span class="filepond--label-action">Selecione</span>',
+                server: {
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    process: {
+                        url: '{{ route('uploads.process') }}',
+                        method: 'POST',
+                        onload: (response) => {
+                            const filename = response.replace(/^["']+|["']+$/g, '');
+                            createHiddenInput(filename);
+                            return filename;
+                        },
+                        onerror: (err) => {
+                            console.error('Erro ao carregar ícone:', err);
+                        }
+                    },
+                    revert: {
+                        url: '{{ route('uploads.revert') }}',
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        onload: removeHiddenInput
+                    }
+                },
+                onremovefile: (error) => {
+                    if (error) {
+                        console.error('Erro ao remover arquivo:', error);
+                    } else {
+                        removeHiddenInput();
+                    }
+                },
+                onerror: (error) => {
+                    console.error('Erro ao carregar ícone:', error);
+                }
             };
-            const existingImage = {!! isset($propertyType) && $propertyType->icon_path ? json_encode(Storage::url($propertyType->icon_path)) : 'null' !!};
+
+            const existingImage = @json($existingImage);
             if (existingImage) {
+                createHiddenInput(existingImage.name);
                 pondOptions.files = [{
-                    source: existingImage,
+                    source: existingImage.name,
                     options: {
                         type: 'local',
                         file: {
-                            name: existingImage.split('/').pop(),
-                            size: existingImage.length,
-                            type: existingImage.split('.').pop(),
+                            name: existingImage.name,
+                            size: existingImage.size,
+                            type: existingImage.type,
                         },
                         metadata: {
-                            poster: existingImage
+                            poster: existingImage.preview,
                         }
                     }
                 }];
             }
+
             FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>

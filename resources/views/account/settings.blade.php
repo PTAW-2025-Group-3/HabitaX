@@ -55,7 +55,7 @@
             </div>
         </form>
     </div> --}}
-    
+
     <!-- Privacidade -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
         <h2 class="text-xl font-semibold text-primary mb-4">Privacidade</h2>
@@ -66,7 +66,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <label class="font-medium text-gray-secondary">Mostrar email</label>
-                        <p class="text-sm text-gray mt-1">Permita que outros usuários vejam seu email</p>
+                        <p class="text-sm text-gray mt-1">Permita que outros utilizadores vejam seu email</p>
                     </div>
 
                     <label class="relative inline-flex items-center cursor-pointer">

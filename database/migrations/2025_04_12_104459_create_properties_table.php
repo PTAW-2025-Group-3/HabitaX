@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->longText('description')->nullable();
-            $table->string('icon_path')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('show_on_homepage')->default(false);
             $table->timestamps();

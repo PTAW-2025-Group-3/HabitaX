@@ -34,4 +34,3 @@ class PropertyTypeSeeder extends Seeder
         }
     }
 }
-
