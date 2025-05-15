@@ -33,7 +33,8 @@
                         <label for="first_name" class="block text-sm font-semibold text-gray">Nome</label>
                         <input type="text" id="first_name" name="first_name"
                                class="form-input" required
-                               placeholder="João">
+                               placeholder="João"
+                               value="{{ auth()->check() ? explode(' ', auth()->user()->name)[0] : old('first_name') }}">
                         @error('first_name')
                         <div class="text-red-500 text-sm mt-1">
                             {{ $message }}
@@ -44,7 +45,8 @@
                         <label for="last_name" class="block text-sm font-semibold text-gray">Apelido</label>
                         <input type="text" id="last_name" name="last_name"
                                class="form-input" required
-                               placeholder="Silva">
+                               placeholder="Silva"
+                               value="{{ auth()->check() && str_word_count(auth()->user()->name) > 1 ? substr(auth()->user()->name, strlen(explode(' ', auth()->user()->name)[0]) + 1) : old('last_name') }}">
                         @error('last_name')
                         <div class="text-red-500 text-sm mt-1">
                             {{ $message }}
@@ -57,7 +59,8 @@
                         <label for="email" class="block text-sm font-semibold text-gray">Email</label>
                         <input type="email" id="email" name="email"
                                class="form-input" required
-                               placeholder="joao.silva@exemplo.com">
+                               placeholder="joao.silva@exemplo.com"
+                               value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
                         @error('email')
                         <div class="text-red-500 text-sm mt-1">
                             {{ $message }}
@@ -68,7 +71,8 @@
                         <label for="telephone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
                         <input type="text" id="telephone" name="telephone"
                                class="form-input" required
-                               placeholder="+351912 345 678">
+                               placeholder="+351912 345 678"
+                               value="{{ auth()->check() && auth()->user()->telephone ? auth()->user()->telephone : old('telephone') }}">
                         @error('telephone')
                         <div class="text-red-500 text-sm mt-1">
                             {{ $message }}
@@ -81,7 +85,7 @@
                     <textarea id="message" name="message" rows="4"
                               class="form-input" minlength="10"
                               required
-                              placeholder="Escreva a sua mensagem aqui..."></textarea>
+                              placeholder="Escreva a sua mensagem aqui...">{{ old('message') }}</textarea>
                     @error('message')
                     <div class="text-red-500 text-sm mt-1">
                         {{ $message }}

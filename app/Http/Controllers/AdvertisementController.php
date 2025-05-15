@@ -124,7 +124,7 @@ class AdvertisementController extends Controller
 
         // Verifica se o anúncio está publicado
         if (!$ad->is_published) {
-            // Se não estiver publicado, apenas o criador, admin ou moderador pode ver
+            // Se não estiver publicado, apenas o criador pode ver
             if (!auth()->check() ||
                 (auth()->id() !== $ad->created_by &&
                     !auth()->user()->isAdmin() &&

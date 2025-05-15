@@ -22,6 +22,12 @@ class ModerationController extends Controller
         // Substituindo state=active para is_published=true e is_suspended=false
         $pendingCount = Advertisement::where('is_published', true)
             ->where('is_suspended', false)
+            ->whereHas('creator', function($q) {
+                $q->where('state', 'active');
+            })
+            ->whereHas('property.property_type', function($q) {
+                $q->where('is_active', true);
+            })
             ->count();
 
         $resolvedCount = Denunciation::whereIn('report_state', [1, 2])->count();

@@ -30,6 +30,16 @@ class AdministrationController extends Controller
             );
         }
 
+        $publishedAds = Advertisement::where('is_published', true)
+            ->where('is_suspended', false)
+            ->whereHas('creator', function($q) {
+                $q->where('state', 'active');
+            })
+            ->whereHas('property.property_type', function($q) {
+                $q->where('is_active', true);
+            })
+            ->count();
+
         $userRoleLabels = ['Utilizadores', 'Moderadores', 'Administradores'];
         $userRoleData = [
             User::where('user_type', 'user')->orWhereNull('user_type')->count(),
@@ -40,7 +50,7 @@ class AdministrationController extends Controller
         return view('administration.index', [
             'activeUsers' => User::where('state', 'active')->count(),
             'totalUsers' => User::count(),
-            'publishedAds' => Property::count(),
+            'publishedAds' => $publishedAds,
             'reportedAds' => Denunciation::count(),
             'users' => User::orderBy('created_at', 'desc')->paginate(5),
             'chartLabels' => $months,
