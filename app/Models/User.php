@@ -89,4 +89,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
+
+    public function advertiserVerifications()
+    {
+        return $this->hasMany(AdvertiserVerification::class, 'submitted_by');
+    }
+
 }

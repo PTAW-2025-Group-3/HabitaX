@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AdvertiserVerificationRequested;
 use App\Models\AdvertiserVerification;
+use App\Models\GlobalVariable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -106,12 +107,42 @@ class AdvertiserVerificationController extends Controller
             ->where('verification_advertiser_state', 0)
             ->exists();
         if ($hasPending) {
-            return redirect()->route('profile.edit')->with('error', 'Já existe uma verificação pendente para o seu perfil.');
+            return redirect()->route('advertiser-verifications.list')->with('error', 'Já existe uma verificação pendente para o seu perfil.');
         }
 
         $documentTypes = \App\Models\DocumentType::all();
-        return view('account.advertiser-verification', compact('documentTypes'));
+
+        // Verifica se o utilizador já tem verificações anteriores
+        $verifications = auth()->user()->advertiserVerifications;
+
+        return view('account.advertiser-verification', compact('documentTypes', 'verifications'));
     }
+
+    public function list()
+    {
+        $verifications = auth()->user()->advertiserVerifications()
+            ->orderBy('submitted_at', 'desc')
+            ->get();
+
+        $maxTrials = GlobalVariable::where('code', 'max_advertiser_verification_trials')
+            ->first()->value ?? 3;
+
+        $lastVerification = $verifications->first();
+        $rejectedCount = $verifications->where('verification_advertiser_state', 2)->count();
+        $pendingCount = $verifications->where('verification_advertiser_state', 0)->count();
+        $canCreateNew = $verifications->isEmpty() ||
+            ($lastVerification && $lastVerification->verification_advertiser_state === 2 && $rejectedCount < $maxTrials);
+
+        return view('account.verification-list', [
+            'verifications' => $verifications,
+            'maxTrials' => (int)$maxTrials,
+            'lastVerification' => $lastVerification,
+            'rejectedCount' => $rejectedCount,
+            'pendingCount' => $pendingCount,
+            'canCreateNew' => $canCreateNew
+        ]);
+    }
+
 
     public function store(Request $request)
     {
@@ -168,7 +199,7 @@ class AdvertiserVerificationController extends Controller
 
         event(new AdvertiserVerificationRequested($verification));
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('advertiser-verifications.list')
             ->with('success', 'Verificação de anunciante submetida com sucesso!');
     }
 

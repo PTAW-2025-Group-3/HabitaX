@@ -25,6 +25,12 @@ class GlobalVariableSeeder extends Seeder
                 'value' => 5,
                 'description' => 'Numero maximo de atributos permitidos em listagem de anúncios.',
             ],
+            [
+                'name' => 'Máximo de tentativas de verificação de anunciante',
+                'code' => 'max_advertiser_verification_trials',
+                'value' => 3,
+                'description' => 'Número máximo de tentativas que um usuário pode fazer para verificação como anunciante antes de ser bloqueado.',
+            ],
         ];
 
         foreach ($variables as $variable) {

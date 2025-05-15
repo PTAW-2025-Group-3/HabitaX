@@ -108,7 +108,9 @@
             </div>
 
             <div class="flex justify-end gap-3">
-                <button type="button" class="btn-gray py-2 px-6">Cancelar</button>
+                @if(isset($verifications) && count($verifications) > 0)
+                    <a href="{{ route('advertiser-verifications.list') }}" class="btn-gray py-2 px-6 inline-block text-center">Cancelar</a>
+                @endif
                 <button type="submit" class="btn-primary py-2 px-6">Enviar Verificação</button>
             </div>
         </form>

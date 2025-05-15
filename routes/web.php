@@ -219,6 +219,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verifications.create');
     Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verifications.store');
+    Route::get('/advertiser-verification/list', [AdvertiserVerificationController::class, 'list'])
+        ->name('advertiser-verifications.list');
 
     Route::get('/contact-requests', [ContactRequestController::class, 'index'])
             ->name('contact-requests.index');
