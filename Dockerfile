@@ -45,6 +45,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     nodejs \
     npm \
+    supervisor \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip sockets
 
 COPY --from=build /tmp/extensions/redis.so /tmp/redis.so
@@ -54,9 +55,10 @@ RUN echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 COPY .env.docker /var/www/.env
 COPY --from=build /var/www /var/www
 
-EXPOSE 9000
+COPY supervisord.conf /etc/supervisord.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+EXPOSE 9000
 ENTRYPOINT ["sh", "/usr/local/bin/docker-entrypoint.sh"]

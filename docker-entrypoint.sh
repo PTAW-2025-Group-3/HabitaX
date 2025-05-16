@@ -19,4 +19,4 @@ php artisan view:clear && php artisan view:cache
 php artisan optimize:clear && php artisan optimize
 php artisan responsecache:clear
 
-exec php-fpm
+exec supervisord -c /etc/supervisord.conf

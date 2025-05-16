@@ -146,7 +146,6 @@ class AdvertiserVerificationController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('Verificação de anunciante: início do processo de validação');
         $request->validate([
             'document_type_id' => 'required|exists:document_types,id',
             'document_number' => 'required|string|max:255',
@@ -157,15 +156,12 @@ class AdvertiserVerificationController extends Controller
             'uploaded_selfies.*' => 'string',
         ]);
 
-        Log::info('Verificação de anunciante: validação passada');
-
         $user = auth()->user();
         $user->update([
             'document_type_id' => $request->input('document_type_id'),
             'document_number' => $request->input('document_number'),
             'nif' => $request->input('nif'),
         ]);
-        Log::info('Verificação de anunciante: utilizador atualizado');
 
         $verification = AdvertiserVerification::create([
             'submitted_by' => auth()->id(),

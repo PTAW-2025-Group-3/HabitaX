@@ -5,6 +5,8 @@ services:
             dockerfile: Dockerfile
         container_name: habitax
         restart: unless-stopped
+        ports:
+            - "8080:8080"
         volumes:
             - ./storage:/var/www/storage
             - ./public:/var/www/public
@@ -18,7 +20,7 @@ services:
         container_name: nginx
         restart: unless-stopped
         ports:
-            - "8080:80"
+            - "8000:80"
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
             - ./storage:/var/www/storage
@@ -51,14 +53,6 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - internal
-
-#    cloudflared:
-#        image: cloudflare/cloudflared:latest
-#        container_name: cloudflared
-#        command: tunnel --no-autoupdate run --token eyJhIjoiMzUzMmVlZDcwMGQxZjYzZjhkZTY0YmE1ZjUwYTY4ZjIiLCJ0IjoiNDg0NDAxNmQtZjQ1MC00YmE2LTljNGMtMmI3N2ZkZDMzOGU0IiwicyI6IlpUQXlZall3TXpNdFkyTTJPUzAwTURjMkxUZ3daVE10WkdNeU1tTTJOVFprTWpBNCJ9
-#        networks:
-#            - internal
-#        restart: unless-stopped
 
 networks:
     internal:

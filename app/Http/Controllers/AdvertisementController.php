@@ -37,8 +37,6 @@ class AdvertisementController extends Controller
             ->with('property.parameters.attribute')
             ->select('advertisements.*');
 
-        Log::debug('Request attributes:', $request->input('attributes', []));
-
         // Aplicar filtros (assumindo que o AdvertisementFilterRequest já os aplica corretamente)
         $query = $request->applyFilters($query);
 

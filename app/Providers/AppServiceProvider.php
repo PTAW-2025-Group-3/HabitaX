@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Observers\AdvertisementObserver;
 use App\Observers\UserObserver;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Faker\Factory as FakerFactory;

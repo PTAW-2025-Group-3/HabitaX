@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class AdvertiserVerificationRequested implements ShouldBroadcast
 {
@@ -44,9 +45,12 @@ class AdvertiserVerificationRequested implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
+        Log::info('[BROADCAST] Event is being sent', [
+            'channel' => 'private-advertiser_verifications',
+            'data' => $this->verification,
+        ]);
         return [
             'verification' => $this->verification,
-            'submitter' => $this->verification->submitter,
         ];
     }
 }
