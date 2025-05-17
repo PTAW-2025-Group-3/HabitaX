@@ -71,7 +71,7 @@
                         <label for="telephone" class="block text-sm font-semibold text-gray">Número de Telefone</label>
                         <input type="text" id="telephone" name="telephone"
                                class="form-input" required
-                               placeholder="+351912 345 678"
+                               placeholder="+351912345678"
                                value="{{ auth()->check() && auth()->user()->telephone ? auth()->user()->telephone : old('telephone') }}">
                         @error('telephone')
                         <div class="text-red-500 text-sm mt-1">

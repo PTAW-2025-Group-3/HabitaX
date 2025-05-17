@@ -19,24 +19,6 @@
             </div>
         </div>
     @endif
-
-    @if(auth()->check() && auth()->id() == $ad->created_by)
-        <div class="max-w-screen-xl mx-auto p-2 md:p-4 mb-4">
-            <div class="bg-white rounded-lg shadow-sm flex justify-between items-center">
-                <div class="px-4 py-2 font-medium text-gray-700">
-                    Modo de visualização:
-                </div>
-                <div class="flex border border-gray-200 rounded-lg overflow-hidden">
-                    <button id="ownerViewBtn" class="px-4 py-2 text-sm font-medium transition-colors view-mode-btn active-view">
-                        <i class="bi bi-person-fill"></i> Minha Visualização
-                    </button>
-                    <button id="clientViewBtn" class="px-4 py-2 text-sm font-medium transition-colors view-mode-btn">
-                        <i class="bi bi-people-fill"></i> Visualização do Cliente
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
 @endsection
 @section('content')
     <div class="max-w-screen-xl mx-auto p-2 md:p-4 space-y-6 animate-fade-in">
@@ -179,7 +161,7 @@
                     <p class="text-gray-700 text-sm md:text-base">{{ $ad->description }}</p>
                 </section>
 
-                <section class="space-y-2">
+                {{-- <section class="space-y-2">
                     <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
@@ -213,6 +195,74 @@
                             @if(isset($attributeIncludes[$parameter->attribute->type->value]) && $displayedCount < $maxDisplayed)
                                 <div>
                                     @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
+                                </div>
+                                @php $displayedCount++; @endphp
+                            @endif
+                        @endforeach
+                    </div>
+
+                    <!-- Botão "Ver mais características" -->
+                    <div class="my-4 flex justify-start">
+                        <button id="showAllFeaturesBtn"
+                                class="btn-secondary gap-2 px-4 py-2.5">
+                            <i class="bi bi-grid-3x3-gap-fill"></i>
+                            <span class="text-sm font-medium">Mostrar todas as {{ $allParameters->count() }} características</span>
+                        </button>
+                    </div>
+                </section> --}}
+                <section class="space-y-2 mb-4">
+                    <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
+
+                    <!-- Características em formato de lista vertical -->
+                    <div class="space-y-2 mb-4">
+                        @php
+                            $displayedCount = 0;
+                            $maxDisplayed = 4;
+                            $path = 'advertisements.individual.parameters.';
+                            $attributeIncludes = [
+                                AttributeType::TEXT->value => $path. 'text',
+                                AttributeType::LONG_TEXT->value => $path . 'long-text',
+                                AttributeType::INT->value => $path . 'int',
+                                AttributeType::FLOAT->value => $path . 'float',
+                                AttributeType::BOOLEAN->value => $path . 'boolean',
+                                AttributeType::DATE->value => $path . 'date',
+                                AttributeType::SELECT_SINGLE->value => $path . 'select-single',
+                                AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
+                            ];
+
+                            // Obter todos os parâmetros disponíveis
+                            $allParameters = collect([]);
+                            $groupedParameters = $groupedParameters ?? collect([]);
+                            foreach($groupedParameters as $groupId => $parameters) {
+                                $allParameters = $allParameters->merge($parameters);
+                            }
+
+                            $priorityParameters = $allParameters->take($maxDisplayed);
+                        @endphp
+
+                        @foreach($priorityParameters as $parameter)
+                            @if(isset($attributeIncludes[$parameter->attribute->type->value]) && $displayedCount < $maxDisplayed)
+                                <div class="flex items-center px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-100">
+                                    <i class="bi bi-info-circle text-blue-500 mr-3"></i>
+                                    <div class="text-sm">
+                                        <span class="font-medium">{{ $parameter->attribute->name }}:</span>
+                                        <span class="font-semibold text-gray-800 ml-1">
+                            @php
+                                // Obter o valor correto com base no tipo de atributo
+                                $value = match($parameter->attribute->type->value) {
+                                    AttributeType::TEXT->value, AttributeType::LONG_TEXT->value => $parameter->text_value,
+                                    AttributeType::INT->value => number_format($parameter->int_value, 0, ',', '.'),
+                                    AttributeType::FLOAT->value => number_format($parameter->float_value, 2, ',', '.'),
+                                    AttributeType::BOOLEAN->value => $parameter->boolean_value ? 'Sim' : 'Não',
+                                    AttributeType::DATE->value => $parameter->date_value->format('d/m/Y'),
+                                    AttributeType::SELECT_SINGLE->value => \App\Models\PropertyAttributeOption::find($parameter->select_value)->name,
+                                    AttributeType::SELECT_MULTIPLE->value => implode(', ', $parameter->options->pluck('option.name')->toArray()),
+                                    default => 'N/A'
+                                };
+                            @endphp
+                                            {{ $value }}
+                        </span>
+                                    </div>
                                 </div>
                                 @php $displayedCount++; @endphp
                             @endif
@@ -268,23 +318,6 @@
         </div>
     </div>
 @endsection
-@push('styles')
-    <style>
-        .view-mode-btn {
-            @apply bg-gray-100 text-gray-600 hover:bg-gray-200;
-        }
-        .active-view {
-            @apply bg-primary text-white hover:bg-primary-dark;
-        }
-        .owner-view-element {
-            /* Visível por padrão para o dono */
-            @apply block;
-        }
-        .client-view-hidden {
-            /* Elementos que devem ser escondidos na visão de cliente */
-        }
-    </style>
-@endpush
 @include('advertisements.individual.modals.all_photos', ['images' => $images])
 @include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
@@ -296,8 +329,6 @@
             const photosModal = document.getElementById('photos-modal');
             const closePhotosModal = document.getElementById('closePhotosModal');
             const photoItems = document.querySelectorAll('.photo-item');
-            const ownerViewBtn = document.getElementById('ownerViewBtn');
-            const clientViewBtn = document.getElementById('clientViewBtn');
 
             // Função para abrir o modal de fotos
             function openPhotosModal() {

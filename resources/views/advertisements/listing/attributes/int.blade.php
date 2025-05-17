@@ -1,25 +1,23 @@
-@php use App\Enums\AttributeType; @endphp
-<div class="mb-4">
-    <h3 class="font-semibold text-gray-secondary mb-2 flex items-center">
+<div class="mb-6">
+    <h3 class="font-semibold text-gray-secondary mb-3 flex items-center">
         <i class="bi bi-sliders2-vertical mr-2 text-secondary"></i> {{ $attribute->name }}
     </h3>
+
     <div class="grid grid-cols-2 gap-3">
-        <div>
-            <label for="min_{{ $attribute->id }}" class="text-sm font-medium">Mínimo</label>
+        <div class="relative">
             <input type="number"
                    id="min_{{ $attribute->id }}"
                    name="attributes[{{ $attribute->id }}][min_int]"
-                   class="w-full border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary"
-                   placeholder="Min value"
+                   class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg"
+                   placeholder="Mínimo"
                    value="{{ request()->input('attributes.' . $attribute->id . '.min_int') }}">
         </div>
-        <div>
-            <label for="max_{{ $attribute->id }}" class="text-sm font-medium">Máximo</label>
+        <div class="relative">
             <input type="number"
                    id="max_{{ $attribute->id }}"
                    name="attributes[{{ $attribute->id }}][max_int]"
-                   class="w-full border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary"
-                   placeholder="Max value"
+                   class="p-2 pl-4 pr-4 w-full border border-gray-300 rounded-lg"
+                   placeholder="Máximo"
                    value="{{ request()->input('attributes.' . $attribute->id . '.max_int') }}">
         </div>
     </div>

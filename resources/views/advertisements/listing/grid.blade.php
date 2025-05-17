@@ -8,7 +8,7 @@
                     class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300 h-full flex flex-col overflow-hidden">
                     <div class="relative group overflow-hidden">
                         <div class="relative overflow-hidden rounded-t-2xl">
-                            <div class="swiper swiper-ad-{{ $ad->id }} h-[220px]">
+                            <div class="swiper swiper-ad-{{ $ad->id }} h-[200px]">
                                 <div class="swiper-wrapper">
                                     @php
                                         $totalImages = $ad->property->getMedia('images')->count();
