@@ -125,7 +125,7 @@
         @endphp
         <div id="gallery" class="gallery-container grid grid-cols-12 gap-2 md:gap-4 relative">
             <!-- Visible part -->
-            <a href="{{ $property->getFirstMediaUrl('images') }}"
+            <a href="{{ $property->getFirstMediaUrl('images', 'watermark') }}"
                class="col-span-12 md:col-span-6 h-[300px] md:h-[500px]">
                 <img src="{{ $property->getFirstMediaUrl('images', 'preview') }}"
                      class="w-full h-full object-cover rounded-lg shadow" alt="Imagem Principal">
@@ -137,7 +137,7 @@
                         @if($loop->index == 4 && count($images) > 5)
                             <!-- Última imagem visível com overlay e "+X" -->
                             <div class="relative">
-                                <a href="{{ $image->getUrl() }}" class="block w-full h-full">
+                                <a href="{{ $image->getUrl('watermark') }}" class="block w-full h-full">
                                     <img src="{{ $image->getUrl('preview') }}"
                                          class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
                                     <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center rounded-lg hover:bg-opacity-70 transition-all">
@@ -147,7 +147,7 @@
                                 </a>
                             </div>
                         @else
-                            <a href="{{ $image->getUrl() }}">
+                            <a href="{{ $image->getUrl('watermark') }}">
                                 <img src="{{ $image->getUrl('preview') }}"
                                      class="w-full h-full object-cover rounded-lg shadow" loading="lazy" alt="Miniatura">
                             </a>
@@ -164,8 +164,8 @@
             <div class="hidden">
                 @foreach($images as $image)
                     @if($loop->index >= 5)
-                        <a href="{{ $image->getUrl() }}">
-                            <img src="{{ $image->getUrl() }}" loading="lazy" alt="Miniatura oculta" class="hidden">
+                        <a href="{{ $image->getUrl('watermark') }}">
+                            <img src="{{ $image->getUrl('thumbnail') }}" loading="lazy" alt="Miniatura oculta" class="hidden">
                         </a>
                     @endif
                 @endforeach
@@ -503,12 +503,10 @@
             const gallery = lightGallery(document.getElementById('gallery'), {
                 selector: 'a',
                 plugins: [lgThumbnail, lgZoom],
-                autoplayControls: false,
-                share: false,
                 loop: true,
+                hideScrollbar: true,
                 mode: 'lg-fade',
                 speed: 500,
-                licenseKey: 'your-license-key',
                 dynamic: true,
                 dynamicEl: Array.from(document.querySelectorAll('#gallery a')).map(a => {
                     return {

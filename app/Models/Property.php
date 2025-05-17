@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Enums\Fit;
+use Spatie\Image\Enums\Unit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -39,20 +40,27 @@ class Property extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->fit(Fit::Crop, 300, 200)
+            ->format('webp')
             ->optimize()
-            ->sharpen(5)
-            ->watermark(public_path('images/logos/habitaxLogo.png'))
-            ->watermarkOpacity(70)
-            ->watermarkPosition('bottom-right')
-            ->watermarkPadding(10, 10)
-            ->watermarkWidth(80) // tamanho em pixels
+            ->fit(Fit::Crop, 300, 200)
             ->performOnCollections('images');
 
         $this->addMediaConversion('preview')
-            ->fit(Fit::Crop, 800, 600)
+            ->format('webp')
             ->optimize()
-            ->sharpen(5)
+            ->fit(Fit::Crop, 800, 600)
+            ->performOnCollections('images');
+
+        $this->addMediaConversion('watermark')
+            ->format('webp')
+            ->optimize()
+            ->watermark(
+                public_path('images/logos/habitaxLogo.png'),
+                paddingX: 2, paddingY: 2, paddingUnit: Unit::Percent,
+                width: 20, widthUnit: Unit::Percent,
+                height: 10, heightUnit: Unit::Percent,
+                alpha: 50
+            )
             ->performOnCollections('images');
     }
 

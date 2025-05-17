@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\PropertyType;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyTypeSeeder extends Seeder
 {
@@ -32,34 +33,33 @@ class PropertyTypeSeeder extends Seeder
                     'is_active' => $type['show_on_homepage'] ?? false,
                     'show_on_homepage' => $type['show_on_homepage'] ?? false,
                 ]);
-
             $this->attachIcon($propertyType);
         }
     }
 
     private function attachIcon(PropertyType $propertyType): void
     {
-        $tempDir = storage_path('app/public/tmp/uploads');
+        $iconsPath = 'icons/';
+        $icons = Storage::disk('public')->files($iconsPath);
 
-        if (!file_exists($tempDir)) {
-            mkdir($tempDir, 0755, true);
-        }
+        if (count($icons) > 50) {
+            // Select a random icon from the existing ones
+            $fileName = $icons[array_rand($icons)];
+        } else {
+            // Fetch a new icon from the URL
+            $seed = fake()->uuid;
+            $fileName = $iconsPath . 'icon_' . $seed . '.svg';
+            $url = "https://api.dicebear.com/7.x/icons/svg?seed={$seed}";
 
-        $seed = fake()->uuid;
-        $filename = 'icon_' . $seed . '.svg';
-        $tempPath = $tempDir . '/' . $filename;
+            $response = Http::get($url);
 
-        $url = "https://api.dicebear.com/7.x/icons/svg?seed={$seed}";
-        $response = Http::get($url);
-
-        if ($response->ok()) {
-            file_put_contents($tempPath, $response->body());
-            $propertyType->addMedia($tempPath)
-                ->preservingOriginal()
-                ->toMediaCollection('icon');
-            if (file_exists($tempPath)) {
-                @unlink($tempPath);
+            if ($response->ok()) {
+                Storage::disk('public')->put($fileName, $response->body());
             }
         }
+
+        $propertyType->addMedia(storage_path('app/public/' . $fileName))
+            ->preservingOriginal()
+            ->toMediaCollection('icon');
     }
 }

@@ -253,6 +253,9 @@
             @endif
         </div>
     </div>
+@endsection
+
+@push('scripts')
     @if($verification->hasMedia('documents') || $verification->hasMedia('identity_verifications') || $verification->verification_advertiser_state === 0)
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -260,11 +263,11 @@
                 @if($verification->hasMedia('documents'))
                 // Configuração para documentos enviados
                 const documents = @json($verification->getMedia('documents')->map(function($document) {
-                return [
-                    'src' => $document->getUrl(),
-                    'thumb' => $document->getUrl('preview')
-                ];
-            }));
+                    return [
+                        'src' => $document->getUrl(),
+                        'thumb' => $document->getUrl('preview')
+                    ];
+                }));
 
                 const viewDocumentsBtn = document.getElementById('view-documents-btn');
 
@@ -273,6 +276,7 @@
                     dynamic: true,
                     plugins: [lgThumbnail, lgZoom],
                     download: true,
+                    hideScrollbar: true,
                     zoom: true,
                     speed: 500,
                     dynamicEl: documents
@@ -299,6 +303,7 @@
                 const verificationsGallery = lightGallery(document.getElementById('verifications-gallery'), {
                     dynamic: true,
                     plugins: [lgThumbnail, lgZoom],
+                    hideScrollbar: true,
                     download: true,
                     zoom: true,
                     speed: 500,
@@ -363,100 +368,100 @@
                 </div>
             </div>`;
 
-                    confirmModal.innerHTML = modalContent;
-                    document.body.appendChild(confirmModal);
-                    document.body.classList.add('overflow-hidden');
+                confirmModal.innerHTML = modalContent;
+                document.body.appendChild(confirmModal);
+                document.body.classList.add('overflow-hidden');
 
-                    // Adicionar handlers de eventos
-                    document.getElementById('cancelStateBtn').addEventListener('click', () => {
+                // Adicionar handlers de eventos
+                document.getElementById('cancelStateBtn').addEventListener('click', () => {
+                    closeConfirmModal();
+                });
+
+                document.getElementById('confirmStateBtn').addEventListener('click', () => {
+                    closeConfirmModal();
+                    proceedWithUpdate(state, comments);
+                });
+
+                // Fechar ao clicar fora do modal
+                confirmModal.addEventListener('click', (e) => {
+                    if (e.target === confirmModal) {
                         closeConfirmModal();
-                    });
+                    }
+                });
 
-                    document.getElementById('confirmStateBtn').addEventListener('click', () => {
+                // Fechar ao pressionar ESC
+                document.addEventListener('keydown', function escHandler(e) {
+                    if (e.key === 'Escape') {
                         closeConfirmModal();
-                        proceedWithUpdate(state, comments);
-                    });
-
-                    // Fechar ao clicar fora do modal
-                    confirmModal.addEventListener('click', (e) => {
-                        if (e.target === confirmModal) {
-                            closeConfirmModal();
-                        }
-                    });
-
-                    // Fechar ao pressionar ESC
-                    document.addEventListener('keydown', function escHandler(e) {
-                        if (e.key === 'Escape') {
-                            closeConfirmModal();
-                            document.removeEventListener('keydown', escHandler);
-                        }
-                    });
-
-                    function closeConfirmModal() {
-                        confirmModal.classList.add('opacity-0');
-                        setTimeout(() => {
-                            document.body.removeChild(confirmModal);
-                            document.body.classList.remove('overflow-hidden');
-                        }, 200);
+                        document.removeEventListener('keydown', escHandler);
                     }
+                });
 
-                    function proceedWithUpdate(state, comments) {
-                        approveBtn.disabled = true;
-                        rejectBtn.disabled = true;
-
-                        const activeBtn = state === 1 ? approveBtn : rejectBtn;
-                        const originalText = activeBtn.innerHTML;
-                        activeBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Processando...';
-
-                        // Continuação do seu código original para enviar a requisição...
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                        fetch('/moderation/advertiser-verifications/{{ $verification->id }}/update-state', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            body: JSON.stringify({
-                                state: state,
-                                comments: comments
-                            })
-                        })
-                            .then(response => {
-                                // Verificar primeiro se a resposta é JSON antes de tentar fazer o parse
-                                const contentType = response.headers.get('content-type');
-                                if (contentType && contentType.includes('application/json')) {
-                                    return response.json().then(data => {
-                                        if (data.success) {
-                                            // Se tiver um redirecionamento, usar
-                                            if (data.redirect) {
-                                                window.location.href = data.redirect;
-                                            } else {
-                                                alert(`Verificação ${state === 1 ? 'aprovada' : 'rejeitada'} com sucesso!`);
-                                                window.location.reload();
-                                            }
-                                        } else {
-                                            alert('Erro ao atualizar: ' + (data.message || 'Erro desconhecido'));
-                                        }
-                                    });
-                                } else {
-                                    // Se a resposta não for JSON, redirecionar para a página principal de moderação
-                                    window.location.href = "{{ route('advertiser-verifications.index') }}";
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Erro:', error);
-                                alert('Erro ao processar. Por favor, tente novamente.');
-                            })
-                            .finally(() => {
-                                approveBtn.disabled = false;
-                                rejectBtn.disabled = false;
-                                activeBtn.innerHTML = originalText;
-                            });
-                    }
+                function closeConfirmModal() {
+                    confirmModal.classList.add('opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(confirmModal);
+                        document.body.classList.remove('overflow-hidden');
+                    }, 200);
                 }
-                @endif
-            });
+
+                function proceedWithUpdate(state, comments) {
+                    approveBtn.disabled = true;
+                    rejectBtn.disabled = true;
+
+                    const activeBtn = state === 1 ? approveBtn : rejectBtn;
+                    const originalText = activeBtn.innerHTML;
+                    activeBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Processando...';
+
+                    // Continuação do seu código original para enviar a requisição...
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    fetch('/moderation/advertiser-verifications/{{ $verification->id }}/update-state', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            state: state,
+                            comments: comments
+                        })
+                    })
+                        .then(response => {
+                            // Verificar primeiro se a resposta é JSON antes de tentar fazer o parse
+                            const contentType = response.headers.get('content-type');
+                            if (contentType && contentType.includes('application/json')) {
+                                return response.json().then(data => {
+                                    if (data.success) {
+                                        // Se tiver um redirecionamento, usar
+                                        if (data.redirect) {
+                                            window.location.href = data.redirect;
+                                        } else {
+                                            alert(`Verificação ${state === 1 ? 'aprovada' : 'rejeitada'} com sucesso!`);
+                                            window.location.reload();
+                                        }
+                                    } else {
+                                        alert('Erro ao atualizar: ' + (data.message || 'Erro desconhecido'));
+                                    }
+                                });
+                            } else {
+                                // Se a resposta não for JSON, redirecionar para a página principal de moderação
+                                window.location.href = "{{ route('advertiser-verifications.index') }}";
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            alert('Erro ao processar. Por favor, tente novamente.');
+                        })
+                        .finally(() => {
+                            approveBtn.disabled = false;
+                            rejectBtn.disabled = false;
+                            activeBtn.innerHTML = originalText;
+                        });
+                }
+            }
             @endif
-        </script>
-        @endsection
+        });
+        @endif
+    </script>
+@endpush

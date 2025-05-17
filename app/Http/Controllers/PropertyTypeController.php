@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GlobalVariable;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
-use App\Models\PropertyTypeAttribute;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class PropertyTypeController extends Controller
 {
@@ -95,7 +92,6 @@ class PropertyTypeController extends Controller
             'description' => $request->description,
             'is_active' => $request->is_active,
             'show_on_homepage' => $request->show_on_homepage,
-            'uploaded_icon' => $request->uploaded_icon,
         ]);
 
         $this->attachMedia($request, $propertyType);

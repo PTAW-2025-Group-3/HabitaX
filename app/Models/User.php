@@ -9,11 +9,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -28,7 +32,6 @@ class User extends Authenticatable
         'public_profile',
         'show_email',
         'telephone',
-        'profile_picture_path',
         'user_type',
         'is_advertiser',
         'staff_number',
@@ -52,10 +55,24 @@ class User extends Authenticatable
         'staff_number' => 'integer',
     ];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('picture')->useDisk('public');
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->format('webp')
+            ->optimize()
+            ->fit(Fit::Crop, 100, 100)
+            ->performOnCollections('picture');
+    }
+
     public function getProfilePictureUrl()
     {
-        if ($this->profile_picture_path) {
-            return Storage::url($this->profile_picture_path);
+        if ($this->hasMedia('picture')) {
+            return $this->getFirstMediaUrl('picture', 'thumb');
         }
         return asset('images/default-pfp-habitax.png');
     }

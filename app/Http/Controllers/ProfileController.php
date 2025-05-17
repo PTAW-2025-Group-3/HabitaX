@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -23,17 +22,32 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'bio' => 'nullable|string|max:1000',
+            'uploaded_picture' => 'nullable|string',
         ]);
 
-        $imagePath = $request->file('image') ? $request->file('image')
-            ->store('profile_pictures', 'public') : null;
-
         $user->update([
-            'profile_picture_path' => $imagePath,
             'name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,
         ]);
+
+        if ($request->has('uploaded_picture')) {
+            $filename = trim(basename($request->uploaded_picture), "\"'");
+
+            if ($filename == '') {
+                $user->clearMediaCollection('picture');
+            } else {
+                $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
+                if (file_exists($tempPath)) {
+                    $user->clearMediaCollection('picture');
+
+                    $user->addMedia($tempPath)
+                        ->preservingOriginal()
+                        ->toMediaCollection('picture');
+                    unlink($tempPath);
+                }
+            }
+        }
 
         return redirect()->route('profile.edit')->with('success', 'Perfil atualizado com sucesso!');
     }

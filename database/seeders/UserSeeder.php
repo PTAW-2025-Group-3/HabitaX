@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class UserSeeder extends Seeder
 {
@@ -46,7 +48,7 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            User::factory()
+            $user = User::factory()
                 ->create([
                     'email' => $user['email'],
                     'name' => $user['name'],
@@ -55,6 +57,32 @@ class UserSeeder extends Seeder
                     'state' => $user['state'] ?? 'active',
                 ]
             );
+            $this->attachProfilePicture($user);
         }
+    }
+
+    private function attachProfilePicture(User $user): void
+    {
+        $picturesPath = 'profile_pictures/';
+        $pictures = Storage::disk('public')->files($picturesPath);
+        if (count($pictures) > 20) {
+            // Select a random picture from the existing ones
+            $fileName = $pictures[array_rand($pictures)];
+        } else {
+            // Fetch a new picture from the URL
+            $seed = fake()->uuid;
+            $fileName = $picturesPath . 'picture_' . $seed . '.jpeg';
+            $url = "https://picsum.photos/200/200?random={$seed}";
+
+            $response = Http::get($url);
+
+            if ($response->ok()) {
+                Storage::disk('public')->put($fileName, $response->body());
+            }
+        }
+
+        $user->addMedia(storage_path('app/public/' . $fileName))
+            ->preservingOriginal()
+            ->toMediaCollection('picture');
     }
 }

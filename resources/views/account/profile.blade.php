@@ -35,13 +35,14 @@
                     </div>
 
                     <div class="mb-2">
-                        <label for="image" class="block text-gray-secondary font-medium mb-2">Foto de perfil</label>
+                        <label for="file" class="block text-gray-secondary font-medium mb-2">Foto de perfil</label>
                         <input
                             type="file"
                             class="filepond"
-                            name="image"
-                            id="image"
+                            name="file"
+                            id="picture"
                         />
+                        <div id="hidden-picture-input"></div>
                     </div>
 
                     <div>
@@ -63,10 +64,10 @@
                     </div>
 
                     <div>
-                        <label for="phone" class="block text-gray-secondary font-medium mb-2">Telefone</label>
-                        <input type="tel" name="phone" id="phone" value="{{ auth()->user()->phone ?? '' }}"
+                        <label for="telephone" class="block text-gray-secondary font-medium mb-2">Telefone</label>
+                        <input type="tel" name="telephone" id="telephone" value="{{ auth()->user()->telephone ?? '' }}"
                                class="form-input w-full">
-                        @error('phone')
+                        @error('telephone')
                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -116,33 +117,112 @@
 @endpush
 
 @push('scripts')
+    @php
+        $existingImage = auth()->user()?->getMedia('picture')->first();
+
+        if ($existingImage) {
+            $existingImage = [
+                'source' => $existingImage->file_name,
+                'name' => $existingImage->file_name,
+                'size' => $existingImage->size,
+                'type' => $existingImage->mime_type,
+                'preview' => $existingImage->getUrl(),
+            ];
+        }
+    @endphp
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const existingImage = {!! auth()->user()->profile_picture_path ? json_encode(Storage::url(auth()->user()->profile_picture_path)) : 'null' !!};
+            const hiddenContainer = document.getElementById('hidden-picture-input');
+            let currentInput = null;
+
+            const createHiddenInput = (filename) => {
+                if (!currentInput) {
+                    currentInput = document.createElement('input');
+                    currentInput.type = 'hidden';
+                    currentInput.name = 'uploaded_picture';
+                    hiddenContainer.appendChild(currentInput);
+                }
+
+                currentInput.value = filename;
+            };
+
+            const removeHiddenInput = () => {
+                if (!currentInput) {
+                    currentInput = document.createElement('input');
+                    currentInput.type = 'hidden';
+                    currentInput.name = 'uploaded_picture';
+                    hiddenContainer.appendChild(currentInput);
+                }
+
+                currentInput.value = '';
+            };
+
             const pondOptions = {
-                instantUpload: false,
-                storeAsFile: true,
-                allowReplace: true,
+                maxFileSize: '2MB',
                 allowImageCrop: true,
                 imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                imageResizeTargetWidth: 300,
+                imageResizeTargetHeight: 300,
+                acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'],
+                allowReplace: true,
+                maxFiles: 1,
+                labelIdle: 'Arraste e solte ou <span class="filepond--label-action">Selecione</span>',
+                server: {
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    process: {
+                        url: '{{ route('uploads.process') }}',
+                        method: 'POST',
+                        onload: (response) => {
+                            const filename = response.replace(/^["']+|["']+$/g, '');
+                            createHiddenInput(filename);
+                            return filename;
+                        },
+                        onerror: (err) => {
+                            console.error('Erro ao carregar ícone:', err);
+                        }
+                    },
+                    revert: {
+                        url: '{{ route('uploads.revert') }}',
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        onload: removeHiddenInput
+                    }
+                },
+                onremovefile: (error) => {
+                    if (error) {
+                        console.error('Erro ao remover arquivo:', error);
+                    } else {
+                        removeHiddenInput();
+                    }
+                },
+                onerror: (error) => {
+                    console.error('Erro ao carregar ícone:', error);
+                }
             };
+
+            const existingImage = @json($existingImage);
             if (existingImage) {
+                createHiddenInput(existingImage.name);
                 pondOptions.files = [{
-                    source: existingImage,
+                    source: existingImage.name,
                     options: {
                         type: 'local',
                         file: {
-                            name: existingImage.split('/').pop(),
-                            size: existingImage.length,
-                            type: existingImage.split('.').pop(),
+                            name: existingImage.name,
+                            size: existingImage.size,
+                            type: existingImage.type,
                         },
                         metadata: {
-                            poster: existingImage
+                            poster: existingImage.preview,
                         }
                     }
                 }];
             }
+
             FilePond.create(document.querySelector('input.filepond'), pondOptions);
         });
     </script>

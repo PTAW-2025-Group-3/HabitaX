@@ -21,9 +21,9 @@
                     <label for="document_type_id" class="block text-gray-secondary font-medium mb-2">Tipo de Documento</label>
                     <div class="relative dropdown-wrapper">
                         <select id="document_type_id" name="document_type_id" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
-                            <option value="" disabled selected>Selecione o tipo de documento</option>
+                            <option value="" disabled {{ old('document_type_id') ? '' : 'selected' }}>Selecione o tipo de documento</option>
                             @foreach($documentTypes as $documentType)
-                                <option value="{{ $documentType->id }}">
+                                <option value="{{ $documentType->id }}" {{ old('document_type_id') == $documentType->id ? 'selected' : '' }}>
                                     {{ $documentType->name }}
                                 </option>
                             @endforeach
@@ -40,7 +40,8 @@
                 <div class="mb-4">
                     <label for="document_number" class="block text-gray-secondary font-medium mb-2">Número do Documento</label>
                     <input type="text" name="document_number" id="document_number"
-                           class="form-input w-full mt-2" required
+                           class="form-input w-full mt-2"
+                           value="{{ old('document_number') }}" required
                            placeholder="Número do documento">
                     @error('document_number')
                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -50,7 +51,8 @@
                 <div class="mb-4">
                     <label for="nif" class="block text-gray-secondary font-medium mb-2">Numero do Contribuinte</label>
                     <input type="number" name="nif" id="nif"
-                           class="form-input w-full mt-2" required
+                           class="form-input w-full mt-2"
+                           value="{{ old('document_number') }}" required
                            placeholder="Número do documento">
                     @error('nif')
                     <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -58,6 +60,9 @@
                 </div>
 
                 <!-- Upload do Documentos -->
+                @php
+                    $uploadedDocuments = old('uploaded_documents', []);
+                @endphp
                 <div class="mb-4">
                     <label for="documents" class="block text-gray-secondary font-medium mb-2">Carregar Documentos</label>
                     <div class="filepond-wrapper">
@@ -67,7 +72,11 @@
                                  id="documents-upload"
                                multiple
                         >
-                        <div id="hidden-uploaded-documents"></div>
+                        <div id="hidden-uploaded-documents">
+                            @foreach($uploadedDocuments as $document)
+                                <input type="hidden" name="uploaded_documents[]" value="{{ $document }}">
+                            @endforeach
+                        </div>
                     </div>
                     @error('documents')
                         <p class="text-red text-sm mt-2">{{ $message }}</p>
@@ -76,6 +85,9 @@
             </div>
 
             <!-- Selfie com Documento -->
+            @php
+                $uploadedSelfies = old('uploaded_selfies', []);
+            @endphp
             <div class="bg-gray-50 rounded-lg p-6 border border-gray">
                 <h2 class="text-xl font-semibold text-primary mb-3">2. Verificação da Identidade</h2>
                 <p class="text-gray mb-4">Tire uma selfie segurando seu documento de identificação visível ao lado do rosto.</p>
@@ -87,7 +99,11 @@
                            id="selfie-upload"
                            multiple
                     >
-                    <div id="hidden-uploaded-selfies"></div>
+                    <div id="hidden-uploaded-selfies">
+                        @foreach($uploadedSelfies as $selfie)
+                            <input type="hidden" name="uploaded_selfies[]" value="{{ $selfie }}">
+                        @endforeach
+                    </div>
                 </div>
                 @error('selfie')
                     <p class="text-red text-sm mt-2">{{ $message }}</p>
@@ -144,9 +160,9 @@
                 console.warn('No input found for:', name);
             }
 
-            function initPond(inputSelector, targetWrapper, fieldName) {
+            function initPond(inputSelector, targetWrapper, fieldName, existingFiles = []) {
                 FilePond.create(document.querySelector(inputSelector), {
-                    maxFiles: 20,
+                    maxFiles: 5,
                     maxFileSize: '5MB',
                     allowMultiple: true,
                     allowReorder: true,
@@ -178,6 +194,12 @@
                             }
                         }
                     },
+                    files: existingFiles.map(file => ({
+                        source: file,
+                        options: {
+                            type: 'local'
+                        }
+                    })),
                     onreorderfiles: (files) => {
                         targetWrapper.innerHTML = '';
 
@@ -197,8 +219,8 @@
                 });
             }
 
-            initPond('#documents-upload', uploadedDocuments, 'uploaded_documents[]');
-            initPond('#selfie-upload', uploadedSelfies, 'uploaded_selfies[]');
+            initPond('#documents-upload', uploadedDocuments, 'uploaded_documents[]', @json($uploadedDocuments));
+            initPond('#selfie-upload', uploadedSelfies, 'uploaded_selfies[]', @json($uploadedSelfies));
         });
     </script>
 @endpush

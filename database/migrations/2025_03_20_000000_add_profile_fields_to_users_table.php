@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->text('bio')->nullable();
-            $table->integer('telephone')->nullable();
-            $table->string('profile_picture_path')->nullable();
+            $table->string('telephone', 20)->nullable();
             $table->enum('user_type', ['user', 'moderator', 'admin'])->default('user');
             $table->boolean('is_advertiser')->default(false);
             $table->integer('staff_number')->nullable();
@@ -40,7 +39,6 @@ return new class extends Migration
             $table->dropColumn([
                 'bio',
                 'telephone',
-                'profile_picture_path',
                 'user_type',
                 'is_advertiser',
                 'staff_number',

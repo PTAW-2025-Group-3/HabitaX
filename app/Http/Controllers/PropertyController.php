@@ -6,6 +6,7 @@ use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Services\PropertyAttributeService;
+use App\Services\PropertyImageService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +53,7 @@ class PropertyController extends Controller
             'property_type_id' => 'required|exists:property_types,id',
             'parish_id' => 'nullable|exists:parishes,id',
             'uploaded_images' => 'nullable|array',
-            'uploaded_images.*' => 'image|max:5120',
+            'uploaded_images.*' => 'string',
         ]);
 
         $property = Property::create([
@@ -63,79 +64,11 @@ class PropertyController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        $files = $request->input('uploaded_images', []);
-        foreach ($files as $filename) {
-            $filename = trim(basename($filename));
-            $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
-
-            if (file_exists($tempPath)) {
-                $this->addWatermark($tempPath);
-                $property->addMedia($tempPath)
-                    ->preservingOriginal()
-                    ->toMediaCollection('images');
-                unlink($tempPath);
-            }
-        }
+        app(PropertyImageService::class)
+            ->addImages($property, $request->input('uploaded_images', []));
 
         return redirect()->route('properties.my', $property->id)
             ->with('success', 'A propriedade foi criada com sucesso!');
-    }
-
-    private function addWatermark($imagePath)
-    {
-        $logoPath = public_path('images/logos/habitaxLogo.png');
-        if (!file_exists($logoPath)) {
-            return;
-        }
-
-        $imageInfo = getimagesize($imagePath);
-        $mimeType = $imageInfo['mime'];
-
-        switch ($mimeType) {
-            case 'image/jpeg':
-                $image = imagecreatefromjpeg($imagePath);
-                break;
-            case 'image/png':
-                $image = imagecreatefrompng($imagePath);
-                imagealphablending($image, true);
-                imagesavealpha($image, true);
-                break;
-            default:
-                return;
-        }
-
-        $logo = imagecreatefrompng($logoPath);
-        $imageWidth = imagesx($image);
-        $imageHeight = imagesy($image);
-        $logoWidth = imagesx($logo);
-        $logoHeight = imagesy($logo);
-        $newLogoWidth = $imageWidth * 0.15;
-        $newLogoHeight = $logoHeight * ($newLogoWidth / $logoWidth);
-        $resizedLogo = imagecreatetruecolor($newLogoWidth, $newLogoHeight);
-
-        imagealphablending($resizedLogo, false);
-        imagesavealpha($resizedLogo, true);
-
-        imagecopyresampled($resizedLogo, $logo, 0, 0, 0, 0, $newLogoWidth, $newLogoHeight, $logoWidth, $logoHeight);
-
-        $margin = 10;
-        $posX = $imageWidth - $newLogoWidth - $margin;
-        $posY = $imageHeight - $newLogoHeight - $margin;
-
-        imagecopy($image, $resizedLogo, $posX, $posY, 0, 0, $newLogoWidth, $newLogoHeight);
-
-        switch ($mimeType) {
-            case 'image/jpeg':
-                imagejpeg($image, $imagePath, 90);
-                break;
-            case 'image/png':
-                imagepng($image, $imagePath, 9);
-                break;
-        }
-
-        imagedestroy($image);
-        imagedestroy($logo);
-        imagedestroy($resizedLogo);
     }
 
     public function edit(Request $request, $id)
@@ -196,74 +129,8 @@ class PropertyController extends Controller
 
         $property->update(array_merge($validated, ['updated_by' => auth()->id()]));
 
-        $rawInput = $request->input('uploaded_images', []);
-        Log::info('Raw uploaded_images from request:', $rawInput);
-
-        $existingFilenames = collect($rawInput)
-            ->map(fn($name) => trim(basename($name), "\"'"))
-            ->unique()
-            ->toArray();
-
-        Log::info('Cleaned uploaded_images:', $existingFilenames);
-
-        $existingMedia = $property->getMedia('images');
-        Log::info('Current media in DB:', $existingMedia->pluck('file_name')->toArray());
-
-        // Delete media not in the new list
-        $existingMedia->each(function ($media) use ($existingFilenames) {
-            if (!in_array($media->file_name, $existingFilenames)) {
-                Log::info('Deleting media: ' . $media->file_name);
-                $media->delete();
-            } else {
-                Log::info('Keeping media: ' . $media->file_name);
-            }
-        });
-
-        $existingMediaNames = $property->fresh()->getMedia('images')->pluck('file_name')->toArray();
-        Log::info('Media after deletion:', $existingMediaNames);
-
-        // Update order of existing media
-        $orderedFilenames = $existingFilenames;
-        $mediaItems = $property->getMedia('images');
-
-        foreach ($orderedFilenames as $index => $filename) {
-            $media = $mediaItems->firstWhere('file_name', $filename);
-            if ($media) {
-                $media->order_column = $index + 1;
-                $media->save();
-                Log::info("Set order for {$filename} → " . ($index + 1));
-            } else {
-                Log::warning("Could not find media for ordering: {$filename}");
-            }
-        }
-
-        // Add new files
-        foreach ($existingFilenames as $filename) {
-            if (in_array($filename, $existingMediaNames)) {
-                Log::info('📎 Skipping already existing media: ' . $filename);
-                continue;
-            }
-
-            $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
-            Log::info('Checking tempPath for adding: ' . $tempPath);
-
-            if (file_exists($tempPath)) {
-                try {
-                    // Adicionar marca d'água antes de salvar
-                    $this->addWatermark($tempPath);
-
-                    $property->addMedia($tempPath)
-                        ->preservingOriginal()
-                        ->toMediaCollection('images');
-                    unlink($tempPath);
-                    Log::info('Added and removed temp file: ' . $filename);
-                } catch (Exception $e) {
-                    Log::error('Failed to add image: ' . $e->getMessage());
-                }
-            } else {
-                Log::warning('Temp file not found: ' . $tempPath);
-            }
-        }
+        app(PropertyImageService::class)
+            ->syncImages($property, $request->input('uploaded_images', []));
 
         app(PropertyAttributeService::class)->updateAttributes(
             $property,
