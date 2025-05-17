@@ -12,7 +12,7 @@
                 @if(isset($isReadOnly) && $isReadOnly)
                     <!-- Show recipient info for sent messages -->
                     <div class="mr-3 flex-shrink-0">
-                        <img src="{{ isset($profile_picture) ? asset('storage/' . $profile_picture) : asset('assets/images/default-avatar.jpg') }}"
+                        <img src="{{ $profile_picture }}"
                              alt="Foto de perfil"
                              class="w-10 h-10 rounded-full object-cover border border-gray-200">
                     </div>
@@ -31,7 +31,7 @@
                 @elseif(isset($created_by) && $created_by)
                     <!-- Show sender info for received messages from registered users -->
                     <div class="mr-3 flex-shrink-0">
-                        <img src="{{ isset($profile_picture) ? asset('storage/' . $profile_picture) : asset('assets/images/default-avatar.jpg') }}"
+                        <img src="{{ $profile_picture }}"
                              alt="Foto de perfil"
                              class="w-10 h-10 rounded-full object-cover border border-gray-200">
                     </div>

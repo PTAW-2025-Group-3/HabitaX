@@ -13,7 +13,7 @@ class MunicipalitySeeder extends Seeder
         $data = [
             'Lisboa' => ['Lisboa', 'Sintra', 'Oeiras'],
             'Porto' => ['Porto', 'Matosinhos', 'Vila Nova de Gaia'],
-            'Braga' => ['Braga', 'Guimarães', 'Barcelos'],
+//            'Braga' => ['Braga', 'Guimarães', 'Barcelos'],
         ];
 
         foreach ($data as $districtName => $municipalities) {

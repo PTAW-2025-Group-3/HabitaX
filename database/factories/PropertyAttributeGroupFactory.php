@@ -18,8 +18,8 @@ class PropertyAttributeGroupFactory extends Factory
      */
     public function definition(): array
     {
-        $iconsPath = 'icons/';
-        $icons = Storage::disk('public')->files($iconsPath);
+        $iconsPath = storage_path('seed/icons');
+        $icons = glob("{$iconsPath}/*.{svg,png}", GLOB_BRACE);
 
         if (count($icons) > 20) {
             // Select a random icon from the existing ones

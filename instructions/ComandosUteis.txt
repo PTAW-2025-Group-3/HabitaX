@@ -1,0 +1,14 @@
+npm run dev
+
+php artisan migrate:fresh --seed
+php artisan seed
+
+php artisan optimize:clear
+
+
+
+
+Production
+
+docker-compose up --build -d
+docker-compose exec habitax ...

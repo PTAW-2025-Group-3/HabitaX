@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -26,19 +27,16 @@ class PropertyType extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('icon')
-            ->singleFile();
+        $this->addMediaCollection('images');
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
-        if ($media && $media->mime_type === 'image/svg+xml') {
-            return;
-        }
         $this->addMediaConversion('thumb')
-            ->width(100)
-            ->height(100)
-            ->performOnCollections('icon');
+            ->format('webp')
+            ->optimize()
+            ->fit(Fit::Crop, 300, 200)
+            ->performOnCollections('images');
     }
 
     public function typeAttributes()

@@ -8,30 +8,27 @@
             Descubra imóveis nos principais distritos de Portugal, com ofertas exclusivas para cada região
         </p>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            @foreach ($adsPerDistrict as $district)
-                <a href="{{ route('advertisements.index', ['district' => $district->district_id]) }}"
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            @foreach ($districts as $district)
+                <a href="{{ route('advertisements.index', ['district' => $district->id]) }}"
                    class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group border border-gray-100">
-                    <div class="p-5 flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-full mb-3 overflow-hidden group-hover:scale-110 transition-all duration-300 shadow-md">
-                            <img
-                                src="https://picsum.photos/seed/{{ str_replace(' ', '', $district->district_name) }}/100/100"
-                                alt="Distrito {{ $district->district_name }}"
-                                class="w-full h-full object-cover"
-                                loading="lazy"
-                                onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100/718096/FFFFFF?text={{ substr($district->district_name, 0, 2) }}';"
-                            >
-                        </div>
-                        <h3 class="font-semibold text-gray-800 mb-1 group-hover:text-secondary transition-colors text-center">
-                            {{ $district->district_name }}
+                    <div class="w-full h-48 overflow-hidden">
+                        <img
+                            src="{{ $district->getFirstMediaUrl('images', 'thumb') }}"
+                            alt="Distrito {{ $district->name }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='{{ asset('images/default-district.png') }}';"
+                        >
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-secondary transition-colors text-center">
+                            {{ $district->name }}
                         </h3>
-                        <p class="text-sm text-gray-500 flex items-center space-x-1">
-                            <span class="font-bold text-secondary">{{ $district->total }}</span>
-                            <span>{{ $district->total == 1 ? 'imóvel' : 'imóveis' }}</span>
-                        </p>
                     </div>
                 </a>
             @endforeach
         </div>
+
     </div>
 </section>

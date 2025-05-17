@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Home')
+@section('title', 'Início')
 
 @section('content')
 
@@ -28,7 +28,7 @@
     @include('pages.home.sections.property-types', ['propertyTypes' => $propertyTypes])
 
     {{-- District Listing --}}
-    @include('pages.home.sections.district-listing', ['adsPerDistrict' => $adsPerDistrict])
+    @include('pages.home.sections.district-listing', ['districts' => $districts])
 
     {{-- Client Testimonials --}}
     @include('pages.home.sections.client-testimonials')
@@ -37,3 +37,11 @@
     @include('pages.home.sections.news', ['news' => $news])
 
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+@endpush
+
+@push('scripts')
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+@endpush

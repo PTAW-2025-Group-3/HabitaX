@@ -17,7 +17,7 @@ class PropertyFactory extends Factory
         $user = User::inRandomOrder()->first();
 
         return [
-            'title' => $this->faker->sentence(3),
+            'title' => $this->faker->sentence(),
             'country' => 'Portugal',
             'total_area' => $this->faker->randomFloat(2, 50, 500),
             'is_active' => true,

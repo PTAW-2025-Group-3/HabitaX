@@ -12,17 +12,56 @@ class PropertyTypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['name' => 'Apartamento', 'description' => 'Unidade habitacional num edifício partilhado.', 'show_on_homepage' => true],
-            ['name' => 'Quinta', 'description' => 'Propriedade rural com terreno e edifícios.', 'show_on_homepage' => true],
-            ['name' => 'Moradia', 'description' => 'Casa independente, muitas vezes com jardim.', 'show_on_homepage' => true],
-            ['name' => 'Estúdio', 'description' => 'Espaço habitacional com divisão única.', 'show_on_homepage' => true],
-            ['name' => 'Quarto', 'description' => 'Parte de um imóvel para arrendamento individual.'],
-            ['name' => 'Terreno', 'description' => 'Parcela de terra para construção ou cultivo.', 'show_on_homepage' => true],
-            ['name' => 'Armazém', 'description' => 'Espaço para armazenamento ou logística.'],
-            ['name' => 'Loja', 'description' => 'Espaço comercial para venda a retalho.', 'show_on_homepage' => true],
-            ['name' => 'Escritório', 'description' => 'Espaço para atividades profissionais e administrativas.'],
-            ['name' => 'Garagem', 'description' => 'Espaço para estacionamento ou arrumação.'],
-            ['name' => 'Prédio', 'description' => 'Edifício completo composto por várias frações.'],
+            [
+                'name' => 'Apartamentos', 'folder' => 'apartamentos',
+                'description' => 'Unidade habitacional num edifício partilhado.',
+                'show' => true
+            ],
+            [
+                'name' => 'Moradias', 'folder' => 'moradias',
+                'description' => 'Casa independente, muitas vezes com jardim.',
+                'show' => true
+            ],
+            [
+                'name' => 'Terrenos', 'folder' => 'terrenos',
+                'description' => 'Parcela de terra para construção ou cultivo.',
+                'show' => true],
+            [
+                'name' => 'Quintas', 'folder' => 'quintas',
+                'description' => 'Propriedade rural com terreno e edifícios.',
+                'show' => true],
+            [
+                'name' => 'Prédios', 'folder' => 'predios',
+                'description' => 'Edifício completo composto por várias frações.',
+                'show' => true
+            ],
+            [
+                'name' => 'Escritórios', 'folder' => 'escritorios',
+                'description' => 'Espaço para atividades profissionais e administrativas.',
+                'show' => true
+            ],
+            [
+                'name' => 'Lojas', 'folder' => 'lojas',
+                'description' => 'Espaço comercial para venda a retalho.',
+                'show' => true
+            ],
+            [
+                'name' => 'Garagens', 'folder' => 'garagens',
+                'description' => 'Espaço para estacionamento ou arrumação.',
+                'show' => true
+            ],
+            [
+                'name' => 'Estúdios', 'folder' => 'estudios',
+                'description' => 'Espaço habitacional com divisão única.'
+            ],
+            [
+                'name' => 'Quartos', 'folder' => 'quartos',
+                'description' => 'Parte de um imóvel para arrendamento individual.'
+            ],
+            [
+                'name' => 'Armazéns', 'folder' => 'armazens',
+                'description' => 'Espaço para armazenamento ou logística.'
+            ],
         ];
 
         foreach ($types as $type) {
@@ -30,36 +69,23 @@ class PropertyTypeSeeder extends Seeder
                 ->create([
                     'name' => $type['name'],
                     'description' => $type['description'],
-                    'is_active' => $type['show_on_homepage'] ?? false,
-                    'show_on_homepage' => $type['show_on_homepage'] ?? false,
+                    'is_active' => $type['show'] ?? false,
+                    'show_on_homepage' => $type['show'] ?? false,
                 ]);
-            $this->attachIcon($propertyType);
+            $this->attachImages($propertyType, $type['folder']);
         }
     }
 
-    private function attachIcon(PropertyType $propertyType): void
+    public function attachImages(PropertyType $propertyType, $folder)
     {
-        $iconsPath = 'icons/';
-        $icons = Storage::disk('public')->files($iconsPath);
+        $imageBaseFolder = storage_path('seed/property-type-images');
+        $imagesPath = $imageBaseFolder . '/' . $folder;
+        $images = glob("{$imagesPath}/*.{jpg,jpeg,png,webp}", GLOB_BRACE);
 
-        if (count($icons) > 50) {
-            // Select a random icon from the existing ones
-            $fileName = $icons[array_rand($icons)];
-        } else {
-            // Fetch a new icon from the URL
-            $seed = fake()->uuid;
-            $fileName = $iconsPath . 'icon_' . $seed . '.svg';
-            $url = "https://api.dicebear.com/7.x/icons/svg?seed={$seed}";
-
-            $response = Http::get($url);
-
-            if ($response->ok()) {
-                Storage::disk('public')->put($fileName, $response->body());
+        if (count($images) > 0) {
+            foreach ($images as $image) {
+                $propertyType->addMedia($image)->preservingOriginal()->toMediaCollection('images');
             }
         }
-
-        $propertyType->addMedia(storage_path('app/public/' . $fileName))
-            ->preservingOriginal()
-            ->toMediaCollection('icon');
     }
 }

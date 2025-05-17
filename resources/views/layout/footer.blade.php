@@ -19,7 +19,7 @@
             <div>
                 <h3 class="text-white font-semibold mb-4 text-lg">Links: </h3>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="/" class="hover:text-indigo-400 transition">Home</a></li>
+                    <li><a href="/" class="hover:text-indigo-400 transition">Início</a></li>
                     <li><a href="/contact" class="hover:text-indigo-400 transition">Contactos</a></li>
                     <li><a href="/about" class="hover:text-indigo-400 transition">Sobre Nós</a></li>
                     <li><a href="/noticias" class="hover:text-indigo-400 transition">Notícias</a></li>

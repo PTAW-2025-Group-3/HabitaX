@@ -1,7 +1,7 @@
 <div id="mobileMenu" class="hidden bg-white shadow-lg py-4 px-6 md:hidden">
     {{-- Mobile Navigation --}}
     <div class="flex flex-col space-y-4">
-        <a href="{{ route('home') }}" class="text-gray font-medium text-lg py-2 border-b border-gray">Home</a>
+        <a href="{{ route('home') }}" class="text-gray font-medium text-lg py-2 border-b border-gray">Início</a>
         <a href="{{ route('advertisements.index') }}" class="text-gray font-medium text-lg py-2 border-b border-gray">Anúncios</a>
         <a href="{{ route('about') }}" class="text-gray font-medium text-lg py-2 border-b border-gray">Sobre Nós</a>
         <a href="{{ route('contact') }}" class="text-gray font-medium text-lg py-2 border-b border-gray">Contactos</a>

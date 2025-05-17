@@ -9,7 +9,7 @@ class PropertySeeder extends Seeder
 {
     public function run(): void
     {
-        $imageFolder = storage_path('property-seed-images');
+        $imageFolder = storage_path('seed/property-images');
         $extensions = ['jpg', 'jpeg', 'png', 'webp'];
         $imageFiles = [];
 

@@ -63,8 +63,8 @@ class UserSeeder extends Seeder
 
     private function attachProfilePicture(User $user): void
     {
-        $picturesPath = 'profile_pictures/';
-        $pictures = Storage::disk('public')->files($picturesPath);
+        $picturesPath = 'seed/profile-pictures/';
+        $pictures = glob(storage_path($picturesPath) . '*.{jpg,jpeg,png,webp}', GLOB_BRACE);
         if (count($pictures) > 20) {
             // Select a random picture from the existing ones
             $fileName = $pictures[array_rand($pictures)];
@@ -77,11 +77,11 @@ class UserSeeder extends Seeder
             $response = Http::get($url);
 
             if ($response->ok()) {
-                Storage::disk('public')->put($fileName, $response->body());
+                Storage::put($fileName, $response->body());
             }
         }
 
-        $user->addMedia(storage_path('app/public/' . $fileName))
+        $user->addMedia($fileName)
             ->preservingOriginal()
             ->toMediaCollection('picture');
     }

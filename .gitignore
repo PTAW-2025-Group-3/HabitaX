@@ -20,6 +20,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-/storage/property-seed-images/
-/storage/document-seed-images/
+/storage/seed/
 /storage/media-library/

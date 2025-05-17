@@ -50,7 +50,6 @@ class User extends Authenticatable implements HasMedia
         'public_profile' => 'boolean',
         'show_email' => 'boolean',
         'nif' => 'integer',
-        'telephone' => 'integer',
         'is_advertiser' => 'boolean',
         'staff_number' => 'integer',
     ];

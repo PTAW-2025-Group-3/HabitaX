@@ -107,7 +107,7 @@
                         'id' => $message->advertisement->id ?? 'N/A',
                         'messageId' => $message->id,
                         'created_by' => $message->created_by,
-                        'profile_picture' => $message->user->profile_picture_path ?? null,
+                        'profile_picture' => $message->user->getProfilePictureUrl(),
                         'isReadOnly' => false
                     ])
                 @else
@@ -118,7 +118,7 @@
                         'name' => auth()->user()->name,
                         'email' => auth()->user()->email,
                         'telephone' => auth()->user()->telephone ?? null,
-                        'profile_picture' => auth()->user()->profile_picture_path ?? null,
+                        'profile_picture' => auth()->user()->getProfilePictureUrl(),
                         'status' => $message->state,
                         'time' => $message->created_at->format('d/m/Y, H:i'),
                         'message' => $message->message,
@@ -129,7 +129,7 @@
                         'recipient_name' => $adOwner->name ?? 'N/A',
                         'recipient_email' => $adOwner->email ?? 'N/A',
                         'recipient_telephone' => $adOwner->telephone ?? null,
-                        'recipient_profile_picture' => $adOwner->profile_picture_path ?? null,
+                        'recipient_profile_picture' => $adOwner->getProfilePictureUrl(),
                         'isReadOnly' => true
                     ])
                 @endif

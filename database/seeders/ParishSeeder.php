@@ -15,7 +15,7 @@ class ParishSeeder extends Seeder
             'Lisboa' => ['Santa Maria Maior', 'Campo de Ourique', 'Benfica'],
             'Sintra' => ['Algueirão-Mem Martins', 'Rio de Mouro'],
             'Porto' => ['Cedofeita', 'Bonfim', 'Paranhos'],
-            'Braga' => ['Sé', 'São Vítor'],
+//            'Braga' => ['Sé', 'São Vítor'],
         ];
 
         foreach ($data as $municipalityName => $parishes) {

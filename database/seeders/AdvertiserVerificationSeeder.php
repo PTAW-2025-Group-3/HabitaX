@@ -17,7 +17,7 @@ class AdvertiserVerificationSeeder extends Seeder
         }
 
         // Caminho para as imagens de exemplo para documentos
-        $imageFolder = storage_path('document-seed-images');
+        $imageFolder = storage_path('seed/document-images');
         $extensions = ['jpg', 'jpeg', 'png', 'webp'];
         $imageFiles = [];
 

@@ -67,7 +67,6 @@
 
 {{-- Flickity CSS/JS --}}
 @push('styles')
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <style>
         .carousel-cell {
             max-width: 33rem;
@@ -96,11 +95,4 @@
             }
         }
     </style>
-@endpush
-
-@push('scripts')
-    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-    <script>
-        //
-    </script>
 @endpush

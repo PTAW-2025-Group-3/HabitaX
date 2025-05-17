@@ -9,10 +9,54 @@ class DistrictSeeder extends Seeder
 {
     public function run(): void
     {
-        $districts = ['Lisboa', 'Porto', 'Braga'];
+        $districtData = [
+            [
+                'name' => 'Lisboa',
+                'folder' => 'lisboa'
+            ],
+            [
+                'name' => 'Porto',
+                'folder' => 'porto'
+            ],
+            [
+                'name' => 'Aveiro',
+                'folder' => 'aveiro'
+            ],
+            [
+                'name' => 'Coimbra',
+                'folder' => 'coimbra'
+            ],
+//            [
+//                'name' => 'Braga',
+//                'folder' => 'braga'
+//            ],
+//            [
+//                'name' => 'Setúbal',
+//                'folder' => 'setubal'
+//            ],
+        ];
 
-        foreach ($districts as $name) {
-            District::firstOrCreate(['name' => $name]);
+        foreach ($districtData as $data) {
+            $district = District::firstOrCreate([
+                'name' => $data['name'],
+            ]);
+            $this->attachImages($district, $data['folder']);
+        }
+    }
+
+    public function attachImages($district, $folder)
+    {
+        $imagesPath = storage_path('seed/district-images' . '/' . $folder);
+        $images = glob("{$imagesPath}/*.{jpg,jpeg,png,webp}", GLOB_BRACE);
+
+        if (count($images) > 0) {
+            foreach ($images as $image) {
+                $district->addMedia($image)
+                    ->preservingOriginal()
+                    ->toMediaCollection('images');
+            }
+        } else {
+            throw new \Exception("No images found in {$imagesPath}");
         }
     }
 }
