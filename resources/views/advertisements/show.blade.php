@@ -38,69 +38,86 @@
                 </div>
             </div>
         @endif
-        <!-- Header do anúncio -->
-        <div class="bg-gradient-to-r bg-white rounded-2xl shadow-md p-5 md:p-7 space-y-4 mt-6 md:mt-12">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                <div class="space-y-1">
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-primary flex items-center gap-2">
-                        <i class="bi bi-house-door-fill text-secondary"></i>
-                        {{ $ad->title }}
-                    </h1>
-                    <div class="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-600">
-                <span class="inline-flex items-center gap-1">
-                    <i class="bi bi-geo-alt text-secondary"></i> {{ $property->country }}
-                </span>
-                        <span class="inline-flex items-center gap-1">
-                    <i class="bi bi-geo-alt text-secondary"></i> {{ $property->parish->name }}, {{ $property->parish->municipality->name }}
-                </span>
-                        <span class="inline-flex items-center gap-1">
-                    <i class="bi bi-arrow-left-right text-secondary"></i> {{ $ad->transaction_type === 'sale' ? 'Compra' : 'Aluguer' }}
-                </span>
-                        <span class="inline-flex items-center gap-1">
-                    <i class="bi bi-building text-secondary"></i> {{ $property->type->name ?? 'Tipo não especificado' }}
-                </span>
+            <!-- Header do anúncio redesenhado -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Banner superior com gradiente subtil -->
+                <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-6 py-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <!-- Informações principais -->
+                        <div class="space-y-2">
+                            <div class="inline-flex items-center gap-2 text-sm font-medium px-3 py-1 bg-primary/10 text-primary rounded-full">
+                                <i class="bi bi-arrow-left-right"></i>
+                                <span>{{ $ad->transaction_type === 'sale' ? 'Compra' : 'Aluguer' }}</span>
+                            </div>
+                            <div class="inline-flex items-center gap-2 text-sm font-medium px-3 py-1 bg-secondary/10 text-secondary rounded-full">
+                                <i class="bi bi-house"></i>
+                                <span>{{ $property->property_type->name }}</span>
+                            </div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
+                                {{ $ad->title }}
+                            </h1>
+
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="bi bi-geo-alt-fill text-secondary"></i>
+                                <span>{{ $property->parish->name }}, {{ $property->parish->municipality->name }}, {{ $property->country }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Preço destacado -->
+                        <div class="flex flex-col items-end">
+                            <div class="text-sm text-gray-500 font-medium">Preço</div>
+                            <div class="text-3xl md:text-4xl font-extrabold text-secondary">
+                                {{ number_format($ad->price, 0, ',', '.') }}€
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Publicado {{ $ad->created_at->diffForHumans() }}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="text-3xl md:text-4xl font-bold text-secondary">
-                    {{ number_format($ad->price, 0, ',', '.') }}€
+
+                <!-- Barra de informações do anunciante e botões de ação juntos -->
+                <div class="px-6 py-3 border-b border-gray-200 bg-white">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                        <!-- Informações do anunciante -->
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                    <img src="{{ $ad->creator->getProfilePictureUrl() }}" alt="Foto de {{ $ad->creator->name }}" class="w-full h-full object-cover">
+                            </div>
+
+                            <div>
+                                <div class="font-medium text-gray-800">{{ $ad->creator->name }}</div>
+                                <div class="text-xs text-gray-500">Membro desde {{ $ad->creator->created_at->format('M Y') }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Botões de ação -->
+                        <div class="flex flex-wrap gap-2">
+                            @if($ad->is_published)
+                                <button id="shareBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-lg transition-colors">
+                                    <i class="bi bi-share-fill"></i>
+                                    <span class="text-sm font-medium">Partilhar</span>
+                                </button>
+                            @endif
+
+                            @if(auth()->check() && auth()->id() == $ad->created_by)
+                                <a href="{{ route('advertisements.edit', $ad->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-lg transition-colors">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span class="text-sm font-medium">Editar Anúncio</span>
+                                </a>
+                            @else
+                                    <button id="favoriteBtn" data-ad-id="{{ $ad->id }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-rose-50 text-rose-600 rounded-lg transition-colors">
+                                        <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                        <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
+                                    </button>
+
+                                <button id="reportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-lg transition-colors">
+                                    <i class="bi bi-flag"></i>
+                                    <span class="text-sm font-medium">Reportar</span>
+                                </button>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="flex flex-wrap justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
-                @if($ad->is_published)
-                    <button id="shareBtn"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors">
-                        <i class="bi bi-share-fill"></i>
-                        <span class="text-sm font-medium">Partilhar</span>
-                    </button>
-                @endif
-
-                @if(auth()->check() && auth()->id() == $ad->created_by)
-                    <!-- Botão de editar anúncio para o anunciante -->
-                    <a href="{{ route('advertisements.edit', $ad->id) }}"
-                       class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition-colors">
-                        <i class="bi bi-pencil-square"></i>
-                        <span class="text-sm font-medium">Editar Anúncio</span>
-                    </a>
-                @else
-                    <!-- Botão de favoritos normal para outros utilizadores -->
-                    <button id="favoriteBtn"
-                            data-ad-id="{{ $ad->id }}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bg-rose-100 text-rose-600' : 'bg-rose-50 hover:bg-rose-100 text-rose-600' }} rounded-lg transition-colors">
-                        <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
-                        <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
-                    </button>
-
-                    <!-- Botão de reportar normal para outros utilizadores -->
-                    <button id="reportBtn"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors">
-                        <i class="bi bi-flag"></i>
-                        <span class="text-sm font-medium">Reportar</span>
-                    </button>
-                @endif
-            </div>
-        </div>
-
         <!-- Galeria -->
         @php
             $images = $property->getMedia('images');
@@ -247,21 +264,21 @@
                                     <div class="text-sm">
                                         <span class="font-medium">{{ $parameter->attribute->name }}:</span>
                                         <span class="font-semibold text-gray-800 ml-1">
-                            @php
-                                // Obter o valor correto com base no tipo de atributo
-                                $value = match($parameter->attribute->type->value) {
-                                    AttributeType::TEXT->value, AttributeType::LONG_TEXT->value => $parameter->text_value,
-                                    AttributeType::INT->value => number_format($parameter->int_value, 0, ',', '.'),
-                                    AttributeType::FLOAT->value => number_format($parameter->float_value, 2, ',', '.'),
-                                    AttributeType::BOOLEAN->value => $parameter->boolean_value ? 'Sim' : 'Não',
-                                    AttributeType::DATE->value => $parameter->date_value->format('d/m/Y'),
-                                    AttributeType::SELECT_SINGLE->value => \App\Models\PropertyAttributeOption::find($parameter->select_value)->name,
-                                    AttributeType::SELECT_MULTIPLE->value => implode(', ', $parameter->options->pluck('option.name')->toArray()),
-                                    default => 'N/A'
-                                };
-                            @endphp
+                        @php
+                            // Obter o valor correto com base no tipo de atributo
+                            $value = match($parameter->attribute->type->value) {
+                                AttributeType::TEXT->value, AttributeType::LONG_TEXT->value => $parameter->text_value,
+                                AttributeType::INT->value => number_format($parameter->int_value, 0, ',', '.'),
+                                AttributeType::FLOAT->value => number_format($parameter->float_value, 2, ',', '.'),
+                                AttributeType::BOOLEAN->value => $parameter->boolean_value ? 'Sim' : 'Não',
+                                AttributeType::DATE->value => $parameter->date_value->format('d/m/Y'),
+                                AttributeType::SELECT_SINGLE->value => \App\Models\PropertyAttributeOption::find($parameter->select_value)->name,
+                                AttributeType::SELECT_MULTIPLE->value => implode(', ', $parameter->options->pluck('option.name')->toArray()),
+                                default => 'N/A'
+                            };
+                        @endphp
                                             {{ $value }}
-                        </span>
+                                        </span>
                                     </div>
                                 </div>
                                 @php $displayedCount++; @endphp
@@ -280,6 +297,7 @@
                 </section>
                 @include('advertisements.individual.price-history', ['ad' => $ad])
                 @include('advertisements.individual.loan-simulator', ['ad' => $ad])
+                @include('advertisements.individual.ad-stats', ['ad' => $ad])
             </div>
 
             <div class="space-y-6 animate-fade-in">
@@ -480,12 +498,12 @@
                     // Animate heart immediately
                     if (!isCurrentlyFavorite) {
                         heartIcon.classList.replace('bi-heart', 'bi-heart-fill');
-                        this.classList.replace('bg-rose-50', 'bg-rose-100');
+                        this.classList.add('bg-rose-50');
                         buttonText.textContent = 'Adicionado';
                         showToast('Anúncio adicionado aos favoritos!', 'success');
                     } else {
                         heartIcon.classList.replace('bi-heart-fill', 'bi-heart');
-                        this.classList.replace('bg-rose-100', 'bg-rose-50');
+                        this.classList.remove('bg-rose-50');
                         buttonText.textContent = 'Favoritos';
                         showToast('Anúncio removido dos favoritos', 'info');
                     }

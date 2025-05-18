@@ -46,7 +46,7 @@
                             $parishName = optional($property->parish)->name ?? 'Localização indisponível';
                             $price = $advertisement->price ?? 0;
                             $creator = optional($advertisement->creator);
-                            $creatorImage = $creator?->profile_picture_path ? Storage::url($creator->profile_picture_path) : null;
+                            $creatorImage = $creator ? $creator->getProfilePictureUrl() : null;
                         @endphp
 
                         <div class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group favorite-card"

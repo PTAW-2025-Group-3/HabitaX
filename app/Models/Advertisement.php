@@ -43,6 +43,11 @@ class Advertisement extends Model
         return $this->hasMany(ContactRequest::class, 'advertisement_id');
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteAdvertisement::class);
+    }
+
     public function isActive()
     {
         return $this->is_published && !$this->is_suspended;

@@ -8,15 +8,10 @@
         </h3>
 
         <div class="flex flex-col items-center gap-1 text-center">
-            @if($ad->creator && $ad->creator->profile_picture_path)
-                <img src="{{ Storage::url($ad->creator->profile_picture_path) }}"
+                {{-- Exibir imagem de perfil do anunciante --}}
+                <img src="{{ $ad->creator->getProfilePictureUrl() }}"
                      alt="{{ $ad->creator->name }}"
                      class="w-10 h-10 rounded-full object-cover shadow-sm">
-            @else
-                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 shadow-sm">
-                    <i class="bi bi-person text-lg"></i>
-                </div>
-            @endif
             <span class="text-xs text-gray-500 truncate max-w-[80px]">{{ $ad->creator->name ?? 'Anunciante' }}</span>
         </div>
     </div>

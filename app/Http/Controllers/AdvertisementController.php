@@ -114,7 +114,13 @@ class AdvertisementController extends Controller
 
     public function show($id)
     {
-        $ad = Advertisement::find($id);
+        $ad = Advertisement::with([
+            'property.parish.municipality',
+            'creator'
+        ])->withCount([
+            'favorites',  // Adiciona a contagem de favoritos
+            'requests'    // Adiciona a contagem de pedidos de contacto
+        ])->findOrFail($id);
 
         if (!$ad) {
             return redirect()->route('advertisements.index')->with('error', 'Anúncio não encontrado.');

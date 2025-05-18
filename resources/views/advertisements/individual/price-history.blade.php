@@ -10,8 +10,26 @@
     @if(count($priceHistory) > 0)
         <div class="flex items-center gap-4">
             <div>
-                <div class="text-2xl md:text-3xl font-extrabold text-gray-900">
-                    {{ number_format($priceHistory->last()->price, 0, ',', '.') }}€
+                <div class="flex items-center gap-2">
+                    <div class="text-2xl md:text-3xl font-extrabold text-gray-900">
+                        {{ number_format($priceHistory->last()->price, 0, ',', '.') }}€
+                    </div>
+                    @php
+                        $lastPrice = $priceHistory->last()->price;
+                        $previousPrice = count($priceHistory) > 1 ? $priceHistory[count($priceHistory) - 2]->price : $lastPrice;
+                        $priceDiff = $lastPrice - $previousPrice;
+                        $percentChange = $previousPrice > 0 ? ($priceDiff / $previousPrice) * 100 : 0;
+                        $isIncrease = $priceDiff > 0;
+                        $isDecrease = $priceDiff < 0;
+                        $changeClass = $isIncrease ? 'text-green-600' : ($isDecrease ? 'text-rose-600' : 'text-gray-500');
+                        $icon = $isIncrease ? 'bi-arrow-up-circle-fill' : ($isDecrease ? 'bi-arrow-down-circle-fill' : 'bi-dash-circle-fill');
+                    @endphp
+                    @if(count($priceHistory) > 1)
+                        <div class="{{ $changeClass }} text-sm md:text-base font-medium flex items-center gap-1">
+                            <i class="bi {{ $icon }}"></i>
+                            {{ abs(round($percentChange, 1)) }}%
+                        </div>
+                    @endif
                 </div>
                 <div class="text-xs md:text-sm text-gray-500">Preço mais recente</div>
                 <div class="text-xs mt-1 text-green-600 font-semibold flex items-center gap-1">

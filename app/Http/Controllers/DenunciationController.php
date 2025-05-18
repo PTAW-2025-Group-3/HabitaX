@@ -10,6 +10,29 @@ class DenunciationController extends Controller
 
     public function store(Request $request)
     {
+        // Verificar se o utilizador está autenticado
+        if (!auth()->check()) {
+            return response()->json([
+                'message' => 'Autenticação necessária para denunciar anúncios.'
+            ], 401);
+        }
+
+        // Buscar o limite diário de denúncias das variáveis globais
+        $maxReportsPerDay = \App\Models\GlobalVariable::where('code', 'max_reports_per_day')
+            ->first()->value ?? 5;
+
+        // Contar quantas denúncias o usuário já fez hoje
+        $todayReportsCount = Denunciation::where('created_by', auth()->id())
+            ->whereDate('submitted_at', now()->toDateString())
+            ->count();
+
+        // Verificar se o usuário atingiu o limite
+        if ($todayReportsCount >= $maxReportsPerDay) {
+            return response()->json([
+                'message' => "Limite diário de {$maxReportsPerDay} denúncia(s) atingido. Tente novamente amanhã."
+            ], 429);
+        }
+
         $validated = $request->validate([
             'advertisement_id' => 'required|exists:advertisements,id',
             'reason_id' => 'required|exists:denunciation_reasons,id',
@@ -26,7 +49,7 @@ class DenunciationController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Denunciation submitted successfully.',
+            'message' => 'Denúncia enviada com sucesso.',
             'denunciation' => $denunciation,
         ], 201);
     }

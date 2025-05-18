@@ -164,7 +164,9 @@
                     })
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error('Erro na submissão');
+                                return response.json().then(data => {
+                                    throw new Error(data.message || 'Erro na submissão');
+                                });
                             }
                             return response.json();
                         })
@@ -184,11 +186,35 @@
                                 }, 300);
                             }, 1500);
                         })
+                        // Substituir a parte do .catch no script atual
                         .catch(error => {
                             console.error('Error:', error);
                             submitBtn.disabled = false;
                             submitBtn.innerHTML = '<i class="bi bi-send-fill mr-2"></i> Enviar denúncia';
-                            alert('Ocorreu um erro ao enviar a denúncia. Por favor, tente novamente.');
+
+                            // Criar um alerta bonito em vez do alert() padrão
+                            const alertContainer = document.createElement('div');
+                            alertContainer.className = 'bg-rose-100 border-l-4 border-rose-500 text-rose-700 p-4 mb-4 rounded-md';
+                            alertContainer.innerHTML = `
+                                <div class="flex items-center">
+                                    <i class="bi bi-exclamation-circle-fill mr-2 text-rose-500"></i>
+                                    <p>${error.message || 'Ocorreu um erro ao enviar a denúncia. Por favor, tente novamente.'}</p>
+                                </div>
+                            `;
+                            // Inserir o alerta no topo do formulário
+                            const form = document.getElementById('reportForm');
+                            form.prepend(alertContainer);
+
+                            // Auto-remover o alerta após 5 segundos
+                            setTimeout(() => {
+                                if (alertContainer.parentNode) {
+                                    alertContainer.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                                    setTimeout(() => alertContainer.remove(), 300);
+                                }
+                            }, 5000);
+
+                            // Mover o scroll para o topo para mostrar o erro
+                            modal.scrollTo({top: 0, behavior: 'smooth'});
                         });
                 }
             });

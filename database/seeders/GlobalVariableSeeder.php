@@ -31,6 +31,12 @@ class GlobalVariableSeeder extends Seeder
                 'value' => 3,
                 'description' => 'Número máximo de tentativas que um usuário pode fazer para verificação como anunciante antes de ser bloqueado.',
             ],
+            [
+                'name' => 'Máximo de denúncias diárias por usuário',
+                'code' => 'max_reports_per_day',
+                'value' => 5,
+                'description' => 'Número máximo de denúncias que um usuário pode fazer por dia.',
+            ],
         ];
 
         foreach ($variables as $variable) {
