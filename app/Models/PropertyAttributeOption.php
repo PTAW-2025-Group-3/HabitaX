@@ -13,7 +13,6 @@ class PropertyAttributeOption extends Model
     protected $fillable = [
         'name',
         'order',
-        'icon_path',
         'attribute_id',
     ];
 

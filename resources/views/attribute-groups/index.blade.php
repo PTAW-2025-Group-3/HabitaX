@@ -28,16 +28,7 @@
                     <table class="min-w-full text-sm">
                         <thead class="bg-blue-100 text-left">
                         <tr>
-                            <th class="p-4">
-                                <div class="flex items-center">
-                                    Nome
-                                </div>
-                            </th>
-                            <th class="p-4">
-                                <div class="flex items-center">
-                                    Icone
-                                </div>
-                            </th>
+                            <th class="p-4">Nome</th>
                             <th class="p-4">Atributos</th>
                             <th class="p-4 text-right">Ações</th>
                         </tr>
@@ -46,14 +37,6 @@
                         @foreach ($groups as $group)
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $group->name }}</td>
-                                <td class="p-4 font-medium">
-                                    @if ($group->icon_path)
-                                        <img src="{{ Storage::url($group->icon_path) }}" alt="{{ $group->name }} Icon"
-                                             class="w-8 h-8 rounded-full">
-                                    @else
-                                        <span class="text-gray">Sem ícone</span>
-                                    @endif
-                                </td>
                                 <td class="p-4">
                                     @foreach ($group->attributes as $attribute)
                                         <span class="inline-block px-2 py-1 mb-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600 mr-1">

@@ -42,22 +42,6 @@
         </div>
         @enderror
     </div>
-    {{--  icon  --}}
-    <div>
-        <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
-        <div class="mt-1 w-1/2">
-            <input
-                type="file"
-                class="filepond"
-                name="icon"
-                id="icon"
-                accept="image/png, image/svg+xml, image/webp"
-            />
-        </div>
-        @error('icon')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-        @enderror
-    </div>
 
     <div class="md:col-span-2">
         <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex items-center">
@@ -73,38 +57,4 @@
             max-width: 300px;
         }
     </style>
-@endpush
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const pondOptions = {
-                instantUpload: false,
-                storeAsFile: true,
-                allowReplace: true,
-                allowImageCrop: true,
-                imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/svg+xml', 'image/webp'],
-                labelIdle: 'Arraste e solte ou <span class="filepond--label-action">Selecione</span>',
-            };
-            const existingImage = {!! isset($group) && $group->icon_path ? json_encode(Storage::url($group->icon_path)) : 'null' !!};
-            if (existingImage) {
-                pondOptions.files = [{
-                    source: existingImage,
-                    options: {
-                        type: 'local',
-                        file: {
-                            name: existingImage.split('/').pop(),
-                            size: existingImage.length,
-                            type: existingImage.split('.').pop(),
-                        },
-                        metadata: {
-                            poster: existingImage
-                        }
-                    }
-                }];
-            }
-            FilePond.create(document.querySelector('input.filepond'), pondOptions);
-        });
-    </script>
 @endpush

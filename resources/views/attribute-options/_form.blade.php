@@ -14,13 +14,6 @@
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
-        <div>
-            <label for="icon" class="block text-sm font-semibold text-primary">Ícone (PNG, SVG)</label>
-            <input type="file" name="icon" id="icon" accept=".svg,.png,.jpg,.jpeg,.webp" class="form-input">
-            @error('icon')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
     </div>
     <div class="md:col-span-2">
         <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex items-center">

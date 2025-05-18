@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Models\Property;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Spatie\MediaLibrary\HasMedia;
 
-class PropertyImageService
+class MediaSyncService
 {
     protected string $tempDir;
 
@@ -15,7 +16,7 @@ class PropertyImageService
         $this->tempDir = storage_path('app/public/tmp/uploads/');
     }
 
-    public function addImages(Property $property, array $filenames): void
+    public function addImages(HasMedia $model, array $filenames, string $collection): void
     {
         foreach ($filenames as $filename) {
             $filename = trim(basename($filename));
@@ -23,21 +24,22 @@ class PropertyImageService
 
             if (file_exists($tempPath)) {
                 try {
-                    $property->addMedia($tempPath)
+                    $model->addMedia($tempPath)
                         ->preservingOriginal()
-                        ->toMediaCollection('images');
+                        ->toMediaCollection($collection);
+
                     unlink($tempPath);
-                    Log::info('Added image from temp and removed: ' . $filename);
+                    Log::info("Added file and deleted temp: {$filename}");
                 } catch (Exception $e) {
-                    Log::error('Failed to add image: ' . $e->getMessage());
+                    Log::error("Failed to add file {$filename}: " . $e->getMessage());
                 }
             } else {
-                Log::warning('Temp file not found: ' . $tempPath);
+                Log::warning("Temp file not found: {$tempPath}");
             }
         }
     }
 
-    public function syncImages(Property $property, array $filenames): void
+    public function syncImages(HasMedia $model, array $filenames, string $collection): void
     {
         $filenames = collect($filenames)
             ->map(fn($name) => trim(basename($name), "\"'"))
@@ -45,22 +47,24 @@ class PropertyImageService
             ->values()
             ->toArray();
 
-        Log::info('Syncing images, cleaned filenames:', $filenames);
+        Log::info("Syncing files in collection [{$collection}]:", $filenames);
 
-        $existingMedia = $property->getMedia('images');
+        $existingMedia = $model->getMedia($collection);
 
+        // Delete media not in the new list
         $existingMedia->each(function ($media) use ($filenames) {
             if (!in_array($media->file_name, $filenames)) {
-                Log::info('Deleting media: ' . $media->file_name);
+                Log::info("Deleting media: {$media->file_name}");
                 $media->delete();
             } else {
-                Log::info('Keeping media: ' . $media->file_name);
+                Log::info("Keeping media: {$media->file_name}");
             }
         });
 
-        $property->refresh();
-        $mediaItems = $property->getMedia('images');
+        $model->refresh();
+        $mediaItems = $model->getMedia($collection);
 
+        // Set order for existing media
         foreach ($filenames as $index => $filename) {
             $media = $mediaItems->firstWhere('file_name', $filename);
             if ($media) {
@@ -83,16 +87,16 @@ class PropertyImageService
 
             if (file_exists($tempPath)) {
                 try {
-                    $property->addMedia($tempPath)
+                    $model->addMedia($tempPath)
                         ->preservingOriginal()
-                        ->toMediaCollection('images');
+                        ->toMediaCollection($collection);
                     unlink($tempPath);
-                    Log::info('Added and removed temp file: ' . $filename);
+                    Log::info("Added and removed temp file: {$filename}");
                 } catch (Exception $e) {
-                    Log::error('Failed to add image: ' . $e->getMessage());
+                    Log::error("Failed to add file {$filename}: " . $e->getMessage());
                 }
             } else {
-                Log::warning('Temp file not found when syncing: ' . $tempPath);
+                Log::warning("Temp file not found when syncing: {$tempPath}");
             }
         }
     }

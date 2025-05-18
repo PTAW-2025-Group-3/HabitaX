@@ -27,15 +27,11 @@ class PropertyAttributeOptionController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'order' => 'nullable|integer',
-            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
         ]);
-
-        $iconPath = $request->file('icon') ? $request->file('icon')->store('icons', 'public') : null;
 
         PropertyAttributeOption::create([
             'name' => $request->name,
             'order' => $request->order,
-            'icon_path' => $iconPath,
             'attribute_id' => $request->id,
         ]);
 
@@ -54,26 +50,13 @@ class PropertyAttributeOptionController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'order' => 'nullable|integer',
-            'icon' => 'nullable|file|mimes:png,svg,jpg,jpeg,webp|max:2048',
         ]);
 
         $option = PropertyAttributeOption::findOrFail($id);
 
-        if ($request->hasFile('icon')) {
-            if ($option->icon_path && Storage::disk('public')->exists($option->icon_path)) {
-                Storage::disk('public')->delete($option->icon_path);
-            }
-
-            $iconPath = $request->file('icon')->store('icons', 'public');
-        } else {
-            $iconPath = $option->icon_path;
-        }
-
-
         $option->update([
             'name' => $request->name,
             'order' => $request->order,
-            'icon_path' => $iconPath,
         ]);
 
         return redirect()->route('attribute-options.index', $option->attribute_id)

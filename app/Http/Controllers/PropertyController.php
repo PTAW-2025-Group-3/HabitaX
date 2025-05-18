@@ -6,7 +6,7 @@ use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Services\PropertyAttributeService;
-use App\Services\PropertyImageService;
+use App\Services\MediaSyncService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -64,8 +64,8 @@ class PropertyController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        app(PropertyImageService::class)
-            ->addImages($property, $request->input('uploaded_images', []));
+        app(MediaSyncService::class)
+            ->addImages($property, $request->input('uploaded_images', []), 'images');
 
         return redirect()->route('properties.my', $property->id)
             ->with('success', 'A propriedade foi criada com sucesso!');
@@ -129,8 +129,8 @@ class PropertyController extends Controller
 
         $property->update(array_merge($validated, ['updated_by' => auth()->id()]));
 
-        app(PropertyImageService::class)
-            ->syncImages($property, $request->input('uploaded_images', []));
+        app(MediaSyncService::class)
+            ->syncImages($property, $request->input('uploaded_images', []), 'images');
 
         app(PropertyAttributeService::class)->updateAttributes(
             $property,

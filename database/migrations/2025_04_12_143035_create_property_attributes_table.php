@@ -17,7 +17,6 @@ return new class extends Migration
 
             $table->string('name')->unique();
             $table->string('description')->nullable();
-            $table->string('icon_path')->nullable();
             $table->boolean('is_active')->default(true);
 
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade');
@@ -75,7 +74,6 @@ return new class extends Migration
             $table->foreignId('attribute_id')->constrained('property_attributes')->cascadeOnDelete();
             $table->string('name');
             $table->integer('order')->nullable();
-            $table->string('icon_path')->nullable();
 
             $table->timestamps();
         });

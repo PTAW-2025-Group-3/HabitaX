@@ -66,7 +66,7 @@
                             <td class="p-4 font-medium">{{ $documentType->name }}</td>
                             <td class="p-4 text-gray-600">{{ $documentType->description }}</td>
                             <td class="p-4">
-                                @if ($documentType->active)
+                                @if ($documentType->is_active)
                                     <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Ativo</span>
                                 @else
                                     <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Inativo</span>

@@ -180,7 +180,7 @@
                             return filename;
                         },
                         onerror: (err) => {
-                            console.error('Erro ao carregar ícone:', err);
+                            console.error('Erro ao carregar:', err);
                         }
                     },
                     revert: {
@@ -194,13 +194,13 @@
                 },
                 onremovefile: (error) => {
                     if (error) {
-                        console.error('Erro ao remover arquivo:', error);
+                        console.error('Erro ao remover:', error);
                     } else {
                         removeHiddenInput();
                     }
                 },
                 onerror: (error) => {
-                    console.error('Erro ao carregar ícone:', error);
+                    console.error('Erro ao carregar:', error);
                 }
             };
 

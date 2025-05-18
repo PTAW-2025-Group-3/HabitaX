@@ -12,7 +12,6 @@ class PropertyAttributeGroup extends Model
     protected $fillable = [
         'name',
         'description',
-        'icon_path',
         'is_active',
     ];
 

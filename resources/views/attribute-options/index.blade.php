@@ -30,7 +30,6 @@
                         <thead class="bg-blue-100 text-left">
                         <tr>
                             <th class="p-4">Nome</th>
-                            <th class="p-4">Ícone</th>
                             <th class="p-4 text-right">Ações</th>
                         </tr>
                         </thead>
@@ -38,14 +37,6 @@
                         @foreach ($options->get() as $option)
                             <tr class="border-t hover:bg-gray-50 transition">
                                 <td class="p-4 font-medium">{{ $option->name }}</td>
-                                <td class="p-4">
-                                    @if ($option->icon_path)
-                                        <img src="{{ Storage::url($option->icon_path) }}" alt="{{ $option->name }} Icon"
-                                             class="w-8 h-8 rounded-full">
-                                    @else
-                                        <span class="text-gray-500">Sem ícone</span>
-                                    @endif
-                                </td>
                                 <td class="p-4 text-right space-x-1">
                                     <a href="{{ route('attribute-options.edit', ['id' => $option->id]) }}"
                                        class="btn-secondary text-xs px-2 py-1 inline-flex items-center">

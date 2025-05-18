@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GlobalVariable;
 use App\Models\PropertyAttribute;
 use App\Models\PropertyType;
+use App\Services\MediaSyncService;
 use Illuminate\Http\Request;
 
 class PropertyTypeController extends Controller
@@ -62,8 +63,8 @@ class PropertyTypeController extends Controller
             'show_on_homepage' => $request->show_on_homepage,
         ]);
 
-        $this->attachMedia($request, $propertyType);
-
+        app(MediaSyncService::class)
+            ->syncImages($propertyType, $request->input('uploaded_images', []), 'images');
 
         return redirect()->route('property-types.index')->with('success', 'Property type created successfully.');
     }
@@ -94,8 +95,8 @@ class PropertyTypeController extends Controller
             'show_on_homepage' => $request->show_on_homepage,
         ]);
 
-        $this->attachMedia($request, $propertyType);
-
+        app(MediaSyncService::class)
+            ->syncImages($propertyType, $request->input('uploaded_images', []), 'images');
 
         return redirect()->route('property-types.index')->with('success', 'Property type updated successfully.');
     }
@@ -153,30 +154,5 @@ class PropertyTypeController extends Controller
         $propertyType->delete();
 
         return redirect()->route('property-types.index')->with('success', 'Property type deleted successfully.');
-    }
-
-    /**
-     * @param Request $request
-     * @param $type
-     * @return void
-     */
-    public function attachMedia(Request $request, $type): void
-    {
-        if ($request->has('uploaded_icon')) {
-            $filename = trim(basename($request->uploaded_icon), "\"'");
-
-            if ($filename == '') {
-                $type->clearMediaCollection('icon');
-            } else {
-                $tempPath = storage_path('app/public/tmp/uploads/' . $filename);
-                if (file_exists($tempPath)) {
-                    $type->clearMediaCollection('icon');
-                    $type->addMedia($tempPath)
-                        ->preservingOriginal()
-                        ->toMediaCollection('icon');
-                    unlink($tempPath);
-                }
-            }
-        }
     }
 }
