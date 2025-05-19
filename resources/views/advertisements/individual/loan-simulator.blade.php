@@ -4,14 +4,17 @@
             <i class="bi bi-house-heart mr-3 text-secondary"></i>
             Simulador de Crédito Habitação
         </h3>
-        <span class="bg-indigo-100 text-secondary text-xs font-semibold px-3 py-1 rounded-full">Personalizado</span>
+        <span class="bg-indigo-100 text-secondary text-xs font-semibold px-3 py-1 rounded-full">Compra</span>
     </div>
 
     <div class="grid grid-cols-1 gap-6">
         <!-- Preço do Imóvel com Slider -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 shadow-sm transition-all duration-300 hover:shadow-md">
-            <label class="text-sm md:text-base font-medium text-primary">Preço do Imóvel</label>
-
+            <label class="text-sm md:text-base font-medium text-primary flex items-center gap-1">
+                Preço do Imóvel
+                <i class="bi bi-info-circle text-gray-400 hover:text-primary transition-colors text-sm cursor-pointer"
+                   title="Valor de venda do imóvel definido pelo anunciante."></i>
+            </label>
             <div class="flex items-center space-x-4 mt-2">
                 <div class="w-full">
                     <input
@@ -44,7 +47,11 @@
         <!-- Entrada Inicial com Slider -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 shadow-sm transition-all duration-300 hover:shadow-md">
             <div class="flex justify-between">
-                <label class="text-sm md:text-base font-medium text-primary">Entrada Inicial</label>
+                <label class="text-sm md:text-base font-medium text-primary flex items-center gap-1">
+                    Entrada Inicial
+                    <i class="bi bi-info-circle text-gray-400 hover:text-primary transition-colors text-sm cursor-pointer"
+                       title="Montante inicial pago pelo comprador. O restante será financiado."></i>
+                </label>
                 <span id="down-payment-percentage" class="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded-full">25%</span>
             </div>
 
@@ -80,7 +87,11 @@
         <!-- Taxa de Juros com Slider -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 shadow-sm transition-all duration-300 hover:shadow-md">
             <div class="flex justify-between">
-                <label class="text-sm md:text-base font-medium text-primary">Taxa de Juros</label>
+                <label class="text-sm md:text-base font-medium text-primary flex items-center gap-1">
+                    Taxa de Juros
+                    <i class="bi bi-info-circle text-gray-400 hover:text-primary transition-colors text-sm cursor-pointer"
+                       title="Percentagem anual aplicada ao valor do empréstimo. Pode ser fixa ou variável."></i>
+                </label>
                 <span id="interest-rate-type" class="text-xs font-semibold bg-green-100 text-green-800 px-2 py-1 rounded-full">Taxa Fixa</span>
             </div>
 
@@ -115,7 +126,11 @@
 
         <!-- Prazo em Anos com Slider -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 shadow-sm transition-all duration-300 hover:shadow-md">
-            <label class="text-sm md:text-base font-medium text-primary">Prazo em Anos</label>
+            <label class="text-sm md:text-base font-medium text-primary flex items-center gap-1">
+                Prazo em Anos
+                <i class="bi bi-info-circle text-gray-400 hover:text-primary transition-colors text-sm cursor-pointer"
+                   title="Duração total do empréstimo em anos."></i>
+            </label>
 
             <div class="flex items-center space-x-4 mt-2">
                 <div class="w-full">
@@ -151,7 +166,11 @@
             <!-- Impostos e Despesas -->
             <div class="bg-blue-900 text-white rounded-xl p-4 shadow-md">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs md:text-sm font-medium text-blue-200">Impostos e Despesas</label>
+                    <label class="text-xs md:text-sm font-medium text-blue-200 flex items-center gap-1">
+                        Impostos e Despesas
+                        <i class="bi bi-info-circle text-blue-200 hover:text-white transition-colors text-xs cursor-pointer"
+                           title="Estimativa de custos como imposto de selo, IMT, escrituras e registos."></i>
+                    </label>
                     <i class="bi bi-coin text-xl text-blue-200"></i>
                 </div>
                 <div class="text-lg md:text-xl font-bold mt-2" id="taxes-fees">33.193€</div>
@@ -161,7 +180,11 @@
             <!-- Montante de Empréstimo -->
             <div class="bg-indigo-600 text-white rounded-xl p-4 shadow-md">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs md:text-sm font-medium text-indigo-200">Montante de Empréstimo</label>
+                    <label class="text-xs md:text-sm font-medium text-indigo-200 flex items-center gap-1">
+                        Montante de Empréstimo
+                        <i class="bi bi-info-circle text-indigo-200 hover:text-white transition-colors text-xs cursor-pointer"
+                           title="Valor que será financiado pelo banco após subtrair a entrada inicial."></i>
+                    </label>
                     <i class="bi bi-bank text-xl text-indigo-200"></i>
                 </div>
                 <div class="text-lg md:text-xl font-bold mt-2" id="loan-amount">{{ number_format($ad->price * 0.75, 0, ',', '.') }}€</div>
@@ -171,7 +194,11 @@
             <!-- Prestação Mensal -->
             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl p-4 shadow-md">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs md:text-sm font-medium text-indigo-100">Prestação Mensal</label>
+                    <label class="text-xs md:text-sm font-medium text-indigo-100 flex items-center gap-1">
+                        Prestação Mensal
+                        <i class="bi bi-info-circle text-indigo-100 hover:text-white transition-colors text-xs cursor-pointer"
+                           title="Valor mensal estimado a pagar ao banco durante o prazo acordado."></i>
+                    </label>
                     <i class="bi bi-calendar-check text-xl text-indigo-100"></i>
                 </div>
                 <div class="text-lg md:text-xl font-bold mt-2" id="monthly-payment">1.448€</div>

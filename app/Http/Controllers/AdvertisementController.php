@@ -116,7 +116,8 @@ class AdvertisementController extends Controller
     {
         $ad = Advertisement::with([
             'property.parish.municipality',
-            'creator'
+            'creator',
+            'favorites.user'
         ])->withCount([
             'favorites',  // Adiciona a contagem de favoritos
             'requests'    // Adiciona a contagem de pedidos de contacto

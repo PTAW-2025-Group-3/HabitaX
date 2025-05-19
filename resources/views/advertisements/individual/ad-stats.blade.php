@@ -19,10 +19,12 @@
                     <div>
                         <p class="text-sm text-rose-700 font-medium">Total de Favoritos</p>
                         <p class="text-3xl font-bold text-rose-900">{{ $ad->favorites_count ?? 0 }}</p>
-                        <p class="text-xs text-rose-600 mt-1">
-                            <i class="bi bi-people"></i>
-                            <span>Utilizadores interessados</span>
-                        </p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <button id="viewFavoritesBtn" class="text-xs text-rose-600 font-medium bg-white px-2 py-1 rounded shadow-sm hover:bg-rose-50 transition-colors">
+                                <i class="bi bi-people"></i>
+                                <span>Ver interessados</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,13 +44,6 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="flex flex-col md:flex-row justify-between items-center pt-3 text-sm text-gray-500">
-            <div class="text-xs mt-2 md:mt-0 text-gray-400 flex items-center gap-1">
-                <i class="bi bi-clock"></i>
-                <span>Última atualização: {{ $ad->updated_at->format('d/m/Y H:i') }}</span>
             </div>
         </div>
     </div>

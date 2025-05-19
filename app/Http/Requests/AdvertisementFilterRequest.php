@@ -52,6 +52,10 @@ class AdvertisementFilterRequest extends FormRequest
             });
         }
 
+        if ($this->has('created_by')) {
+            $query->where('created_by', $this->input('created_by'));
+        }
+
         // Dynamic attribute filters
         if ($this->has('attributes') && is_array($this->input('attributes'))) {
             foreach ($this->input('attributes') as $attributeId => $data) {

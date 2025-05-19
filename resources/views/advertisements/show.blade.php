@@ -66,8 +66,11 @@
                         <!-- Preço destacado -->
                         <div class="flex flex-col items-end">
                             <div class="text-sm text-gray-500 font-medium">Preço</div>
-                            <div class="text-3xl md:text-4xl font-extrabold text-secondary">
-                                {{ number_format($ad->price, 0, ',', '.') }}€
+                            <div class="flex items-baseline text-secondary">
+                                <span class="text-3xl md:text-4xl font-extrabold">{{ number_format($ad->price, 0, ',', '.') }}€</span>
+                                @if($ad->transaction_type === 'rent')
+                                    <span class="text-sm md:text-base text-gray-500 font-medium ml-0.5">/mês</span>
+                                @endif
                             </div>
                             <div class="text-xs text-gray-500 mt-1">Publicado {{ $ad->created_at->diffForHumans() }}</div>
                         </div>
@@ -80,12 +83,15 @@
                         <!-- Informações do anunciante -->
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
-                                    <img src="{{ $ad->creator->getProfilePictureUrl() }}" alt="Foto de {{ $ad->creator->name }}" class="w-full h-full object-cover">
+                                <img src="{{ $ad->creator->getProfilePictureUrl() }}" alt="Foto de {{ $ad->creator->name }}" class="w-full h-full object-cover">
                             </div>
 
                             <div>
                                 <div class="font-medium text-gray-800">{{ $ad->creator->name }}</div>
-                                <div class="text-xs text-gray-500">Membro desde {{ $ad->creator->created_at->format('M Y') }}</div>
+                                <div class="text-xs text-gray-500 flex items-center gap-1">
+                                    <i class="bi bi-clock"></i>
+                                    <span>Última atualização: {{ $ad->updated_at->format('d/m/Y H:i') }}</span>
+                                </div>
                             </div>
                         </div>
 
@@ -104,10 +110,10 @@
                                     <span class="text-sm font-medium">Editar Anúncio</span>
                                 </a>
                             @else
-                                    <button id="favoriteBtn" data-ad-id="{{ $ad->id }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-rose-50 text-rose-600 rounded-lg transition-colors">
-                                        <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
-                                        <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
-                                    </button>
+                                <button id="favoriteBtn" data-ad-id="{{ $ad->id }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-rose-50 text-rose-600 rounded-lg transition-colors">
+                                    <i class="bi {{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                    <span class="text-sm font-medium">{{ auth()->check() && auth()->user()->favoriteAdvertisements->contains('advertisement_id', $ad->id) ? 'Adicionado' : 'Favoritos' }}</span>
+                                </button>
 
                                 <button id="reportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-lg transition-colors">
                                     <i class="bi bi-flag"></i>
@@ -296,8 +302,13 @@
                     </div>
                 </section>
                 @include('advertisements.individual.price-history', ['ad' => $ad])
-                @include('advertisements.individual.loan-simulator', ['ad' => $ad])
+                @if($ad->transaction_type === 'rent')
+                    @include('advertisements.individual.rent-simulator', ['ad' => $ad])
+                @else
+                    @include('advertisements.individual.loan-simulator', ['ad' => $ad])
+                @endif
                 @include('advertisements.individual.ad-stats', ['ad' => $ad])
+                @include('advertisements.individual.about-advertiser', ['ad' => $ad])
             </div>
 
             <div class="space-y-6 animate-fade-in">
@@ -339,6 +350,7 @@
 @include('advertisements.individual.modals.all_photos', ['images' => $images])
 @include('advertisements.individual.modals.denunciation', ['adId' => $ad->id])
 @include('advertisements.individual.modals.share', ['ad' => $ad])
+@include('advertisements.individual.modals.favorites-viewer', ['ad' => $ad])
 @include('advertisements.individual.modals.features', ['groupedParameters' => $groupedParameters, 'groups' => $groups])
 @push('scripts')
     <script>

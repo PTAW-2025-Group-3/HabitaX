@@ -120,20 +120,18 @@
 
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100 mt-4 gap-2">
                             <div class="flex items-center gap-2">
-                                @if($ad->creator && $ad->creator->profile_picture_path)
-                                    <img src="{{ Storage::url($ad->creator->profile_picture_path) }}"
-                                         alt="{{ $ad->creator->name }}" loading="lazy"
+                                    <img src="{{ $ad->creator->getProfilePictureUrl() }}"
+                                         alt="Foto de {{ $ad->creator->name }}"
+                                         loading="lazy"
                                          class="h-9 w-9 rounded-full object-cover shadow-sm">
-                                @else
-                                    <div
-                                        class="h-9 w-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 shadow-sm">
-                                        <i class="bi bi-person text-lg"></i>
-                                    </div>
-                                @endif
                                 <span class="text-sm font-semibold text-gray-700">
                                                 {{ $ad->creator->name ?? 'Anunciante' }}
                                             </span>
                             </div>
+                            @php
+                                $isOwner = auth()->check() && auth()->id() == $ad->created_by;
+                            @endphp
+                            @if(!$isOwner)
                             <div class="flex gap-2 flex-wrap sm:flex-nowrap">
                                 <button
                                     data-advertiser-id="{{ $ad->creator->id ?? 0 }}"
@@ -145,6 +143,7 @@
                                     Contactar
                                 </a>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
