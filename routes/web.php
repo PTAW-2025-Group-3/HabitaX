@@ -6,6 +6,7 @@ use App\Http\Controllers\AdministrativeDivisionController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DenunciationController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FileUploadController;
@@ -208,6 +209,12 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::delete('/admin/document-types/{id}', [DocumentTypeController::class, 'destroy'])->name('document-types.destroy');
 
     // Distritos, Municípios e Freguesias
+    Route::get('/admin/districts', [DistrictController::class, 'index'])->name('districts.index');
+//    Route::get('/admin/districts/create', [DistrictController::class, 'create'])->name('districts.create');
+//    Route::post('/admin/districts', [DistrictController::class, 'store'])->name('districts.store');
+    Route::get('/admin/districts/{id}/edit', [DistrictController::class, 'edit'])->name('districts.edit');
+    Route::put('/admin/districts/{id}', [DistrictController::class, 'update'])->name('districts.update');
+    Route::delete('/admin/districts/{id}', [DistrictController::class, 'destroy'])->name('districts.destroy');
 });
 
 // This route should be accessible to guests for contact request
@@ -221,10 +228,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Account Routes
-    // Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
-    // Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password');
-    // Route::put('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
-    // Route::put('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
+    Route::get('/settings', [AccountController::class, 'settings'])->name('settings');
+    Route::put('/settings/privacy', [AccountController::class, 'updatePrivacy'])->name('account.updatePrivacy');
+    Route::put('/settings/password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
+    Route::delete('/settings', [AccountController::class, 'deleteAccount'])->name('account.delete');
 
     Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verifications.create');
     Route::post('/advertiser-verification', [AdvertiserVerificationController::class, 'store'])->name('advertiser-verifications.store');
@@ -242,14 +249,6 @@ Route::post('/share/email', [App\Http\Controllers\ShareController::class, 'share
 Route::view('/politica-de-privacidade', 'pages.legal.privacy-policy')->name('privacy.policy');
 Route::view('/condicoes-gerais', 'pages.legal.terms-and-conditions')->name('terms.conditions');
 Route::get('/noticias', [\App\Http\Controllers\NewsController::class, 'index']);
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/settings', [AccountController::class, 'settings'])->name('settings');
-    Route::put('/settings/privacy', [AccountController::class, 'updatePrivacy'])->name('account.updatePrivacy');
-    Route::put('/settings/password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
-    Route::delete('/settings', [AccountController::class, 'deleteAccount'])->name('account.delete');
-});
 
 
 // Auth (login, logout, etc.)

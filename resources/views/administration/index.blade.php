@@ -48,6 +48,10 @@
                         <i class="bi bi-file-earmark-text mr-2"></i>
                         Gerir Tipos de Documento
                     </a>
+                    <a href="{{ route('districts.index') }}" class="btn-primary px-6 py-3">
+                        <i class="bi bi-map mr-2"></i>
+                        Gerir Distritos
+                    </a>
                 </div>
             </div>
         </div>

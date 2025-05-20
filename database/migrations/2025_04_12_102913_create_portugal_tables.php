@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('districts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_active')->default(true);
+            $table->boolean('show_on_homepage')->default(false);
             $table->timestamps();
         });
 

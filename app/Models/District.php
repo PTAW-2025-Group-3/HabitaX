@@ -13,7 +13,11 @@ class District extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'is_active',
+        'show_on_homepage',
+    ];
 
     public function registerMediaCollections(): void
     {
