@@ -1,14 +1,15 @@
 <div class="space-y-4">
     @if($advertisements->isEmpty())
-        <p>Nenhum anúncio encontrado.</p>
+        <div class="flex items-center justify-center p-8 bg-gray-50 rounded-xl">
+            <p class="text-gray-500 font-medium">Nenhum anúncio encontrado.</p>
+        </div>
     @else
         @foreach($advertisements as $ad)
-            <div
-                class="bg-white rounded-2xl border border-gray-200 p-4 shadow hover:shadow-md transition-all duration-300">
-                <div class="flex flex-col md:flex-row gap-4 items-stretch">
-                    <div
-                        class="md:w-2/5 w-full flex-shrink-0 relative group overflow-hidden rounded-xl swiper-ad-list-container">
-                        <div class="swiper swiper-ad-list-{{ $ad->id }} aspect-[4/3] w-full">
+            <div class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300">
+                <div class="flex flex-col md:flex-row gap-3 items-stretch">
+                    <!-- Seção da imagem -->
+                    <div class="md:w-2/5 w-full flex-shrink-0 relative group overflow-hidden rounded-tl-2xl rounded-bl-2xl">
+                        <div class="swiper swiper-ad-list-{{ $ad->id }} aspect-[4/3] md:aspect-[16/10] w-full">
                             <div class="swiper-wrapper">
                                 @php
                                     $totalImages = $ad->property->getMedia('images')->count();
@@ -16,15 +17,13 @@
                                 @if($totalImages > 0)
                                     @foreach($ad->property->getMedia('images') as $index => $image)
                                         <div class="swiper-slide">
-                                            <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
-                                               class="block h-full">
-                                                <div class="image-overlay"></div>
-                                                <div class="aspect-[4/3] w-full relative">
-                                                    <img src="{{ $image->getUrl('preview') }}"
+                                            <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block h-full">
+                                                <div class="aspect-[4/3] md:aspect-[16/10] w-full relative">
+                                                    <img src="{{ $image->getUrl('thumb') }}"
                                                          alt="{{ $ad['title'] }}" loading="lazy"
-                                                         class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                                     @if($totalImages > 1)
-                                                        <div class="image-counter">
+                                                        <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                                                             <span>{{ $index + 1 }}</span>/<span>{{ $totalImages }}</span>
                                                         </div>
                                                     @endif
@@ -34,40 +33,50 @@
                                     @endforeach
                                 @else
                                     <div class="swiper-slide">
-                                        <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
-                                           class="block h-full">
-                                            <div class="image-overlay"></div>
-                                            <div class="aspect-[4/3] w-full relative">
+                                        <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block h-full">
+                                            <div class="aspect-[4/3] md:aspect-[16/10] w-full relative">
                                                 <img src="{{ asset('images/property-placeholder.png') }}"
                                                      alt="{{ $ad['title'] }}" loading="lazy"
-                                                     class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                             </div>
                                         </a>
                                     </div>
                                 @endif
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination !bottom-3"></div>
+                            <div class="swiper-button-next !w-8 !h-8 !bg-white/80 !rounded-full !text-blue-900 !right-3"></div>
+                            <div class="swiper-button-prev !w-8 !h-8 !bg-white/80 !rounded-full !text-blue-900 !left-3"></div>
                         </div>
+
                         @if(isset($ad['featured']) && $ad['featured'])
-                            <div class="feature-badge">
+                            <div class="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center space-x-1 z-10">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"
                                      fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                                 </svg>
                                 <span>Destaque</span>
                             </div>
                         @endif
                     </div>
-                    <div class="flex-grow flex flex-col">
-                        <div class="space-y-2 flex-grow">
+
+                    <!-- Conteúdo do anúncio -->
+                    <div class="flex-grow flex flex-col p-3">
+                        <div class="space-y-2.5 flex-grow">
                             <div class="flex justify-between items-start">
-                                <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
-                                   class="block">
-                                    <h3 class="text-xl font-bold text-gray-900 leading-tight hover:text-blue-700 transition-colors">{{ $ad['title'] }}</h3>
-                                </a>
+                                <div>
+                                    <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block">
+                                        <h3 class="text-xl font-bold text-gray-900 leading-tight hover:text-blue-700 transition-colors">{{ $ad['title'] }}</h3>
+                                    </a>
+                                    <p class="flex items-center text-sm text-gray-500 mt-0.5">
+                                        <i class="bi bi-geo-alt-fill text-blue-700 mr-1"></i>
+                                        @if($ad->property && $ad->property->parish)
+                                            {{ $ad->property->parish->name }},
+                                            {{ $ad->property->parish->municipality->name }}
+                                        @else
+                                            —
+                                        @endif
+                                    </p>
+                                </div>
                                 <div class="flex space-x-1">
                                     @php
                                         $isOwner = auth()->check() && auth()->id() == $ad->created_by;
@@ -82,13 +91,22 @@
                                     @endif
                                 </div>
                             </div>
-                            <p class="flex items-center text-sm text-gray-500 mt-0.5">
-                                <i class="bi bi-geo-alt-fill text-secondary mr-1"></i>
-                                {{ $ad->property && $ad->property->parish ? $ad->property->parish->name : '—' }}
-                            </p>
-                            <p class="text-2xl font-extrabold text-blue-800 mt-2">{{ number_format($ad['price'], 0, ',', '.') }}
-                                €</p>
-                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
+
+                            <p class="text-2xl font-extrabold text-blue-800">{{ number_format($ad['price'], 0, ',', '.') }} €</p>
+
+                            <!-- Badges tipo de imóvel e tipo de transação (texto com ícones Bootstrap) -->
+                            <div class="flex flex-wrap gap-3 text-sm">
+                                <div class="text-indigo-700 font-medium">
+                                    <i class="bi bi-arrow-left-right mr-1"></i>
+                                    {{ $ad->transaction_type === 'sale' ? 'Compra' : 'Aluguer' }}
+                                </div>
+                                <div class="text-gray-700 font-medium">
+                                    <i class="bi bi-house mr-1"></i>
+                                    {{ $ad->property->property_type->name }}
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2 mt-1">
                                 @php
                                     $attributeIdsToShow = $ad->property->type
                                         ->attributes()
@@ -97,11 +115,11 @@
                                         ->toArray();
                                     $parameters = $ad->property->parameters()
                                         ->whereIn('attribute_id', $attributeIdsToShow)
-                                        ->with('attribute') // eager-load the attribute
+                                        ->with('attribute')
                                         ->get();
                                 @endphp
-                                <div class="flex flex-wrap items-center gap-2 mt-1">
-                                    <i class="bi bi-house-door-fill text-secondary mr-1"></i>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <i class="bi bi-house-door-fill text-blue-700"></i>
                                     @foreach($parameters as $parameter)
                                         @if($parameter->attribute)
                                             <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-lg">
@@ -115,34 +133,40 @@
                                     @endforeach
                                 </div>
                             </div>
+
                             <p class="text-gray-700 line-clamp-2 leading-relaxed">{{ $ad['description'] }}</p>
                         </div>
 
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100 mt-4 gap-2">
-                            <div class="flex items-center gap-2">
-                                    <img src="{{ $ad->creator->getProfilePictureUrl() }}"
-                                         alt="Foto de {{ $ad->creator->name }}"
-                                         loading="lazy"
-                                         class="h-9 w-9 rounded-full object-cover shadow-sm">
-                                <span class="text-sm font-semibold text-gray-700">
-                                                {{ $ad->creator->name ?? 'Anunciante' }}
-                                            </span>
-                            </div>
+                        <!-- Info anunciante + botões -->
+                        <div class="flex items-center flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
                             @php
                                 $isOwner = auth()->check() && auth()->id() == $ad->created_by;
                             @endphp
+
+                            <img src="{{ $ad->creator->getProfilePictureUrl() }}"
+                                 alt="Foto de {{ $ad->creator->name }}"
+                                 loading="lazy"
+                                 class="h-9 w-9 rounded-full object-cover shadow-sm">
+
+                            <span class="text-sm font-semibold text-gray-700">
+                                {{ $ad->creator->name ?? 'Anunciante' }}
+                            </span>
+
+                            <div class="flex-grow"></div>
+
                             @if(!$isOwner)
-                            <div class="flex gap-2 flex-wrap sm:flex-nowrap">
                                 <button
                                     data-advertiser-id="{{ $ad->creator->id ?? 0 }}"
-                                    class="phone-button px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:text-blue-700 transition-all duration-300">
+                                    class="phone-button px-3 py-1.5 bg-white text-blue-700 border border-blue-200 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 whitespace-nowrap">
+                                    <i class="bi bi-telephone-fill mr-1"></i>
                                     Ver Telefone
                                 </button>
+
                                 <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
-                                   class="px-4 py-2 bg-blue-900 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition-all duration-300 text-center">
+                                   class="px-3 py-1.5 bg-blue-900 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition-all duration-200 whitespace-nowrap">
+                                    <i class="bi bi-chat-dots-fill mr-1"></i>
                                     Contactar
                                 </a>
-                            </div>
                             @endif
                         </div>
                     </div>

@@ -54,7 +54,6 @@ Route::get('/parishes/search', [AdministrativeDivisionController::class, 'search
 // Advertisement Routes
 Route::get('/advertisements/help', [AdvertisementController::class, 'help'])->name('advertisements.help');
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
-Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 Route::get('/advertiser/{id}/phone', function ($id) {
     $user = User::find($id);
     return response()->json([
@@ -63,18 +62,16 @@ Route::get('/advertiser/{id}/phone', function ($id) {
 });
 
 Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
-    // create, edit, delete
     Route::get('/advertisements/my', 'my')->name('advertisements.my');
     Route::get('/advertisements/favorites', 'favorites')->name('advertisements.favorites');
-
     Route::get('/advertisements/create', 'create')->name('advertisements.create');
     Route::post('/advertisements', 'store')->name('advertisements.store');
-
     Route::get('/advertisements/{id}/edit', 'edit')->name('advertisements.edit');
     Route::put('/advertisements/{id}', 'update')->name('advertisements.update');
     Route::delete('/advertisements/{id}', 'destroy')->name('advertisements.destroy');
-
 });
+
+Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 Route::middleware('auth')->group(function () {
     Route::post('/denunciations', [DenunciationController::class, 'store'])->name('denunciations.store');

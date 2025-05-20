@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-tr from-white to-gray-50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
+<div class="sticky top-24 bg-gradient-to-tr from-white to-gray-50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-7 space-y-6 animate-fade-in">
     <div class="flex items-center justify-between border-b border-indigo-100 pb-4">
         <h3 class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
             <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7,16 +7,15 @@
             Contactar o Anunciante
         </h3>
 
-        <div class="flex flex-col items-center gap-1 text-center">
-                {{-- Exibir imagem de perfil do anunciante --}}
-                <img src="{{ $ad->creator->getProfilePictureUrl() }}"
-                     alt="{{ $ad->creator->name }}"
-                     class="w-10 h-10 rounded-full object-cover shadow-sm">
-            <span class="text-xs text-gray-500 truncate max-w-[80px]">{{ $ad->creator->name ?? 'Anunciante' }}</span>
+        <div class="relative group">
+            <img src="{{ $ad->creator->getProfilePictureUrl() }}"
+                 alt="{{ $ad->creator->name }}"
+                 class="w-10 h-10 rounded-full object-cover shadow-sm cursor-help"
+                 title="{{ $ad->creator->name ?? 'Anunciante' }}">
         </div>
     </div>
 
-    {{-- Verificação de dono do anúncio --}}
+    {{-- Verificação de anunciante --}}
     @if(auth()->check() && auth()->id() == $ad->created_by)
         <div class="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,12 +70,28 @@
             {{-- Mensagem --}}
             <div>
                 <label for="message" class="block text-gray-600 text-xs md:text-sm mb-1">Mensagem</label>
-                <textarea id="message" name="message" class="form-input @error('message') border-red-300 @enderror"
-                          rows="4" placeholder="Estou interessado neste imóvel..." required>{{ old('message') }}</textarea>
+
+                <div class="relative">
+                    <textarea
+                        id="message"
+                        name="message"
+                        maxlength="500"
+                        class="form-input @error('message') border-red-300 @enderror pr-16"
+                        rows="4"
+                        placeholder="Estou interessado neste imóvel..."
+                        required>{{ old('message') }}</textarea>
+
+                    <!-- Contador no canto inferior direito -->
+                    <div class="absolute bottom-2 right-3 text-xs text-gray-400">
+                        <span id="charCount">0</span>/500
+                    </div>
+                </div>
+
                 @error('message')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
 
             {{-- Política de Privacidade --}}
             <div class="flex items-start">
@@ -101,7 +116,11 @@
                 <span id="submitBtnText">Enviar Contacto</span>
             </button>
         </form>
-
+        <div class="flex items-center gap-3 my-4 text-sm text-gray-400">
+            <hr class="flex-grow border-t border-gray-200">
+            <span>ou</span>
+            <hr class="flex-grow border-t border-gray-200">
+        </div>
         {{-- Mostrar telefone --}}
         <div class="text-center">
             <a href="#" id="showPhoneBtn" class="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center group" data-phone="{{ $ad->creator->telephone ?? '+351 XXX XXX XXX' }}">
@@ -122,6 +141,15 @@
         const successMessage = document.getElementById('successMessage');
         const phoneBtn = document.getElementById('showPhoneBtn');
         const phoneText = document.getElementById('phoneText');
+        const messageInput = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+
+        if (messageInput && charCount) {
+            messageInput.addEventListener('input', function () {
+                charCount.textContent = messageInput.value.length;
+            });
+        }
+
 
         if (form) {
             form.addEventListener('submit', function(e) {

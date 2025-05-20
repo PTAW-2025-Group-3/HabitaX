@@ -170,7 +170,7 @@
                 @foreach($images as $image)
                     @if($loop->index >= 5)
                         <a href="{{ $image->getUrl('watermark') }}">
-                            <img src="{{ $image->getUrl('thumbnail') }}" loading="lazy" alt="Miniatura oculta" class="hidden">
+                            <img src="{{ $image->getUrl('thumb') }}" loading="lazy" alt="Miniatura oculta" class="hidden">
                         </a>
                     @endif
                 @endforeach
