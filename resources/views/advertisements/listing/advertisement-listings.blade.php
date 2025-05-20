@@ -1,5 +1,5 @@
 @php use App\Models\District;use App\Models\Municipality;use App\Models\Parish;use App\Models\PropertyType; @endphp
-<div x-data="page" x-init="view = '{{ $viewMode }}'" x-cloak class="w-full md:w-3/4">
+<div x-data="page" x-init="view = '{{ $viewMode }}'" x-cloak class="w-full">
     <div class="property-listings-container">
         <!-- Header Section -->
         <h1 class="text-xl font-semibold mb-4">

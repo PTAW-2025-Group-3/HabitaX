@@ -1,14 +1,22 @@
+Básicos
+
 npm run dev
 
 php artisan migrate:fresh --seed
+
 php artisan seed
 
 php artisan optimize:clear
 
 
+Avançados
 
+conversão de imagens e eventos
+php artisan queue:work
 
-Production
+sockets
+php artisan reverb:start
 
+production
 docker-compose up --build -d
 docker-compose exec habitax ...

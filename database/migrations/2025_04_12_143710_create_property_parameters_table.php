@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('property_parameters', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
+            $table->foreignId('property_id')->nullable()->constrained('properties')->onDelete('cascade');
+            $table->foreignId('filter_id')->nullable()->constrained('search_filters')->onDelete('cascade');
             $table->foreignId('attribute_id')->constrained('property_attributes')->onDelete('cascade');
 
             $table->text('value')->nullable();

@@ -11,11 +11,19 @@ use App\Models\Property;
 use App\Models\PropertyParameter;
 use App\Models\PropertyType;
 use App\Models\District;
+use App\Models\SearchFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AdvertisementController extends Controller
 {
+    public function search(Request $request)
+    {
+        $districts = District::with('municipalities.parishes')->orderBy('name')->get();
+
+        return view('advertisements.search', compact('districts'));
+    }
+
     public function index(AdvertisementFilterRequest $request)
     {
         // Filtros selecionados vindos da query string
@@ -45,9 +53,14 @@ class AdvertisementController extends Controller
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
 
         $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
-        $perPage = $viewMode === 'list' ? 10 : 21;
+        $perPage = $viewMode === 'list' ? 10 : 28;
 
         $advertisements = $query->paginate($perPage);
+
+        $savedSearches = SearchFilter::where('created_by', auth()->id())
+            ->with('propertyType')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         if ($request->ajax()) {
             return view('advertisements.listing.advertisement-listings', compact('advertisements'))->render();
@@ -63,7 +76,8 @@ class AdvertisementController extends Controller
             'selectedParish',
             'selectedType',
             'transactionType',
-            'viewMode'
+            'viewMode',
+            'savedSearches'
         ));
     }
 

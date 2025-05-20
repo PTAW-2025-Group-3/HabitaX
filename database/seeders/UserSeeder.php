@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                 'password' => 'passwordKousha',
                 'user_type' => 'admin',
                 'state' => 'active',
+                'is_advertiser' => true,
             ],
             [
                 'name' => 'Sedro Pampaio',
@@ -55,6 +56,7 @@ class UserSeeder extends Seeder
                     'password' => Hash::make($user['password']),
                     'user_type' => $user['user_type'] ?? 'user',
                     'state' => $user['state'] ?? 'active',
+                    'is_advertiser' => $user['is_advertiser'] ?? false,
                 ]
             );
             $this->attachProfilePicture($user);

@@ -126,11 +126,21 @@
         </div>
 
         {{-- Botão Pesquisar --}}
-        <div class="w-full md:w-1/4 flex items-end">
+        <div class="flex items-end">
             <button type="submit"
-                    class="w-full p-3 pl-4 pr-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 h-[48px]">
+                    class="p-3 pl-4 pr-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 h-[48px]">
                 <i class="bi bi-search text-lg"></i>
-                Pesquisar
+{{--                Pesquisar--}}
+            </button>
+        </div>
+
+        {{-- Botão Filtros --}}
+        <div class="flex items-end">
+            <button type="button"
+                    class="p-3 pl-4 pr-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 h-[48px]"
+                    @click="filtersOpen = !filtersOpen">
+                <i class="bi bi-funnel text-lg"></i>
+                Filtros
             </button>
         </div>
     </div>

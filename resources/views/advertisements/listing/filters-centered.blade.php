@@ -3,9 +3,27 @@
     $topClass = request('property_type') ? 'md:top-[80px]' : 'md:top-[100px]';
 @endphp
 
-<div class="w-full md:w-1/4 md:sticky {{ $topClass }} self-start">
+<!-- Overlay -->
+<div x-show="filtersOpen"
+     @click="filtersOpen = false"
+     class="fixed inset-0 bg-black bg-opacity-50 z-40"
+     x-transition.opacity
+     style="display: none;">
+</div>
 
-    <form method="GET" action="{{ route('advertisements.index') }}" id="filters-form">
+{{--<div class="w-full md:w-1/4 md:sticky {{ $topClass }} self-start">--}}
+<div x-show="filtersOpen"
+     @click.outside="filtersOpen = false"
+     x-transition:enter="transition transform ease-out duration-300"
+     x-transition:enter-start="translate-x-full"
+     x-transition:enter-end="translate-x-0"
+     x-transition:leave="transition transform ease-in duration-300"
+     x-transition:leave-start="translate-x-0"
+     x-transition:leave-end="translate-x-full"
+     class="fixed right-0 top-0 h-full bg-white shadow-lg z-50 p-6 overflow-y-auto"
+     style="display: none;">
+
+    <form method="GET" action="{{ route('advertisements.index') }}" id="filters-form" class="space-y-4 p-6">
         <!-- Preservar os filtros de localização e tipo de propriedade -->
         @if(request('property_type'))
             <input type="hidden" name="property_type" value="{{ request('property_type') }}">
@@ -22,7 +40,7 @@
 
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
             <h2 class="font-bold text-2xl mb-6 text-primary text-center">Filtros</h2>
-            <div class="overflow-y-auto max-h-[625px] pr-2 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+{{--            <div class="overflow-y-auto max-h-[625px] pr-2 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">--}}
             <!-- Filtros ativos (fora do scroll) -->
             @if(request('property_type') || request('district') || request('municipality') || request('parish') ||
                 request('time_period') || request('min_price') || request('max_price'))
@@ -255,7 +273,7 @@
                         @endif
                     @endforeach
                 @endif
-            </div> <!-- Fim da área com scroll -->
+{{--            </div> <!-- Fim da área com scroll -->--}}
             @php
                 $hasPropertyType = request('property_type');
                 $bottomSpacingClass = $hasPropertyType ? 'mt-8' : 'mt-2';

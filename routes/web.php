@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdministrationController;
+use App\Http\Controllers\AdministrativeDivisionController;
 use App\Http\Controllers\ContactRequestController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DenunciationController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\ReportedAdvertisementController;
 use App\Http\Controllers\AdvertiserVerificationController;
+use App\Http\Controllers\SearchFilterController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ModeratorMiddleware;
 use App\Models\User;
@@ -43,9 +45,16 @@ Route::get('/about', function () {
     return view('pages.about.about');
 })->name('about');
 
+Route::get('/search', [AdvertisementController::class, 'search'])->name('advertisements.search');
+Route::get('/districts', [AdministrativeDivisionController::class, 'districts']);
+Route::get('/districts/{id}/municipalities', [AdministrativeDivisionController::class, 'municipalitiesByDistrict']);
+Route::get('/municipalities/{id}/parishes', [AdministrativeDivisionController::class, 'parishesByMunicipality']);
+Route::get('/parishes/search', [AdministrativeDivisionController::class, 'searchParishes']);
+
 // Advertisement Routes
 Route::get('/advertisements/help', [AdvertisementController::class, 'help'])->name('advertisements.help');
 Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 Route::get('/advertiser/{id}/phone', function ($id) {
     $user = User::find($id);
     return response()->json([
@@ -66,7 +75,6 @@ Route::middleware('auth')->controller(AdvertisementController::class)->group(fun
     Route::delete('/advertisements/{id}', 'destroy')->name('advertisements.destroy');
 
 });
-Route::get('/advertisements/{id}', [AdvertisementController::class, 'show'])->name('advertisements.show');
 
 Route::middleware('auth')->group(function () {
     Route::post('/denunciations', [DenunciationController::class, 'store'])->name('denunciations.store');
@@ -76,6 +84,10 @@ Route::middleware('auth')->group(function () {
         ->name('advertisements.favorite.toggle');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+    // Filters routes
+    Route::get('/search-filters', [SearchFilterController::class, 'index'])->name('search-filters.index');
+    Route::post('/search-filters', [SearchFilterController::class, 'store'])->name('search-filters.store');
 
     // File Upload
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
