@@ -172,6 +172,13 @@ class ReportedAdvertisementController extends Controller
             if ($advertisement) {
                 $advertisement->is_suspended = true;
                 $advertisement->save();
+                $advertisement->requests()->delete();
+
+                // Eliminar as outras denúncias pendentes deste anúncio
+                Denunciation::where('advertisement_id', $advertisement->id)
+                    ->where('id', '!=', $denunciation->id)
+                    ->where('report_state', 0)
+                    ->delete();
             }
 
             \DB::commit();

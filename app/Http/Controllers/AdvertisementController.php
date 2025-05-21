@@ -95,7 +95,14 @@ class AdvertisementController extends Controller
                 ->where('is_suspended', false);
         } elseif ($state === 'suspended') {
             $query->where('is_suspended', true);
+        } else {
+            $query->where('is_suspended', false);
         }
+
+        // Filtrar para mostrar apenas anúncios com tipos de propriedade ativos
+        $query->whereHas('property.property_type', function($q) {
+            $q->where('is_active', true);
+        });
 
         $ads = $query->orderBy('updated_at', 'desc')->paginate(9);
 
@@ -112,6 +119,7 @@ class AdvertisementController extends Controller
         $favorites = FavoriteAdvertisement::where('user_id', $user->id)
             ->whereHas('advertisement', function($query) {
                 $query->where('is_suspended', false)
+                    ->where('is_published', true)
                     ->whereHas('creator', function($q) {
                         $q->where('state', 'active');
                     })

@@ -35,7 +35,29 @@ class UserObserver
         $user->properties()->update(['is_active' => false]);
 
         // Archive advertisements
+        $user->advertisements()->update(['is_published' => false]);
         $user->advertisements()->update(['is_suspended' => true]);
+
+        // Eliminar todos os pedidos de contacto relacionados aos anúncios do utilizador
+        foreach ($user->advertisements as $advertisement) {
+            $advertisement->requests()->delete();
+        }
+
+        \App\Models\ContactRequest::where('created_by', $user->id)->delete();
+
+        // Encerrar todas as sessões do utilizador
+        $this->logoutUserFromAllDevices($user);
+    }
+
+    /**
+     * Termina a sessão do utilizador em todos os dispositivos
+     */
+    protected function logoutUserFromAllDevices(User $user): void
+    {
+        // Termina a sessão do utilizador
+        \DB::table('sessions')
+            ->where('user_id', $user->id)
+            ->delete();
     }
 
     /**

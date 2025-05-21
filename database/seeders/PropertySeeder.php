@@ -21,7 +21,7 @@ class PropertySeeder extends Seeder
             throw new \Exception("Not enough images in {$imageFolder}");
         }
 
-        Property::factory()->count(10)->create()->each(function ($property) use ($imageFiles) {
+        Property::factory()->count(20)->create()->each(function ($property) use ($imageFiles) {
             //$count = rand(5, 8);
             $count = 1;
             $randomFiles = collect($imageFiles)->random($count);

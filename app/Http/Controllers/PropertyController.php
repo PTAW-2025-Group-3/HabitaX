@@ -22,6 +22,9 @@ class PropertyController extends Controller
         $properties = auth()->user()->properties()
             ->with('property_type')
             ->with('parish')
+            ->whereHas('property_type', function($query) {
+                $query->where('is_active', true);
+            })
             ->orderBy('updated_at', 'desc')
             ->paginate(9);
 

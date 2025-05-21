@@ -17,6 +17,12 @@ class HomeController extends Controller
         $featuredAds = Advertisement::with('property')
             ->where('is_published', true)
             ->where('is_suspended', false)
+            ->whereHas('property.property_type', function($query) {
+                $query->where('is_active', true);
+            })
+            ->whereHas('creator', function($query) {
+                $query->where('state', 'active');
+            })
             ->take(8)
             ->get();
 
@@ -28,7 +34,7 @@ class HomeController extends Controller
         $transactionType = request('transaction_type', 'sale');
         $selectedType = request('property_type');
 
-        $districts = District::all();
+        $districts = District::where('show_on_homepage', true)->get();
 
         $newsController = new NewsController();
         $newsView = $newsController->index();
