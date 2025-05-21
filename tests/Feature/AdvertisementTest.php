@@ -18,7 +18,6 @@ class AdvertisementTest extends TestCase
     {
         parent::setUp();
 
-        // Criar dados obrigatórios
         PropertyType::factory()->create();
         Parish::factory()->create();
     }
@@ -35,14 +34,16 @@ class AdvertisementTest extends TestCase
 
         $advertisement = Advertisement::create([
             'reference' => 123456,
+            'title' => 'Apartamento Teste', // FIX HERE
             'description' => 'Apartamento com vista para o mar',
             'transaction_type' => 'rent',
             'price' => 850.00,
             'state' => 'active',
             'property_id' => $property->id,
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
         ]);
 
-        // Verificações
         $this->assertDatabaseHas('advertisements', [
             'id' => $advertisement->id,
             'reference' => 123456,
@@ -54,7 +55,6 @@ class AdvertisementTest extends TestCase
         $this->assertEquals(850.00, $advertisement->price);
         $this->assertEquals($property->id, $advertisement->property_id);
 
-        // Verificar relação com Property
         $this->assertEquals($property->id, $advertisement->property->id);
     }
 }
