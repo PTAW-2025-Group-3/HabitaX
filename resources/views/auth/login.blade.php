@@ -1,11 +1,10 @@
 @extends('layout.app')
 
-@section('title', 'Sign In')
+@section('title', 'Login')
 
 @section('content')
     <section class="min-h-screen grid place-content-start justify-center pt-16 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-6xl flex flex-col lg:flex-row bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden animate-fade-in">
-
             {{-- Image Section (Left) --}}
             <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
                 <img src="{{ asset('images/login-side.avif') }}"

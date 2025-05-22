@@ -19,6 +19,18 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $messages = [
+            'name.required' => 'O nome é obrigatório.',
+            'name.max' => 'O nome não pode ter mais de 255 caracteres.',
+            'email.required' => 'O email é obrigatório.',
+            'email.email' => 'Por favor, forneça um endereço de email válido.',
+            'email.unique' => 'Este email já está a ser utilizado.',
+            'password.required' => 'A password é obrigatória.',
+            'password.confirmed' => 'A confirmação da password não corresponde.',
+            'password.regex' => 'A password deve conter pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e caracteres especiais.',
+            'terms.accepted' => 'Deve aceitar os termos e condições.',
+        ];
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -28,7 +40,7 @@ class RegisteredUserController extends Controller
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/'
             ],
             'terms' => ['accepted'],
-        ]);
+        ], $messages);
 
         $user = User::create([
             'name' => $request->name,

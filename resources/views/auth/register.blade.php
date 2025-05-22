@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Register')
+@section('title', 'Registo')
 
 @section('content')
     <section class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
