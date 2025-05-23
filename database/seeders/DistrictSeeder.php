@@ -39,7 +39,10 @@ class DistrictSeeder extends Seeder
         foreach ($districtData as $data) {
             $district = District::updateOrCreate(
                 ['name' => $data['name']],
-                ['show_on_homepage' => true]
+                [
+                    'is_active' => true,
+                    'show_on_homepage' => true
+                ]
             );
             $this->attachImages($district, $data['folder']);
         }

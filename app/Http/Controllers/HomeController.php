@@ -34,7 +34,7 @@ class HomeController extends Controller
         $transactionType = request('transaction_type', 'sale');
         $selectedType = request('property_type');
 
-        $districts = District::where('show_on_homepage', true)->get();
+        $districts = District::where('is_active', true)->get();
 
         $newsController = new NewsController();
         $newsView = $newsController->index();

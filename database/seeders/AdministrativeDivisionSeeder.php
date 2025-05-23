@@ -30,6 +30,7 @@ class AdministrativeDivisionSeeder extends Seeder
         foreach ($districtsData as $districtEntry) {
             $district = District::create([
                 'name' => $districtEntry['distrito'],
+                'is_active' => false,
             ]);
 
             foreach ($districtEntry['municipios'] as $municipalityName) {

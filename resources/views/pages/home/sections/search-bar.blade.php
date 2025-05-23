@@ -44,7 +44,7 @@
             <div class="relative dropdown-wrapper w-full sm:w-auto">
                 <select id="districtSelect" name="district" class="py-2 pl-4 pr-10 w-full h-10 dropdown-select">
                     <option value="">Selecione um Distrito</option>
-                    @foreach(App\Models\District::orderBy('name')->get() as $district)
+                    @foreach($districts as $district)
                         <option value="{{ $district->id }}" data-municipalities='@json($district->municipalities)'>
                             {{ $district->name }}
                         </option>
@@ -108,7 +108,6 @@
         });
 
         const districtSelect = document.getElementById('districtSelect');
-        const municipalityWrapper = document.getElementById('municipalityWrapper');
         const municipalitySelect = document.getElementById('municipalitySelect');
 
         districtSelect.addEventListener('change', function() {

@@ -12,7 +12,9 @@ class AdministrativeDivisionController extends Controller
     // GET /districts
     public function districts()
     {
-        return District::all();
+        return District::where('is_active', true)
+            ->orderBy('name')
+            ->get();
     }
 
     // GET /districts/{id}/municipalities

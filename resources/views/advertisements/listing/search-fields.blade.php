@@ -88,15 +88,15 @@
             <div class="relative dropdown-wrapper w-full">
                 <select name="municipality" id="municipalitySelect" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Concelho</option>
-                    @if($selectedDistrict)
-                        @foreach($districts->find($selectedDistrict)?->municipalities ?? [] as $municipality)
-                            <option value="{{ $municipality->id }}"
-                                    data-parishes='@json($municipality->parishes)'
-                                {{ $selectedMunicipality == $municipality->id ? 'selected' : '' }}>
-                                {{ $municipality->name }}
-                            </option>
-                        @endforeach
-                    @endif
+{{--                    @if($selectedDistrict)--}}
+{{--                        @foreach($districts->find($selectedDistrict)?->municipalities ?? [] as $municipality)--}}
+{{--                            <option value="{{ $municipality->id }}"--}}
+{{--                                    data-parishes='@json($municipality->parishes)'--}}
+{{--                                {{ $selectedMunicipality == $municipality->id ? 'selected' : '' }}>--}}
+{{--                                {{ $municipality->name }}--}}
+{{--                            </option>--}}
+{{--                        @endforeach--}}
+{{--                    @endif--}}
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
@@ -111,13 +111,13 @@
             <div class="relative dropdown-wrapper w-full">
                 <select name="parish" id="parishSelect" class="special-chevron p-3 pl-4 pr-10 w-full dropdown-select">
                     <option value="">Freguesia</option>
-                    @if($selectedMunicipality)
-                        @foreach(\App\Models\Parish::where('municipality_id', $selectedMunicipality)->get() as $parish)
-                            <option value="{{ $parish->id }}" {{ $selectedParish == $parish->id ? 'selected' : '' }}>
-                                {{ $parish->name }}
-                            </option>
-                        @endforeach
-                    @endif
+{{--                    @if($selectedMunicipality)--}}
+{{--                        @foreach(\App\Models\Parish::where('municipality_id', $selectedMunicipality)->get() as $parish)--}}
+{{--                            <option value="{{ $parish->id }}" {{ $selectedParish == $parish->id ? 'selected' : '' }}>--}}
+{{--                                {{ $parish->name }}--}}
+{{--                            </option>--}}
+{{--                        @endforeach--}}
+{{--                    @endif--}}
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
@@ -184,39 +184,114 @@
                 });
             }
 
-            function setupLocationSelects() {
+            // function setupLocationSelects() {
+            //     const districtSelect = document.getElementById('districtSelect');
+            //     const municipalitySelect = document.getElementById('municipalitySelect');
+            //     const parishSelect = document.getElementById('parishSelect');
+            //
+            //     districtSelect.addEventListener('change', function () {
+            //         const selectedOption = this.options[this.selectedIndex];
+            //         const municipalities = JSON.parse(selectedOption.dataset.municipalities || '[]');
+            //
+            //         municipalitySelect.innerHTML = '<option value="">Concelho</option>';
+            //         parishSelect.innerHTML = '<option value="">Freguesia</option>';
+            //
+            //         municipalities.forEach(m => {
+            //             const opt = document.createElement('option');
+            //             opt.value = m.id;
+            //             opt.textContent = m.name;
+            //             opt.dataset.parishes = JSON.stringify(m.parishes);
+            //             municipalitySelect.appendChild(opt);
+            //         });
+            //     });
+            //
+            //     municipalitySelect.addEventListener('change', function () {
+            //         const selectedOption = this.options[this.selectedIndex];
+            //         const parishes = JSON.parse(selectedOption.dataset.parishes || '[]');
+            //
+            //         parishSelect.innerHTML = '<option value="">Freguesia</option>';
+            //
+            //         parishes.forEach(p => {
+            //             const opt = document.createElement('option');
+            //             opt.value = p.id;
+            //             opt.textContent = p.name;
+            //             parishSelect.appendChild(opt);
+            //         });
+            //     });
+            // }
+
+            async function fetchAndPopulate(selectEl, url, selectedId, placeholderText) {
+                selectEl.innerHTML = `<option value="">${placeholderText}</option>`;
+
+                try {
+                    const data = await fetch(url).then(res => res.json());
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = item.name;
+                        if (String(item.id) === selectedId) opt.selected = true;
+                        selectEl.appendChild(opt);
+                    });
+                } catch (e) {
+                    console.error(`Erro ao carregar dados de ${url}:`, e);
+                }
+            }
+
+            async function setupLocationSelects() {
                 const districtSelect = document.getElementById('districtSelect');
                 const municipalitySelect = document.getElementById('municipalitySelect');
                 const parishSelect = document.getElementById('parishSelect');
 
-                districtSelect.addEventListener('change', function () {
-                    const selectedOption = this.options[this.selectedIndex];
-                    const municipalities = JSON.parse(selectedOption.dataset.municipalities || '[]');
+                const selectedDistrict = "{{ $selectedDistrict }}";
+                const selectedMunicipality = "{{ $selectedMunicipality }}";
+                const selectedParish = "{{ $selectedParish }}";
 
+                if (selectedDistrict) {
+                    districtSelect.value = selectedDistrict;
+                    await fetchAndPopulate(
+                        municipalitySelect,
+                        `/districts/${selectedDistrict}/municipalities`,
+                        selectedMunicipality,
+                        'Concelho'
+                    );
+                }
+
+                if (selectedMunicipality) {
+                    await fetchAndPopulate(
+                        parishSelect,
+                        `/municipalities/${selectedMunicipality}/parishes`,
+                        selectedParish,
+                        'Freguesia'
+                    );
+                }
+
+                districtSelect.addEventListener('change', async function () {
+                    const districtId = this.value;
                     municipalitySelect.innerHTML = '<option value="">Concelho</option>';
                     parishSelect.innerHTML = '<option value="">Freguesia</option>';
 
-                    municipalities.forEach(m => {
-                        const opt = document.createElement('option');
-                        opt.value = m.id;
-                        opt.textContent = m.name;
-                        opt.dataset.parishes = JSON.stringify(m.parishes);
-                        municipalitySelect.appendChild(opt);
-                    });
+                    if (districtId) {
+                        await fetchAndPopulate(
+                            municipalitySelect,
+                            `/districts/${districtId}/municipalities`,
+                            null,
+                            'Concelho'
+                        );
+                    }
                 });
 
-                municipalitySelect.addEventListener('change', function () {
-                    const selectedOption = this.options[this.selectedIndex];
-                    const parishes = JSON.parse(selectedOption.dataset.parishes || '[]');
-
+                municipalitySelect.addEventListener('change', async function () {
+                    const municipalityId = this.value;
                     parishSelect.innerHTML = '<option value="">Freguesia</option>';
 
-                    parishes.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p.id;
-                        opt.textContent = p.name;
-                        parishSelect.appendChild(opt);
-                    });
+                    if (municipalityId) {
+                        await fetchAndPopulate(
+                            parishSelect,
+                            `/municipalities/${municipalityId}/parishes`,
+                            null,
+                            'Freguesia'
+                        );
+                    }
                 });
             }
 

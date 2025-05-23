@@ -36,21 +36,20 @@ class AdvertisementController extends Controller
         // Query base - usando os novos campos
         $query = Advertisement::where('is_published', true)
             ->where('is_suspended', false)
-            ->whereHas('creator', function($q) {
-                $q->where('state', 'active');
-            })
+//            ->whereHas('creator', function($q) {
+//                $q->where('state', 'active');
+//            })
             ->whereHas('property.property_type', function($q) {
                 $q->where('is_active', true);
             })
-            ->with('property.parameters.attribute')
-            ->select('advertisements.*');
+            ->with('property.parameters.attribute');
 
         // Aplicar filtros (assumindo que o AdvertisementFilterRequest já os aplica corretamente)
         $query = $request->applyFilters($query);
 
         // Carregamento de dados auxiliares para os selects
         $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
-        $districts = District::with('municipalities.parishes')->orderBy('name')->get();
+        $districts = District::where('is_active', true)->orderBy('name')->get();
 
         $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
         $perPage = $viewMode === 'list' ? 10 : 28;
