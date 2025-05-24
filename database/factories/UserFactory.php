@@ -36,7 +36,8 @@ class UserFactory extends Factory
             'email_notifications' => true,
             'message_notifications' => true,
             'public_profile' => true,
-            'show_email' => false,
+            'show_email' => true,
+            'show_telephone' => true,
             'state' => $this->faker->randomElement(['active', 'suspended', 'banned', 'archived']),
         ];
     }

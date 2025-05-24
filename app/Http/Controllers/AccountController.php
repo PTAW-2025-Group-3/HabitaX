@@ -16,7 +16,8 @@ class AccountController extends Controller
     public function updatePrivacy(Request $request)
     {
         $user = Auth::user();
-        $user->show_email = $request->has('show_email') ? 1 : 0;
+        $user->show_email = $request->has('show_email');
+        $user->show_telephone = $request->has('show_telephone');
         $user->save();
 
         return redirect()->back()->with('success', 'As configurações de privacidade foram atualizadas com sucesso.');

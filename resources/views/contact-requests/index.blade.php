@@ -107,7 +107,10 @@
                         'id' => $message->advertisement->id ?? 'N/A',
                         'messageId' => $message->id,
                         'created_by' => $message->created_by,
-                        'profile_picture' => $message->user->getProfilePictureUrl(),
+                        'profile_picture' => $message->created_by ? ($message->user->getProfilePictureUrl() ?? asset('images/default-avatar.png')) : asset('images/default-avatar.png'),
+                        'user' => $message->created_by ? $message->user : null,
+                        'show_email' => $message->created_by && $message->user ? $message->user->show_email : true,
+                        'show_telephone' => $message->created_by && $message->user ? $message->user->show_telephone : true,
                         'isReadOnly' => false
                     ])
                 @else
@@ -130,7 +133,9 @@
                         'recipient_email' => $adOwner->email ?? 'N/A',
                         'recipient_telephone' => $adOwner->telephone ?? null,
                         'recipient_profile_picture' => $adOwner->getProfilePictureUrl(),
-                        'isReadOnly' => true
+                        'isReadOnly' => true,
+                        'show_email' => $message->created_by && $message->user ? $message->user->show_email : true,
+                        'show_telephone' => $message->created_by && $message->user ? $message->user->show_telephone : true,
                     ])
                 @endif
             @empty

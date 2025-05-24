@@ -63,23 +63,39 @@
             @csrf
             @method('PUT')
             <div class="space-y-5">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <label class="font-medium text-gray-secondary">Mostrar email</label>
-                        <p class="text-sm text-gray mt-1">Permita que outros utilizadores vejam seu email</p>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="font-medium text-gray-secondary">Mostrar email</label>
+                            <p class="text-sm text-gray mt-1">Permita que outros utilizadores vejam o seu email</p>
+                        </div>
+
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="show_email" value="1" class="sr-only peer"
+                                {{ auth()->user()->show_email ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
+                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+                        </label>
                     </div>
 
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="show_email" value="1" class="sr-only peer"
-                            {{ auth()->user()->show_email ? 'checked' : '' }}>
-                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
-                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
-                    </label>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="font-medium text-gray-secondary">Mostrar telefone</label>
+                            <p class="text-sm text-gray mt-1">Permita que outros utilizadores vejam o seu telefone</p>
+                        </div>
+
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="show_telephone" value="1" class="sr-only peer"
+                                {{ auth()->user()->show_telephone ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
+                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="flex justify-end mt-4">
                     <button type="submit" class="btn-primary py-2 px-6">
-                        Salvar alterações
+                        Guardar alterações
                     </button>
                 </div>
             </div>

@@ -32,21 +32,39 @@
                     @endphp
 
                     @if(!$isOwner && $ad->creator->telephone)
-                        <button onclick="return showPhoneNumber(this, '{{ $ad->creator->telephone }}')" class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 border border-indigo-100 text-indigo-700 rounded-lg transition-all shadow-sm hover:shadow">
-                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                                <i class="bi bi-telephone-fill text-indigo-500"></i>
+                        @if($ad->creator->show_telephone)
+                            <button onclick="return showPhoneNumber(this, '{{ $ad->creator->telephone }}')" class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 border border-indigo-100 text-indigo-700 rounded-lg transition-all shadow-sm hover:shadow">
+                                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                    <i class="bi bi-telephone text-indigo-500"></i>
+                                </div>
+                                <span class="text-sm font-medium phone-text">Ver Número</span>
+                            </button>
+                        @else
+                            <div class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-slate-50 border border-gray-200 text-gray-600 rounded-lg shadow-sm">
+                                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                    <i class="bi bi-x-circle text-gray-400"></i>
+                                </div>
+                                <span class="text-sm font-medium">Telefone não disponível</span>
                             </div>
-                            <span class="text-sm font-medium phone-text">Ver Número</span>
-                        </button>
+                        @endif
                     @endif
 
                     @if(!$isOwner && $ad->creator->email)
-                        <a href="mailto:{{ $ad->creator->email }}" class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-50 to-purple-50 hover:from-violet-100 hover:to-purple-100 border border-purple-100 text-purple-700 rounded-lg transition-all shadow-sm hover:shadow">
-                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                                <i class="bi bi-envelope-fill text-purple-500"></i>
+                        @if($ad->creator->show_email)
+                            <a href="mailto:{{ $ad->creator->email }}" class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-50 to-purple-50 hover:from-violet-100 hover:to-purple-100 border border-purple-100 text-purple-700 rounded-lg transition-all shadow-sm hover:shadow">
+                                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                    <i class="bi bi-envelope-fill text-purple-500"></i>
+                                </div>
+                                <span class="text-sm font-medium">{{ $ad->creator->email }}</span>
+                            </a>
+                        @else
+                            <div class="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-50 to-slate-50 border border-gray-200 text-gray-600 rounded-lg shadow-sm">
+                                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                    <i class="bi bi-envelope-slash text-gray-400"></i>
+                                </div>
+                                <span class="text-sm font-medium">E-mail não disponível</span>
                             </div>
-                            <span class="text-sm font-medium">{{ $ad->creator->email }}</span>
-                        </a>
+                        @endif
                     @endif
                 </div>
             </div>

@@ -155,12 +155,14 @@
                             <div class="flex-grow"></div>
 
                             @if(!$isOwner)
-                                <button
-                                    data-advertiser-id="{{ $ad->creator->id ?? 0 }}"
-                                    class="phone-button px-3 py-1.5 bg-white text-blue-700 border border-blue-200 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 whitespace-nowrap">
-                                    <i class="bi bi-telephone-fill mr-1"></i>
-                                    Ver Telefone
-                                </button>
+                                @if($ad->creator->show_telephone)
+                                    <button
+                                        data-advertiser-id="{{ $ad->creator->id ?? 0 }}"
+                                        class="phone-button px-3 py-1.5 bg-white text-blue-700 border border-blue-200 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 whitespace-nowrap">
+                                        <i class="bi bi-telephone-fill mr-1"></i>
+                                        Ver Telefone
+                                    </button>
+                                @endif
 
                                 <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}"
                                    class="px-3 py-1.5 bg-blue-900 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition-all duration-200 whitespace-nowrap">
