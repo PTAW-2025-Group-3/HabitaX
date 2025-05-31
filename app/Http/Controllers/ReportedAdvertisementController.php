@@ -45,7 +45,7 @@ class ReportedAdvertisementController extends Controller
             // Aplicar filtro
             $filter = $request->input('filter', 'all');
             if ($filter === 'pending') {
-                // Para denúncias pendentes, filtramos anúncios não suspensos e usuários ativos
+                // Para denúncias pendentes, filtramos anúncios não suspensos e utilizadores ativos
                 $query->where('report_state', 0)
                     ->whereHas('advertisement', function($subQuery) {
                         $subQuery->where('is_suspended', false)

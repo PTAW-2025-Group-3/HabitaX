@@ -72,7 +72,7 @@ function initPagination() {
                                 </td>
                             </tr>
                         `;
-                        console.error('Erro ao buscar usuários:', error);
+                        console.error('Erro ao buscar utilizadores:', error);
                     });
             });
         });

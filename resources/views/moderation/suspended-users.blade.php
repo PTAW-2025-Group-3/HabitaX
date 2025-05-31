@@ -425,7 +425,7 @@
                         if (data.success) {
                             window.location.reload();
                         } else {
-                            alert('Erro ao atualizar estado do usuário.');
+                            alert('Erro ao atualizar estado do utilizador.');
                             this.disabled = false;
                             this.innerHTML = 'Atualizar Estado';
                         }

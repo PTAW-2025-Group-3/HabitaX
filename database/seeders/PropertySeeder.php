@@ -22,8 +22,8 @@ class PropertySeeder extends Seeder
         }
 
         Property::factory()->count(20)->create()->each(function ($property) use ($imageFiles) {
-            //$count = rand(5, 8);
-            $count = 1;
+            $count = rand(5, 8);
+            // $count = 1;
             $randomFiles = collect($imageFiles)->random($count);
 
             foreach ($randomFiles as $path) {

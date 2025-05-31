@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Models\Denunciation;
 use App\Models\User;
+use App\Traits\MonthsInPortuguese;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ModerationController extends Controller
 {
+
+    use MonthsInPortuguese;
+
     public function index()
     {
+
+        Carbon::setLocale('pt_PT'); // ou 'pt_PT' para português de Portugal
+
         // Get data for denunciations
         $reportedController = new ReportedAdvertisementController();
         $denunciationData = $reportedController->index();
@@ -43,11 +50,13 @@ class ModerationController extends Controller
         // Preparar últimos 6 meses
         $suspendedUsersData = [];
         $reportedAdsData = [];
-        $monthLabels = [];
+        $monthLabels = $this->generateMonthLabels();
+
+        $startDate = Carbon::now()->startOfMonth();
 
         for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $monthLabels[] = $date->format('M'); // Apenas aqui!
+            $date = clone $startDate;
+            $date = $date->subMonths($i);
 
             $suspendedUsersData[] = User::where('state', 'suspended')
                 ->whereYear('updated_at', $date->year)

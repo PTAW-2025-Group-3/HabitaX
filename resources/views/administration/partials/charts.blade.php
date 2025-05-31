@@ -1,19 +1,72 @@
-<div class="col-span-1 bg-white p-4 shadow rounded-xl">
-    <h4 class="font-semibold text-primary mb-2">Anúncios</h4>
-    <canvas id="anunciosChart" class="w-full h-48"></canvas>
+<div class="bg-white rounded-xl shadow-sm border border-gray overflow-hidden">
+    <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-secondary">Anúncios</h3>
+        <p class="text-sm text-gray mt-1">Últimos 6 meses</p>
+    </div>
+    <div class="px-6 pb-6">
+        <div class="h-52">
+            <canvas id="anunciosChart"></canvas>
+        </div>
+    </div>
 </div>
-<div class="col-span-1 bg-white p-4 shadow rounded-xl">
-    <h4 class="font-semibold text-primary mb-2">Utilizadores</h4>
-    <canvas id="utilizadoresChart" class="w-full h-48"></canvas>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray overflow-hidden">
+    <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-secondary">Utilizadores</h3>
+        <p class="text-sm text-gray mt-1">Últimos 6 meses</p>
+    </div>
+    <div class="px-6 pb-6">
+        <div class="h-52">
+            <canvas id="utilizadoresChart"></canvas>
+        </div>
+    </div>
 </div>
-<div class="col-span-1 bg-white p-4 shadow rounded-xl">
-    <h4 class="font-semibold text-primary mb-2">Utilizadores por Tipo</h4>
-    <canvas id="userRolesChart" class="w-full h-48"></canvas>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray overflow-hidden">
+    <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-secondary">Utilizadores por Tipo</h3>
+        <p class="text-sm text-gray mt-1">Distribuição atual</p>
+    </div>
+    <div class="px-6 pb-6">
+        <div class="h-52">
+            <canvas id="userRolesChart"></canvas>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const labels = @json($chartLabels);
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(context) {
+                        return labels[context[0].dataIndex] + ' ' + new Date().getFullYear();
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: true,
+                    color: 'rgba(0,0,0,0.05)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    };
 
     new Chart(document.getElementById('anunciosChart'), {
         type: 'line',
@@ -22,24 +75,14 @@
             datasets: [{
                 label: 'Anúncios',
                 data: @json($anunciosData),
-                borderColor: '#4f46e5',
-                backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 fill: true,
-                tension: 0.3
+                tension: 0.3,
+                borderWidth: 3
             }]
         },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        title: function(context) {
-                            return labels[context[0].dataIndex] + ' ' + new Date().getFullYear();
-                        }
-                    }
-                }
-            }
-        }
+        options: chartOptions
     });
 
     new Chart(document.getElementById('utilizadoresChart'), {
@@ -49,8 +92,24 @@
             datasets: [{
                 label: 'Utilizadores',
                 data: @json($utilizadoresData),
-                backgroundColor: '#1d4ed8'
-            }]
+                backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                borderRadius: 4,
+                barPercentage: 0.8,
+                categoryPercentage: 0.9
+            }],
+        },
+        options: {
+            ...chartOptions,
+            scales: {
+                ...chartOptions.scales,
+                x: {
+                    ...chartOptions.scales.x,
+                    offset: true,
+                    ticks: {
+                        align: 'center'
+                    }
+                }
+            }
         }
     });
 
@@ -66,15 +125,46 @@
                     '#3b82f6', // blue for users
                     '#8b5cf6', // purple for moderators
                     '#ef4444'  // red for admins
-                ]
+                ],
+                borderRadius: 4,
+                barPercentage: 0.6, // Reduz a largura das barras para 60%
+                categoryPercentage: 0.8 // Ajusta o espaçamento entre categorias
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: false
                 }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        color: 'rgba(0,0,0,0.05)'
+                    },
+                    // Garante que o eixo Y tenha espaço suficiente no topo
+                    suggestedMax: function(context) {
+                        const max = Math.max(...context.chart.data.datasets[0].data);
+                        return max * 1.2; // Adiciona 20% de espaço acima do valor máximo
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 15 // Adiciona um padding no topo do gráfico
+                }
+            },
+            animation: {
+                duration: 1000 // Animação mais suave
             }
         }
     });

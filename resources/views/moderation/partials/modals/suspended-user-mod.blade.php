@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md z-10 mx-4">
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900" id="suspendModalTitle">Gerenciar Estado do Utilizador</h3>
+                <h3 class="text-lg font-bold text-gray-900" id="suspendModalTitle">Gerir Estado do Utilizador</h3>
                 <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" id="closeSuspendModal">
                     <i class="bi bi-x-lg"></i>
                 </button>

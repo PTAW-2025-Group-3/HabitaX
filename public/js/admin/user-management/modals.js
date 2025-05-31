@@ -38,7 +38,7 @@ function initModals() {
                 const stateSelect = document.getElementById('stateSelect');
                 stateSelect.value = currentState;
 
-                suspendModalTitle.textContent = 'Gerenciar Estado do Utilizador';
+                suspendModalTitle.textContent = 'Gerir Estado do Utilizador';
                 if (suspendBtnText) {
                     suspendBtnText.textContent = 'Atualizar Estado';
                 } else {

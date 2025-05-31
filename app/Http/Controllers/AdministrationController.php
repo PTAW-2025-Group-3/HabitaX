@@ -3,29 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\{Advertisement, User, Property, Denunciation};
+use App\Traits\MonthsInPortuguese;
 use Illuminate\Http\Request;
 
 class AdministrationController extends Controller
 {
+    use MonthsInPortuguese;
+
     public function index()
     {
-        $months = collect();
+        $months = collect($this->generateMonthLabels());
         $anunciosData = collect();
         $utilizadoresData = collect();
 
+        // Começar no primeiro dia do mês atual e voltar 5 meses
+        $startDate = now()->startOfMonth();
+
         for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
-            $months->push($month->format('M'));
+            $date = clone $startDate;
+            $date = $date->subMonths($i);
 
             $anunciosData->push(
-                Advertisement::whereYear('created_at', $month->year)
-                    ->whereMonth('created_at', $month->month)
+                Advertisement::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
                     ->count()
             );
 
             $utilizadoresData->push(
-                User::whereYear('created_at', $month->year)
-                    ->whereMonth('created_at', $month->month)
+                User::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
                     ->count()
             );
         }

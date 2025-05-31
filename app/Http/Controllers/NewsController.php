@@ -16,7 +16,7 @@ class NewsController extends Controller
     {
         try {
             return Cache::remember('noticias_feed', 3600, function () {
-                $response = Http::get('https://rss.app/feeds/v1.1/L9b0G4SHxjbI1KSD.json');
+                $response = Http::get('https://rss.app/feeds/v1.1/oo67lwym5zAVNg65.json');
                 if ($response->successful()) {
                     return $response->json();
                 }

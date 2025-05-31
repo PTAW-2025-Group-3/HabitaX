@@ -72,7 +72,7 @@ class NewPasswordController extends Controller
         // Traduzindo mensagens comuns de erro
         $customMessages = [
             'passwords.token' => 'O link de redefinição de senha é inválido ou expirou.',
-            'passwords.user' => 'Não encontramos um usuário com esse endereço de e-mail.',
+            'passwords.user' => 'Não encontramos um utilizador com esse endereço de e-mail.',
             'passwords.throttled' => 'Por favor, aguarde antes de tentar novamente.',
         ];
 

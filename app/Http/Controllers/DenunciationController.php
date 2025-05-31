@@ -21,12 +21,12 @@ class DenunciationController extends Controller
         $maxReportsPerDay = \App\Models\GlobalVariable::where('code', 'max_reports_per_day')
             ->first()->value ?? 5;
 
-        // Contar quantas denúncias o usuário já fez hoje
+        // Contar quantas denúncias o utilizador já fez hoje
         $todayReportsCount = Denunciation::where('created_by', auth()->id())
             ->whereDate('submitted_at', now()->toDateString())
             ->count();
 
-        // Verificar se o usuário atingiu o limite
+        // Verificar se o utilizador atingiu o limite
         if ($todayReportsCount >= $maxReportsPerDay) {
             return response()->json([
                 'message' => "Limite diário de {$maxReportsPerDay} denúncia(s) atingido. Tente novamente amanhã."

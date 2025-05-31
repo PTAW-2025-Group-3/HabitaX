@@ -29,13 +29,13 @@ class GlobalVariableSeeder extends Seeder
                 'name' => 'Máximo de tentativas de verificação de anunciante',
                 'code' => 'max_advertiser_verification_trials',
                 'value' => 3,
-                'description' => 'Número máximo de tentativas que um usuário pode fazer para verificação como anunciante antes de ser bloqueado.',
+                'description' => 'Número máximo de tentativas que um utilizador pode fazer para verificação como anunciante antes de ser bloqueado.',
             ],
             [
-                'name' => 'Máximo de denúncias diárias por usuário',
+                'name' => 'Máximo de denúncias diárias por utilizador',
                 'code' => 'max_reports_per_day',
                 'value' => 5,
-                'description' => 'Número máximo de denúncias que um usuário pode fazer por dia.',
+                'description' => 'Número máximo de denúncias que um utilizador pode fazer por dia.',
             ],
         ];
 

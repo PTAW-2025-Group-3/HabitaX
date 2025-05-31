@@ -59,7 +59,7 @@ class ContactRequestController extends Controller
             'privacy_policy' => 'required|accepted',
         ]);
 
-        // Verificar se o usuário logado é o dono do anúncio
+        // Verificar se o utilizador logado é o dono do anúncio
         if (auth()->check()) {
             $advertisement = Advertisement::find($validated['advertisement_id']);
 

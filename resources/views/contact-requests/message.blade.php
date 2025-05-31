@@ -31,7 +31,7 @@
                                 </span>
                             @endif
                         @elseif(isset($created_by) && $created_by)
-                            <!-- Informações do remetente para mensagens recebidas (usuários registrados) -->
+                            <!-- Informações do remetente para mensagens recebidas (utilizadores registados) -->
                             @if(isset($user) && $user->show_email)
                                 <span class="text-xs text-gray">{{ $email }}</span>
                             @else
