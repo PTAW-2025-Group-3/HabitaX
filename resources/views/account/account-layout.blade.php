@@ -29,7 +29,7 @@
                                 </a>
 
                                 <a href="{{ route('advertisements.favorites') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary  rounded-md hover:bg-gray-50 group {{ request()->routeIs('advertisements.favorites') ? 'bg-gray-50' : '' }}">
+                                   class="flex items-center px-4 py-2 text-sm font-medium text-gray-secondary rounded-md hover:bg-gray-50 group {{ request()->routeIs('advertisements.favorites') || request()->routeIs('favorites.index') ? 'bg-gray-50' : '' }}">
                                     <i class="bi bi-heart-fill me-3 text-gray-400 group-hover:text-gray"></i>
                                     Favoritos
                                 </a>

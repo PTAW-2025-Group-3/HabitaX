@@ -498,7 +498,7 @@
             <!-- Última Atualização -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mt-8">
                 <div class="text-center">
-                    <p class="text-gray-600">Última atualização: <span class="font-medium text-blue-900">15 de abril de 2025</span></p>
+                    <p class="text-gray-600">Última atualização: <span class="font-medium text-blue-900">6 de Junho de 2025</span></p>
                 </div>
             </div>
         </div>

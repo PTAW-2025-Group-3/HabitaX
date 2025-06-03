@@ -196,13 +196,26 @@
                         successMessage.classList.remove('hidden');
                         form.reset();
 
-                        // Keep email if user is logged in
+                        // Limpar todas as mensagens de erro
+                        document.querySelectorAll('.text-red-500').forEach(el => el.remove());
+
+                        // Remover a classe de borda vermelha dos inputs
+                        document.querySelectorAll('.border-red-300').forEach(input => {
+                            input.classList.remove('border-red-300');
+                        });
+
+                        // Manter email se o utilizador estiver logado
                         const userEmail = "{{ auth()->user()?->email ?? '' }}";
                         if (userEmail) {
                             document.getElementById('email').value = userEmail;
                         }
 
-                        // Scroll to success message
+                        // Reiniciar o contador de caracteres
+                        if (charCount) {
+                            charCount.textContent = '0';
+                        }
+
+                        // Rolar para a mensagem de sucesso
                         successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     })
                     .catch(errors => {

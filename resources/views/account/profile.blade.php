@@ -76,7 +76,7 @@
                         <label for="bio" class="block text-gray-secondary font-medium mb-2">Biografia</label>
                         <textarea name="bio" id="bio" rows="4"
                                   class="form-input w-full"
-                                  placeholder="Conte um pouco sobre você...">{{ auth()->user()->bio ?? '' }}</textarea>
+                                  placeholder="Conta um pouco sobre ti...">{{ auth()->user()->bio ?? '' }}</textarea>
                         @error('bio')
                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -84,7 +84,7 @@
 
                     <div class="flex justify-center sm:justify-end">
                         <button type="submit" class="btn-primary py-2 px-6 w-full sm:w-auto">
-                            Salvar alterações
+                            Guardar alterações
                         </button>
                     </div>
                 </form>

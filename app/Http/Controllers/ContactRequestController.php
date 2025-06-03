@@ -16,33 +16,74 @@ class ContactRequestController extends Controller
         // Default to 'sent' for non-advertisers, otherwise use the request parameter
         $requestType = $isAdvertiser ? $request->get('type', 'received') : 'sent';
 
-        if ($requestType === 'received') {
-            // Anúncios para filtro (para pedidos recebidos)
-            $ads = Advertisement::where('created_by', auth()->user()->id)
-                ->whereHas('requests')
-                ->orderBy('created_at', 'desc')
-                ->get();
+        // Obter parâmetros de filtro
+        $status = $request->get('status', 'all');
+        $advertisementId = $request->get('advertisement_id');
+        $userType = $request->get('user_type', 'all');
+        $search = $request->get('search');
 
-            // Pedidos recebidos (para anúncios do utilizador)
-            $messages = ContactRequest::with('user')
+        // Query base para anúncios
+        $adsQuery = Advertisement::query();
+
+        if ($requestType === 'received') {
+            $adsQuery->where('created_by', auth()->user()->id)
+                ->whereHas('requests')
+                ->orderBy('created_at', 'desc');
+
+            // Query base para mensagens recebidas
+            $messagesQuery = ContactRequest::with('user')
                 ->whereHas('advertisement', function ($query) {
                     $query->where('created_by', auth()->user()->id);
-                })
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                });
         } else {
-            // Anúncios para filtro (anúncios aos quais o utilizador enviou mensagens)
-            $ads = Advertisement::whereHas('requests', function($query) {
+            $adsQuery->whereHas('requests', function($query) {
                 $query->where('created_by', auth()->id());
             })
-                ->orderBy('created_at', 'desc')
-                ->get();
+                ->orderBy('created_at', 'desc');
 
-            // Pedidos enviados pelo utilizador
-            $messages = ContactRequest::with(['advertisement.creator'])
-                ->where('created_by', auth()->id())
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+            // Query base para mensagens enviadas
+            $messagesQuery = ContactRequest::with(['advertisement.creator'])
+                ->where('created_by', auth()->id());
+        }
+
+        // Aplicar filtros à query
+        if ($status !== 'all') {
+            $messagesQuery->where('state', $status);
+        }
+
+        if ($advertisementId) {
+            $messagesQuery->where('advertisement_id', $advertisementId);
+        }
+
+        if ($userType !== 'all' && $requestType === 'received') {
+            if ($userType === 'registered') {
+                $messagesQuery->whereNotNull('created_by');
+            } elseif ($userType === 'guest') {
+                $messagesQuery->whereNull('created_by');
+            }
+        }
+
+        if ($search) {
+            $messagesQuery->where(function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Ordenar e paginar
+        $messages = $messagesQuery->orderBy('created_at', 'desc')->paginate(5);
+        $ads = $adsQuery->get();
+
+        // Para requisições AJAX, retornar dados JSON
+        if ($request->ajax()) {
+            $view = view('contact-requests.message-list', compact('messages', 'requestType', 'isAdvertiser'))->render();
+            $pagination = view('vendor.pagination.tailwind', ['paginator' => $messages])->render();
+
+            return response()->json([
+                'html' => $view,
+                'pagination' => $pagination,
+                'count' => $messages->count()
+            ]);
         }
 
         return view('contact-requests.index', compact('messages', 'ads', 'requestType', 'isAdvertiser'));
@@ -50,14 +91,22 @@ class ContactRequestController extends Controller
 
     public function store(Request $request)
     {
+        $messages = [
+            'telephone.regex' => 'O número de telefone deve ser um número português válido (9 dígitos começando com 2, 3 ou 9, com ou sem o prefixo +351).',
+            'name.regex' => 'O nome deve conter apenas letras, espaços, hífens ou apóstrofos.',
+        ];
+
         $validated = $request->validate([
             'advertisement_id' => 'required|exists:advertisements,id',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^[\pL\s\-\']+$/u',
             'email' => 'required|email',
-            'telephone' => 'required|string|min:9',
+            'telephone' => [
+                'required',
+                'regex:/^(\+351)?[2,3,9]\d{8}$/',
+            ],
             'message' => 'required|string|min:10',
             'privacy_policy' => 'required|accepted',
-        ]);
+        ], $messages);
 
         // Verificar se o utilizador logado é o dono do anúncio
         if (auth()->check()) {

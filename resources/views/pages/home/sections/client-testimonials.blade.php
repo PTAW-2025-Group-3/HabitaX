@@ -13,20 +13,60 @@
                 $path = 'images/clients/';
                 $testemunhos = [
                     [
-                        ['nome' => 'John Doe I', 'imagem' => 'client1.jpg', 'profissao' => 'Arquiteto', 'mensagem' => 'O HabitaX ajudou-me a arrendar o apartamento rapidamente. Em menos de uma semana já tinha interessados. Recomendo pela segurança e facilidade.'],
-                        ['nome' => 'John Doe II', 'imagem' => 'client2.jpg', 'profissao' => 'Professor Assistente', 'mensagem' => 'Encontrei exatamente o que procurava para o meu estúdio de tatuagem. A plataforma é rápida e o proprietário respondeu de imediato!']
+                        [
+                            'nome' => 'João Figueira',
+                            'imagem' => 'client1.jpg',
+                            'profissao' => 'Arquiteto',
+                            'mensagem' => 'O HabitaX ajudou-me a arrendar o T1 mais rápido do que o tempo que demorei a montar o IKEA. Em três dias já tinha visitas marcadas. Recomendo!'
+                        ],
+                        [
+                            'nome' => 'Beatriz Lopes',
+                            'imagem' => 'client2.jpg',
+                            'profissao' => 'Professora Assistente',
+                            'mensagem' => 'Achei o espaço ideal para as minhas aulas de yoga online. Silencioso, boa luz e sem vizinhos a tocar flauta às 8h da manhã. 10/10!'
+                        ]
                     ],
                     [
-                        ['nome' => 'Jane Doe', 'imagem' => 'client3.jpg', 'profissao' => 'Freelancer', 'mensagem' => 'I found a perfect place in Lisbon. HabitaX makes things really easy!'],
-                        ['nome' => 'Carlos Pinto', 'imagem' => 'client4.jpg', 'profissao' => 'Digital Nomad', 'mensagem' => 'Easy booking and smooth process. Recommended for anyone looking to rent short-term!']
+                        [
+                            'nome' => 'André Costa',
+                            'imagem' => 'client3.jpg',
+                            'profissao' => 'Freelancer em TI',
+                            'mensagem' => 'Encontrei um T0 com internet melhor que a do meu antigo escritório. Agora trabalho de pantufas e café sempre à mão. Obrigado, HabitaX!'
+                        ],
+                        [
+                            'nome' => 'Inês Matos',
+                            'imagem' => 'client4.jpg',
+                            'profissao' => 'Nómada Digital',
+                            'mensagem' => 'Arrendei um loft em menos tempo do que o delivery da UberEats. O senhorio respondeu mais rápido que o meu ex. Fantástico!'
+                        ]
                     ],
                     [
-                        ['nome' => 'Maria Silva', 'imagem' => 'client5.jpg', 'profissao' => 'Designer Gráfico', 'mensagem' => 'A plataforma é intuitiva e fácil de usar. Encontrei o apartamento perfeito em Lisboa!'],
-                        ['nome' => 'Pedro Santos', 'imagem' => 'client6.jpg', 'profissao' => 'Engenheiro de Software', 'mensagem' => 'O suporte ao cliente foi excepcional. Resolvi todas as minhas dúvidas rapidamente.']
+                        [
+                            'nome' => 'Manuela Moura Guedes',
+                            'imagem' => 'client5.jpg',
+                            'profissao' => 'Designer Gráfico',
+                            'mensagem' => 'O site é tão fácil de usar que até o meu gato quase fez uma reserva enquanto dormia em cima do teclado.'
+                        ],
+                        [
+                            'nome' => 'Cláudia Ferreira',
+                            'imagem' => 'client6.jpg',
+                            'profissao' => 'Engenheira de Software',
+                            'mensagem' => 'O suporte respondeu-me num piscar de olhos. Mais rápido que a minha app em produção (e com menos bugs).'
+                        ]
                     ],
                     [
-                        ['nome' => 'Mia Costa', 'imagem' => 'client7.jpg', 'profissao' => 'Atriz', 'mensagem' => 'Amei a experiência de alugar através do HabitaX. O processo foi simples e rápido!'],
-                        ['nome' => 'Luís Almeida', 'imagem' => 'client8.jpg', 'profissao' => 'Fotógrafo', 'mensagem' => 'Encontrei o espaço perfeito para o meu estúdio. Recomendo a todos!']
+                        [
+                            'nome' => 'Marta Cruz',
+                            'imagem' => 'client7.jpg',
+                            'profissao' => 'Atriz',
+                            'mensagem' => 'A experiência foi tão boa que quase pedi uma segunda casa... só porque sim. Simples, rápido e sem dramas (nem ensaios!).'
+                        ],
+                        [
+                            'nome' => 'Tiago Rocha',
+                            'imagem' => 'client8.jpg',
+                            'profissao' => 'Fotógrafo',
+                            'mensagem' => 'Encontrei o estúdio ideal. Luz natural impecável, vizinhos discretos e uma parede branca digna de catálogo.'
+                        ]
                     ]
                 ];
             @endphp

@@ -64,7 +64,9 @@ Route::get('/advertiser/{id}/phone', function ($id) {
 
 Route::middleware('auth')->controller(AdvertisementController::class)->group(function () {
     Route::get('/advertisements/my', 'my')->name('advertisements.my');
-    Route::get('/advertisements/favorites', 'favorites')->name('advertisements.favorites');
+    Route::get('/advertisements/favorites', function() {
+        return redirect()->route('favorites.index');
+    })->name('advertisements.favorites');
     Route::get('/advertisements/create', 'create')->name('advertisements.create');
     Route::post('/advertisements', 'store')->name('advertisements.store');
     Route::get('/advertisements/{id}/edit', 'edit')->name('advertisements.edit');

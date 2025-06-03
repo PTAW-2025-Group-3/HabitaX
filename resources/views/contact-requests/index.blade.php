@@ -16,25 +16,39 @@
             <!-- Request Type Selector - only for advertisers -->
             @if($isAdvertiser)
                 <div class="flex rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-                    <a href="{{ route('contact-requests.index', ['type' => 'received']) }}"
+                    <a href="{{ route('contact-requests.index', ['type' => 'received'] + request()->except('type', 'page')) }}"
                        class="px-4 py-2 text-sm font-medium {{ $requestType === 'received' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50' }}">
-                        Pedidos Recebidos
+                        Recebidos
                     </a>
-                    <a href="{{ route('contact-requests.index', ['type' => 'sent']) }}"
+                    <a href="{{ route('contact-requests.index', ['type' => 'sent'] + request()->except('type', 'page')) }}"
                        class="px-4 py-2 text-sm font-medium {{ $requestType === 'sent' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50' }}">
-                        Pedidos Enviados
+                        Enviados
                     </a>
                 </div>
             @endif
 
-            <!-- Search bar - only show for received requests -->
-            <div class="relative w-full md:w-64 {{ $requestType !== 'received' ? 'invisible' : '' }}">
-                <input type="search" id="user_search" class="form-input ps-10 w-full" placeholder="Pesquisar por nome...">
-            </div>
+            <!-- Search form - only show for received requests -->
+            <form action="{{ route('contact-requests.index') }}" method="GET" class="w-full md:w-64 {{ $requestType !== 'received' ? 'invisible' : '' }}">
+                @foreach(request()->except('search', 'page') as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                <div class="relative">
+                    <input type="search" name="search" id="user_search" class="form-input ps-10 w-full"
+                           placeholder="Pesquisar por nome..." value="{{ request('search') }}">
+                    <button type="submit" class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <!-- Filter Controls - Always show some filters with conditionals for each type -->
-        <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+        <!-- Filter Controls -->
+        <form action="{{ route('contact-requests.index') }}" method="GET" id="filter-form" class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <!-- Manter os parâmetros de rota existentes que não são filtros -->
+            <input type="hidden" name="type" value="{{ $requestType }}">
+            @if(request('search'))
+                <input type="hidden" name="search" value="{{ request('search') }}">
+            @endif
+
             <div class="flex items-center mb-2">
                 <i class="bi bi-funnel mr-2 text-gray-500"></i>
                 <h3 class="text-sm font-medium text-gray-700">Filtros</h3>
@@ -45,14 +59,14 @@
                 <div class="relative">
                     <label for="message_status" class="block text-xs font-medium text-gray-500 mb-1">Estado</label>
                     <div class="relative dropdown-wrapper">
-                        <select id="message_status" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
-                            <option value="all">Todos</option>
-                            <option value="unread">Não lidos</option>
-                            <option value="read">Lidos</option>
-                            <option value="archived">Arquivados</option>
+                        <select name="status" id="message_status" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
+                            <option value="all" {{ request('status', 'all') == 'all' ? 'selected' : '' }}>Todos os estados</option>
+                            <option value="unread" {{ request('status') == 'unread' ? 'selected' : '' }}>Não lidos</option>
+                            <option value="read" {{ request('status') == 'read' ? 'selected' : '' }}>Lidos</option>
+                            <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Arquivados</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                            <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                            <i class="bi bi-chevron-down"></i>
                         </div>
                     </div>
                 </div>
@@ -61,14 +75,16 @@
                 <div class="relative">
                     <label for="ad_filter" class="block text-xs font-medium text-gray-500 mb-1">Anúncio</label>
                     <div class="relative dropdown-wrapper">
-                        <select id="ad_filter" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
+                        <select name="advertisement_id" id="ad_filter" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
                             <option value="">Todos os anúncios</option>
                             @foreach ($ads as $ad)
-                                <option value="{{ $ad->id }}">{{ $ad->title }}</option>
+                                <option value="{{ $ad->id }}" {{ request('advertisement_id') == $ad->id ? 'selected' : '' }}>
+                                    {{ Str::limit($ad->title, 40) }}
+                                </option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                            <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                            <i class="bi bi-chevron-down"></i>
                         </div>
                     </div>
                 </div>
@@ -78,19 +94,19 @@
                     <div class="relative">
                         <label for="user_type_filter" class="block text-xs font-medium text-gray-500 mb-1">Tipo de utilizador</label>
                         <div class="relative dropdown-wrapper">
-                            <select id="user_type_filter" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
-                                <option value="all">Todos os utilizadores</option>
-                                <option value="registered">Utilizadores registados</option>
-                                <option value="guest">Utilizadores não registados</option>
+                            <select name="user_type" id="user_type_filter" class="dropdown-select py-2 pl-4 pr-10 h-10 text-sm w-full">
+                                <option value="all" {{ request('user_type', 'all') == 'all' ? 'selected' : '' }}>Todos os utilizadores</option>
+                                <option value="registered" {{ request('user_type') == 'registered' ? 'selected' : '' }}>Registados</option>
+                                <option value="guest" {{ request('user_type') == 'guest' ? 'selected' : '' }}>Convidados</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
-                                <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
+                                <i class="bi bi-chevron-down"></i>
                             </div>
                         </div>
                     </div>
                 @endif
             </div>
-        </div>
+        </form>
 
         <!-- Messages List -->
         <div id="messages_container" class="space-y-4">
@@ -142,14 +158,18 @@
                 <div class="text-center py-10">
                     <i class="bi bi-chat-left-dots text-gray text-5xl mb-4"></i>
                     <h3 class="text-lg font-medium text-gray-secondary">
-                        @if($isAdvertiser && $requestType === 'received')
+                        @if (request('status') || request('advertisement_id') || request('user_type') || request('search'))
+                            Nenhuma mensagem encontrada
+                        @elseif($isAdvertiser && $requestType === 'received')
                             Sem pedidos de contacto recebidos
                         @else
                             Sem pedidos de contacto enviados
                         @endif
                     </h3>
                     <p class="text-gray mt-2">
-                        @if($isAdvertiser && $requestType === 'received')
+                        @if (request('status') || request('advertisement_id') || request('user_type') || request('search'))
+                            Não foram encontradas mensagens com os filtros selecionados.
+                        @elseif($isAdvertiser && $requestType === 'received')
                             Ainda não recebeu nenhum pedido de contacto.
                         @else
                             Ainda não enviou nenhum pedido de contacto.
@@ -161,69 +181,24 @@
 
         <!-- Pagination -->
         <div class="mt-6">
-            {{ $messages->appends(['type' => $requestType])->links('vendor.pagination.tailwind') }}
-        </div>
-
-        <!-- Empty state -->
-        <div id="no_messages" class="hidden text-center py-10">
-            <i class="bi bi-chat-left-dots text-gray text-5xl mb-4"></i>
-            <h3 class="text-lg font-medium text-gray-secondary">Nenhuma mensagem encontrada</h3>
-            <p class="text-gray mt-2">Não foram encontradas mensagens com os filtros selecionados.</p>
+            {{ $messages->appends(request()->query())->links('vendor.pagination.tailwind') }}
         </div>
     </div>
     @push('scripts')
-        <!-- JavaScript remains mostly the same, just need to handle read-only state -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const statusFilter = document.getElementById('message_status');
-                const adFilter = document.getElementById('ad_filter');
-                const userTypeFilter = document.getElementById('user_type_filter');
-                const userSearch = document.getElementById('user_search');
-                const messagesContainer = document.getElementById('messages_container');
-                const noMessages = document.getElementById('no_messages');
-                const messages = messagesContainer.querySelectorAll('[data-status]');
-
-                const requestType = '{{ $requestType }}';
-                const isAdvertiser = {{ $isAdvertiser ? 'true' : 'false' }};
-
-                function filterMessages() {
-                    const statusValue = statusFilter ? statusFilter.value : 'all';
-                    const propertyValue = adFilter ? adFilter.value : '';
-                    const userTypeValue = userTypeFilter ? userTypeFilter.value : 'all';
-                    const searchValue = userSearch ? userSearch.value.toLowerCase() : '';
-                    let visibleCount = 0;
-
-                    messages.forEach(message => {
-                        const messageStatus = message.getAttribute('data-status');
-                        const messageProperty = message.getAttribute('data-property');
-                        const messageUserType = message.getAttribute('data-user-type');
-
-                        // Only get user name if search input exists and has a value
-                        const userName = searchValue && message.querySelector('h3') ?
-                            message.querySelector('h3').textContent.toLowerCase() : '';
-
-                        const statusMatch = statusValue === 'all' || messageStatus === statusValue;
-                        const propertyMatch = propertyValue === '' || messageProperty === propertyValue;
-                        const userTypeMatch = userTypeValue === 'all' || messageUserType === userTypeValue;
-                        const searchMatch = !searchValue || userName.includes(searchValue);
-
-                        if (statusMatch && propertyMatch && userTypeMatch && searchMatch) {
-                            message.classList.remove('hidden');
-                            visibleCount++;
-                        } else {
-                            message.classList.add('hidden');
-                        }
+                // Auto-submit na mudança dos selects para melhorar a experiência do usuário
+                document.querySelectorAll('#message_status, #ad_filter, #user_type_filter').forEach(select => {
+                    select.addEventListener('change', function() {
+                        document.getElementById('filter-form').submit();
                     });
-
-                    noMessages.classList.toggle('hidden', visibleCount !== 0 || messages.length === 0);
-                }
-
-                if (statusFilter) statusFilter.addEventListener('change', filterMessages);
-                if (adFilter) adFilter.addEventListener('change', filterMessages);
-                if (userTypeFilter) userTypeFilter.addEventListener('change', filterMessages);
-                if (userSearch) userSearch.addEventListener('input', filterMessages);
+                });
 
                 // Only allow status updates for received messages
+                const isAdvertiser = {{ $isAdvertiser ? 'true' : 'false' }};
+                const requestType = '{{ $requestType }}';
+                const messagesContainer = document.getElementById('messages_container');
+
                 if (isAdvertiser && requestType === 'received') {
                     async function updateRequestStatus(requestId, newStatus) {
                         try {
@@ -318,48 +293,33 @@
 
                         message.setAttribute('data-status', newStatus);
 
-                        if (statusBadge) {
-                            if (newStatus === 'read') {
-                                statusBadge.textContent = 'Lido';
-                                statusBadge.className = 'status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800';
-                            } else if (newStatus === 'unread') {
-                                statusBadge.textContent = 'Não lido';
-                                statusBadge.className = 'status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800';
-                            } else if (newStatus === 'archived') {
-                                statusBadge.textContent = 'Arquivado';
-                                statusBadge.className = 'status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-300 text-gray-700';
-                            }
-                        }
-
                         if (buttonsContainer) {
                             if (newStatus === 'read') {
                                 buttonsContainer.innerHTML = `
-                        <button class="btn-primary py-1.5 px-3 text-xs status-action-btn" data-action="mark-unread">
-                            <i class="bi bi-envelope mr-1"></i> Marcar como não lido
-                        </button>
-                        <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="archive">
-                            <i class="bi bi-archive mr-1"></i> Arquivar
-                        </button>
-                    `;
+                                <button class="btn-primary py-1.5 px-3 text-xs status-action-btn" data-action="mark-unread">
+                                    <i class="bi bi-envelope mr-1"></i> Marcar como não lido
+                                </button>
+                                <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="archive">
+                                    <i class="bi bi-archive mr-1"></i> Arquivar
+                                </button>
+                                `;
                             } else if (newStatus === 'unread') {
                                 buttonsContainer.innerHTML = `
-                        <button class="btn-secondary py-1.5 px-3 text-xs status-action-btn" data-action="mark-read">
-                            <i class="bi bi-check2-all mr-1"></i> Marcar como lido
-                        </button>
-                        <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="archive">
-                            <i class="bi bi-archive mr-1"></i> Arquivar
-                        </button>
-                    `;
+                                <button class="btn-secondary py-1.5 px-3 text-xs status-action-btn" data-action="mark-read">
+                                    <i class="bi bi-check2-all mr-1"></i> Marcar como lido
+                                </button>
+                                <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="archive">
+                                    <i class="bi bi-archive mr-1"></i> Arquivar
+                                </button>
+                                `;
                             } else if (newStatus === 'archived') {
                                 buttonsContainer.innerHTML = `
-                        <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="restore">
-                            <i class="bi bi-arrow-counterclockwise mr-1"></i> Restaurar
-                        </button>
-                    `;
+                                <button class="btn-gray py-1.5 px-3 text-xs status-action-btn" data-action="restore">
+                                    <i class="bi bi-arrow-counterclockwise mr-1"></i> Restaurar
+                                </button>
+                                `;
                             }
                         }
-
-                        filterMessages();
                     });
                 }
             });

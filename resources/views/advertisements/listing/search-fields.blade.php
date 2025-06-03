@@ -10,28 +10,27 @@
         <input type="hidden" name="max_price" value="{{ request('max_price') }}">
     @endif
 
-    <input type="hidden" name="transaction_type" id="transactionTypeInput" value="{{ request('transaction_type', 'sale') }}">
-    {{--    Toggle Buttons--}}
+    <input type="hidden" name="transaction_type" id="transactionTypeInput" value="{{ request('transaction_type', '') }}">
     <div class="relative w-full max-w-md mx-auto mb-8">
         <div class="flex bg-gray-300 rounded-2xl relative overflow-hidden">
-            <!-- Slider Azul -->
+            <!-- Slider Azul - começa invisível quando não há seleção -->
             <div id="slider"
                  class="absolute top-0 left-0 w-1/2 h-full bg-blue-900 rounded-2xl transition-transform duration-300 ease-in-out z-0 transform"
-                 style="transform: translateX({{ request('transaction_type') == 'rent' ? '100%' : '0%' }})"
+                 style="{{ request('transaction_type') ? 'transform: translateX(' . (request('transaction_type') == 'rent' ? '100%' : '0%') . ');' : 'display: none;' }}"
             ></div>
 
             <!-- Botões -->
             <button
                 id="btn-comprar"
                 type="button"
-                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium {{ request('transaction_type') == 'sale' ? 'text-white font-semibold' : 'text-gray-800' }}"
             >
                 Comprar
             </button>
             <button
                 id="btn-arrendar"
                 type="button"
-                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium text-black"
+                class="w-1/2 text-center z-10 cursor-pointer py-3 px-6 text-xl font-medium {{ request('transaction_type') == 'rent' ? 'text-white font-semibold' : 'text-gray-800' }}"
             >
                 Arrendar
             </button>
@@ -156,22 +155,54 @@
                 const slider = document.getElementById("slider");
 
                 function activateButton(buttonToActivate, buttonToDeactivate, transformValue, typeValue) {
-                    slider.style.display = "block";
-                    slider.style.transform = `translateX(${transformValue})`;
-                    transactionInput.value = typeValue;
+                    // Verifica se já está ativado para permitir desselecionar
+                    if (transactionInput.value === typeValue) {
+                        // Desselecionar: esconde o slider e limpa o valor
+                        slider.style.display = "none";
+                        transactionInput.value = "";
 
-                    buttonToActivate.classList.add("text-white", "font-semibold");
-                    buttonToActivate.classList.remove("text-gray-800");
-                    buttonToDeactivate.classList.remove("text-white", "font-semibold");
-                    buttonToDeactivate.classList.add("text-gray-800");
+                        // Remove o estilo de selecionado dos dois botões
+                        btnComprar.classList.remove("text-white", "font-semibold");
+                        btnArrendar.classList.remove("text-white", "font-semibold");
+                        btnComprar.classList.add("text-gray-800");
+                        btnArrendar.classList.add("text-gray-800");
+                    } else {
+                        // Ativar o botão selecionado
+                        slider.style.display = "block";
+                        slider.style.transform = `translateX(${transformValue})`;
+                        transactionInput.value = typeValue;
+
+                        buttonToActivate.classList.add("text-white", "font-semibold");
+                        buttonToActivate.classList.remove("text-gray-800");
+                        buttonToDeactivate.classList.remove("text-white", "font-semibold");
+                        buttonToDeactivate.classList.add("text-gray-800");
+                    }
                 }
 
                 // Estado inicial com base no valor do input hidden
-                const selected = transactionInput.value || "sale";
+                const selected = transactionInput.value || "";
                 if (selected === "rent") {
-                    activateButton(btnArrendar, btnComprar, "100%", "rent");
+                    // Não precisamos chamar activateButton que poderia desselecionar
+                    slider.style.display = "block";
+                    slider.style.transform = "translateX(100%)";
+                    btnArrendar.classList.add("text-white", "font-semibold");
+                    btnArrendar.classList.remove("text-gray-800");
+                    btnComprar.classList.remove("text-white", "font-semibold");
+                    btnComprar.classList.add("text-gray-800");
+                } else if (selected === "sale") {
+                    slider.style.display = "block";
+                    slider.style.transform = "translateX(0%)";
+                    btnComprar.classList.add("text-white", "font-semibold");
+                    btnComprar.classList.remove("text-gray-800");
+                    btnArrendar.classList.remove("text-white", "font-semibold");
+                    btnArrendar.classList.add("text-gray-800");
                 } else {
-                    activateButton(btnComprar, btnArrendar, "0%", "sale");
+                    // Começa com ambos botões desselecionados
+                    slider.style.display = "none";
+                    btnComprar.classList.remove("text-white", "font-semibold");
+                    btnArrendar.classList.remove("text-white", "font-semibold");
+                    btnComprar.classList.add("text-gray-800");
+                    btnArrendar.classList.add("text-gray-800");
                 }
 
                 // Nos cliques

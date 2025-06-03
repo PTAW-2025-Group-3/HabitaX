@@ -13,13 +13,15 @@
                     Aqui estão os imóveis que marcou como favoritos.
                 </p>
                 <div class="relative dropdown-wrapper w-full sm:w-auto">
-                    <select id="sortFavorites" class="dropdown-select py-2 pl-4 pr-10 w-full h-10">
-                        <option disabled selected>Ordenar por</option>
-                        <option value="price_asc">Preço: Menor para Maior</option>
-                        <option value="price_desc">Preço: Maior para Maior</option>
-                        <option value="date_desc">Data: Mais Recente</option>
-                        <option value="date_asc">Data: Mais Antiga</option>
-                    </select>
+                    <form action="{{ route('favorites.index') }}" method="GET" id="sortForm">
+                        <select id="sortFavorites" name="sort" class="dropdown-select py-2 pl-4 pr-10 w-full h-10" onchange="document.getElementById('sortForm').submit()">
+                            <option disabled {{ !request('sort') ? 'selected' : '' }}>Ordenar por</option>
+                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Preço: Menor para Maior</option>
+                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Preço: Maior para Menor</option>
+                            <option value="date_desc" {{ request('sort') == 'date_desc' ? 'selected' : '' }}>Data: Mais Recente</option>
+                            <option value="date_asc" {{ request('sort') == 'date_asc' ? 'selected' : '' }}>Data: Mais Antiga</option>
+                        </select>
+                    </form>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                         <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
                     </div>
@@ -51,9 +53,7 @@
 
                         <div class="bg-white rounded-2xl border border-gray-200 shadow hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group favorite-card"
                              data-id="{{ $favorite->id }}"
-                             data-advertisement-id="{{ $advertisement->id ?? '' }}"
-                             data-price="{{ $price }}"
-                             data-date="{{ $favorite->created_at->timestamp }}">
+                             data-advertisement-id="{{ $advertisement->id ?? '' }}">
 
                             <div class="relative group overflow-hidden">
                                 <img src="{{ $image }}" alt="{{ $title }}" class="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300">
@@ -97,6 +97,10 @@
                 @endif
             </div>
 
+            <div class="mt-6">
+                {{ $favorites->withQueryString()->links() }}
+            </div>
+
             <div class="mt-8 text-center">
                 <p class="text-gray mb-4">Não encontrou o que procura? Explore mais imóveis!</p>
                 <a href="{{ route('advertisements.index') }}" class="btn-primary py-2 px-6">Ver Mais Imóveis</a>
@@ -132,25 +136,6 @@
                         }
                     }, 300);
                 }, 3000);
-            }
-
-            const sortSelect = document.getElementById('sortFavorites');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', function () {
-                    const favoritesContainer = document.getElementById('favorites-container');
-                    const favoriteCards = Array.from(document.querySelectorAll('.favorite-card'));
-                    const sortValue = this.value;
-
-                    favoriteCards.sort((a, b) => {
-                        if (sortValue === 'price_asc') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
-                        if (sortValue === 'price_desc') return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
-                        if (sortValue === 'date_desc') return parseInt(b.dataset.date) - parseInt(a.dataset.date);
-                        if (sortValue === 'date_asc') return parseInt(a.dataset.date) - parseInt(b.dataset.date);
-                        return 0;
-                    });
-
-                    favoriteCards.forEach(card => favoritesContainer.appendChild(card));
-                });
             }
 
             document.querySelectorAll('.favorite-card').forEach(card => {

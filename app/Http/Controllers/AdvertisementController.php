@@ -114,23 +114,7 @@ class AdvertisementController extends Controller
 
     public function favorites()
     {
-        $user = auth()->user();
-        $favorites = FavoriteAdvertisement::where('user_id', $user->id)
-            ->whereHas('advertisement', function($query) {
-                $query->where('is_suspended', false)
-                    ->where('is_published', true)
-                    ->whereHas('creator', function($q) {
-                        $q->where('state', 'active');
-                    })
-                    ->whereHas('property.property_type', function($q) {
-                        $q->where('is_active', true);
-                    });
-            })
-            ->with('advertisement.property.parish.municipality')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('advertisements.favorites', compact('favorites'));
+        return redirect()->route('favorites.index');
     }
 
     public function show($id)

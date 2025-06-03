@@ -37,14 +37,48 @@ class FavoriteController extends Controller
         return back();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $favorites = FavoriteAdvertisement::with('advertisement.property.parish.municipality')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+        $user = auth()->user();
+        $sort = $request->get('sort', 'date_desc');
 
-        return view('advertisements.favorites', compact('favorites'));
+        $query = FavoriteAdvertisement::where('favorite_advertisements.user_id', $user->id) // Qualificando com nome da tabela
+        ->whereHas('advertisement', function($query) {
+            $query->where('is_suspended', false)
+                ->where('is_published', true)
+                ->whereHas('creator', function($q) {
+                    $q->where('state', 'active');
+                })
+                ->whereHas('property.property_type', function($q) {
+                    $q->where('is_active', true);
+                });
+        })
+            ->with('advertisement.property.parish.municipality');
+
+        // Aplicar ordenação baseada no parâmetro sort
+        switch ($sort) {
+            case 'price_asc':
+                $query->join('advertisements', 'favorite_advertisements.advertisement_id', '=', 'advertisements.id')
+                    ->select('favorite_advertisements.*')
+                    ->orderBy('advertisements.price', 'asc');
+                break;
+            case 'price_desc':
+                $query->join('advertisements', 'favorite_advertisements.advertisement_id', '=', 'advertisements.id')
+                    ->select('favorite_advertisements.*')
+                    ->orderBy('advertisements.price', 'desc');
+                break;
+            case 'date_asc':
+                $query->orderBy('favorite_advertisements.created_at', 'asc');
+                break;
+            case 'date_desc':
+            default:
+                $query->orderBy('favorite_advertisements.created_at', 'desc');
+                break;
+        }
+
+        $favorites = $query->paginate(9);
+
+        return view('advertisements.favorites', compact('favorites', 'sort'));
     }
 
     public function destroy($id)

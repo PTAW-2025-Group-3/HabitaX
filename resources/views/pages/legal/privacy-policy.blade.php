@@ -307,7 +307,7 @@
                         </div>
                         <div class="space-y-2">
                             <p class="text-gray-600 text-sm">A presente Política de Privacidade poderá ser revista a qualquer momento. Todas as alterações serão publicadas nesta página e a sua consulta é recomendada de forma regular.</p>
-                            <p class="text-sm font-medium mt-2">Última atualização: <span class="text-indigo-600">Junho de 2025</span></p>
+                            <p class="text-sm font-medium mt-2">Última atualização: <span class="text-indigo-600">6 de Junho de 2025</span></p>
                         </div>
                     </div>
 

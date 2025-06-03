@@ -9,7 +9,7 @@
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            @foreach ($districts as $district)
+            @foreach ($districts->where('show_on_homepage', true) as $district)
                 <a href="{{ route('advertisements.index', ['district' => $district->id]) }}"
                    class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group border border-gray-100">
                     <div class="w-full h-48 overflow-hidden">
