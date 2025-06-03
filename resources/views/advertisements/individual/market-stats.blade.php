@@ -1,25 +1,44 @@
-<div class="bg-white shadow rounded p-3 md:p-6 space-y-4 md:space-y-6">
-    <h3 class="text-lg md:text-xl font-semibold">Dados do Mercado</h3>
+<div class="bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-5 md:p-8 space-y-5 animate-fade-in">
+    <div class="flex items-center justify-between border-b border-indigo-100 pb-4">
+        <h3 class="text-xl md:text-2xl font-bold text-primary flex items-center gap-2">
+            <i class="bi bi-bar-chart-fill text-secondary text-2xl"></i>
+            Dados do Mercado
+        </h3>
+        <span class="bg-indigo-100 text-secondary text-xs md:text-sm font-semibold px-3 py-1 rounded-full shadow-sm">Atualizado</span>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        <!-- Gráfico de novos anúncios -->
-        <div>
-            <h4 class="text-xs md:text-sm font-medium mb-2">Número de Novos Anúncios na Zona</h4>
-            <canvas id="adsChart" height="120"></canvas>
+    <div class="space-y-5">
+        <div class="flex items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <div class="text-2xl md:text-3xl font-extrabold text-gray-900">
+                        {{ number_format($ad->district_average ?? 0, 0, ',', '.') }}€
+                    </div>
+                    @php
+                        $isAboveAverage = $ad->price > $ad->district_average && $ad->district_average > 0;
+                        $isBelowAverage = $ad->price < $ad->district_average && $ad->district_average > 0;
+                        $percentDiff = $ad->district_average > 0 ?
+                            abs(round((($ad->price - $ad->district_average) / $ad->district_average) * 100, 1)) : 0;
+                    @endphp
+                    @if($ad->district_average > 0)
+                        <div class="{{ $isAboveAverage ? 'text-blue-600' : 'text-green-600' }} text-sm md:text-base font-medium flex items-center gap-1">
+                            <i class="bi {{ $isAboveAverage ? 'bi-arrow-up-circle-fill' : 'bi-arrow-down-circle-fill' }}"></i>
+                            {{ number_format($percentDiff, 1, ',', '.') }}% {{ $isAboveAverage ? 'acima' : 'abaixo' }}
+                        </div>
+                    @endif
+                </div>
+                <div class="text-xs md:text-sm text-gray-500">
+                    Preço Médio {{ $ad->transaction_type == 'rent' ? 'para Arrendamento' : 'para Venda' }}, {{ $ad->property->property_type->name ?? 'Imóvel' }}
+                </div>
+                <div class="text-xs mt-1 {{ $isBelowAverage ? 'text-green-600' : 'text-blue-600' }} font-semibold flex items-center gap-1">
+                    <i class="bi {{ $isBelowAverage ? 'bi-check-circle-fill text-green-500' : 'bi-info-circle-fill text-blue-500' }}"></i>
+                    {{ $isBelowAverage ? 'Bom negócio! Abaixo da média do distrito' : 'Preço acima da média do distrito' }}
+                </div>
+            </div>
         </div>
 
-        <!-- Comparação com média -->
-        <div>
-            <h4 class="text-xs md:text-sm font-medium mb-2">Comparação do Preço do Imóvel com a Média da Zona</h4>
-            <canvas id="compareChart" height="120"></canvas>
-            <div class="mt-2 text-center text-gray-500 text-xs md:text-sm">
-                {{ number_format($ad->area_average, 0, ',', '.') }}€ <span class="font-semibold">Preço Médio da Zona</span>
-            </div>
-            <div class="text-center mt-1">
-                <span class="inline-block px-2 py-1 bg-blue-600 text-white text-xs rounded shadow">
-                    Este Imóvel está acima da média!
-                </span>
-            </div>
+        <div class="h-[180px] md:h-[160px] mt-2">
+            <canvas id="compareChart"></canvas>
         </div>
     </div>
 </div>
@@ -28,84 +47,120 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const newAds = @json($ad->monthly_ads); // [15, 20, 18, 25, 35, 28]
-            const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun'];
             const currentPrice = @json($ad->price);
-            const areaAvg = @json($ad->area_average);
+            const districtAvg = @json($ad->district_average ?? 0);
+            const transactionType = @json($ad->transaction_type);
+            const distrito = @json($ad->property->parish->municipality->district->name ?? 'Não disponível');
 
-            // Function to handle responsive charts
-            function handleResponsiveCharts() {
+            // Formatar valores grandes para exibição sem centavos
+            function formatCurrency(value) {
+                return parseFloat(value).toLocaleString('pt-PT', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }) + "€";
+            }
+
+            // Function to handle responsive chart
+            function handleResponsiveChart() {
                 const isMobile = window.innerWidth < 768;
 
-                new Chart(document.getElementById('adsChart').getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Anúncios',
-                            data: newAds,
-                            backgroundColor: 'rgba(59,130,246,0.7)',
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                bodyFont: { size: isMobile ? 10 : 12 }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { font: { size: isMobile ? 10 : 12 } }
-                            },
-                            x: {
-                                ticks: { font: { size: isMobile ? 10 : 12 } }
-                            }
-                        }
-                    }
-                });
+                // Limpar canvas existente para evitar duplicação
+                const chartElement = document.getElementById('compareChart');
+                if (window.marketComparison) {
+                    window.marketComparison.destroy();
+                }
 
-                new Chart(document.getElementById('compareChart').getContext('2d'), {
+                window.marketComparison = new Chart(chartElement.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['Este imóvel', 'Média da zona'],
+                        labels: [`Este imóvel`, `Média em ${distrito}`],
                         datasets: [{
-                            data: [currentPrice, areaAvg],
-                            backgroundColor: ['#3B82F6', '#D1D5DB'],
-                            borderRadius: 6
+                            data: [currentPrice, districtAvg],
+                            backgroundColor: [
+                                currentPrice > districtAvg ? '#3B82F6' : '#10B981',
+                                'rgba(209, 213, 219, 0.7)'
+                            ],
+                            borderColor: [
+                                currentPrice > districtAvg ? '#2563EB' : '#059669',
+                                '#9CA3AF'
+                            ],
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            barThickness: isMobile ? 40 : 60
                         }]
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
                             tooltip: {
-                                bodyFont: { size: isMobile ? 10 : 12 }
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                titleColor: '#111827',
+                                bodyColor: '#374151',
+                                borderColor: '#E5E7EB',
+                                borderWidth: 1,
+                                padding: 12,
+                                cornerRadius: 8,
+                                callbacks: {
+                                    title: function(context) {
+                                        return context[0].label;
+                                    },
+                                    label: function(context) {
+                                        return formatCurrency(context.raw);
+                                    }
+                                },
+                                bodyFont: { size: isMobile ? 10 : 12, family: "'Inter', sans-serif" }
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                ticks: { font: { size: isMobile ? 10 : 12 } }
+                                grid: {
+                                    color: 'rgba(203, 213, 225, 0.3)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    font: { size: isMobile ? 10 : 12, family: "'Inter', sans-serif" },
+                                    color: '#64748B',
+                                    callback: function(value) {
+                                        if (value >= 1000) {
+                                            return Math.round(value / 1000) + 'k€';
+                                        }
+                                        return value + '€';
+                                    }
+                                }
                             },
                             x: {
-                                ticks: { font: { size: isMobile ? 10 : 12 } }
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    font: { size: isMobile ? 11 : 13, family: "'Inter', sans-serif" },
+                                    color: '#64748B',
+                                    maxRotation: 0,
+                                    autoSkip: false
+                                }
                             }
+                        },
+                        layout: {
+                            padding: {
+                                top: 10,
+                                bottom: 10
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
                         }
                     }
                 });
             }
-
             // Initial render
-            handleResponsiveCharts();
-
+            handleResponsiveChart();
             // Update on resize
-            window.addEventListener('resize', handleResponsiveCharts);
+            window.addEventListener('resize', handleResponsiveChart);
         });
     </script>
 @endpush

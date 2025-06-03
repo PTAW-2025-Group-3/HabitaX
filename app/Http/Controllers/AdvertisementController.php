@@ -12,11 +12,13 @@ use App\Models\PropertyParameter;
 use App\Models\PropertyType;
 use App\Models\District;
 use App\Models\SearchFilter;
+use App\Traits\MonthsInPortuguese;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AdvertisementController extends Controller
 {
+    use MonthsInPortuguese;
     public function search(Request $request)
     {
         $districts = District::with('municipalities.parishes')->orderBy('name')->get();
@@ -197,6 +199,40 @@ class AdvertisementController extends Controller
         // Adiciona flag para mostrar alerta quando estiver vendo um anúncio não publicado
         $showUnpublishedAlert = !$ad->is_published;
 
+        $ptMonths = $this->getPortugueseMonths();
+
+        $formattedDates = $priceHistory->map(function ($item) {
+            return $item->register_date->format('d/m/Y');
+        });
+
+        // Obter a média de preço do distrito com base no tipo de transação e tipo de propriedade
+        $districtId = $ad->property->parish->municipality->district_id ?? null;
+        $propertyTypeId = $ad->property->property_type_id ?? null;
+
+        if ($districtId && $propertyTypeId) {
+            // Calcular a média de preços no distrito para o mesmo tipo de transação e tipo de propriedade
+            $districtAverage = Advertisement::where('is_published', true)
+                ->where('is_suspended', false)
+                ->where('transaction_type', $ad->transaction_type)
+                ->whereHas('property', function($query) use ($propertyTypeId) {
+                    $query->where('property_type_id', $propertyTypeId);
+                })
+                ->whereHas('property.parish.municipality', function($query) use ($districtId) {
+                    $query->where('district_id', $districtId);
+                })
+                ->whereHas('property.property_type', function($q) {
+                    $q->where('is_active', true);
+                })
+                ->whereHas('creator', function($q) {
+                    $q->whereNotIn('state', ['suspended', 'banned', 'archived']);
+                })
+                ->avg('price');
+
+            $ad->district_average = $districtAverage;
+        } else {
+            $ad->district_average = 0;
+        }
+
         return view('advertisements.show', [
             'ad' => $ad,
             'property' => $property,
@@ -205,8 +241,11 @@ class AdvertisementController extends Controller
             'parameters' => $parameters,
             'groupedParameters' => $groupedParameters,
             'priceHistory' => $priceHistory,
-            'showUnpublishedAlert' => $showUnpublishedAlert
+            'showUnpublishedAlert' => $showUnpublishedAlert,
+            'ptMonths' => $ptMonths,
+            'formattedDates' => $formattedDates,
         ]);
+
     }
 
     public function help()
@@ -295,7 +334,7 @@ class AdvertisementController extends Controller
 
         $advertisement->delete();
 
-        return redirect()->route('advertisements.my')->with('success', 'Anúncio deletado com sucesso!');
+        return redirect()->route('advertisements.my')->with('success', 'O anúncio foi removido com sucesso!');
     }
 
 }

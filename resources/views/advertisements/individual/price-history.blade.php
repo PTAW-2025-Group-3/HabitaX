@@ -32,10 +32,6 @@
                     @endif
                 </div>
                 <div class="text-xs md:text-sm text-gray-500">Preço mais recente</div>
-                <div class="text-xs mt-1 text-green-600 font-semibold flex items-center gap-1">
-                    <i class="bi bi-check-circle-fill text-green-500"></i>
-                    Em linha com o mercado
-                </div>
             </div>
         </div>
 
@@ -56,9 +52,16 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const prices = @json($priceHistory->pluck('price'));
-                const labels = @json($priceHistory->map(function($item) {
-                    return $item->register_date->format('M Y');
-                }));
+                const fullDates = @json($formattedDates);
+
+                // Mapeamento de meses em português
+                const ptMonths = @json($ptMonths);
+
+                // Criar labels com os meses em português
+                const labels = fullDates.map(date => {
+                    const [day, month, year] = date.split('/');
+                    return `${ptMonths[parseInt(month)]} ${year}`;
+                });
 
                 // Function to handle responsive chart
                 function handleResponsiveChart() {
@@ -93,7 +96,15 @@
                             plugins: {
                                 legend: { display: false },
                                 tooltip: {
-                                    bodyFont: { size: isMobile ? 10 : 12 }
+                                    bodyFont: { size: isMobile ? 10 : 12 },
+                                    callbacks: {
+                                        title: function (context) {
+                                            return fullDates[context[0].dataIndex];
+                                        },
+                                        label: function (context) {
+                                            return `Preço: €${context.parsed.y.toLocaleString('pt-PT')}`;
+                                        }
+                                    }
                                 }
                             },
                             scales: {
@@ -103,7 +114,12 @@
                                 },
                                 y: {
                                     beginAtZero: false,
-                                    ticks: { font: { size: isMobile ? 10 : 12 } }
+                                    ticks: {
+                                        font: { size: isMobile ? 10 : 12 },
+                                        callback: function (value) {
+                                            return '€' + value.toLocaleString('pt-PT');
+                                        }
+                                    }
                                 }
                             }
                         }

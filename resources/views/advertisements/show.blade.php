@@ -302,6 +302,7 @@
                     </div>
                 </section>
                 @include('advertisements.individual.price-history', ['ad' => $ad])
+                @include('advertisements.individual.market-stats', ['ad' => $ad])
                 @if($ad->transaction_type === 'rent')
                     @include('advertisements.individual.rent-simulator', ['ad' => $ad])
                 @else

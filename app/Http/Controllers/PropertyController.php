@@ -156,6 +156,6 @@ class PropertyController extends Controller
         $property->delete();
 
         return redirect()->route('properties.my')
-            ->with('success', 'Property deleted successfully!');
+            ->with('success', 'A propriedade foi removida com sucesso!');
     }
 }

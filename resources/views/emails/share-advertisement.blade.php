@@ -109,14 +109,6 @@
     </div>
 
     <div class="content">
-        @if($advertisement->property && $advertisement->property->getFirstMediaUrl('images'))
-            <img src="{{ url($advertisement->property->getFirstMediaUrl('images')) }}" alt="Imagem do imóvel" class="property-image">
-        @elseif(isset($advertisement->property->district))
-            <img src="{{ asset('images/districts/' . Str::slug($advertisement->property->district) . '.jpg') }}" alt="Imagem da localidade" class="property-image">
-        @else
-            <img src="{{ asset('images/default-property.jpg') }}" alt="Imagem de imóvel" class="property-image">
-        @endif
-
         @if(!empty($messageContent))
             <div class="message">
                 <p>{{ $messageContent }}</p>
