@@ -63,9 +63,11 @@
                 Freguesia
             </label>
             <div class="relative dropdown-wrapper w-full">
-                <select name="parish" id="parish"
+                <select name="parish_id" id="parish"
                         class="dropdown-select py-3 pl-4 pr-10 w-full text-base">
-                    <option value="" disabled selected>Freguesia</option>
+                    <option value="" disabled {{ old('parish_id', $property->parish_id ?? '') === '' ? 'selected' : '' }}>
+                        Freguesia
+                    </option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray">
                     <i class="chevron bi bi-chevron-right transition-transform duration-300 ease-in-out"></i>
@@ -82,3 +84,95 @@
 
     {{--  Street address, ZIP code, and maybe autodetect city by ZIP code  --}}
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const districtSelect = document.getElementById('district');
+            const municipalitySelect = document.getElementById('municipality');
+            const parishSelect = document.getElementById('parish');
+
+            const currentDistrictId = '{{ old('district_id', $property->parish->municipality->district_id ?? '') }}';
+            const currentMunicipalityId = '{{ old('municipality_id', $property->parish->municipality_id ?? '') }}';
+            const currentParishId = '{{ old('parish_id', $property->parish_id ?? '') }}';
+
+            // Carregar distritos
+            fetch('/districts')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(d => {
+                        const option = document.createElement('option');
+                        option.value = d.id;
+                        option.textContent = d.name;
+                        if (String(d.id) === currentDistrictId) option.selected = true;
+                        districtSelect.appendChild(option);
+                    });
+
+                    if (currentDistrictId) {
+                        fetch(`/districts/${currentDistrictId}/municipalities`)
+                            .then(res => res.json())
+                            .then(munis => {
+                                munis.forEach(m => {
+                                    const option = document.createElement('option');
+                                    option.value = m.id;
+                                    option.textContent = m.name;
+                                    if (String(m.id) === currentMunicipalityId) option.selected = true;
+                                    municipalitySelect.appendChild(option);
+                                });
+
+                                if (currentMunicipalityId) {
+                                    fetch(`/municipalities/${currentMunicipalityId}/parishes`)
+                                        .then(res => res.json())
+                                        .then(parishes => {
+                                            parishes.forEach(p => {
+                                                const option = document.createElement('option');
+                                                option.value = p.id;
+                                                option.textContent = p.name;
+                                                if (String(p.id) === currentParishId) option.selected = true;
+                                                parishSelect.appendChild(option);
+                                            });
+                                        });
+                                }
+                            });
+                    }
+                });
+
+            // Quando o distrito muda, carregar concelhos
+            districtSelect.addEventListener('change', function () {
+                municipalitySelect.innerHTML = '<option disabled selected>Concelho</option>';
+                parishSelect.innerHTML = '<option disabled selected>Freguesia</option>';
+
+                if (!this.value) return;
+
+                fetch(`/districts/${this.value}/municipalities`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(m => {
+                            const option = document.createElement('option');
+                            option.value = m.id;
+                            option.textContent = m.name;
+                            municipalitySelect.appendChild(option);
+                        });
+                    });
+            });
+
+            // Quando o concelho muda, carregar freguesias
+            municipalitySelect.addEventListener('change', function () {
+                parishSelect.innerHTML = '<option disabled selected>Freguesia</option>';
+
+                if (!this.value) return;
+
+                fetch(`/municipalities/${this.value}/parishes`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(p => {
+                            const option = document.createElement('option');
+                            option.value = p.id;
+                            option.textContent = p.name;
+                            parishSelect.appendChild(option);
+                        });
+                    });
+            });
+        });
+    </script>
+@endpush

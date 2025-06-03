@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\District;
+use App\Services\MediaSyncService;
 use Illuminate\Http\Request;
 
 class DistrictController extends Controller
@@ -34,6 +35,13 @@ class DistrictController extends Controller
 
         $district = District::findOrFail($id);
         $district->update($request->all());
+
+        app(MediaSyncService::class)
+            ->syncImages(
+                $district,
+                $request->input('uploaded_images', []),
+                'images'
+            );
 
         return redirect()->route('districts.index')->with('success', 'District updated successfully.');
     }

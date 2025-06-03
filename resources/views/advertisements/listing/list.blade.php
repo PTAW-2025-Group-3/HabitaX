@@ -19,7 +19,7 @@
                                         <div class="swiper-slide">
                                             <a href="{{ route('advertisements.show', ['id' => $ad['id']]) }}" class="block h-full">
                                                 <div class="aspect-[4/3] md:aspect-[16/10] w-full relative">
-                                                    <img src="{{ $image->getUrl('thumb') }}"
+                                                    <img src="{{ $image->getUrl('preview') }}"
                                                          alt="{{ $ad['title'] }}" loading="lazy"
                                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                                     @if($totalImages > 1)

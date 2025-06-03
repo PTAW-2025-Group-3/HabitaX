@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\District;
 use App\Models\Municipality;
 use App\Models\Parish;
+use Collator;
 use Illuminate\Http\Request;
 
 class AdministrativeDivisionController extends Controller
@@ -26,51 +27,59 @@ class AdministrativeDivisionController extends Controller
     // GET /municipalities/{id}/parishes
     public function parishesByMunicipality(int $id)
     {
-        return \App\Models\Parish::where('municipality_id', $id)->get();
+        return Parish::where('municipality_id', $id)->get();
     }
 
-    // GET /search/parishes
-    public function searchParishes(Request $request)
+    // GET /search/locations
+    public function searchLocations(Request $request)
     {
         $query = $request->query('q', '');
 
-        if (mb_strlen($query) < 2) {
+        if (mb_strlen($query) < 3) {
             return response()->json([]);
         }
 
-        $results = Parish::select('parishes.id as parish_id', 'parishes.name as parish_name',
-            'municipalities.id as municipality_id', 'municipalities.name as municipality_name',
-            'districts.name as district_name')
-            ->join('municipalities', 'parishes.municipality_id', '=', 'municipalities.id')
-            ->join('districts', 'municipalities.district_id', '=', 'districts.id')
-            ->where('parishes.name', 'ILIKE', '%' . $query . '%')
-            ->orderBy('municipalities.name')
-            ->orderBy('parishes.name')
+        $normalized = mb_strtolower($query);
+
+        $parishes = Parish::with('municipality.district')
+            ->whereRaw("unaccent(lower(name)) LIKE unaccent(lower(?))", ["{$normalized}%"])
+            ->orderBy('name')
             ->get();
 
-        // Group by municipality
         $grouped = [];
 
-        foreach ($results as $row) {
-            $mid = $row->municipality_id;
+        foreach ($parishes as $parish) {
+            $municipality = $parish->municipality;
+            $mid = $municipality->id;
 
             if (!isset($grouped[$mid])) {
                 $grouped[$mid] = [
                     'municipality' => [
-                        'id' => $row->municipality_id,
-                        'name' => $row->municipality_name,
-                        'district' => [
-                            'name' => $row->district_name,
-                        ],
+                        'id' => $municipality->id,
+                        'name' => $municipality->name,
+                        'district' => ['name' => $municipality->district->name],
                     ],
                     'parishes' => [],
                 ];
             }
 
             $grouped[$mid]['parishes'][] = [
-                'id' => $row->parish_id,
-                'name' => $row->parish_name,
+                'id' => $parish->id,
+                'name' => $parish->name,
+                'municipality_id' => $mid,
+                'district_id' => $parish->municipality->district->id,
             ];
+        }
+
+        $collator = new Collator('pt_PT');
+        usort($grouped, fn($a, $b) =>
+        $collator->compare($a['municipality']['name'], $b['municipality']['name'])
+        );
+
+        foreach ($grouped as &$entry) {
+            usort($entry['parishes'], fn($a, $b) =>
+            $collator->compare($a['name'], $b['name'])
+            );
         }
 
         return array_values($grouped);

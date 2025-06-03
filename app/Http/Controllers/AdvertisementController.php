@@ -33,28 +33,31 @@ class AdvertisementController extends Controller
         $selectedType = $request->input('property_type');
         $transactionType = $request->input('transaction_type');
 
-        // Query base - usando os novos campos
-        $query = Advertisement::where('is_published', true)
-            ->where('is_suspended', false)
-//            ->whereHas('creator', function($q) {
-//                $q->where('state', 'active');
-//            })
-            ->whereHas('property.property_type', function($q) {
-                $q->where('is_active', true);
-            })
-            ->with('property.parameters.attribute');
-
-        // Aplicar filtros (assumindo que o AdvertisementFilterRequest já os aplica corretamente)
-        $query = $request->applyFilters($query);
-
-        // Carregamento de dados auxiliares para os selects
-        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
-        $districts = District::where('is_active', true)->orderBy('name')->get();
-
         $viewMode = $request->input('view', 'grid'); // 'grid' por defeito
         $perPage = $viewMode === 'list' ? 10 : 28;
 
+        // Query base
+        $query = Advertisement::where('is_published', true)
+            ->where('is_suspended', false)
+            ->whereHas('property.property_type', function ($q) {
+                $q->where('is_active', true);
+            });
+
+        // Eager load condicional
+        if ($viewMode === 'list') {
+            $query->with('property.parameters.attribute');
+        } else {
+            $query->with('property');
+        }
+
+        // Aplicar filtros adicionais
+        $query = $request->applyFilters($query);
+
         $advertisements = $query->paginate($perPage);
+
+        // Dados auxiliares
+        $propertyTypes = PropertyType::where('is_active', true)->orderBy('id')->get();
+        $districts = District::where('is_active', true)->orderBy('name')->get();
 
         $savedSearches = SearchFilter::where('created_by', auth()->id())
             ->with('propertyType')
@@ -65,7 +68,6 @@ class AdvertisementController extends Controller
             return view('advertisements.listing.advertisement-listings', compact('advertisements'))->render();
         }
 
-        // Passar também os filtros selecionados para o blade
         return view('advertisements.index', compact(
             'advertisements',
             'propertyTypes',

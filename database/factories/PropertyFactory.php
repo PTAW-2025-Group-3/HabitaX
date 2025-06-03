@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Parish;
-use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,6 +14,11 @@ class PropertyFactory extends Factory
     {
         $user = User::inRandomOrder()->first();
 
+        // Obter todas as freguesias pertencentes a distritos ativos
+        $activeParishIds = \App\Models\Parish::whereHas('municipality.district', function ($query) {
+            $query->where('is_active', true);
+        })->pluck('id');
+
         return [
             'title' => $this->faker->sentence(),
             'country' => 'Portugal',
@@ -23,9 +26,8 @@ class PropertyFactory extends Factory
             'is_active' => true,
             'is_verified' => false,
 
-            // Foreign keys com dados reais e o mesmo user para created/updated
-            'property_type_id' => PropertyType::inRandomOrder()->first()?->id,
-            'parish_id' => Parish::inRandomOrder()->first()?->id,
+            'property_type_id' => \App\Models\PropertyType::inRandomOrder()->first()?->id,
+            'parish_id' => $activeParishIds->random(),
             'created_by' => $user?->id,
             'updated_by' => $user?->id,
         ];

@@ -14,7 +14,8 @@
         "spatie/image": "^3.8",
         "spatie/laravel-image-optimizer": "^1.8",
         "spatie/laravel-medialibrary": "^11.12",
-        "spatie/laravel-responsecache": "^7.6"
+        "spatie/laravel-responsecache": "^7.6",
+        "ext-intl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

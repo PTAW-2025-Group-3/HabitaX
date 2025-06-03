@@ -43,19 +43,6 @@
     @include('layout.footer')
 </div>
 
-{{-- Image Cropping --}}
-<div id="tui-editor-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex flex-col items-center justify-center p-4">
-    <div id="tui-editor-container" class="w-full max-w-5xl h-[80vh] bg-white rounded shadow-lg overflow-hidden"></div>
-    <div class="flex gap-4 mt-4">
-        <button id="tui-editor-confirm" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
-            Confirmar
-        </button>
-        <button id="tui-editor-cancel" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
-            Cancelar
-        </button>
-    </div>
-</div>
-
 {{-- Page-specific JS Scripts --}}
 @stack('scripts')
 

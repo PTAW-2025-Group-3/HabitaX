@@ -29,15 +29,11 @@
                        class="p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <i class="bi bi-pencil text-secondary"></i>
                     </a>
-                    <form action="{{ route('advertisements.destroy', $ad->id) }}" method="POST"
-                          onsubmit="return confirm('Tem certeza que deseja deletar este anúncio?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                            <i class="bi bi-trash text-red"></i>
-                        </button>
-                    </form>
+                    <button type="button"
+                            onclick="showDeleteModal('{{ $ad->id }}', '{{ $ad->title }}')"
+                            class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i class="bi bi-trash text-red"></i>
+                    </button>
                 </div>
             </div>
         </div>

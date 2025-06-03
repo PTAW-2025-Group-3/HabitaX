@@ -51,6 +51,7 @@ Route::get('/districts', [AdministrativeDivisionController::class, 'districts'])
 Route::get('/districts/{id}/municipalities', [AdministrativeDivisionController::class, 'municipalitiesByDistrict']);
 Route::get('/municipalities/{id}/parishes', [AdministrativeDivisionController::class, 'parishesByMunicipality']);
 Route::get('/parishes/search', [AdministrativeDivisionController::class, 'searchParishes']);
+Route::get('/locations/search', [AdministrativeDivisionController::class, 'searchLocations']);
 
 // Advertisement Routes
 Route::get('/advertisements/help', [AdvertisementController::class, 'help'])->name('advertisements.help');

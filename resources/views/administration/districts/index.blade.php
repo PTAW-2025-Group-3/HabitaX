@@ -6,7 +6,7 @@
     <div class="container mx-auto p-4">
         <div class="mt-12 animate-fade-in">
             <div class="mb-4">
-                <a href="{{ route('districts.index') }}"
+                <a href="{{ route('admin.index') }}"
                    class="btn-primary px-4 py-2 rounded-lg flex items-center w-fit">
                     <i class="bi bi-arrow-left mr-2"></i>
                     Voltar para Dashboard
@@ -14,11 +14,11 @@
             </div>
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-primary">Distritos</h2>
-                <a href="{{ route('property-types.create') }}"
-                   class="btn-primary px-4 py-2 rounded-lg flex items-center">
-                    <i class="bi bi-plus-lg mr-2"></i>
-                    Adicionar Tipo de Propriedade
-                </a>
+{{--                <a href="{{ route('property-types.create') }}"--}}
+{{--                   class="btn-primary px-4 py-2 rounded-lg flex items-center">--}}
+{{--                    <i class="bi bi-plus-lg mr-2"></i>--}}
+{{--                    Adicionar Tipo de Propriedade--}}
+{{--                </a>--}}
             </div>
 
             @if ($districts->isEmpty())
