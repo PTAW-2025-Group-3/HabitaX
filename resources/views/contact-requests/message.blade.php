@@ -19,7 +19,13 @@
                     </div>
                 @endif
                 <div>
-                    <h3 class="font-semibold text-primary">{{ $name }}</h3>
+                    <h3 class="font-semibold text-primary">
+                        @if(isset($created_by) && $created_by && isset($user) && $user && $user->state === 'archived')
+                            Utilizador Eliminado
+                        @else
+                            {{ $name }}
+                        @endif
+                    </h3>
                     <div class="flex flex-wrap items-center gap-2">
                         @if(isset($isReadOnly) && $isReadOnly)
                             <!-- Informações do destinatário para mensagens enviadas -->
@@ -27,17 +33,21 @@
                                 <span class="text-xs text-gray">{{ $email }}</span>
                             @else
                                 <span class="text-xs text-gray-400 italic">
-                                    <i class="bi bi-envelope-slash text-gray-400 mr-1"></i>Email não disponível
-                                </span>
+                        <i class="bi bi-envelope-slash text-gray-400 mr-1"></i>Email não disponível
+                    </span>
                             @endif
                         @elseif(isset($created_by) && $created_by)
                             <!-- Informações do remetente para mensagens recebidas (utilizadores registados) -->
-                            @if(isset($user) && $user->show_email)
+                            @if(isset($user) && $user->state === 'archived')
+                                <span class="text-xs text-gray-400 italic">
+                        <i class="bi bi-person-x text-gray-400 mr-1"></i>Utilizador não disponível
+                    </span>
+                            @elseif(isset($user) && $user->show_email)
                                 <span class="text-xs text-gray">{{ $email }}</span>
                             @else
                                 <span class="text-xs text-gray-400 italic">
-                                    <i class="bi bi-envelope-slash text-gray-400 mr-1"></i>Email não disponível
-                                </span>
+                        <i class="bi bi-envelope-slash text-gray-400 mr-1"></i>Email não disponível
+                    </span>
                             @endif
                         @else
                             <!-- Informações do remetente para mensagens recebidas (convidados) -->
@@ -45,16 +55,16 @@
                         @endif
 
                         <!-- Telefone -->
-                        @if(isset($telephone))
+                        @if(isset($telephone) && (!isset($user) || $user->state !== 'archived'))
                             <span class="text-xs text-gray hidden xs:inline">•</span>
                             @if((isset($show_telephone) && $show_telephone) || (!isset($created_by) || !$created_by))
                                 <span class="text-xs text-gray">
-                                    <i class="bi bi-telephone text-gray mr-1"></i>{{ $telephone }}
-                                </span>
+                        <i class="bi bi-telephone text-gray mr-1"></i>{{ $telephone }}
+                    </span>
                             @else
                                 <span class="text-xs text-gray-400 italic">
-                                    <i class="bi bi-x-circle text-gray-400 mr-1"></i>Telefone não disponível
-                                </span>
+                        <i class="bi bi-x-circle text-gray-400 mr-1"></i>Telefone não disponível
+                    </span>
                             @endif
                         @endif
                     </div>

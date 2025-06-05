@@ -234,6 +234,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [AccountController::class, 'settings'])->name('settings');
     Route::put('/settings/privacy', [AccountController::class, 'updatePrivacy'])->name('account.updatePrivacy');
     Route::put('/settings/password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
+    Route::get('/password-changed', [App\Http\Controllers\AccountController::class, 'passwordChanged'])->name('password.changed');
     Route::delete('/settings/delete', [AccountController::class, 'destroy'])->name('account.delete');
 
     Route::get('/advertiser-verification', [AdvertiserVerificationController::class, 'create'])->name('advertiser-verifications.create');

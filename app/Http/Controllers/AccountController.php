@@ -25,21 +25,50 @@ class AccountController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $messages = [
+            'password.regex' => 'A senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (@$!%*#?&).'
+        ];
+
         $request->validate([
             'current_password' => 'required|string',
-            'password' => 'required|string|min:5|confirmed',
-        ]);
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/'
+            ],
+        ], $messages);
 
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Senha atual incorreta.']);
+            return back()->withErrors(['current_password' => 'A senha atual está incorreta.']);
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return back()->with('success', 'Senha atualizada com sucesso.');
+        // Armazenar a mensagem em uma variável de sessão que persiste após o logout
+        $request->session()->put('password_changed', true);
+
+        // Logout
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('password.changed');
+    }
+
+    public function passwordChanged()
+    {
+        if (!session('password_changed')) {
+            return redirect('/');
+        }
+
+        // Remover a flag da sessão
+        session()->forget('password_changed');
+
+        return redirect('/')->with('success', 'A sua senha foi atualizada com sucesso. Por favor, faça login novamente.');
     }
 
     public function destroy(Request $request)

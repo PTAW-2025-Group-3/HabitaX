@@ -17,17 +17,41 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        $messages = [
+            'name.regex' => 'O nome deve conter apenas letras, espaços e hífens.',
+            'telephone.regex' => 'O número de telefone deve ser um número português válido.',
+            'email.email' => 'Por favor, insira um endereço de email válido.',
+            'email.unique' => 'Este email já está a ser utilizado por outra conta.',
+        ];
+
         $request->validate([
             'image' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\s\-]+$/u', // Permite apenas letras, espaços e hífens
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email:rfc,dns',
+                'max:255',
+                'unique:users,email,' . $user->id,
+            ],
+            'telephone' => [
+                'nullable',
+                'string',
+                'regex:/^(\+351|00351)?[2,3,6,9][0-9]{8}$/', // Formato português melhorado
+            ],
             'bio' => 'nullable|string|max:1000',
             'uploaded_picture' => 'nullable|string',
-        ]);
+        ], $messages);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'telephone' => $request->telephone,
             'bio' => $request->bio,
         ]);
 
@@ -63,37 +87,7 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('settings')->with('success', 'Senha atualizada com sucesso!');
-    }
-
-    public function updateNotifications(Request $request)
-    {
-        $request->validate([
-            'email_notifications' => ['boolean'],
-            'message_notifications' => ['boolean'],
-        ]);
-
-        Auth::user()->update([
-            'email_notifications' => $request->email_notifications ?? false,
-            'message_notifications' => $request->message_notifications ?? false,
-        ]);
-
-        return redirect()->route('settings')->with('success', 'Configurações de notificação atualizadas com sucesso!');
-    }
-
-    public function updatePrivacy(Request $request)
-    {
-        $request->validate([
-            'public_profile' => ['boolean'],
-            'show_email' => ['boolean'],
-        ]);
-
-        Auth::user()->update([
-            'public_profile' => $request->public_profile ?? false,
-            'show_email' => $request->show_email ?? false,
-        ]);
-
-        return redirect()->route('settings')->with('success', 'Configurações de privacidade atualizadas com sucesso!');
+        return redirect()->route('settings')->with('success', 'A senha foi atualizada com sucesso!');
     }
 
     public function destroy(Request $request)
@@ -106,7 +100,7 @@ class ProfileController extends Controller
         Auth::logout();
         $user->delete();
 
-        return redirect()->route('home')->with('success', 'Sua conta foi excluída com sucesso.');
+        return redirect()->route('home')->with('success', 'A sua conta foi excluída com sucesso.');
     }
 
     public function settings()

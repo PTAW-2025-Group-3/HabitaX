@@ -50,6 +50,19 @@
                 @endforeach
             </div>
 
+            {{-- Secção: Localização e Contato --}}
+            @include('pages.about.sections.title', [
+                'title' => 'Onde Nos Encontrar',
+                'class' => 'mt-16 mb-8',
+                'slot' => 'Estamos localizados na ESTGA em Águeda. Visite-nos ou entre em contato através das nossas plataformas.'
+            ])
+
+            @include('pages.about.sections.contact-map', [
+                'address' => 'Escola Superior de Tecnologia e Gestão de Águeda (ESTGA), R. Comandante Pinho e Freitas 28, 3750-127 Águeda',
+                'mapUrl' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d637.0857441417367!2d-8.44382317198344!3d40.57454979720562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd230982ea9570a1%3A0x15e2e89202d3bff4!2sEscola%20Superior%20de%20Tecnologia%20e%20Gest%C3%A3o%20de%20%C3%81gueda!5e0!3m2!1spt-PT!2spt!4v1749154666876!5m2!1spt-PT!2spt',
+                'githubUrl' => 'https://github.com/Projecto-Tematico-em-Aplicacoes-Web/HabitaX'
+            ])
+
             {{-- Secção: Impacto --}}
             @include('pages.about.sections.title', [
                 'title' => 'O Nosso Impacto',
