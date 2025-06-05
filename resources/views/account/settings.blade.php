@@ -156,21 +156,20 @@
             </p>
         </div>
 
-        <form action="{{ route('account.delete') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.');">
+        <form action="{{ route('account.delete') }}" method="POST" id="deleteAccountForm">
             @csrf
             @method('DELETE')
             <div class="space-y-4">
                 <div>
-                    <label for="delete_password" class="block font-medium text-gray-secondary mb-1">Confirme sua senha para excluir</label>
-                    <input type="password" name="password" id="delete_password"
-                        class="form-input">
-                    @error('password')
-                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                    <label for="delete_password" class="block font-medium text-gray-secondary mb-1">Confirme a sua senha para excluir</label>
+                    <input type="password" name="delete_password" id="delete_password" class="form-input">
+                    @error('delete_password')
+                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn-warning py-2 px-6">
+                    <button type="button" onclick="confirmDelete()" class="btn-warning py-2 px-6">
                         Excluir conta
                     </button>
                 </div>
@@ -186,6 +185,12 @@
             input.value = input.value === '1' ? '0' : '1';
         });
     });
+
+    function confirmDelete() {
+        if (confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')) {
+            document.getElementById('deleteAccountForm').submit();
+        }
+    }
 </script>
 @endpush
 @endsection

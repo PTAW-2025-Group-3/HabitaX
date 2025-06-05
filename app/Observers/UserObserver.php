@@ -15,8 +15,12 @@ class UserObserver
 
         // Check if state was changed
         if ($user->isDirty('state')) {
+            // Se for uma eliminação voluntária (o nome foi alterado para "Utilizador Eliminado")
+            if ($user->state === 'archived' && $user->isDirty('name') && $user->name === 'Utilizador Eliminado') {
+                $this->handleAccountDeletion($user);
+            }
             // If changed to a restricted state
-            if (in_array($user->state, $restrictedStates)) {
+            elseif (in_array($user->state, $restrictedStates)) {
                 $this->deactivateUserContent($user);
             }
             // If changed from a restricted state to active
@@ -24,6 +28,23 @@ class UserObserver
                 $this->reactivateUserContent($user);
             }
         }
+    }
+
+    /**
+     * Tratamento específico para eliminação voluntária da conta
+     */
+    protected function handleAccountDeletion(User $user): void
+    {
+        // Deactivate properties
+        $user->properties()->update(['is_active' => false]);
+
+        // Archive advertisements
+        $user->advertisements()->update(['is_published' => false]);
+        $user->advertisements()->update(['is_suspended' => true]);
+
+        // NÃO elimina os pedidos de contacto
+        // Apenas encerra as sessões
+        $this->logoutUserFromAllDevices($user);
     }
 
     /**

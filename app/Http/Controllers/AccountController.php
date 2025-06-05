@@ -42,52 +42,46 @@ class AccountController extends Controller
         return back()->with('success', 'Senha atualizada com sucesso.');
     }
 
-    public function deleteAccount(Request $request)
+    public function destroy(Request $request)
     {
         $request->validate([
-            'password' => 'required|string',
+            'delete_password' => ['required'],
         ]);
 
         $user = Auth::user();
 
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['password' => 'Senha incorreta.']);
+        if (!Hash::check($request->delete_password, $user->password)) {
+            return back()->withErrors(['delete_password' => 'Senha incorreta.']);
         }
 
-        // Inicia uma transação para garantir a integridade
-        \DB::beginTransaction();
-
-        try {
-            // Desativar propriedades
-            $user->properties()->update(['is_active' => false]);
-
-            // Suspender anúncios
-            $user->advertisements()->update(['is_published' => false, 'is_suspended' => true]);
-
-            // Eliminar pedidos de contato
-            foreach ($user->advertisements as $advertisement) {
-                $advertisement->requests()->delete();
-            }
-            \App\Models\ContactRequest::where('created_by', $user->id)->delete();
-
-            // Remover as denúncias relacionadas aos anúncios
-            foreach ($user->advertisements as $advertisement) {
-                \App\Models\Denunciation::where('advertisement_id', $advertisement->id)->delete();
-            }
-
-            // Remover os favoritos
-            $user->favorites()->delete();
-
-            // Será que agora é removido este caralho?
-            $user->delete();
-
-            \DB::commit();
-            Auth::logout();
-
-            return redirect('/')->with('success', 'Conta excluída com sucesso.');
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            return back()->with('error', 'Não foi possível excluir a conta: ' . $e->getMessage());
+        // Remover todas as mídias da coleção "picture"
+        if ($user->hasMedia('picture')) {
+            $user->clearMediaCollection('picture');
         }
+
+        // Marca como arquivado + limpa dados
+        $user->update([
+            'name' => 'Utilizador Eliminado',
+            'email' => 'deleted_' . $user->id . '@' . parse_url(config('app.url'), PHP_URL_HOST),
+            'telephone' => null,
+            'profile_photo_path' => null,
+            'show_email' => false,
+            'show_telephone' => false,
+            'password' => Hash::make(''), // Limpa a senha
+            'public_profile' => false,
+            'message_notifications' => false,
+            'bio'=> null,
+            'state' => 'archived',
+        ]);
+
+        // Flash antes do logout
+        session()->flash('success', 'Conta desativada com sucesso.');
+
+        // Logout total
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
