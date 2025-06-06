@@ -43,7 +43,11 @@
             <i class="bi bi-images text-xl text-primary mr-3"></i>
             <h2 class="text-xl font-bold text-primary">Imagens da Propriedade</h2>
         </div>
-        <p class="text-sm text-gray-500 mb-4">Submete aqui imagens da propriedade. Imagens tem que ser... Depois deixamos aqui recomendações gerais para fotos.</p>
+        <p class="text-sm text-gray-500 mb-4">
+            Carrega aqui as imagens da propriedade.
+            As 5 primeiras aparecem em destaque no anúncio — escolhe as melhores!
+            Podes arrastar as fotos para mudar a ordem.
+        </p>
         <div class="filepond-wrapper w-full">
             <input
                 type="file"

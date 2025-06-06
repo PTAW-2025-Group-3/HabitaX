@@ -22,7 +22,7 @@
             </p>
             <div class="mt-4 flex items-center justify-between">
                 <span class="text-sm text-gray">
-                    Publicado há {{ \Carbon\Carbon::parse($ad->created_at)->diffForHumans() }}
+                    Atualizado {{ \Carbon\Carbon::parse($ad->updated_at)->diffForHumans() }}
                 </span>
                 <div class="flex space-x-2">
                     <a href="{{ route('advertisements.edit', $ad->id) }}"

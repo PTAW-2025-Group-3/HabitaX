@@ -16,7 +16,7 @@
         <p class="text-sm text-gray mb-2">{{ $property->parish->name ?? 'Localização não disponível' }}</p>
         <p class="text-lg font-bold text-secondary">{{ $property->property_type->name }}</p>
         <div class="mt-4 flex items-center justify-between">
-            <span class="text-sm text-gray">Inserido há {{ \Carbon\Carbon::parse($property->created_at)->diffForHumans() }}</span>
+            <span class="text-sm text-gray">Atualizado {{ \Carbon\Carbon::parse($property->updated_at)->diffForHumans() }}</span>
             <div class="flex space-x-2">
                 <a href="{{ route('properties.edit', $property->id) }}" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
                     <i class="bi bi-pencil text-secondary"></i>
