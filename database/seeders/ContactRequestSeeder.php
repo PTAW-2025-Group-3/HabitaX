@@ -11,29 +11,15 @@ class ContactRequestSeeder extends Seeder
 {
     public function run(): void
     {
-        // Verifica se existem utilizadores e anúncios
         $users = User::all();
         $ads = Advertisement::all();
 
-        if ($users->isEmpty() || $ads->isEmpty()) {
-            $this->command->warn('⚠️ É necessário ter utilizadores e anúncios antes de criar pedidos de contacto.');
+        if ($ads->isEmpty()) {
+            $this->command->warn('⚠️ É necessário ter anúncios antes de criar pedidos de contacto.');
             return;
         }
 
-        // Criar 15 pedidos de contacto
-        foreach (range(1, 15) as $i) {
-            $user = $users->random();
-            $ad = $ads->random();
-
-            ContactRequest::create([
-                'advertisement_id' => $ad->id,
-                'created_by' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'telephone' => rand(910000000, 939999999),
-                'message' => fake()->paragraph(3),
-                'state' => fake()->randomElement(['unread', 'read', 'archived']),
-            ]);
-        }
+        ContactRequest::factory()->count(20)->create();
     }
 }
+

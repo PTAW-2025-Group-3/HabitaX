@@ -22,3 +22,5 @@ yarn-error.log
 /.zed
 /storage/seed/
 /storage/media-library/
+.env
+.env.*

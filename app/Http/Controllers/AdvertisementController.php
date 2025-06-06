@@ -179,7 +179,12 @@ class AdvertisementController extends Controller
 
         $parameters = PropertyParameter::where('property_id', $property->id)
             ->with('attribute')
-            ->get();
+            ->get()
+            ->filter(function ($param) {
+                return !is_null(
+                    $param->text_value ?? $param->int_value ?? $param->float_value ?? $param->boolean_value ?? $param->select_value ?? $param->date_value ?? $param->value
+                );
+            });
 
         // group parameters by PropertyAttributeGroup depending on if attribute makes part of a group
         $groupedParameters = [];

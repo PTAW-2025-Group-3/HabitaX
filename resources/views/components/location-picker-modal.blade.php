@@ -6,26 +6,18 @@
         </div>
 
         <div class="p-4 space-y-4">
-            <!-- Mode Switcher -->
-            <div class="flex space-x-4">
-                <button :class="{ 'font-bold': mode === 'list' }" @click="mode = 'list'">Selecionar pela Lista</button>
-                <button :class="{ 'font-bold': mode === 'search' }" @click="mode = 'search'">Pesquisar pelo Nome</button>
-                <button class="ml-auto text-sm text-red-600 underline" @click="resetState">Reiniciar</button>
+            <div x-show="mode === ''">
+                @include('components.location-picker-modal.selected')
             </div>
-
-            <!-- Search -->
+            <div x-show="mode === 'choose'">
+                @include('components.location-picker-modal.choose')
+            </div>
             <div x-show="mode === 'search'">
                 @include('components.location-picker-modal.search')
             </div>
-
-            <!-- Select by List -->
             <div x-show="mode === 'list'">
                 @include('components.location-picker-modal.list')
             </div>
-        </div>
-
-        <div class="border-t p-4 text-right" x-show="selectedMunicipality || selectedParishes.length">
-            <button @click="confirmAndSaveHistory" class="px-4 py-2 bg-green-600 text-white rounded">Confirmar</button>
         </div>
     </div>
 </div>
@@ -36,12 +28,12 @@
             return {
                 triggerId: triggerId,
                 isOpen: false,
-                mode: 'list',
+                mode: '',
                 districts: [],
                 municipalities: [],
                 parishes: [],
-                selectedDistrict: null,
-                selectedMunicipality: null,
+                selectedDistricts: [],
+                selectedMunicipalities: [],
                 selectedParishes: [],
                 searchQuery: '',
                 searchResults: [],
@@ -69,9 +61,7 @@
                     }
 
                     const res = await fetch(`/locations/search?q=${encodeURIComponent(this.searchQuery)}`);
-                    const data = await res.json();
-                    this.searchResults = data;
-                    console.log('searchResults:', data);
+                    this.searchResults = await res.json();
                 },
 
                 openModal() {
@@ -84,10 +74,8 @@
                     this.isOpen = false;
                 },
 
-                openChooseMode(districtId = null, municipalityId = null) {
-                    this.contextDistrict = districtId;
-                    this.contextMunicipality = municipalityId;
-                    this.mode = 'chooseMode';
+                openChooseMode() {
+                    this.mode = 'choose';
                 },
 
                 openList() {
@@ -100,8 +88,8 @@
 
                 resetState() {
                     this.mode = 'list';
-                    this.selectedDistrict = null;
-                    this.selectedMunicipality = null;
+                    this.selectedDistricts = [];
+                    this.selectedMunicipalities = [];
                     this.selectedParishes = [];
                     this.municipalities = [];
                     this.parishes = [];
@@ -156,16 +144,13 @@
 
                     this.saveToHistory();
                     this.closeModal();
-                }
-                ,
+                },
 
                 goBack() {
-                    if (this.selectedMunicipality) {
-                        this.selectedMunicipality = null;
-                        this.parishes = [];
-                    } else if (this.selectedDistrict) {
-                        this.selectedDistrict = null;
-                        this.municipalities = [];
+                    if (this.selectedMunicipalities.length > 0) {
+                        this.selectedMunicipalities.pop();
+                    } else if (this.selectedDistricts.length > 0) {
+                        this.selectedDistricts.pop();
                     }
                 },
 
@@ -176,16 +161,12 @@
 
                 saveToHistory() {
                     const selectedParishObjs = this.parishes.filter(p => this.selectedParishes.includes(p.id));
-
-                    const uniqueMunicipalities = new Set(selectedParishObjs.map(p => p.municipality_id));
-                    const uniqueDistricts = new Set(selectedParishObjs.map(p => p.district_id));
-
-                    const district = uniqueDistricts.size === 1 ? this.selectedDistrict : null;
-                    const municipality = uniqueMunicipalities.size === 1 ? this.selectedMunicipality : null;
+                    const districtsIds = [...new Set(selectedParishObjs.map(p => p.district_id))];
+                    const municipalitiesIds = [...new Set(selectedParishObjs.map(p => p.municipality_id))];
 
                     const newItem = {
-                        district,
-                        municipality,
+                        districts: this.selectedDistricts,
+                        municipalities: this.selectedMunicipalities,
                         parishes: this.selectedParishes,
                         parishNames: selectedParishObjs.map(p => p.name),
                         timestamp: Date.now(),
@@ -202,16 +183,15 @@
                     }
 
                     history = history.filter(item =>
-                        JSON.stringify(item.district) !== JSON.stringify(newItem.district) ||
-                        JSON.stringify(item.municipality) !== JSON.stringify(newItem.municipality) ||
+                        JSON.stringify(item.districts) !== JSON.stringify(newItem.districts) ||
+                        JSON.stringify(item.municipalities) !== JSON.stringify(newItem.municipalities) ||
                         JSON.stringify(item.parishes) !== JSON.stringify(newItem.parishes)
                     );
 
                     history.unshift(newItem);
-
                     history = history.slice(0, 5);
 
-                    document.cookie = `locationHistory=${encodeURIComponent(JSON.stringify(history))}; path=/; max-age=31536000`; // 1 год
+                    document.cookie = `locationHistory=${encodeURIComponent(JSON.stringify(history))}; path=/; max-age=31536000`;
                     this.searchHistory = history;
                 },
 
@@ -234,8 +214,8 @@
                 },
 
                 selectFromHistory(item) {
-                    this.selectedDistrict = item.district;
-                    this.selectedMunicipality = item.municipality;
+                    this.selectedDistricts = item.districts;
+                    this.selectedMunicipalities = item.municipalities;
                     this.selectedParishes = item.parishes;
                     this.closeModal();
                 },

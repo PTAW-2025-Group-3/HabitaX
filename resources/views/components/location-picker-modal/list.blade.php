@@ -1,8 +1,10 @@
-<template x-if="selectedDistrict || selectedMunicipality">
+<!-- VOLTAR -->
+<template x-if="selectedDistricts.length > 0 || selectedMunicipalities.length > 0">
     <div class="p-2 text-gray-600 cursor-pointer hover:underline" @click="goBack">&larr; Voltar</div>
 </template>
 
-<div x-show="!selectedDistrict">
+<!-- ETAPA 1: LISTAR DISTRITOS -->
+<div x-show="selectedDistricts.length === 0">
     <template x-for="district in districts" :key="district.id">
         <div class="p-2 border-b cursor-pointer hover:bg-gray-100" @click="selectDistrict(district)">
             <span x-text="district.name"></span>
@@ -10,7 +12,8 @@
     </template>
 </div>
 
-<div x-show="selectedDistrict && !selectedMunicipality">
+<!-- ETAPA 2: LISTAR MUNICÍPIOS -->
+<div x-show="selectedDistricts.length > 0 && selectedMunicipalities.length === 0">
     <div class="p-2 text-blue-600 cursor-pointer" @click="selectWholeDistrict">Selecionar distrito inteiro</div>
     <template x-for="municipality in municipalities" :key="municipality.id">
         <div class="p-2 border-b cursor-pointer hover:bg-gray-100" @click="selectMunicipality(municipality)">
@@ -19,7 +22,8 @@
     </template>
 </div>
 
-<div x-show="selectedMunicipality">
+<!-- ETAPA 3: LISTAR FREGUESIAS -->
+<div x-show="selectedMunicipalities.length > 0">
     <div class="p-2 font-semibold text-blue-600 cursor-pointer" @click="selectWholeMunicipality">Selecionar concelho inteiro</div>
     <template x-for="parish in parishes" :key="parish.id">
         <label class="block p-2 hover:bg-gray-50">

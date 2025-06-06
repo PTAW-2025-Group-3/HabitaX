@@ -13,17 +13,20 @@ class ContactRequestFactory extends Factory
 {
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
+        $faker = $this->faker;
         $advertisement = Advertisement::inRandomOrder()->first();
+
+        $isAuthenticated = $this->faker->boolean(50);
+        $user = $isAuthenticated ? User::inRandomOrder()->first() : null;
 
         return [
             'advertisement_id' => $advertisement?->id,
             'created_by' => $user?->id,
-            'name' => $user?->name ?? $this->faker->name(),
-            'email' => $user?->email ?? $this->faker->safeEmail(),
-            'telephone' => $this->faker->numerify('9########'),
-            'message' => $this->faker->paragraph(),
-            'state' => $this->faker->randomElement(['unread', 'read', 'archived']),
+            'name' => $user?->name ?? $faker->firstName() . ' ' . $faker->lastName(),
+            'email' => $user?->email ?? $faker->safeEmail(),
+            'telephone' => $faker->phoneNumber(),
+            'message' => $faker->paragraph(),
+            'state' => $faker->randomElement(['unread', 'read', 'archived']),
         ];
     }
 }
