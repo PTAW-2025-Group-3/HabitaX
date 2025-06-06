@@ -15,14 +15,20 @@ class AdvertisementFactory extends Factory
     {
         $user = User::inRandomOrder()->first();
 
+        $transactionType = $this->faker->randomElement(['sale', 'rent']);
+
+        $price = $transactionType === 'rent'
+            ? $this->faker->randomFloat(2, 200, 3000) // preço para aluguer
+            : $this->faker->randomFloat(2, 50000, 750000); // preço para venda
+
         return [
             'reference' => $this->faker->unique()->numberBetween(100000, 999999),
-            'title' => $this->faker->sentence(6),
-            'description' => $this->faker->paragraph(3),
-            'transaction_type' => $this->faker->randomElement(['sale', 'rent']),
-            'price' => $this->faker->randomFloat(2, 10000, 750000),
-            'is_published' => $this->faker->boolean(80), // 80% chance de estar publicado
-            'is_suspended' => $this->faker->boolean(10), // 10% chance de estar suspenso
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+            'transaction_type' => $transactionType,
+            'price' => $price,
+            'is_published' => $this->faker->boolean(80),
+            'is_suspended' => $this->faker->boolean(10),
             'property_id' => Property::inRandomOrder()->first()?->id,
             'created_by' => $user?->id,
             'updated_by' => $user?->id,

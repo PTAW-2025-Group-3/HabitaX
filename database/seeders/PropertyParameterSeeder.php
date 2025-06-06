@@ -33,9 +33,10 @@ class PropertyParameterSeeder extends Seeder
                             break;
                         }
 
-                        PropertyParameterOption::factory()->create([
-                            'parameter_id' => $attribute->id,
-                            'option_id' => $options->random()->id,
+                        PropertyParameter::factory()->create([
+                            'attribute_id' => $attribute->id,
+                            'property_id' => $property->id,
+                            'select_value' => fake()->randomElement($options->pluck('id')->toArray()),
                         ]);
                         break;
 
@@ -51,7 +52,7 @@ class PropertyParameterSeeder extends Seeder
                             $attribute->max_options ?? count($options)
                         ));
 
-                        $parameter = PropertyParameterOption::factory()
+                        $parameter = PropertyParameter::factory()
                             ->withAttribute([
                                 'attribute' => $attribute,
                                 'property_id' => $property->id,

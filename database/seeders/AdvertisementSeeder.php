@@ -22,14 +22,7 @@ class AdvertisementSeeder extends Seeder
 
         // Create advertisements for all properties
         foreach ($properties as $property) {
-            Advertisement::create([
-                'reference' => fake()->unique()->numberBetween(100000, 999999),
-                'title' => fake()-> sentence(6),
-                'description' => fake()->paragraph(3),
-                'transaction_type' => fake()->randomElement(['sale', 'rent']),
-                'price' => fake()->randomFloat(2, 10000, 750000),
-                'is_published' => true,
-                'is_suspended' => false,
+            Advertisement::factory()->create([
                 'property_id' => $property->id,
                 'created_by' => $property->created_by,
             ]);

@@ -184,55 +184,6 @@
                     <p class="text-gray-700 text-sm md:text-base">{{ $ad->description }}</p>
                 </section>
 
-                {{-- <section class="space-y-2">
-                    <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                        <!-- Mostrar apenas 4-5 características mais importantes -->
-                        @php
-                            $displayedCount = 0;
-                            $maxDisplayed = 4;
-                            $path = 'advertisements.individual.parameters.';
-                            $attributeIncludes = [
-                                AttributeType::TEXT->value => $path. 'text',
-                                AttributeType::LONG_TEXT->value => $path . 'long-text',
-                                AttributeType::INT->value => $path . 'int',
-                                AttributeType::FLOAT->value => $path . 'float',
-                                AttributeType::BOOLEAN->value => $path . 'boolean',
-                                AttributeType::DATE->value => $path . 'date',
-                                AttributeType::SELECT_SINGLE->value => $path . 'select-single',
-                                AttributeType::SELECT_MULTIPLE->value => $path . 'select-multiple',
-                            ];
-
-                            // Obter todos os parâmetros disponíveis
-                            $allParameters = collect([]);
-                            $groupedParameters = $groupedParameters ?? collect([]);
-                            foreach($groupedParameters as $groupId => $parameters) {
-                                $allParameters = $allParameters->merge($parameters);
-                            }
-
-                            $priorityParameters = $allParameters->take($maxDisplayed);
-                        @endphp
-
-                        @foreach($priorityParameters as $parameter)
-                            @if(isset($attributeIncludes[$parameter->attribute->type->value]) && $displayedCount < $maxDisplayed)
-                                <div>
-                                    @include($attributeIncludes[$parameter->attribute->type->value], ['parameter' => $parameter])
-                                </div>
-                                @php $displayedCount++; @endphp
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <!-- Botão "Ver mais características" -->
-                    <div class="my-4 flex justify-start">
-                        <button id="showAllFeaturesBtn"
-                                class="btn-secondary gap-2 px-4 py-2.5">
-                            <i class="bi bi-grid-3x3-gap-fill"></i>
-                            <span class="text-sm font-medium">Mostrar todas as {{ $allParameters->count() }} características</span>
-                        </button>
-                    </div>
-                </section> --}}
                 <section class="space-y-2 mb-4">
                     <h2 class="text-lg md:text-xl font-semibold">Características do Imóvel</h2>
 
