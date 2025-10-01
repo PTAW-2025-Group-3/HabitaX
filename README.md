@@ -24,7 +24,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 ## Installation
 
 ```bash
-git clone https://github.com/Projecto-Tematico-em-Aplicacoes-Web/HabitaX.git
+git clone https://github.com/PTAW-2025-Group-3/HabitaX
 cd habitax
 composer install
 npm install && npm run build
@@ -66,7 +66,7 @@ We would like to thank the following resources and libraries that helped us in t
 - [Alpine.js](https://alpinejs.dev/) - for a lightweight JavaScript framework
 
 We followed a tutorial series by The Net Ninja to learn Laravel:
-- [Net Ninja - Laravel 11 Tutorial for Beginners](https://youtube.com/playlist?list=PL4cUxeGkcC9gF5Gez17eHcDIxrpVSBuVt&si=CG2-nhbvw0nYhXY7)
+- [Laravel 11 Tutorial for Beginners](https://youtube.com/playlist?list=PL4cUxeGkcC9gF5Gez17eHcDIxrpVSBuVt&si=CG2-nhbvw0nYhXY7)
 
 ## License
 
