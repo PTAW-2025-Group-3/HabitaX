@@ -14,14 +14,10 @@ RUN apk update && apk upgrade && apk add --no-cache \
     git \
     libpq-dev \
     libzip-dev \
+    icu-dev \
     $PHPIZE_DEPS
 
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip
-
-RUN pecl install redis \
-    && mkdir -p /tmp/extensions \
-    && cp $(php -r "echo ini_get('extension_dir');")/redis.so /tmp/extensions/ \
-    && echo "extension=redis.so" > /tmp/extensions/redis.ini
+RUN docker-php-ext-install intl pdo pdo_pgsql mbstring exif pcntl bcmath gd zip
 
 WORKDIR /var/www
 
@@ -46,11 +42,11 @@ RUN apk add --no-cache \
     nodejs \
     npm \
     supervisor \
-    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip sockets
-
-COPY --from=build /tmp/extensions/redis.so /tmp/redis.so
-RUN cp /tmp/redis.so "$(php -r 'echo ini_get("extension_dir");')"
-RUN echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+    icu-dev \
+    $PHPIZE_DEPS \
+    && docker-php-ext-install intl pdo pdo_pgsql mbstring exif pcntl bcmath gd zip sockets \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 COPY .env.docker /var/www/.env
 COPY --from=build /var/www /var/www

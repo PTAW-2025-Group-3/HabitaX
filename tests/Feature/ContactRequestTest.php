@@ -45,7 +45,7 @@ class ContactRequestTest extends TestCase
             'email' => 'joao.silva@example.com',
             'telephone' => '912345678',
             'message' => 'Estou interessado neste imóvel. Quando posso visitar?',
-            'state' => 'new',
+            'state' => 'unread',
         ]);
 
         // Verificações
@@ -55,7 +55,7 @@ class ContactRequestTest extends TestCase
             'created_by' => $user->id,
             'name' => 'João Silva',
             'email' => 'joao.silva@example.com',
-            'state' => 'new',
+            'state' => 'unread',
         ]);
 
         $this->assertEquals('Estou interessado neste imóvel. Quando posso visitar?', $contactRequest->message);
@@ -85,11 +85,11 @@ class ContactRequestTest extends TestCase
         $contactRequest = ContactRequest::factory()->create([
             'advertisement_id' => $advertisement->id,
             'created_by' => $user->id,
-            'state' => 'new',
+            'state' => 'unread',
         ]);
 
         // Verifica estado inicial
-        $this->assertEquals('new', $contactRequest->state);
+        $this->assertEquals('unread', $contactRequest->state);
 
         // Atualiza para lido
         $contactRequest->state = 'read';

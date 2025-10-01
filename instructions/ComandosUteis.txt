@@ -4,7 +4,7 @@ npm run dev
 
 php artisan migrate:fresh --seed
 
-php artisan seed
+php artisan db:seed
 
 php artisan optimize:clear
 

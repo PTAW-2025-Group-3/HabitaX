@@ -19,6 +19,20 @@ class PropertyFactory extends Factory
             $query->where('is_active', true);
         })->pluck('id');
 
+        if (\App\Models\Property::count() > 200) {
+            $propertyTypeId = \App\Models\PropertyType::where('name', 'Moradias')->first()?->id;
+
+            if (!$propertyTypeId) {
+                throw new \Exception('PropertyType "Moradias" not found. Please seed it before running PropertyFactory.');
+            }
+        } else {
+            $propertyTypeId = \App\Models\PropertyType::inRandomOrder()->first()?->id;
+
+            if (!$propertyTypeId) {
+                throw new \Exception('No PropertyType found. Please seed PropertyTypes before running PropertyFactory.');
+            }
+        }
+
         return [
             'title' => $this->faker->sentence(),
             'country' => 'Portugal',
@@ -26,7 +40,7 @@ class PropertyFactory extends Factory
             'is_active' => true,
             'is_verified' => false,
 
-            'property_type_id' => \App\Models\PropertyType::inRandomOrder()->first()?->id,
+            'property_type_id' => $propertyTypeId,
             'parish_id' => $activeParishIds->random(),
             'created_by' => $user?->id,
             'updated_by' => $user?->id,

@@ -11,19 +11,19 @@ class AdvertiserVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_approved_advertiser_verification_sets_advertiser_number(): void
+    public function test_approved_advertiser_verification_sets_is_advertiser_to_true(): void
     {
-        // Criar utilizador sem advertiserNumber
+        // Criar utilizador não anunciante
         $user = User::factory()->create([
-            'advertiser_number' => null,
+            'is_advertiser' => false,
         ]);
 
-        // Verificar que começa sem advertiserNumber
-        $this->assertNull($user->advertiserNumber);
+        // Verificar que começa como não anunciante
+        $this->assertFalse($user->is_advertiser);
 
-        // Criar verificação aprovada (1 = approved)
-        AdvertiserVerification::create([
-            'verification_advertiser_state' => 1,
+        // Criar verificação
+        $verification = AdvertiserVerification::create([
+            'verification_advertiser_state' => 0,
             'submission_date' => now()->subDays(3),
             'validation_date' => now(),
             'document_url' => 'https://example.com/doc.pdf',
@@ -34,11 +34,16 @@ class AdvertiserVerificationTest extends TestCase
             'validated_at' => now(),
         ]);
 
+        // Atualizar estado para aprovado (1)
+        $verification->update([
+            'verification_advertiser_state' => 1,
+        ]);
+
         // Refrescar utilizador
         $user->refresh();
 
-        // Verificar que recebeu advertiserNumber
-        $this->assertNotNull($user->advertiserNumber);
-        $this->assertIsInt($user->advertiserNumber);
+        // Verificar que foi atualizado para anunciante
+        $this->assertNotNull($user->is_advertiser);
+        $this->assertNotFalse($user->is_advertiser);
     }
 }

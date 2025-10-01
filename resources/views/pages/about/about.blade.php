@@ -32,9 +32,9 @@
             @php
                 $path = 'images/team/';
                 $equipa = [
-                    ['nome' => 'Luis Assis', 'imagem' => 'Luiz Assis.jpg', 'cargo' => 'Gestor de Grupo'],
+                    ['nome' => 'Luis Assis', 'imagem' => 'Luis300.jpg', 'cargo' => 'Gestor de Grupo'],
                     ['nome' => 'Gustavo Gião', 'imagem' => 'GustavoGiao.png', 'cargo' => 'Software Engineer'],
-                    ['nome' => 'Pedro Sampaio', 'imagem' => 'SedroPampaio.jpg', 'cargo' => 'Desenvolvedor'],
+                    ['nome' => 'Pedro Sampaio', 'imagem' => 'Pedro.jpg', 'cargo' => 'Desenvolvedor'],
                     ['nome' => 'Ratmir Mukazhanov', 'imagem' => 'Ratmir.jpg', 'cargo' => 'Software Architect'],
                     ['nome' => 'Kousha Rezaei', 'imagem' => 'Kousha.jpg', 'cargo' => 'Desenvolvedor'],
                 ];

@@ -59,6 +59,11 @@ class AdvertisementObserverTest extends TestCase
 
         $this->assertDatabaseHas('price_histories', [
             'advertisement_id' => $ad->id,
+            'price' => 100000,
+        ]);
+
+        $this->assertDatabaseHas('price_histories', [
+            'advertisement_id' => $ad->id,
             'price' => 120000,
         ]);
     }

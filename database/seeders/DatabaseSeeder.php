@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
         }
         $this->call(PropertySeeder::class);
         $this->call(PropertyVerificationSeeder::class);
-        $this->call(PropertyParameterSeeder::class);
+//        $this->call(PropertyParameterSeeder::class);
         $this->call(AdvertisementSeeder::class);
-        $this->call(PriceHistorySeeder::class);
+//        $this->call(PriceHistorySeeder::class);
         $this->call(AdvertiserVerificationSeeder::class);
         $this->call(FavoriteAdvertisementSeeder::class);
         $this->call(ContactRequestSeeder::class);

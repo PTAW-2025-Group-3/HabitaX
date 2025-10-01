@@ -24,3 +24,4 @@ yarn-error.log
 /storage/media-library/
 .env
 .env.*
+!.env.example

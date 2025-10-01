@@ -111,7 +111,7 @@ Route::get('/property-type/{id}/attributes', [PropertyTypeController::class, 'ge
 Route::get('/property-type/{id}/attributes/html', [PropertyTypeController::class, 'loadAttributes']);
 
 // Moderation Route
-Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
+Route::middleware(['auth', ModeratorMiddleware::class, 'doNotCacheResponse'])->group(function () {
     Route::get('/moderation', [ModerationController::class, 'index'])->name('moderation');
     Route::get('/moderation/reported-advertisement/{id}', [ReportedAdvertisementController::class, 'show'])
         ->name('reported-advertisement.show');
@@ -143,7 +143,7 @@ Route::middleware(['auth', ModeratorMiddleware::class])->group(function () {
 });
 
 // Administration Route
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+Route::middleware(['auth', AdminMiddleware::class, 'doNotCacheResponse'])->group(function () {
     Route::get('/admin', [AdministrationController::class, 'index'])->name('admin.index');
     Route::get('/admin/users', [AdministrationController::class, 'getUsers'])->name('admin.users');
     Route::post('/admin/users/{user}/toggle-status', [AdministrationController::class, 'toggleStatus'])
@@ -224,7 +224,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 Route::post('/contact-requests', [ContactRequestController::class, 'store'])
     ->name('contact-requests.store');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'doNotCacheResponse')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

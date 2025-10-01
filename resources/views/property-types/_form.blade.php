@@ -76,7 +76,6 @@
                 class="filepond"
                 name="file"
                 id="images"
-                accept="image/png, image/svg+xml, image/webp"
             />
             <div id="hidden-images-input"></div>
         </div>
@@ -160,7 +159,7 @@
                 allowMultiple: true,
                 allowReorder: true,
                 imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/svg+xml', 'image/webp'],
+                acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'],
                 labelIdle: 'Arraste e solte ou <span class="filepond--label-action">Selecione</span>',
                 files: existingImages.map(image => {
                     createHiddenInput(image.name, image.preview);

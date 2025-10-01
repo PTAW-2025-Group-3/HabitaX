@@ -44,7 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_values');
+        Schema::dropIfExists('property_parameters');
         Schema::dropIfExists('property_parameter_options');
     }
 };

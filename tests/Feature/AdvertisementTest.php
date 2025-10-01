@@ -34,7 +34,7 @@ class AdvertisementTest extends TestCase
 
         $advertisement = Advertisement::create([
             'reference' => 123456,
-            'title' => 'Apartamento Teste', // FIX HERE
+            'title' => 'Apartamento Teste',
             'description' => 'Apartamento com vista para o mar',
             'transaction_type' => 'rent',
             'price' => 850.00,

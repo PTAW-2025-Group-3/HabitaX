@@ -23,7 +23,7 @@ class PropertyValueTest extends TestCase
         Parish::factory()->create(); // Necessário para propriedade
     }
 
-    public function test_property_values_are_created_only_for_attributes_linked_to_type(): void
+    public function test_property_parameters_are_created_only_for_attributes_linked_to_type(): void
     {
         $user = User::factory()->create();
 
@@ -38,7 +38,7 @@ class PropertyValueTest extends TestCase
         // Ligar atributos ao tipo usando PropertyAttributeType
         foreach ($attributes as $attribute) {
             PropertyTypeAttribute::create([
-                'property_type' => $type->id,
+                'property_type_id' => $type->id,
                 'attribute_id' => $attribute->id,
                 'required' => true,
             ]);
@@ -49,7 +49,7 @@ class PropertyValueTest extends TestCase
 
         // Criar propriedade com este tipo
         $property = Property::factory()->create([
-            'property_type' => $type->id,
+            'property_type_id' => $type->id,
             'created_by' => $user->id,
             'updated_by' => $user->id,
         ]);
@@ -64,8 +64,8 @@ class PropertyValueTest extends TestCase
         }
 
         // Verificações
-        $this->assertCount(3, $property->values); // só os ligados ao tipo
-        $this->assertDatabaseMissing('property_values', [
+        $this->assertCount(3, $property->parameters); // só os ligados ao tipo
+        $this->assertDatabaseMissing('property_parameters', [
             'attribute_id' => $unrelatedAttribute->id,
             'property_id' => $property->id,
         ]);

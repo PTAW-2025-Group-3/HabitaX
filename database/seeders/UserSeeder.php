@@ -25,10 +25,25 @@ class UserSeeder extends Seeder
                 'is_advertiser' => true,
             ],
             [
+                'name' => 'Gus G',
+                'email' => 'gustavo@ua.pt',
+                'password' => 'gusfring',
+                'user_type' => 'admin',
+                'state' => 'active',
+                'is_advertiser' => true,
+            ],
+            [
                 'name' => 'Sedro Pampaio',
                 'email' => 'sedro@ua.pt',
                 'password' => 'pampaio',
-                'user_type' => 'moderator',
+                'user_type' => 'admin',
+                'state' => 'active',
+            ],
+            [
+                'name' => 'Luizinho',
+                'email' => 'luis@ua.pt',
+                'password' => 'luizinho',
+                'user_type' => 'admin',
                 'state' => 'active',
             ],
             [

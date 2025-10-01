@@ -59,13 +59,6 @@ class UserObserver
         $user->advertisements()->update(['is_published' => false]);
         $user->advertisements()->update(['is_suspended' => true]);
 
-        // Eliminar todos os pedidos de contacto relacionados aos anúncios do utilizador
-        foreach ($user->advertisements as $advertisement) {
-            $advertisement->requests()->delete();
-        }
-
-        \App\Models\ContactRequest::where('created_by', $user->id)->delete();
-
         // Encerrar todas as sessões do utilizador
         $this->logoutUserFromAllDevices($user);
     }

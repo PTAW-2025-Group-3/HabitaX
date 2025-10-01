@@ -42,7 +42,7 @@
             <ul class="space-y-2 text-sm">
                 <li class="flex items-center justify-center md:justify-end">
                     <i class="bi bi-envelope mr-2"></i>
-                    <a href="mailto:info@habitax.pt" class="hover:text-indigo-400 transition">habitaxsupport@gmail.com</a>
+                    <a href="mailto:info@habitax.pt" class="hover:text-indigo-400 transition">info@habitax.pt</a>
                 </li>
                 <li class="flex items-center justify-center md:justify-end">
                     <i class="bi bi-geo-alt mr-2"></i>

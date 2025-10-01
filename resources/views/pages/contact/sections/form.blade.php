@@ -12,7 +12,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="bi bi-envelope-fill text-xl"></i>
-                        <span>habitaxsupport@gmail.com</span>
+                        <span>info@habitax.pt</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="bi bi-geo-alt-fill text-xl"></i>
