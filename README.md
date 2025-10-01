@@ -17,6 +17,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 - [Credits](#credits)
 - [License](#license)
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [How to Contribute](#how-to-contribute)
 - [Tests](#tests)
 
@@ -29,32 +30,43 @@ composer install
 npm install && npm run build
 ```
 
-Duplicate .env.example to .env, configure database credentials and storage paths, then:
+Duplicate .env.example to .env, configure database credentials and storage paths.
+
+Run the following commands to set up the database and storage:
+
 ```bash
 php artisan key:generate
 php artisan migrate --seed
-php artisan serve
+php artisan storage:link
 ```
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+To access the application locally, you can use [Herd](https://herd.dev/) for a simple setup. After installing Herd, create a new site pointing to the project directory and set the environment to "Laravel". Herd will automatically configure the web server and database for you.
+Alternatively, you can use Docker. Make sure you have Docker and Docker Compose installed, then run:
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
-
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+```bash
+docker-compose up -d
+```
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+This project was developed by:
 
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
+- [Gustavo Guião](https://github.com/gustavogiao)
+- [Kousha Rezaei](https://github.com/Koi725)
+- [Luíz Assis](https://github.com/NO0BMaster69)
+- [Pedro Sampaio](https://github.com/PedroSampaio13)
+- [Ratmir Mukazhanov](https://github.com/ratmir-mukazhanov)
 
-If you followed tutorials, include links to those here as well.
+We would like to thank the following resources and libraries that helped us in the development of this project:
+- [Laravel](https://laravel.com/) - for the web framework and ecosystem
+- [Spatie](https://spatie.be/) - for various Laravel packages including media library and responsecache
+- [Pqina](https://pqina.nl/) - for FilePond, an excellent file upload library
+- [Alpine.js](https://alpinejs.dev/) - for a lightweight JavaScript framework
 
-https://youtube.com/playlist?list=PL4cUxeGkcC9gF5Gez17eHcDIxrpVSBuVt&si=CG2-nhbvw0nYhXY7
+We followed a tutorial series by The Net Ninja to learn Laravel:
+- [Net Ninja - Laravel 11 Tutorial for Beginners](https://youtube.com/playlist?list=PL4cUxeGkcC9gF5Gez17eHcDIxrpVSBuVt&si=CG2-nhbvw0nYhXY7)
 
 ## License
 
@@ -102,9 +114,23 @@ Administrators:
 - Review reports and take action
 - Access internal dashboards
 
+## Screenshots
+![App Screenshot](./readme/screens/1%20home1.png)
+![App Screenshot](./readme/screens/2.png)
+![App Screenshot](./readme/screens/3.png)
+![App Screenshot](./readme/screens/4.png)
+![App Screenshot](./readme/screens/5%20atributos.png)
+![App Screenshot](./readme/screens/7%20tipos.png)
+
 ## How to Contribute
 
-If you created an application or package and would like other developers to contribute it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
+6. Wait for review and approval
+7. Celebrate your contribution!
 
 ## Tests
 
@@ -113,4 +139,5 @@ To run tests, run the following command
 ```bash
   php artisan test
 ```
-Ensure you have a testing database configured in your `.env` file.
+
+You can change the test configuration in phpunit.xml file in the root directory of the project.
