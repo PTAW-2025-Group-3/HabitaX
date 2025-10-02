@@ -2,22 +2,82 @@
 
 ## Description
 
-HabitaX is a web platform designed to simplify the process of publishing and searching for real estate properties. It was developed to address the lack of transparency and usability found in existing real estate platforms, particularly for individual property owners who want to advertise without intermediaries.
+HabitaX is a web platform for publishing and searching real estate listings, developed as an academic project by a culturally diverse team of students based in Portugal, with backgrounds from Brazil, Kazakhstan and Iran.
 
-The platform allows users to create structured listings, manage inquiries, filter and save properties, and simulate bank loan payments. Administrators have access to moderation tools to ensure credibility and security.
+Its core differentiator is a dynamic attribute engine: property types (e.g. apartments, land, commercial units) can define their own custom fields and metadata, so listings capture the right structure for each type without rigid, hardcoded schemas.
 
-During development, the team gained experience in full-stack web development using Laravel, database design, role-based access control, automated testing, and containerization with Docker.
+The platform supports structured listings, image galleries, contact request management, property saving and a mortgage-simulation tool. Administrators can moderate listings and users to preserve credibility.
+
+The main technical challenge of the project was designing a flexible data model that allows new property types and custom fields to be introduced without modifying the database schema or codebase. To solve this, we implemented a polymorphic attribute storage system with validation rules, user-friendly forms and automatic rendering on the listing pages.
 
 ## Table of Contents
 
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+    - [Use Cases](#use-cases)
+    - [System Architecture](#system-architecture)
+    - [Database Schema](#database-schema)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Credits](#credits)
 - [License](#license)
-- [Features](#features)
-- [Screenshots](#screenshots)
 - [How to Contribute](#how-to-contribute)
 - [Tests](#tests)
+
+## Features
+
+Public access:
+- Browse available listings
+- Filter by price, location, property type and specific features
+- Access detailed property pages
+- Run mortgage simulation
+- Contact listing owners
+
+Registered users:
+- Create and manage listings with flexible attributes
+- Upload and order multiple images
+- Receive and answer contact requests
+- Save listings to favorites
+- Report problematic content
+
+Administrators:
+- Manage users and listings
+- Manage property types and attributes
+- Review reports and take action
+- Access analytics and reports
+
+
+## Tech Stack
+
+- **Client:** Blade, TailwindCSS, JavaScript, JQuery, Alpine.js, FilePond
+- **Server:** Laravel, PHP, PostgreSQL, Spatie packages
+- **Dev Tools:** PhpStorm, Herd, Git, Visual Paradigm
+
+## Architecture
+
+### Use Cases
+The main use cases of the application are illustrated below:
+![Use Case Diagram](./readme/usecase.png)
+
+### System Architecture
+The application follows the Model-View-Controller (MVC) architecture pattern, which separates the application logic into three interconnected components:
+![MVC Diagram](./readme/mvc.png)
+
+### Database Schema
+The database schema is designed to support the dynamic attribute system and other core functionalities:
+![Database Schema](./readme/db_schema.jpg)
+
+## Screenshots
+
+The following screenshots showcase various parts of the application:
+![App Screenshot](./readme/screens/1%20home1.png)
+![App Screenshot](./readme/screens/2.png)
+![App Screenshot](./readme/screens/3.png)
+![App Screenshot](./readme/screens/4.png)
+![App Screenshot](./readme/screens/5%20atributos.png)
+![App Screenshot](./readme/screens/7%20tipos.png)
 
 ## Installation
 
@@ -38,10 +98,16 @@ php artisan migrate --seed
 php artisan storage:link
 ```
 
+> Note: The project was developed to run locally without requiring containerization. A docker-compose.yml is included for convenience and optional local testing, but using Docker is not required for normal local development.
+
 ## Usage
 
-To access the application locally, you can use [Herd](https://herd.dev/) for a simple setup. After installing Herd, create a new site pointing to the project directory and set the environment to "Laravel". Herd will automatically configure the web server and database for you.
-Alternatively, you can use Docker. Make sure you have Docker and Docker Compose installed, then run:
+The project can be run locally using a simple PHP + webserver + DB setup. For convenience we recommend:
+
+- [Herd](https://herd.dev/) (easy local setup for Laravel) — point Herd to the project directory and choose the Laravel environment; Herd will configure a web server and database automatically.
+
+Optional Docker usage
+- A docker-compose.yml is provided for developers who prefer a containerized local environment. Using Docker is optional — the application itself does not depend on Docker as a runtime requirement. Make sure you have Docker and Docker Compose installed, then run:
 
 ```bash
 docker-compose up -d
@@ -56,6 +122,8 @@ This project was developed by:
 - [Luíz Assis](https://github.com/NO0BMaster69)
 - [Pedro Sampaio](https://github.com/PedroSampaio13)
 - [Ratmir Mukazhanov](https://github.com/ratmir-mukazhanov)
+
+During development the team gained hands-on experience with Laravel, practical database modeling for flexible data (dynamic attributes), role-based access control and automated testing.
 
 We would like to thank the following resources and libraries that helped us in the development of this project:
 - [Laravel](https://laravel.com/) - for the web framework and ecosystem
@@ -89,36 +157,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-## Features
-
-Public access:
-- Browse available listings
-- Filter by price, location, property type and features
-- Access detailed property pages
-
-Registered users:
-- Create and manage listings with flexible attributes
-- Upload and order multiple images
-- Receive and answer contact requests
-- Save listings to favorites and collections
-- Report problematic content
-- Run mortgage simulation
-
-Administrators:
-- Manage users and listings
-- Review reports and take action
-- Access internal dashboards
-
-## Screenshots
-![App Screenshot](./readme/screens/1%20home1.png)
-![App Screenshot](./readme/screens/2.png)
-![App Screenshot](./readme/screens/3.png)
-![App Screenshot](./readme/screens/4.png)
-![App Screenshot](./readme/screens/5%20atributos.png)
-![App Screenshot](./readme/screens/7%20tipos.png)
 
 ## How to Contribute
 
