@@ -59,25 +59,29 @@ Administrators:
 
 ### Use Cases
 The main use cases of the application are illustrated below:
-![Use Case Diagram](./readme/usecase.png)
+
+![Use Case Diagram](docs/usecase.png)
 
 ### System Architecture
 The application follows the Model-View-Controller (MVC) architecture pattern, which separates the application logic into three interconnected components:
-![MVC Diagram](./readme/mvc.png)
+
+![MVC Diagram](docs/mvc.png)
 
 ### Database Schema
 The database schema is designed to support the dynamic attribute system and other core functionalities:
-![Database Schema](./readme/db_schema.jpg)
+
+![Database Schema](docs/db_schema.jpg)
 
 ## Screenshots
 
 The following screenshots showcase various parts of the application:
-![App Screenshot](./readme/screens/1%20home1.png)
-![App Screenshot](./readme/screens/2.png)
-![App Screenshot](./readme/screens/3.png)
-![App Screenshot](./readme/screens/4.png)
-![App Screenshot](./readme/screens/5%20atributos.png)
-![App Screenshot](./readme/screens/7%20tipos.png)
+
+![App Screenshot](docs/screens/1%20home1.png)
+![App Screenshot](docs/screens/2.png)
+![App Screenshot](docs/screens/3.png)
+![App Screenshot](docs/screens/4.png)
+![App Screenshot](docs/screens/5%20atributos.png)
+![App Screenshot](docs/screens/7%20tipos.png)
 
 ## Installation
 
@@ -125,6 +129,8 @@ This project was developed by:
 
 During development the team gained hands-on experience with Laravel, practical database modeling for flexible data (dynamic attributes), role-based access control and automated testing.
 
+Special thanks to [Professor Rui Isidro](https://www.linkedin.com/in/ruiisidro/) for suggesting the dynamic attributes concept and for his guidance throughout the project.
+
 We would like to thank the following resources and libraries that helped us in the development of this project:
 - [Laravel](https://laravel.com/) - for the web framework and ecosystem
 - [Spatie](https://spatie.be/) - for various Laravel packages including media library and responsecache
@@ -136,27 +142,9 @@ We followed a tutorial series by The Net Ninja to learn Laravel:
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.
 
-Copyright (c) 2025 HabitaX Developers
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Consult the [`LICENSE`](licence.txt) file for more details.
 
 ## How to Contribute
 
