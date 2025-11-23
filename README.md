@@ -123,7 +123,7 @@ This project was developed by:
 
 - [Gustavo Guião](https://github.com/gustavogiao)
 - [Kousha Rezaei](https://github.com/Koi725)
-- [Luíz Assis](https://github.com/NO0BMaster69)
+- [Luíz Assis](https://github.com/LuisAssis24)
 - [Pedro Sampaio](https://github.com/PedroSampaio13)
 - [Ratmir Mukazhanov](https://github.com/ratmir-mukazhanov)
 
