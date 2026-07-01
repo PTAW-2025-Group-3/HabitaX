@@ -22,6 +22,7 @@ yarn-error.log
 /.zed
 /storage/seed/
 /storage/media-library/
+composer.phar
 .env
 .env.*
 !.env.example
